@@ -3,7 +3,7 @@ import React from "react"
 
 const Page = () => {
     return (
-        <main>
+        <main className="w-[720px] mx-auto">
             <Button/>
         </main>
     )
