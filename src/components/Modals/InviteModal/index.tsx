@@ -25,7 +25,7 @@ export const InviteModal = () => {
                 <ModalBody className="p-4">
                     <Snippet>
 
-                    </Snippet>
+                    </Snippet>  
                 </ModalBody>
                 <ModalFooter className="p-4 pt-2">
                     <Button color="primary" variant="bordered" onPress={onClose}>

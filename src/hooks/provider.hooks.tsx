@@ -1,23 +1,12 @@
 "use client"
 
-import { AccountPostgresEntity } from "@/types"
 import React, { createContext, PropsWithChildren } from "react"
-import { SWRResponse } from "swr"
-import { DeepPartial } from "@apollo/client/utilities"
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure"
-import { useModal } from "./modals"
-import { useSwrs } from "./swrs"
+import { useModal, UseModalReturn } from "./modals"
+import { useSwrs, UseSwrsReturn } from "./swrs"
 
 interface HookContextsValue {
-    swrs: {
-        account: {
-            initialize: () => void;
-            accountSwr: SWRResponse<DeepPartial<AccountPostgresEntity>>;
-        }
-    },
-    modals: {
-        inviteModalDiscloresure: UseDisclosureReturn
-    }
+    swrs: UseSwrsReturn
+    modals: UseModalReturn
 }
 export const HooksContext = createContext<HookContextsValue | null>(null)
 

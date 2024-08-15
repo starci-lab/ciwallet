@@ -1,6 +1,11 @@
 import { useDisclosure } from "@nextui-org/react"
+import { UseDisclosureReturn } from "@nextui-org/use-disclosure"
 
-export const useModal = () => {
+export interface UseModalReturn {
+    inviteModalDiscloresure: UseDisclosureReturn
+}
+
+export const useModal = () : UseModalReturn => {
     const inviteModalDiscloresure = useDisclosure()
 
     return {

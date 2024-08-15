@@ -1,6 +1,10 @@
-import { useAccount } from "./useAccount"
+import { UseAccountReturn, useAccount } from "./useAccount"
 
-export const useSwrs = () => {
+export interface UseSwrsReturn {
+    account: UseAccountReturn;
+}
+
+export const useSwrs = () : UseSwrsReturn => {
     const account = useAccount()
     return {
         account

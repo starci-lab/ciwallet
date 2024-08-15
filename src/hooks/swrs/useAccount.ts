@@ -1,10 +1,17 @@
 import { getAccount } from "@/services"
+import { AccountPostgresEntity } from "@/types"
+import { DeepPartial } from "@apollo/client/utilities"
 import { useState } from "react"
-import useSWR from "swr"
+import useSWR, { SWRResponse } from "swr"
 
 const ACCOUNT = "account"
 
-export const useAccount = () => {
+export interface UseAccountReturn {
+    initialize: () => void;
+    accountSwr: SWRResponse<DeepPartial<AccountPostgresEntity>>;
+}
+
+export const useAccount = () : UseAccountReturn => {
     const [initialized, setInitialized] = useState(false)
 
     const accountSwr = useSWR(initialized ? ACCOUNT : null, async () => {
