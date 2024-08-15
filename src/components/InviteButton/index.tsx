@@ -1,16 +1,11 @@
 "use client"
 
-import { HooksContext } from "@/hooks"
+import { useInviteModalDisclosure } from "@/hooks"
 import { Button } from "@nextui-org/react"
-import React, { use } from "react"
+import React from "react"
 
 export const InviteButton = () => {
-    const {
-        modals: {
-            inviteModalDiscloresure: { onOpen },
-        },
-    } = use(HooksContext)!
-
+    const { onOpen } = useInviteModalDisclosure()
     return (
         <Button onPress={onOpen} color="primary">
             Invite

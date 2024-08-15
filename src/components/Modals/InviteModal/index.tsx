@@ -1,7 +1,6 @@
 "use client"
 
-import React, { use } from "react"
-import { HooksContext } from "@/hooks"
+import React from "react"
 import {
     Modal,
     ModalContent,
@@ -11,21 +10,17 @@ import {
     Button,
     Snippet,
 } from "@nextui-org/react"
+import { useInviteModalDisclosure } from "@/hooks"
 
 export const InviteModal = () => {
-    const {
-        modals: {
-            inviteModalDiscloresure: { isOpen, onOpenChange, onClose },
-        },
-    } = use(HooksContext)!
+    const { isOpen, onOpenChange, onClose } = useInviteModalDisclosure()
+
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
                 <ModalHeader className="p-4 pb-2 font-bold">Invite</ModalHeader>
                 <ModalBody className="p-4">
-                    <Snippet>
-
-                    </Snippet>  
+                    <Snippet></Snippet>
                 </ModalBody>
                 <ModalFooter className="p-4 pt-2">
                     <Button color="primary" variant="bordered" onPress={onClose}>
@@ -39,3 +34,4 @@ export const InviteModal = () => {
         </Modal>
     )
 }
+    

@@ -1,8 +1,8 @@
 "use client"
 
 import React, { createContext, PropsWithChildren } from "react"
-import { useModal, UseModalReturn } from "./modals"
-import { useSwrs, UseSwrsReturn } from "./swrs"
+import { _useModal, UseModalReturn } from "./modals"
+import { _useSwrs, UseSwrsReturn } from "./swrs"
 
 interface HookContextsValue {
     swrs: UseSwrsReturn
@@ -12,8 +12,8 @@ export const HooksContext = createContext<HookContextsValue | null>(null)
 
 export const HooksProvider = ({ children } : PropsWithChildren) => {
     
-    const swrs = useSwrs()
-    const modals = useModal()
+    const swrs = _useSwrs()
+    const modals = _useModal()
 
     return (
         <HooksContext.Provider value={{

@@ -1,8 +1,9 @@
 import { getAccount } from "@/services"
 import { AccountPostgresEntity } from "@/types"
 import { DeepPartial } from "@apollo/client/utilities"
-import { useState } from "react"
+import { use, useState } from "react"
 import useSWR, { SWRResponse } from "swr"
+import { HooksContext } from "../provider.hooks"
 
 const ACCOUNT = "account"
 
@@ -11,7 +12,7 @@ export interface UseAccountReturn {
     accountSwr: SWRResponse<DeepPartial<AccountPostgresEntity>>;
 }
 
-export const useAccount = () : UseAccountReturn => {
+export const _useAccount = () : UseAccountReturn => {
     const [initialized, setInitialized] = useState(false)
 
     const accountSwr = useSWR(initialized ? ACCOUNT : null, async () => {
@@ -31,4 +32,9 @@ export const useAccount = () : UseAccountReturn => {
         initialize,
         accountSwr
     }
+}
+
+export const useAccount = () : UseAccountReturn => {
+    const { swrs: { account } } = use(HooksContext)!
+    return account
 }
