@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import { configReducer } from "./slices"
-// ...
+import { configReducer, authReducer, chainReducer } from "./slices"
 
 export const store = configureStore({
     reducer: {
-        configReducer
+        configReducer,
+        authReducer,
+        chainReducer
     }
 })
 
