@@ -20,7 +20,15 @@ const Page = () => {
                 <Spacer y={12} />
                 <Select
                     size="lg"
-                    startContent={<Image className="w-6 h-6" src={chainConfig().chains.find(({ key }) => key === preferenceChain)?.imageUrl} />}
+                    startContent={
+                        <Image
+                            className="w-6 h-6"
+                            src={
+                                chainConfig().chains.find(({ key }) => key === preferenceChain)
+                                    ?.imageUrl
+                            }
+                        />
+                    }
                     aria-label="Select your preference chain"
                     selectedKeys={[preferenceChain]}
                     onSelectionChange={(keys) => {
@@ -39,7 +47,13 @@ const Page = () => {
                     ))}
                 </Select>
                 <Spacer y={12} />
-                <Button onPress={() => router.push(constantConfig().path.home)} color="primary" fullWidth>
+                <Button
+                    onPress={() => {
+                        router.push(constantConfig().path.createPassword)
+                    }}
+                    color="primary"
+                    fullWidth
+                >
           Continue
                 </Button>
             </div>

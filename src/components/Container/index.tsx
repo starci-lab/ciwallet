@@ -12,7 +12,7 @@ export const Container = ({
 }: ContainerProps) => {
     return (
         <div
-            className={`${hasPadding ? "p-4" : ""} ${
+            className={`${hasPadding ? "p-6" : ""} ${
                 centerContent ? "grid place-items-center" : ""
             } h-screen`}
         >

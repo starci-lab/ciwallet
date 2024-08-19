@@ -3,6 +3,8 @@ export const constantConfig = () => ({
         auth: "/auth",
         create: "/create",
         preference: "/preference",
-        home: "/home"
+        createPassword: "/create-password",
+        home: "/home",
+        password: "/password",
     }
 })

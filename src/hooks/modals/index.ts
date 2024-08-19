@@ -5,23 +5,25 @@ import { _useInviteModalDisclosure } from "./useInviteModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
+    settingsModalDisclosure: UseDisclosureReturn
 }
 
-export const _useModal = () : UseModalReturn => {
+export const _useModals = () : UseModalReturn => {
     const inviteModalDisclosure = _useInviteModalDisclosure()
+    const settingsModalDisclosure = _useInviteModalDisclosure()
 
     return {
-        inviteModalDisclosure
+        inviteModalDisclosure,
+        settingsModalDisclosure
     }
 }
 
 
-export const useModal = () : UseModalReturn => {
-    const { modals: { inviteModalDisclosure }} = use(HooksContext)!
+export const useModals = () : UseModalReturn => {
+    const { modals } = use(HooksContext)!
 
-    return {
-        inviteModalDisclosure
-    }
+    return modals
 }
 
 export * from "./useInviteModalDiscloresure"
+export * from "./useSettingsModalDiscloresure"
