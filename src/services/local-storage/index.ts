@@ -23,8 +23,8 @@ export const saveEncryptedMnemonic = async (
 export const loadMnemonic = async (password: string) => {
     const found = localStorage.getItem(ENCRYPTED_MNEMONIC)
     if (!found) return ""
-    const { data, iv } = JSON.parse(found) as EncryptedResult
-    return await decryptMnemonic({ password, encryptedResult: { data, iv } })
+    const encryptedResult = JSON.parse(found) as EncryptedResult
+    return await decryptMnemonic({ password, encryptedResult })
 }
 
 export const foundEncryptedMnemonic = () => {
