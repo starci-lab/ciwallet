@@ -12,11 +12,6 @@ export interface EncryptMnemonicParams {
   mnemonic: string;
 }
 
-export interface GetEncryptMnemonicReturn {
-  password: string;
-  mnemonic: string;
-}
-
 export const encryptMnemonic = async (
     params: EncryptMnemonicParams
 ): Promise<EncryptedResult> => {
