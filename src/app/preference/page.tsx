@@ -3,13 +3,13 @@ import React from "react"
 import { Container } from "@/components"
 import { Button, Image, Select, SelectItem, Spacer } from "@nextui-org/react"
 import { chainConfig, constantConfig, defaultChainKey } from "@/config"
-import { setPreferenceChain, useAppDispatch, useAppSelector } from "@/redux"
+import { setPreferenceChainKey, useAppDispatch, useAppSelector } from "@/redux"
 import { useRouter } from "next/navigation"
 
 const Page = () => {
     const dispatch = useAppDispatch()
-    const preferenceChain = useAppSelector(
-        (state) => state.chainReducer.preferenceChain
+    const preferenceChainKey = useAppSelector(
+        (state) => state.chainReducer.preferenceChainKey
     )
     const router = useRouter()
 
@@ -24,16 +24,16 @@ const Page = () => {
                         <Image
                             className="w-6 h-6"
                             src={
-                                chainConfig().chains.find(({ key }) => key === preferenceChain)
+                                chainConfig().chains.find(({ key }) => key === preferenceChainKey)
                                     ?.imageUrl
                             }
                         />
                     }
                     aria-label="Select your preference chain"
-                    selectedKeys={[preferenceChain]}
+                    selectedKeys={[preferenceChainKey]}
                     onSelectionChange={(keys) => {
-                        const selectedChain = keys.currentKey
-                        dispatch(setPreferenceChain(selectedChain ?? defaultChainKey))
+                        const selectedChain = keys.currentKey  ?? defaultChainKey
+                        dispatch(setPreferenceChainKey(selectedChain))
                     }}
                 >
                     {chainConfig().chains.map(({ key, chain, imageUrl }) => (

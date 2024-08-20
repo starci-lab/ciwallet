@@ -1,5 +1,4 @@
-import { ChainId, Chain, Platform } from "@wormhole-foundation/sdk"
-
+import { ChainId, Chain, Platform, nativeTokenId, TokenId } from "@wormhole-foundation/sdk"
 export const chainConfig = () : ChainConfig => {
     return {
         chains: [
@@ -17,11 +16,32 @@ export const chainConfig = () : ChainConfig => {
                 chain: "Solana",
                 platform: "Solana"
             }
+        ],
+        tokens: [
+            {
+                key: "aptos",
+                tokenId: nativeTokenId("Aptos"),
+                imageUrl: "/icons/aptos.svg",
+                name: "Aptos",
+                symbol: "APT",
+                chainKey: "aptos"
+            },
+            {
+                key: "solana",
+                tokenId: nativeTokenId("Solana"),
+                imageUrl: "/icons/solana.svg",
+                name: "Solana",
+                symbol: "SOL",
+                chainKey: "solana"
+            },
         ]
     }
 }
 
 export const defaultChainKey = chainConfig().chains[0].key
+export const defaultChain = chainConfig().chains[0].chain
+export const defaultSecondaryChainKey = chainConfig().chains[1].key
+export const defaultSecondaryChain = chainConfig().chains[1].chain
 
 export interface ChainInfo {
     key: string,
@@ -31,6 +51,17 @@ export interface ChainInfo {
     platform: Platform
 }
 
+export interface TokenInfo {
+    key: string,
+    tokenId: TokenId,
+    imageUrl: string,
+    name: string,
+    symbol: string,
+    chainKey: string
+}
+
+
 export interface ChainConfig {
-    chains: Array<ChainInfo>
+    chains: Array<ChainInfo>,
+    tokens: Array<TokenInfo>
 }

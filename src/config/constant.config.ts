@@ -6,5 +6,6 @@ export const constantConfig = () => ({
         createPassword: "/create-password",
         home: "/home",
         password: "/password",
+        bridge: "/bridge",
     }
 })
