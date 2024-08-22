@@ -82,13 +82,13 @@ const Page = () => {
                             formik.setFieldValue("targetChainKey", selectedChainKey)
                         }}
                     >
-                        {chains.map(({ key, chain, imageUrl }) => (
+                        {chains.map(({ key, name, imageUrl }) => (
                             <SelectItem
                                 startContent={<Image className="w-5 h-5" src={imageUrl} />}
                                 key={key}
                                 value={key}
                             >
-                                {chain}
+                                {name}
                             </SelectItem>
                         ))}
                     </Select>

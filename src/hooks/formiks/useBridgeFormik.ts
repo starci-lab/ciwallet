@@ -35,10 +35,13 @@ export const _useBridgeFormik = (): FormikProps<BridgeFormikValues> => {
     })
 
     useEffect(() => {
-        if (preferenceChainKey === defaultSecondaryChain) {
+        if (preferenceChainKey === defaultSecondaryChainKey) {
             formik.setFieldValue("targetChainKey", defaultChainKey)
             formik.setFieldValue("tokenId", nativeTokenId(defaultChain))
-        }  
+        } else {
+            formik.setFieldValue("targetChainKey", defaultSecondaryChainKey)
+            formik.setFieldValue("tokenId", nativeTokenId(defaultSecondaryChain))
+        } 
     }, [
         preferenceChainKey
     ])
