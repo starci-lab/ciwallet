@@ -14,24 +14,28 @@ import {
     Divider,
     CheckboxIcon,
 } from "@nextui-org/react"
-import { useBridgeFormik, useBridgeSelectTokenModalDisclosure } from "@/hooks"
 import { chainConfig } from "@/config"
+import { setPreferenceChainKey, useAppDispatch, useAppSelector } from "@/redux"
+import { useSelectNetworkModalDisclosure } from "@/hooks"
 
-export const BridgeSelectTokenModal = () => {
+export const SelectNetworkModal = () => {
     const { isOpen, onClose } =
-    useBridgeSelectTokenModalDisclosure()
-    const formik = useBridgeFormik()
+    useSelectNetworkModalDisclosure()
 
-    const tokens = [...chainConfig().tokens]
+    const dispatch = useAppDispatch()
+
+    const chains = [...chainConfig().chains]
+    const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
+
     return (
         <Modal hideCloseButton isOpen={isOpen}>
             <ModalContent>
-                <ModalHeader className="p-4 pb-2 font-bold">Select Token</ModalHeader>
+                <ModalHeader className="p-4 pb-2 font-bold">Select Network</ModalHeader>
                 <ModalBody className="p-4">
                     <Card>
                         <CardBody className="p-0">
                             <div>
-                                {tokens.map(({ imageUrl, key, tokenId, name }, index) => (
+                                {chains.map(({ imageUrl, key, name }, index) => (
                                     <div key={key}>
                                         <Card
                                             disableRipple
@@ -39,7 +43,7 @@ export const BridgeSelectTokenModal = () => {
                                             shadow="none"
                                             fullWidth
                                             isPressable
-                                            onPress={() => formik.setFieldValue("tokenId", tokenId)}
+                                            onPress={() => dispatch(setPreferenceChainKey(key))}
                                         >
                                             <CardBody className="px-3 py-2">
                                                 <div className="flex items-center justify-between">
@@ -47,14 +51,14 @@ export const BridgeSelectTokenModal = () => {
                                                         <Image className="w-5 h-5" src={imageUrl} />
                                                         {name}
                                                     </div>
-                                                    {formik.values.tokenId.address === tokenId.address && formik.values.tokenId.chain === tokenId.chain && (
+                                                    {key === preferenceChainKey && (
                                                         <CheckboxIcon isSelected className="w-3"/>
                                                     )}
                                                 </div>             
                                             </CardBody>
                                         </Card>
                                         {
-                                            index !== tokens.length - 1 && <Divider />
+                                            index !== chains.length - 1 && <Divider />
                                         }
                                     </div>
                                 ))}

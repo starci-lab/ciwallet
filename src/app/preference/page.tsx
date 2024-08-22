@@ -36,13 +36,13 @@ const Page = () => {
                         dispatch(setPreferenceChainKey(selectedChain))
                     }}
                 >
-                    {chainConfig().chains.map(({ key, chain, imageUrl }) => (
+                    {chainConfig().chains.map(({ key, name, imageUrl }) => (
                         <SelectItem
                             startContent={<Image className="w-5 h-5" src={imageUrl} />}
                             key={key}
                             value={key}
                         >
-                            {chain}
+                            {name}
                         </SelectItem>
                     ))}
                 </Select>

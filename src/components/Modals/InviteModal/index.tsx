@@ -13,10 +13,10 @@ import {
 import { useInviteModalDisclosure } from "@/hooks"
 
 export const InviteModal = () => {
-    const { isOpen, onOpenChange, onClose } = useInviteModalDisclosure()
+    const { isOpen, onClose } = useInviteModalDisclosure()
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <Modal hideCloseButton isOpen={isOpen}>
             <ModalContent>
                 <ModalHeader className="p-4 pb-2 font-bold">Invite</ModalHeader>
                 <ModalBody className="p-4">

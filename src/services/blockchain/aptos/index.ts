@@ -1,4 +1,8 @@
-import { Network } from "@/redux"
+export enum Network {
+  Testnet,
+  Mainnet,
+}
+import { computeDenomination } from "@/utils"
 import {
     AptosConfig,
     Aptos,
@@ -18,7 +22,10 @@ export const aptos = (network: Network = Network.Testnet) =>
 export const getAptosBalance = async (
     address: string,
     network: Network = Network.Testnet
-) =>
-    await aptos(network).getAccountAPTAmount({
+) => {
+    const amount = await aptos(network).getAccountAPTAmount({
         accountAddress: address,
     })
+    return computeDenomination(amount)
+}
+    

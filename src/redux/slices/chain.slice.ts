@@ -1,4 +1,5 @@
 import { defaultChainKey } from "@/config"
+import { Network } from "@/services"
 import { DeepPartial } from "@apollo/client/utilities"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
@@ -25,10 +26,6 @@ export interface ChainData {
   balance: ChainBalance;
 }
 
-export enum Network {
-  Testnet,
-  Mainnet,
-}
 
 const initialState: ChainState = {
     preferenceChainKey: defaultChainKey,
@@ -112,6 +109,16 @@ export const chainSlice = createSlice({
         ) => {
             state.solana.balance.amount = payload
         },
+        triggerRefreshAptosBalance: (
+            state
+        ) => {
+            state.aptos.balance.refreshBalanceKey += 1
+        },
+        triggerRefreshSolanaBalance: (
+            state
+        ) => {
+            state.solana.balance.refreshBalanceKey += 1
+        },
     },
 })
 
@@ -120,6 +127,8 @@ export const {
     setAptosCredential,
     setSolanaCredential,
     setAptosBalance,
-    setSolanaBalance
+    setSolanaBalance,
+    triggerRefreshAptosBalance,
+    triggerRefreshSolanaBalance
 } = chainSlice.actions
 export const chainReducer = chainSlice.reducer

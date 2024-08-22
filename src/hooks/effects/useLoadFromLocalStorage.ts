@@ -52,8 +52,8 @@ export const useLoadFromLocalStorage = () => {
     useEffect(() => {
         if (!firstMount.current) {
             dispatch(setPreferenceChainKey(loadPreferenceChainKey()))
-            firstMount.current = true
-            return  
+            firstMount.current = true  
+            return
         }
 
         if (!preferenceChainKey) return

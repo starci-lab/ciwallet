@@ -13,10 +13,10 @@ import {
 import { useSettingsModalDisclosure } from "@/hooks"
 
 export const SettingsModal = () => {
-    const { isOpen, onOpenChange, onClose } = useSettingsModalDisclosure()
+    const { isOpen, onClose } = useSettingsModalDisclosure()
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>
                 <ModalHeader className="p-4 pb-2 font-bold">Settings</ModalHeader>
                 <ModalBody className="p-4">

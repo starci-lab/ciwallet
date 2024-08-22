@@ -7,14 +7,16 @@ export const chainConfig = () : ChainConfig => {
                 imageUrl: "/icons/aptos.svg",
                 wormholeChainId: 22,
                 chain: "Aptos",
-                platform: "Aptos"
+                platform: "Aptos",
+                name: "Aptos"
             },
             {
                 key: "solana",
                 imageUrl: "/icons/solana.svg",
                 wormholeChainId: 1,
                 chain: "Solana",
-                platform: "Solana"
+                platform: "Solana",
+                name: "Solana"
             }
         ],
         tokens: [
@@ -48,7 +50,8 @@ export interface ChainInfo {
     wormholeChainId: ChainId,
     imageUrl: string,
     chain: Chain,
-    platform: Platform
+    platform: Platform,
+    name: string
 }
 
 export interface TokenInfo {

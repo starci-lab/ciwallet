@@ -18,6 +18,7 @@ export interface EncryptedResult {
 
 export const getHashKey = (key: string) =>
     sha256Hash(key).substring(0, 32)
+
 export const encrypt = ({ key, data }: EncryptParams): EncryptedResult => {
     const iv = randomBytes(16)
     const hashKey = getHashKey(key)
