@@ -22,7 +22,7 @@ const Page = () => {
     ]
 
     const tokens = [
-        ...chainConfig().tokens.filter(({ chainKey }) => chainKey !== preferenceChainKey),
+        ...chainConfig().tokens
     ]
 
     const { imageUrl, name, symbol } = {

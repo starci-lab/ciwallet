@@ -1,8 +1,6 @@
 import { DecryptMnemonicParams, decrypt } from "@/services"
 import { NextRequest, NextResponse } from "next/server"
 
-
-
 export const POST = async (request: NextRequest) => {
     const {
         encryptedResult: { data, iv },

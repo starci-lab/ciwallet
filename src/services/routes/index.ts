@@ -32,3 +32,17 @@ export const decryptMnemonic = async (
     const { data } = await axios.post(url, params)
     return data
 }
+
+export interface GetSeedParams {
+    accountNumber: number;
+    mnemonic: string;
+}
+  
+export const getSeed = async (
+    params: GetSeedParams
+): Promise<Buffer> => {
+    const url = "/api/seed"
+    const { data } = await axios.post(url, params)
+    return Buffer.from(data, "base64")
+}
+  

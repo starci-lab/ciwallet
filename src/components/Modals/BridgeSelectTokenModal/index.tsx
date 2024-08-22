@@ -16,17 +16,13 @@ import {
 } from "@nextui-org/react"
 import { useBridgeFormik, useBridgeSelectTokenModalDisclosure } from "@/hooks"
 import { chainConfig } from "@/config"
-import { useAppSelector } from "@/redux"
-import { CheckIcon } from "lucide-react"
 
 export const BridgeSelectTokenModal = () => {
     const { isOpen, onOpenChange, onClose } =
     useBridgeSelectTokenModalDisclosure()
     const formik = useBridgeFormik()
 
-    const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
-    const tokens = [...chainConfig().tokens.filter(({ key }) => key !== preferenceChainKey)]
-    
+    const tokens = [...chainConfig().tokens]
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
@@ -34,34 +30,35 @@ export const BridgeSelectTokenModal = () => {
                 <ModalBody className="p-4">
                     <Card>
                         <CardBody className="p-0">
-                            {tokens.map(({ imageUrl, key, tokenId, name }, index) => (
-                                <>
-                                    <Card
-                                        disableRipple
-                                        radius="none"
-                                        shadow="none"
-                                        fullWidth
-                                        isPressable
-                                        key={key}
-                                        onPress={() => formik.setFieldValue("tokenId", tokenId)}
-                                    >
-                                        <CardBody className="px-3 py-2">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex gap-2 items-center">
-                                                    <Image className="w-5 h-5" src={imageUrl} />
-                                                    {name}
-                                                </div>
-                                                {formik.values.tokenId.address === tokenId.address && formik.values.tokenId.chain === tokenId.chain && (
-                                                    <CheckboxIcon isSelected className="w-3"/>
-                                                )}
-                                            </div>             
-                                        </CardBody>
-                                    </Card>
-                                    {
-                                        index !== tokens.length - 1 && <Divider />
-                                    }
-                                </>
-                            ))}
+                            <div>
+                                {tokens.map(({ imageUrl, key, tokenId, name }, index) => (
+                                    <div key={key}>
+                                        <Card
+                                            disableRipple
+                                            radius="none"
+                                            shadow="none"
+                                            fullWidth
+                                            isPressable
+                                            onPress={() => formik.setFieldValue("tokenId", tokenId)}
+                                        >
+                                            <CardBody className="px-3 py-2">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex gap-2 items-center">
+                                                        <Image className="w-5 h-5" src={imageUrl} />
+                                                        {name}
+                                                    </div>
+                                                    {formik.values.tokenId.address === tokenId.address && formik.values.tokenId.chain === tokenId.chain && (
+                                                        <CheckboxIcon isSelected className="w-3"/>
+                                                    )}
+                                                </div>             
+                                            </CardBody>
+                                        </Card>
+                                        {
+                                            index !== tokens.length - 1 && <Divider />
+                                        }
+                                    </div>
+                                ))}
+                            </div>
                         </CardBody>
                     </Card>
                 </ModalBody>

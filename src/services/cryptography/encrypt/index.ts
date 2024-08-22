@@ -3,8 +3,8 @@ import {
     randomBytes,
     createCipheriv,
     createDecipheriv,
-    createHash,
 } from "crypto"
+import { sha256Hash } from "../sha256"
 
 export interface EncryptParams {
   key: string;
@@ -17,7 +17,7 @@ export interface EncryptedResult {
 }
 
 export const getHashKey = (key: string) =>
-    createHash("sha256").update(key).digest("base64").substring(0, 32)
+    sha256Hash(key).substring(0, 32)
 export const encrypt = ({ key, data }: EncryptParams): EncryptedResult => {
     const iv = randomBytes(16)
     const hashKey = getHashKey(key)
