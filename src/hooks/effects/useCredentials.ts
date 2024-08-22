@@ -4,14 +4,10 @@ import { Account } from "@aptos-labs/ts-sdk"
 import { Keypair } from "@solana/web3.js"
 import { useEffect } from "react"
 
-export const useAddresses = () => {
-    const state = useAppSelector((state) => state)
-    console.log(state.credentialReducer)
-
-    const { mnemonic, accountNumber } = useAppSelector(
+export const useCredentials = () => {
+    const { mnemonic, accountNumbers } = useAppSelector(
         (state) => state.authReducer
     )
-
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -20,7 +16,7 @@ export const useAddresses = () => {
         const { publicKey, privateKey, accountAddress } =
       Account.fromDerivationPath({
           mnemonic,
-          path: `m/44'/637'/0'/0'/${accountNumber}'`,
+          path: `m/44'/637'/0'/0'/${accountNumbers.aptos}'`,
       })
 
         dispatch(
@@ -30,14 +26,14 @@ export const useAddresses = () => {
                 privateKey: privateKey.toString(),
             })
         )
-    }, [mnemonic, accountNumber])
+    }, [mnemonic, accountNumbers.aptos])
 
     useEffect(() => {
         if (!mnemonic) return
         const handleEffect = async () => {
             const seed = await getSeed({
                 mnemonic,
-                accountNumber,
+                accountNumber: accountNumbers.solana,
             })
             const { publicKey, secretKey: privateKey } = Keypair.fromSeed(
                 seed.subarray(0, 32)
@@ -51,5 +47,5 @@ export const useAddresses = () => {
             )
         }
         handleEffect()
-    }, [mnemonic, accountNumber])
+    }, [mnemonic, accountNumbers.solana])
 }

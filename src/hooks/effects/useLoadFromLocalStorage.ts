@@ -1,6 +1,6 @@
 import { constantConfig } from "@/config"
 import {
-    setAccountNumber,
+    setAccountNumbers,
     setMnemonic,
     setHasAuthBefore,
     useAppDispatch,
@@ -35,7 +35,7 @@ export const useLoadFromLocalStorage = () => {
 
     useEffect(() => {
         const accountNumber = loadAccountNumber()
-        dispatch(setAccountNumber(accountNumber))
+        dispatch(setAccountNumbers(accountNumber))
     }, [])
 
     useEffect(() => {

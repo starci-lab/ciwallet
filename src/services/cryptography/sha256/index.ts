@@ -6,6 +6,6 @@ export const sha256Hash = (
     digest: "base64" | "hex" = "base64"
 ): string => {
     const hash = createHash("sha256")
-    hash.update(data + (salt ?? ""))
+    hash.update(salt ? data + salt : data)
     return hash.digest(digest)
 }

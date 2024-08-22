@@ -1,18 +1,22 @@
 import { defaultChainKey } from "@/config"
 import { EncryptedResult } from "../cryptography"
 import { EncryptMnemonicParams, decryptMnemonic, encryptMnemonic } from "../routes"
+import { AccountNumbers } from "@/redux"
 
-const ACCOUNT_NUMBER = "account-number"
+const ACCOUNT_NUMBERS = "account-numbers"
 const ENCRYPTED_MNEMONIC = "encrypted-mnemonic"
-const PREFERENCE_CHAIN = "preference-mnemonic"
+const PREFERENCE_CHAIN = "preference-chain"
 
-export const saveAccountNumber = (accountNumber: string) => {
-    localStorage.setItem(ACCOUNT_NUMBER, accountNumber)
+export const saveAccountNumbers = (accountNumbers: AccountNumbers) => {
+    localStorage.setItem(ACCOUNT_NUMBERS, JSON.stringify(accountNumbers))
 }
 
-export const loadAccountNumber = () => {
-    const found = localStorage.getItem(ACCOUNT_NUMBER)
-    return found ? Number.parseInt(found) : 0
+export const loadAccountNumber = (): AccountNumbers => {
+    const found = localStorage.getItem(ACCOUNT_NUMBERS)
+    return found ? JSON.parse(found) : {
+        aptos: 0,
+        solana: 0
+    }
 }
 
 export const saveEncryptedMnemonic = async (
