@@ -25,7 +25,7 @@ export const solanaClient = (network: Network = Network.Testnet) =>
     const networkMap: Record<Network, Cluster> = {
         [Network.Devnet]: "devnet",
         [Network.Mainnet]: "mainnet-beta",
-        [Network.Testnet]: "testnet",
+        [Network.Testnet]: "devnet",
     }
     return new Connection(clusterApiUrl(networkMap[network]), {
         commitment: "confirmed",
