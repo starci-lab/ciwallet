@@ -1,22 +1,19 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface StoredAccount {
-    number: number,
-    imageUrl: string ,
-    name: string
+    imageUrl: string;
+    name: string;
 }
 
 export interface ChainAccountNumber {
-    accounts: Array<StoredAccount>
-    activeAccountNumber: number
+  accounts: Record<number, StoredAccount>;
+  activeAccountNumber: number;
 }
 
 export interface AccountNumbers {
-    aptos: ChainAccountNumber,
-    solana: ChainAccountNumber
+  aptos: ChainAccountNumber;
+  solana: ChainAccountNumber;
 }
-
-
 
 export interface AuthState {
   mnemonic: string;
@@ -25,32 +22,46 @@ export interface AuthState {
   hasAuthBefore: boolean;
 }
 
+
+export interface CreateAccountParams{
+    accountNumber: number;
+    chainKey: string;
+    account: StoredAccount;
+}
+
+
+export interface SetActiveAccountNumber{
+    preferenceChainKey: string;
+    accountNumber: number;
+}
+
+
 const initialState: AuthState = {
     mnemonic: "",
     accountNumbers: {
         aptos: {
             activeAccountNumber: 0,
-            accounts: [
+            accounts: 
                 {
-                    number: 0,
-                    imageUrl: "",
-                    name: "Account 0"
-                }
-            ]
+                    0: {
+                        imageUrl: "",
+                        name: "Account 0",
+                    }
+                },
         },
         solana: {
             activeAccountNumber: 0,
-            accounts: [
+            accounts:
                 {
-                    number: 0,
-                    imageUrl: "",
-                    name: "Account 0"
-                }
-            ]
-        }
+                    0: {
+                        imageUrl: "",
+                        name: "Account 0",
+                    }
+                },
+        },
     },
     password: "",
-    hasAuthBefore: false
+    hasAuthBefore: false,
 }
 
 export const authSlice = createSlice({
@@ -60,7 +71,10 @@ export const authSlice = createSlice({
         setMnemonic: (state, { payload }: PayloadAction<string>) => {
             state.mnemonic = payload
         },
-        setAccountNumbers: (state, { payload: { aptos, solana } }: PayloadAction<Partial<AccountNumbers>>) => {
+        setAccountNumbers: (
+            state,
+            { payload: { aptos, solana } }: PayloadAction<Partial<AccountNumbers>>
+        ) => {
             if (aptos) {
                 state.accountNumbers.aptos = aptos
             }
@@ -68,14 +82,54 @@ export const authSlice = createSlice({
                 state.accountNumbers.solana = solana
             }
         },
+        createAccount: (
+            state,
+            {
+                payload: { chainKey, account, accountNumber },
+            }: PayloadAction<CreateAccountParams>
+        ) => {
+            switch (chainKey) {
+            case "aptos":
+            { state.accountNumbers.aptos.accounts[accountNumber] = account
+                state.accountNumbers.aptos.activeAccountNumber = accountNumber
+                break
+            }       
+            case "solana":
+            {
+                state.accountNumbers.solana.accounts[accountNumber] = account
+                state.accountNumbers.solana.activeAccountNumber = accountNumber
+                break
+            }
+            default: break
+            }
+        },
+        setActiveAccountNumber: (
+            state,
+            {payload: { preferenceChainKey, accountNumber } }: PayloadAction<SetActiveAccountNumber>
+        ) => {
+            switch (preferenceChainKey) {
+            case "aptos":
+            {
+                state.accountNumbers.aptos.activeAccountNumber = accountNumber
+                break
+            }
+            case "solana":
+            {
+                state.accountNumbers.solana.activeAccountNumber = accountNumber
+                break
+            }
+            default: break
+            }
+        },
         setPassword: (state, { payload }: PayloadAction<string>) => {
             state.password = payload
         },
-        setHasAuthBefore: (state, { payload }: PayloadAction<boolean>) => { 
+        setHasAuthBefore: (state, { payload }: PayloadAction<boolean>) => {
             state.hasAuthBefore = payload
-        }
-    }
+        },
+    },
 })
 
-export const { setMnemonic, setAccountNumbers, setPassword, setHasAuthBefore } = authSlice.actions
+export const { setMnemonic, setAccountNumbers, setPassword, setHasAuthBefore, createAccount, setActiveAccountNumber } =
+  authSlice.actions
 export const authReducer = authSlice.reducer

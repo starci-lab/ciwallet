@@ -10,14 +10,11 @@ export const saveAccountNumbers = (accountNumbers: AccountNumbers) => {
     localStorage.setItem(ACCOUNT_NUMBERS, JSON.stringify(accountNumbers))
 }
 
-export const loadAccountNumber = (): AccountNumbers => {
+export const loadAccountNumbers = (): AccountNumbers => {
     const found = localStorage.getItem(ACCOUNT_NUMBERS)
     return found
         ? JSON.parse(found)
-        : {
-            aptos: 0,
-            solana: 0,
-        }
+        : null
 }
 
 export const saveEncryptedMnemonic = ({

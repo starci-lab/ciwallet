@@ -9,7 +9,7 @@ import {
 } from "@/redux"
 import {
     foundEncryptedMnemonic,
-    loadAccountNumber,
+    loadAccountNumbers,
     loadMnemonic,
     loadPreferenceChainKey,
     savePreferenceChainKey,
@@ -34,8 +34,10 @@ export const useLoadFromLocalStorage = () => {
     }, [])
 
     useEffect(() => {
-        const accountNumber = loadAccountNumber()
-        dispatch(setAccountNumbers(accountNumber))
+        const accountNumbers = loadAccountNumbers()
+        if (accountNumbers !== null) {
+            dispatch(setAccountNumbers(accountNumbers))
+        }   
     }, [])
 
     useEffect(() => {

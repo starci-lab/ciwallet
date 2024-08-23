@@ -11,13 +11,16 @@ import {
     Divider,
     Card,
     CardBody,
+    Link,
 } from "@nextui-org/react"
-import { useAccountsModalDisclosure } from "@/hooks"
+import { useAccountsModalDisclosure, useCreateAccountModalDisclosure } from "@/hooks"
 import { ChainAccountNumber, useAppSelector } from "@/redux"
 import { AccountUser } from "../../AccountUser"
+import { PlusIcon } from "@heroicons/react/24/outline"
 
 export const AccountsModal = () => {
     const { isOpen, onClose } = useAccountsModalDisclosure()
+    const { onOpen: onCreateAccountModalOpen } = useCreateAccountModalDisclosure()
 
     const preferenceChainKey = useAppSelector(
         (state) => state.chainReducer.preferenceChainKey
@@ -36,6 +39,8 @@ export const AccountsModal = () => {
 
     const { activeAccountNumber, accounts } = map[preferenceChainKey]
 
+    const entries = Object.entries(accounts)
+
     return (
         <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>
@@ -44,19 +49,29 @@ export const AccountsModal = () => {
                     <Card>
                         <CardBody className="p-0">
                             <div>
-                                {accounts.map((account, index) => (
-                                    <div key={account.number}>
+                                {entries.map(([accountNumber, account], index) => (
+                                    <div key={accountNumber}>
                                         <AccountUser
+                                            accountNumber={Number.parseInt(accountNumber)}
                                             account={account}
-                                            key={account.number}
+                                            key={accountNumber}
                                             activeAccountNumber={activeAccountNumber}
                                         />
-                                        {index !== accounts.length - 1 && <Divider />}
+                                        {
+                                            index !== entries.length - 1 &&
+                                            <Divider />
+                                        }
                                     </div>
                                 ))}
-                            </div>         
+                            </div>       
                         </CardBody>
-                    </Card>
+                    </Card> 
+                    <Link as="button" onPress={onCreateAccountModalOpen} size="sm" color="primary">
+                        <div className="flex gap-1 items-center">
+                            <PlusIcon className="w-5 h-5" />
+                            <div>Create Account</div>
+                        </div>
+                    </Link>
                 </ModalBody>
                 <ModalFooter className="p-4 pt-2">
                     <Button color="primary" variant="bordered" onPress={onClose}>

@@ -1,21 +1,20 @@
 "use client"
 
-import { StoredAccount, setActiveAccountNumber, useAppDispatch, useAppSelector } from "@/redux"
+import { useBridgeFormik } from "@/hooks"
+import { StoredAccount, useAppSelector } from "@/redux"
 import { createAptosAccount, createSolanaAccount } from "@/services"
 import { formatAddress } from "@/utils"
 import { Card, CardBody, User, CheckboxIcon } from "@nextui-org/react"
 import React from "react"
 
-interface AccountUserProps {
+interface BridgeAccountUserProps {
     account: StoredAccount
     accountNumber: number
-    activeAccountNumber: number
+    targetChainKey: string
 }
 
-export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, accountNumber}: AccountUserProps) => {
+export const BridgeAccountUser = ({account: { imageUrl, name }, accountNumber, targetChainKey}: BridgeAccountUserProps) => {
     const mnemonic = useAppSelector(state => state.authReducer.mnemonic)
-    const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
-    const dispatch = useAppDispatch()
 
     const { accountAddress } = createAptosAccount({
         accountNumber,
@@ -32,13 +31,12 @@ export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, a
         "solana": publicKey.toString() ?? ""
     }
 
+    const formik = useBridgeFormik()
+
     return (
         <Card classNames={{
             base: "!bg-transparent"
-        }} disableRipple isPressable onPress={() => dispatch(setActiveAccountNumber({
-            accountNumber,
-            preferenceChainKey
-        }))} fullWidth shadow="none">
+        }} disableRipple isPressable onPress={() => formik.setFieldValue("targetAccountNumber", accountNumber)} fullWidth shadow="none">
             <CardBody className="px-3 py-2">
                 <div className="flex justify-between items-center w-full">
                     <User
@@ -52,9 +50,9 @@ export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, a
                             </div>
                         }
                         description={
-                            formatAddress(map[preferenceChainKey])
+                            formatAddress(map[targetChainKey])
                         }/>
-                    <CheckboxIcon isSelected={activeAccountNumber === accountNumber} className="w-3"/>
+                    <CheckboxIcon isSelected={formik.values.targetAccountNumber === accountNumber} className="w-3"/>
                 </div>   
             </CardBody>
         </Card>

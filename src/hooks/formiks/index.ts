@@ -5,12 +5,14 @@ import { HooksContext } from "../provider.hooks"
 import { _useCreatePasswordFormik } from "./useCreatePasswordFormik"
 import { TransferFormikValues, _useTransferFormik } from "./useTransferFormik"
 import { BridgeFormikValues, _useBridgeFormik } from "./useBridgeFormik"
+import { CreateAccountFormikValues, _useCreateAccountFormik } from "./useCreateAccountFormik"
 
 export interface UseFormiksReturn {
     passwordFormik: FormikProps<PasswordFormikValues>
     createPasswordFormik: FormikProps<PasswordFormikValues>,
     transferFormik: FormikProps<TransferFormikValues>,
-    bridgeFormik: FormikProps<BridgeFormikValues>
+    bridgeFormik: FormikProps<BridgeFormikValues>,
+    createAccountFormik: FormikProps<CreateAccountFormikValues>
 }
 
 export const _useFormiks = (): UseFormiksReturn => {
@@ -18,12 +20,14 @@ export const _useFormiks = (): UseFormiksReturn => {
     const createPasswordFormik = _useCreatePasswordFormik()
     const transferFormik = _useTransferFormik()
     const bridgeFormik = _useBridgeFormik()
+    const createAccountFormik = _useCreateAccountFormik()
 
     return {
         passwordFormik,
         createPasswordFormik,
         transferFormik,
-        bridgeFormik
+        bridgeFormik,
+        createAccountFormik
     }
 }
 
@@ -37,3 +41,4 @@ export * from "./usePasswordFormik"
 export * from "./useCreatePasswordFormik"
 export * from "./useTransferFormik"
 export * from "./useBridgeFormik"
+export * from "./useCreateAccountFormik"

@@ -18,7 +18,7 @@ import {
     useAccountsModalDisclosure,
 } from "@/hooks"
 import { chainConfig, constantConfig } from "@/config"
-import { ChainCredential, useAppSelector } from "@/redux"
+import { ChainAccountNumber, ChainCredential, useAppSelector } from "@/redux"
 import {
     BellIcon,
     Cog6ToothIcon,
@@ -48,6 +48,20 @@ const Page = () => {
         solana: solanaCredential,
     }
 
+    const { aptos, solana } = useAppSelector(
+        (state) => state.authReducer.accountNumbers
+    )
+
+    const accountsMap: Record<string, ChainAccountNumber> = {
+        aptos,
+        solana,
+    }
+
+    const activeAccountNumber =
+    accountsMap[preferenceChainKey].activeAccountNumber
+    const accounts = accountsMap[preferenceChainKey].accounts
+    const { name, imageUrl } = accounts[activeAccountNumber]
+
     const { onOpen: onSelectNetworkModalOpen } =
     useSelectNetworkModalDisclosure()
 
@@ -55,19 +69,31 @@ const Page = () => {
         <Container hasPadding>
             <div className="w-full">
                 <div className="flex items-center justify-between">
-                    <Snippet hideSymbol classNames={{
-                        base: "p-0 bg-inhenrit",
-                    }} size="sm" codeString={map[preferenceChainKey].address}>
+                    <Snippet
+                        hideSymbol
+                        classNames={{
+                            base: "p-0 bg-inhenrit",
+                        }}
+                        size="sm"
+                        codeString={map[preferenceChainKey].address}
+                    >
                         <Card disableRipple isPressable onPress={onOpen} shadow="none">
                             <CardBody className="p-0">
                                 <User
-                                    name="John Doe"
-                                    description={
-                                        formatAddress(map[preferenceChainKey].address)
-                                    }/>
+                                    avatarProps={{
+                                        src: imageUrl,
+                                    }}
+                                    name={
+                                        <div className="flex gap-1 text-sm items-center">
+                                            <div>{name}</div>
+                                            <div className="text-primary">{`[${activeAccountNumber}]`}</div>
+                                        </div>
+                                    }
+                                    description={formatAddress(map[preferenceChainKey].address)}
+                                />
                             </CardBody>
                         </Card>
-                    </Snippet> 
+                    </Snippet>
                     <div className="flex gap-2 items-center">
                         <Link as="button" color="foreground">
                             <Cog6ToothIcon className="w-5 h-5" />
