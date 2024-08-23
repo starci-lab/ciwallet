@@ -31,8 +31,5 @@ export const solanaSigner = ({
         throw new Error("Devnet is not supported")
     }
     }
-    return new SolanaSendSigner(solanaClient, chain, keypair, debug ?? false, {
-    }, 5, {
-        maxRetries: 10
-    })
+    return new SolanaSendSigner(solanaClient, chain, keypair, debug ?? false, {})
 }
