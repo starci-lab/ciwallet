@@ -39,7 +39,7 @@ export const useCredentials = () => {
             setSolanaCredential({
                 address: publicKey.toString(),
                 publicKey: publicKey.toString(),
-                privateKey: privateKey.toString(),
+                privateKey: Buffer.from(privateKey).toString("hex"),
             })
         )
     }, [mnemonic, accountNumbers.solana])

@@ -14,13 +14,13 @@ import {
 } from "@nextui-org/react"
 import {
     useBridgeFormik,
-    useBridgeSelectTargetAccountModalDisclosure,
+    useBridgeSelectRecipientModalDisclosure,
 } from "@/hooks"
 import { ChainAccountNumber, useAppSelector } from "@/redux"
 import { BridgeAccountUser } from "../../BridgeAccountUser"
 
-export const BridgeSelectTargetAccountModal = () => {
-    const { isOpen, onClose } = useBridgeSelectTargetAccountModalDisclosure()
+export const BridgeSelectRecipientModal = () => {
+    const { isOpen, onClose } = useBridgeSelectRecipientModalDisclosure()
     const formik = useBridgeFormik()
 
     const aptos =
@@ -40,7 +40,7 @@ export const BridgeSelectTargetAccountModal = () => {
     return (
         <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>
-                <ModalHeader className="p-4 pb-2 font-bold">Select Target Account</ModalHeader>
+                <ModalHeader className="p-4 pb-2 font-bold">Select Recipient</ModalHeader>
                 <ModalBody className="p-4">
                     <Card>
                         <CardBody className="p-0">

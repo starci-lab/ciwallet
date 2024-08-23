@@ -6,7 +6,7 @@ import { _useBridgeSelectTokenModalDisclosure } from "./useBridgeSelectTokenModa
 import { _useSelectNetworkModalDisclosure } from "./useSelectNetworkModalDiscloresure"
 import { _useAccountsModalDisclosure } from "./useAccountsModalDiscloresure"
 import { _useCreateAccountModalDisclosure } from "./useCreateAccountModalDiscloresure"
-import { _useBridgeSelectTargetAccountModalDisclosure } from "./useBridgeSelectTargetAccountModalDiscloresure"
+import { _useBridgeSelectRecipientModalDisclosure } from "./useBridgeSelectRecipientModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
@@ -14,7 +14,7 @@ export interface UseModalReturn {
     bridgeSelectTokenModalDisclosure: UseDisclosureReturn
     selectNetworkModalDiscloresure: UseDisclosureReturn
     createAccountModalDisclosure: UseDisclosureReturn
-    bridgeSelectTargetAccountModalDisclosure: UseDisclosureReturn
+    bridgeSelectRecipientModalDisclosure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
@@ -23,7 +23,7 @@ export const _useModals = () : UseModalReturn => {
     const bridgeSelectTokenModalDisclosure = _useBridgeSelectTokenModalDisclosure()
     const selectNetworkModalDiscloresure = _useSelectNetworkModalDisclosure()
     const createAccountModalDisclosure = _useCreateAccountModalDisclosure()
-    const bridgeSelectTargetAccountModalDisclosure = _useBridgeSelectTargetAccountModalDisclosure()
+    const bridgeSelectRecipientModalDisclosure = _useBridgeSelectRecipientModalDisclosure()
 
     return {
         inviteModalDisclosure,
@@ -31,7 +31,7 @@ export const _useModals = () : UseModalReturn => {
         bridgeSelectTokenModalDisclosure,
         selectNetworkModalDiscloresure,
         createAccountModalDisclosure,
-        bridgeSelectTargetAccountModalDisclosure
+        bridgeSelectRecipientModalDisclosure
     }
 }
 
@@ -48,4 +48,4 @@ export * from "./useBridgeSelectTokenModalDiscloresure"
 export * from "./useSelectNetworkModalDiscloresure"
 export * from "./useCreateAccountModalDiscloresure"
 export * from "./useBridgeSelectTokenModalDiscloresure"
-export * from "./useBridgeSelectTargetAccountModalDiscloresure"
+export * from "./useBridgeSelectRecipientModalDiscloresure"

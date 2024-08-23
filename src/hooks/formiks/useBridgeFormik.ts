@@ -4,13 +4,16 @@ import { TokenId, nativeTokenId } from "@wormhole-foundation/sdk"
 import { useFormiks } from "."
 import {
     chainConfig,
+    defaultChain,
     defaultChainKey,
     defaultSecondaryChain,
     defaultSecondaryChainKey,
 } from "@/config"
 import { useEffect } from "react"
 import { useAppSelector } from "@/redux"
-import { createAptosAccount, createSolanaAccount } from "@/services"
+import { createAptosAccount, createSolanaAccount, transfer } from "@/services"
+import { useSigner } from "../miscellaneous"
+import { computeRaw } from "@/utils"
 
 export interface BridgeFormikValues {
   targetChainKey: string;
@@ -31,6 +34,8 @@ export const _useBridgeFormik = (): FormikProps<BridgeFormikValues> => {
     const solanaAccountNumber = useAppSelector(
         (state) => state.authReducer.accountNumbers.solana.activeAccountNumber
     )
+
+    const signer = useSigner(preferenceChainKey)
 
     useEffect(() => {
         let defaultTargetAccountNumber = 0
@@ -63,6 +68,8 @@ export const _useBridgeFormik = (): FormikProps<BridgeFormikValues> => {
             .required("Amount is required"),
     })
 
+    const network = useAppSelector((state) => state.chainReducer.network)
+
     const formik = useFormik({
         initialValues,
         validationSchema,
@@ -86,8 +93,18 @@ export const _useBridgeFormik = (): FormikProps<BridgeFormikValues> => {
                 solana: publicKey.toString() ?? "",
             }
 
-            const address = targetAddress ?? map[targetChainKey]
-            console.log(address)
+            const address = targetAddress || map[targetChainKey]
+            console.log(chainConfig().chains.find(({ key }) => key === preferenceChainKey)?.chain)
+            const x = await transfer({
+                signer,
+                transferAmount: computeRaw(formik.values.amount),
+                sourceChainName: chainConfig().chains.find(({ key }) => key === preferenceChainKey)?.chain ?? defaultChain,
+                targetChainName: chainConfig().chains.find(({ key }) => key === targetChainKey)?.chain ?? defaultChain,
+                network,
+                recipientAddress: address,
+                tokenAddress: formik.values.tokenId.address,
+            })
+            console.log(x)
         },
     })
 

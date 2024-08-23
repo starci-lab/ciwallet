@@ -1,12 +1,13 @@
 import {
     setAptosBalance,
+    setSolanaBalance,
     triggerRefreshAptosBalance,
     triggerRefreshSolanaBalance,
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
 import { useEffect, useRef } from "react"
-import { getAptosBalance } from "@/services"
+import { getAptosBalance, getSolanaBalance } from "@/services"
 
 export const useBalances = () => {
     const { aptos, solana, network } = useAppSelector(
@@ -28,7 +29,13 @@ export const useBalances = () => {
 
     useEffect(() => {
         if (!solana.credential.address) return
-        const handleEffect = async () => {}
+        const handleEffect = async () => {
+            const balance = await getSolanaBalance(
+                solana.credential.address,
+                network
+            )
+            dispatch(setSolanaBalance(balance))
+        }
         handleEffect()
     }, [solana.balance.refreshBalanceKey, solana.credential.address])
 

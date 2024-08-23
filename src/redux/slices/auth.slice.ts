@@ -11,6 +11,7 @@ export interface ChainAccountNumber {
 }
 
 export interface AccountNumbers {
+  loaded: boolean;
   aptos: ChainAccountNumber;
   solana: ChainAccountNumber;
 }
@@ -39,6 +40,7 @@ export interface SetActiveAccountNumber{
 const initialState: AuthState = {
     mnemonic: "",
     accountNumbers: {
+        loaded: false,
         aptos: {
             activeAccountNumber: 0,
             accounts: 
@@ -81,6 +83,9 @@ export const authSlice = createSlice({
             if (solana) {
                 state.accountNumbers.solana = solana
             }
+        },
+        loadAccountNumbers: (state) => {
+            state.accountNumbers.loaded = true
         },
         createAccount: (
             state,
@@ -130,6 +135,6 @@ export const authSlice = createSlice({
     },
 })
 
-export const { setMnemonic, setAccountNumbers, setPassword, setHasAuthBefore, createAccount, setActiveAccountNumber } =
+export const { setMnemonic, setAccountNumbers, setPassword, setHasAuthBefore, createAccount, setActiveAccountNumber, loadAccountNumbers } =
   authSlice.actions
 export const authReducer = authSlice.reducer

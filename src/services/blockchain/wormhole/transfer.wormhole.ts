@@ -43,7 +43,7 @@ export const transfer = async <
 }: TransferParams<N, SourceChainName, TargetChainName>) : Promise<TransferResult> => {
     const wormhole = await getWormhole(network)
     const sourceChain = wormhole.getChain(sourceChainName)
-    const sourceTokenBridge = await sourceChain.getAutomaticTokenBridge()
+    const sourceTokenBridge = await sourceChain.getTokenBridge()
     
     const txGenerator = sourceTokenBridge.transfer(
         toNative(sourceChainName, signer.address()),

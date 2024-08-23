@@ -14,6 +14,7 @@ import {
     loadPreferenceChainKey,
     savePreferenceChainKey,
 } from "@/services"
+import { loadAccountNumbers as reduxLoadAccountNumbers } from "@/redux"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 
@@ -38,6 +39,7 @@ export const useLoadFromLocalStorage = () => {
         if (accountNumbers !== null) {
             dispatch(setAccountNumbers(accountNumbers))
         }   
+        dispatch(reduxLoadAccountNumbers())
     }, [])
 
     useEffect(() => {

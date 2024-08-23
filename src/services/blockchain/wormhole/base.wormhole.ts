@@ -1,4 +1,4 @@
-import { Network, wormhole } from "@wormhole-foundation/sdk"
+import { Chain, Network, wormhole } from "@wormhole-foundation/sdk"
 import algorand from "@wormhole-foundation/sdk/algorand"
 import evm from "@wormhole-foundation/sdk/evm"
 import solana from "@wormhole-foundation/sdk/solana"
@@ -21,4 +21,12 @@ export const wormholeHosts = <N extends Network>(network: N) => {
     default:
         return []
     }
+}
+
+export interface SignerParams<N extends Network, C extends Chain> {
+    network: N
+    privateKey: string
+    debug?: boolean
+    address?: string
+    chain: C
 }

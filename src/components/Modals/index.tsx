@@ -4,7 +4,7 @@ import { AccountsModal } from "./AccountsModal"
 import { BridgeSelectTokenModal } from "./BridgeSelectTokenModal"
 import { SelectNetworkModal } from "./SelectNetworkModal"
 import { CreateAccountModal } from "./CreateAccountModal"
-import { BridgeSelectTargetAccountModal } from "./BridgeSelectTargetAccountModal"
+import { BridgeSelectRecipientModal } from "./BridgeSelectRecipientModal"
 
 export const Modals = () => {
     return (
@@ -14,7 +14,7 @@ export const Modals = () => {
             <BridgeSelectTokenModal />
             <SelectNetworkModal />
             <CreateAccountModal />
-            <BridgeSelectTargetAccountModal />
+            <BridgeSelectRecipientModal />
         </div>
     )
 }

@@ -25,7 +25,7 @@ export const computeDenomination = (
     }
 }
 
-export const computeRaw = (amount: number, decimals = 8): number => {
+export const computeRaw = (amount: number, decimals = 8): bigint => {
     const mutiplier = 10 ** decimals
-    return Number.parseInt((amount * mutiplier).toFixed())
+    return BigInt(amount * mutiplier)
 }
