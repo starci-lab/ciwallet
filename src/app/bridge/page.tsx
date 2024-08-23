@@ -107,8 +107,7 @@ const Page = () => {
                     </Button>
                 </div>
                 <Button color="primary">Transfer</Button>
-            </div>
-                
+            </div>              
         </Container>
     )
 }

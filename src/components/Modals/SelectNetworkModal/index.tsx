@@ -51,9 +51,7 @@ export const SelectNetworkModal = () => {
                                                         <Image className="w-5 h-5" src={imageUrl} />
                                                         {name}
                                                     </div>
-                                                    {key === preferenceChainKey && (
-                                                        <CheckboxIcon isSelected className="w-3"/>
-                                                    )}
+                                                    <CheckboxIcon isSelected={key === preferenceChainKey} className="w-3"/>
                                                 </div>             
                                             </CardBody>
                                         </Card>

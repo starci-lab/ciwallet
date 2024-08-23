@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react"
 import {
     useSelectNetworkModalDisclosure,
-    useSettingsModalDisclosure,
+    useAccountsModalDisclosure,
 } from "@/hooks"
 import { chainConfig, constantConfig } from "@/config"
 import { ChainCredential, useAppSelector } from "@/redux"
@@ -30,7 +30,7 @@ import { SendToBackIcon } from "lucide-react"
 import { formatAddress } from "@/utils"
 
 const Page = () => {
-    const { onOpen } = useSettingsModalDisclosure()
+    const { onOpen } = useAccountsModalDisclosure()
     const preferenceChainKey = useAppSelector(
         (state) => state.chainReducer.preferenceChainKey
     )

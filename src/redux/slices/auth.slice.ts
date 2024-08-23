@@ -1,10 +1,22 @@
-import { DeepPartial } from "@apollo/client/utilities"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
-export interface AccountNumbers {
-    aptos: number,
-    solana: number
+export interface StoredAccount {
+    number: number,
+    imageUrl: string ,
+    name: string
 }
+
+export interface ChainAccountNumber {
+    accounts: Array<StoredAccount>
+    activeAccountNumber: number
+}
+
+export interface AccountNumbers {
+    aptos: ChainAccountNumber,
+    solana: ChainAccountNumber
+}
+
+
 
 export interface AuthState {
   mnemonic: string;
@@ -16,8 +28,26 @@ export interface AuthState {
 const initialState: AuthState = {
     mnemonic: "",
     accountNumbers: {
-        aptos: 0,
-        solana: 0
+        aptos: {
+            activeAccountNumber: 0,
+            accounts: [
+                {
+                    number: 0,
+                    imageUrl: "",
+                    name: "Account 0"
+                }
+            ]
+        },
+        solana: {
+            activeAccountNumber: 0,
+            accounts: [
+                {
+                    number: 0,
+                    imageUrl: "",
+                    name: "Account 0"
+                }
+            ]
+        }
     },
     password: "",
     hasAuthBefore: false
@@ -30,7 +60,7 @@ export const authSlice = createSlice({
         setMnemonic: (state, { payload }: PayloadAction<string>) => {
             state.mnemonic = payload
         },
-        setAccountNumbers: (state, { payload: { aptos, solana } }: PayloadAction<DeepPartial<AccountNumbers>>) => {
+        setAccountNumbers: (state, { payload: { aptos, solana } }: PayloadAction<Partial<AccountNumbers>>) => {
             if (aptos) {
                 state.accountNumbers.aptos = aptos
             }

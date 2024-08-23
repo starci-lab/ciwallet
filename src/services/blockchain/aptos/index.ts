@@ -7,6 +7,7 @@ import {
     AptosConfig,
     Aptos,
     Network as AptosNetwork,
+    Account,
 } from "@aptos-labs/ts-sdk"
 
 export const aptosConfig = (network: Network = Network.Testnet) => {
@@ -28,4 +29,18 @@ export const getAptosBalance = async (
     })
     return computeDenomination(amount)
 }
-    
+
+export interface CreateAptosAccountParams {
+  mnemonic: string;
+  accountNumber: number;
+}
+
+export const createAptosAccount = ({
+    mnemonic,
+    accountNumber,
+}: CreateAptosAccountParams) => {
+    return Account.fromDerivationPath({
+        mnemonic,
+        path: `m/44'/637'/${accountNumber}'/0'/0'`,
+    })
+}

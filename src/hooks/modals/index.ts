@@ -4,23 +4,24 @@ import { HooksContext } from "../provider.hooks"
 import { _useInviteModalDisclosure } from "./useInviteModalDiscloresure"
 import { _useBridgeSelectTokenModalDisclosure } from "./useBridgeSelectTokenModalDiscloresure"
 import { _useSelectNetworkModalDisclosure } from "./useSelectNetworkModalDiscloresure"
+import { _useAccountsModalDisclosure } from "./useAccountsModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
-    settingsModalDisclosure: UseDisclosureReturn
+    accountsModalDisclosure: UseDisclosureReturn
     bridgeSelectTokenModalDisclosure: UseDisclosureReturn
     selectNetworkModalDiscloresure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
     const inviteModalDisclosure = _useInviteModalDisclosure()
-    const settingsModalDisclosure = _useInviteModalDisclosure()
+    const accountsModalDisclosure = _useAccountsModalDisclosure()
     const bridgeSelectTokenModalDisclosure = _useBridgeSelectTokenModalDisclosure()
     const selectNetworkModalDiscloresure = _useSelectNetworkModalDisclosure()
 
     return {
         inviteModalDisclosure,
-        settingsModalDisclosure,
+        accountsModalDisclosure,
         bridgeSelectTokenModalDisclosure,
         selectNetworkModalDiscloresure
     }
@@ -34,6 +35,6 @@ export const useModals = () : UseModalReturn => {
 }
 
 export * from "./useInviteModalDiscloresure"
-export * from "./useSettingsModalDiscloresure"
+export * from "./useAccountsModalDiscloresure"
 export * from "./useBridgeSelectTokenModalDiscloresure"
 export * from "./useSelectNetworkModalDiscloresure"
