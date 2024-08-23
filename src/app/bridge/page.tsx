@@ -35,13 +35,24 @@ const Page = () => {
         (state) => state.chainReducer.preferenceChainKey
     )
 
-    const aptosBalance = useAppSelector(state => state.chainReducer.aptos.balance)
-    const solanaBalance = useAppSelector(state => state.chainReducer.solana.balance)
+    const aptosBalance = useAppSelector(
+        (state) => state.chainReducer.aptos.balance
+    )
+    const solanaBalance = useAppSelector(
+        (state) => state.chainReducer.solana.balance
+    )
+
     const balanceMap: Record<string, ChainBalance> = {
         aptos: aptosBalance,
         solana: solanaBalance,
     }
-    const { amount: nativeAmount } = balanceMap[preferenceChainKey]
+    const { amount: nativeAmount } = {
+        ...balanceMap[
+            chainConfig().chains.find(
+                ({ chain }) => formik.values.tokenId.chain === chain
+            )?.key ?? ""
+        ],
+    }
 
     const chains = [
         ...chainConfig().chains.filter(({ key }) => key !== preferenceChainKey),
@@ -59,17 +70,21 @@ const Page = () => {
 
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
 
-    const default1 : { accountAddress?: AccountAddress  } = {}
-    const { accountAddress } = mnemonic ? createAptosAccount({
-        accountNumber: formik.values.targetAccountNumber,
-        mnemonic,
-    }) : default1
+    const default1: { accountAddress?: AccountAddress } = {}
+    const { accountAddress } = mnemonic
+        ? createAptosAccount({
+            accountNumber: formik.values.targetAccountNumber,
+            mnemonic,
+        })
+        : default1
 
-    const default2 : { publicKey?: PublicKey } = {}
-    const { publicKey } = mnemonic ? createSolanaAccount({
-        accountNumber: formik.values.targetAccountNumber,
-        mnemonic,
-    }) : default2
+    const default2: { publicKey?: PublicKey } = {}
+    const { publicKey } = mnemonic
+        ? createSolanaAccount({
+            accountNumber: formik.values.targetAccountNumber,
+            mnemonic,
+        })
+        : default2
 
     const map: Record<string, string> = {
         aptos: accountAddress?.toString() ?? "",
@@ -99,11 +114,7 @@ const Page = () => {
                         <div className="text-sm">Select Token</div>
                         <Spacer y={1.5} />
                     </div>
-                    <Button
-                        className="px-3 bg-content2"
-                        onPress={onOpen}
-                        fullWidth
-                    >
+                    <Button className="px-3 bg-content2" onPress={onOpen} fullWidth>
                         <div className="flex gap-2 items-center w-full">
                             <div className="flex gap-2 items-center">
                                 <Image className="w-5 h-5" src={imageUrl} />
@@ -126,9 +137,7 @@ const Page = () => {
                         onBlur={formik.handleBlur}
                         isInvalid={!!(formik.touched.amount && formik.errors.amount)}
                         errorMessage={formik.touched.amount && formik.errors.amount}
-                        description={
-                            `Balance: ${isNative ? nativeAmount : 0} ${symbol}`
-                        }
+                        description={`Balance: ${isNative ? nativeAmount : 0} ${symbol}`}
                         endContent={
                             <div className="text-sm text-foreground-400">{symbol}</div>
                         }

@@ -31,7 +31,7 @@ export const BridgeSelectTokenModal = () => {
                     <Card>
                         <CardBody className="p-0">
                             <div>
-                                {tokens.map(({ imageUrl, key, tokenId, name }, index) => (
+                                {tokens.map(({ imageUrl, key, tokenId, name, symbol }, index) => (
                                     <div key={key}>
                                         <Card
                                             disableRipple
@@ -45,7 +45,10 @@ export const BridgeSelectTokenModal = () => {
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex gap-2 items-center">
                                                         <Image className="w-5 h-5" src={imageUrl} />
-                                                        {name}
+                                                        <div className="flex gap-1 items-center">
+                                                            <div>{name}</div>
+                                                            <div className="text-foreground-400">{symbol}</div>
+                                                        </div>
                                                     </div>
                                                     {formik.values.tokenId.address === tokenId.address && formik.values.tokenId.chain === tokenId.chain && (
                                                         <CheckboxIcon isSelected className="w-3"/>
