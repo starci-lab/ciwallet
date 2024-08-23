@@ -14,10 +14,10 @@ export interface MnemonicToSeedParams {
 
 export const mnemonicToSeed = ({
     mnemonic,
-    password,
-    salt
+    password
 }: MnemonicToSeedParams) =>
     mnemonicToSeedSync(
         mnemonic,
-        sha256Hash(password, salt).substring(0, 32)
+        sha256Hash(password).substring(0, 32)
     )
+

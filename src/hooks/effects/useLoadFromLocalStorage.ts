@@ -40,12 +40,9 @@ export const useLoadFromLocalStorage = () => {
 
     useEffect(() => {
         if (!password) return
-        const handleEffect = async () => {
-            const mnemonic = await loadMnemonic(password)
-            dispatch(setMnemonic(mnemonic))
-            router.push(constantConfig().path.home)
-        }
-        handleEffect()
+        const mnemonic = loadMnemonic(password)
+        dispatch(setMnemonic(mnemonic))
+        router.push(constantConfig().path.home)
     }, [password])
 
     const firstMount = useRef(false)
@@ -55,7 +52,6 @@ export const useLoadFromLocalStorage = () => {
             firstMount.current = true  
             return
         }
-
         if (!preferenceChainKey) return
         savePreferenceChainKey(preferenceChainKey)
     }, [preferenceChainKey])

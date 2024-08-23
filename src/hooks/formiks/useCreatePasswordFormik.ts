@@ -29,8 +29,8 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
     const formik = useFormik({
         initialValues,
         validationSchema,
-        onSubmit: async ({ password }) => {
-            await saveEncryptedMnemonic({
+        onSubmit: ({ password }) => {
+            saveEncryptedMnemonic({
                 mnemonic,
                 password
             })

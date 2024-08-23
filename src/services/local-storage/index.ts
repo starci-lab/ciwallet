@@ -1,6 +1,5 @@
 import { defaultChainKey } from "@/config"
-import { EncryptedResult } from "../cryptography"
-import { EncryptMnemonicParams, decryptMnemonic, encryptMnemonic } from "../routes"
+import { EncryptMnemonicParams, EncryptedResult, decrypt, encrypt } from "../cryptography"
 import { AccountNumbers } from "@/redux"
 
 const ACCOUNT_NUMBERS = "account-numbers"
@@ -13,24 +12,34 @@ export const saveAccountNumbers = (accountNumbers: AccountNumbers) => {
 
 export const loadAccountNumber = (): AccountNumbers => {
     const found = localStorage.getItem(ACCOUNT_NUMBERS)
-    return found ? JSON.parse(found) : {
-        aptos: 0,
-        solana: 0
-    }
+    return found
+        ? JSON.parse(found)
+        : {
+            aptos: 0,
+            solana: 0,
+        }
 }
 
-export const saveEncryptedMnemonic = async (
-    params: EncryptMnemonicParams
-) => {
-    const result = await encryptMnemonic(params)
+export const saveEncryptedMnemonic = ({
+    mnemonic,
+    password,
+}: EncryptMnemonicParams) => {
+    const result = encrypt({
+        data: mnemonic,
+        key: password,
+    })
     localStorage.setItem(ENCRYPTED_MNEMONIC, JSON.stringify(result))
 }
 
-export const loadMnemonic = async (password: string) => {
+export const loadMnemonic = (password: string) => {
     const found = localStorage.getItem(ENCRYPTED_MNEMONIC)
     if (!found) return ""
     const encryptedResult = JSON.parse(found) as EncryptedResult
-    return await decryptMnemonic({ password, encryptedResult })
+    return decrypt({
+        key: password,
+        encryptedData: encryptedResult.data,
+        iv: encryptedResult.iv,
+    })
 }
 
 export const foundEncryptedMnemonic = () => {

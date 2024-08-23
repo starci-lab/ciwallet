@@ -15,7 +15,6 @@ export const useCredentials = () => {
 
     useEffect(() => {
         if (!mnemonic) return
-
         const { publicKey, privateKey, accountAddress } = createAptosAccount({
             mnemonic,
             accountNumber: accountNumbers.aptos.activeAccountNumber,
@@ -32,19 +31,16 @@ export const useCredentials = () => {
 
     useEffect(() => {
         if (!mnemonic) return
-        const handleEffect = async () => {
-            const { publicKey, secretKey: privateKey } = await createSolanaAccount({
-                mnemonic,
-                accountNumber: accountNumbers.solana.activeAccountNumber,
+        const { publicKey, secretKey: privateKey } = createSolanaAccount({
+            mnemonic,
+            accountNumber: accountNumbers.solana.activeAccountNumber,
+        })
+        dispatch(
+            setSolanaCredential({
+                address: publicKey.toString(),
+                publicKey: publicKey.toString(),
+                privateKey: privateKey.toString(),
             })
-            dispatch(
-                setSolanaCredential({
-                    address: publicKey.toString(),
-                    publicKey: publicKey.toString(),
-                    privateKey: privateKey.toString(),
-                })
-            )
-        }
-        handleEffect()
+        )
     }, [mnemonic, accountNumbers.solana])
 }

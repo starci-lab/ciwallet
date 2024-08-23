@@ -1,16 +1,16 @@
 import { Keypair } from "@solana/web3.js"
-import { getSeed } from "../../routes"
+import { getSeed } from "@/services"
 
 export interface CreateSolanaAccountParams {
     mnemonic: string;
     accountNumber: number;
   }
   
-export const createSolanaAccount = async ({
+export const createSolanaAccount = ({
     mnemonic,
     accountNumber
 }: CreateSolanaAccountParams) => {
-    const seed = await getSeed({
+    const seed = getSeed({
         mnemonic,
         accountNumber,
     })

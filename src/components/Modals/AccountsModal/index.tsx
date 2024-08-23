@@ -45,7 +45,7 @@ export const AccountsModal = () => {
                         <CardBody className="p-0">
                             <div>
                                 {accounts.map((account, index) => (
-                                    <div key={account.number} className="px-3 py-2">
+                                    <div key={account.number}>
                                         <AccountUser
                                             account={account}
                                             key={account.number}

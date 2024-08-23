@@ -3,24 +3,18 @@ import { Container } from "@/components"
 import React, { useEffect } from "react"
 import { downloadTextFile } from "@/services"
 import { setMnemonic, useAppDispatch, useAppSelector } from "@/redux"
-import { Button, Skeleton, Snippet, Spacer } from "@nextui-org/react"
-import useSWRMutation from "swr/mutation"
-import { getMnemonic } from "@/services"
+import { Button, Snippet, Spacer } from "@nextui-org/react"
 import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
+import { getMnemonic } from "@/services"
 
 const Page = () => {
     const dispatch = useAppDispatch()
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
     
-    const { trigger, isMutating } = useSWRMutation("MNEMONIC", async () => await getMnemonic())
-    
     useEffect(() => {
-        const handleEffect = async () => {
-            const mnemonic = await trigger()
-            dispatch(setMnemonic(mnemonic))
-        }
-        handleEffect()
+        const mnemonic = getMnemonic()
+        dispatch(setMnemonic(mnemonic))
     }, [])
 
     const router = useRouter()
@@ -28,15 +22,13 @@ const Page = () => {
     return (
         <Container hasPadding centerContent>
             <div className="w-full">
-                <Skeleton isLoaded={!(isMutating || mnemonic === "")} className="rounded-medium">
-                    <Snippet
-                        hideSymbol
-                        classNames={{ pre: "text-justify !whitespace-pre-line" }}
-                        className="w-full"
-                    >
-                        {mnemonic || "lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum"}
-                    </Snippet>
-                </Skeleton>
+                <Snippet
+                    hideSymbol
+                    classNames={{ pre: "text-justify !whitespace-pre-line" }}
+                    className="w-full"
+                >
+                    {mnemonic || "lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum"}
+                </Snippet>
                 <Spacer y={12} />
                 <Button
                     onPress={() =>

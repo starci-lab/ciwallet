@@ -3,9 +3,8 @@
 import { StoredAccount, useAppSelector } from "@/redux"
 import { createAptosAccount, createSolanaAccount } from "@/services"
 import { formatAddress } from "@/utils"
-import { Snippet, Card, CardBody, User, CheckboxIcon } from "@nextui-org/react"
+import { Card, CardBody, User, CheckboxIcon } from "@nextui-org/react"
 import React from "react"
-import useSWR from "swr"
 
 interface AccountUserProps {
     account: StoredAccount
@@ -21,39 +20,38 @@ export const AccountUser = ({account: { imageUrl, name, number }, activeAccountN
         mnemonic
     })
 
-    const { data } = useSWR("SOLANA_ACCOUNT", () => createSolanaAccount({
+    const { publicKey } = createSolanaAccount({
         accountNumber: number,
         mnemonic
-    }))
+    })
     
     const map: Record<string, string> = {
         "aptos": accountAddress.toString(),
-        "solana": data?.publicKey.toString() ?? ""
+        "solana": publicKey.toString() ?? ""
     }
 
     return (
-        <div className="flex items-center justify-between">
-            <div className="w-fit">
-                <Snippet hideSymbol classNames={{
-                    base: "p-0 bg-inhenrit",
-                }} size="sm" className="flex" codeString={map[preferenceChainKey]}>
-                    <Card classNames={{
-                        base: "!bg-transparent"
-                    }} disableRipple isPressable shadow="none">
-                        <CardBody className="p-0">
-                            <User
-                                avatarProps={{
-                                    src: imageUrl
-                                }}
-                                name={name}
-                                description={
-                                    formatAddress(map[preferenceChainKey])
-                                }/>
-                        </CardBody>
-                    </Card>
-                </Snippet> 
-            </div>
-            <CheckboxIcon isSelected={activeAccountNumber === number} className="w-3"/>
-        </div>
+        <Card classNames={{
+            base: "!bg-transparent"
+        }} disableRipple isPressable fullWidth shadow="none">
+            <CardBody className="px-3 py-2">
+                <div className="flex justify-between items-center w-full">
+                    <User
+                        avatarProps={{
+                            src: imageUrl
+                        }}
+                        name={
+                            <div className="flex gap-1 text-sm items-center">
+                                <div>{name}</div>
+                                <div className="text-primary">{`[${number}]`}</div>
+                            </div>
+                        }
+                        description={
+                            formatAddress(map[preferenceChainKey])
+                        }/>
+                    <CheckboxIcon isSelected={activeAccountNumber === number} className="w-3"/>
+                </div>   
+            </CardBody>
+        </Card>
     )
 }
