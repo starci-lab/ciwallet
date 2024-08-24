@@ -67,14 +67,11 @@ export const TransferTab = () => {
 
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
 
-    const default1: { address?: string } = {}
-    const { address } = mnemonic
-        ? createAccount({
-            accountNumber: formik.values.targetAccountNumber,
-            mnemonic,
-            chainKey: formik.values.targetChainKey
-        })
-        : default1
+    const { address } = createAccount({
+        accountNumber: formik.values.targetAccountNumber,
+        mnemonic,
+        chainKey: formik.values.targetChainKey
+    })
 
     const isNative = formik.values.tokenId.address === "native"
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { StoredAccount, setActiveAccountNumber, useAppDispatch, useAppSelector } from "@/redux"
-import { createAptosAccount, createSolanaAccount } from "@/services"
+import { createAccount } from "@/services"
 import { truncateString } from "@/utils"
 import { Card, CardBody, User, CheckboxIcon } from "@nextui-org/react"
 import React from "react"
@@ -17,20 +17,11 @@ export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, a
     const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
     const dispatch = useAppDispatch()
 
-    const { accountAddress } = createAptosAccount({
+    const { address } = createAccount({
         accountNumber,
-        mnemonic
+        mnemonic,
+        chainKey: preferenceChainKey
     })
-
-    const { publicKey } = createSolanaAccount({
-        accountNumber,
-        mnemonic
-    })
-    
-    const map: Record<string, string> = {
-        "aptos": accountAddress.toString(),
-        "solana": publicKey.toString() ?? ""
-    }
 
     return (
         <Card classNames={{
@@ -52,7 +43,7 @@ export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, a
                             </div>
                         }
                         description={
-                            truncateString(map[preferenceChainKey])
+                            truncateString(address)
                         }/>
                     <CheckboxIcon isSelected={activeAccountNumber === accountNumber} className="w-3"/>
                 </div>   

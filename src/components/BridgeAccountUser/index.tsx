@@ -2,7 +2,7 @@
 
 import { useBridgeTransferFormik } from "@/hooks"
 import { StoredAccount, useAppSelector } from "@/redux"
-import { createAptosAccount, createSolanaAccount } from "@/services"
+import { createAccount } from "@/services"
 import { truncateString } from "@/utils"
 import { Card, CardBody, User, CheckboxIcon } from "@nextui-org/react"
 import React from "react"
@@ -16,21 +16,12 @@ interface BridgeAccountUserProps {
 export const BridgeAccountUser = ({account: { imageUrl, name }, accountNumber, targetChainKey}: BridgeAccountUserProps) => {
     const mnemonic = useAppSelector(state => state.authReducer.mnemonic)
 
-    const { accountAddress } = createAptosAccount({
+    const { address } = createAccount({
         accountNumber,
-        mnemonic
-    })
-
-    const { publicKey } = createSolanaAccount({
-        accountNumber,
-        mnemonic
+        mnemonic,
+        chainKey: targetChainKey
     })
     
-    const map: Record<string, string> = {
-        "aptos": accountAddress.toString(),
-        "solana": publicKey.toString() ?? ""
-    }
-
     const formik = useBridgeTransferFormik()
 
     return (
@@ -50,7 +41,7 @@ export const BridgeAccountUser = ({account: { imageUrl, name }, accountNumber, t
                             </div>
                         }
                         description={
-                            truncateString(map[targetChainKey])
+                            truncateString(address)
                         }/>
                     <CheckboxIcon isSelected={formik.values.targetAccountNumber === accountNumber} className="w-3"/>
                 </div>   

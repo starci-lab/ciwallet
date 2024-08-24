@@ -1,6 +1,14 @@
-import { aptosExplorerUrls, createAptosAccount, getAptosBalance } from "../aptos"
-import { Network } from "../common"
-import { createSolanaAccount, getSolanaBalance, solanaExplorerUrls } from "../solana"
+import {
+    aptosExplorerUrls,
+    createAptosAccount,
+    getAptosBalance,
+} from "../aptos"
+import { ChainAccount, Network } from "../common"
+import {
+    createSolanaAccount,
+    getSolanaBalance,
+    solanaExplorerUrls,
+} from "../solana"
 
 export interface GetBalanceParams {
   address: string;
@@ -26,12 +34,22 @@ export const getBalance = async ({
 }
 
 export interface CreateAccountParams {
-    mnemonic: string;
-    accountNumber: number;
-    chainKey: string;
+  mnemonic: string;
+  accountNumber: number;
+  chainKey: string;
 }
 
-export const createAccount = ({ mnemonic, accountNumber, chainKey }: CreateAccountParams) => {
+export const createAccount = ({
+    mnemonic,
+    accountNumber,
+    chainKey,
+}: CreateAccountParams): ChainAccount => {
+    if (!mnemonic)
+        return {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        }
     switch (chainKey) {
     case "aptos":
         return createAptosAccount({ mnemonic, accountNumber })
