@@ -13,7 +13,7 @@ import {
     CardBody,
 } from "@nextui-org/react"
 import {
-    useBridgeFormik,
+    useBridgeTransferFormik,
     useBridgeSelectRecipientModalDisclosure,
 } from "@/hooks"
 import { ChainAccountNumber, useAppSelector } from "@/redux"
@@ -21,7 +21,7 @@ import { BridgeAccountUser } from "../../BridgeAccountUser"
 
 export const BridgeSelectRecipientModal = () => {
     const { isOpen, onClose } = useBridgeSelectRecipientModalDisclosure()
-    const formik = useBridgeFormik()
+    const formik = useBridgeTransferFormik()
 
     const aptos =
     useAppSelector(state => state.authReducer.accountNumbers.aptos)

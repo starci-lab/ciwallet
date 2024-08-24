@@ -4,30 +4,43 @@ import { use } from "react"
 import { HooksContext } from "../provider.hooks"
 import { _useCreatePasswordFormik } from "./useCreatePasswordFormik"
 import { TransferFormikValues, _useTransferFormik } from "./useTransferFormik"
-import { BridgeFormikValues, _useBridgeFormik } from "./useBridgeFormik"
-import { CreateAccountFormikValues, _useCreateAccountFormik } from "./useCreateAccountFormik"
+import {
+    BridgeTransferFormikValues,
+    _useBridgeTransferFormik,
+} from "./useBridgeTransferFormik"
+import {
+    CreateAccountFormikValues,
+    _useCreateAccountFormik,
+} from "./useCreateAccountFormik"
+import {
+    BridgeRedeemFormikValues,
+    _useBridgeRedeemFormik,
+} from "./useBridgeRedeemFormik"
 
 export interface UseFormiksReturn {
-    passwordFormik: FormikProps<PasswordFormikValues>
-    createPasswordFormik: FormikProps<PasswordFormikValues>,
-    transferFormik: FormikProps<TransferFormikValues>,
-    bridgeFormik: FormikProps<BridgeFormikValues>,
-    createAccountFormik: FormikProps<CreateAccountFormikValues>
+  passwordFormik: FormikProps<PasswordFormikValues>;
+  createPasswordFormik: FormikProps<PasswordFormikValues>;
+  transferFormik: FormikProps<TransferFormikValues>;
+  bridgeTransferFormik: FormikProps<BridgeTransferFormikValues>;
+  bridgeRedeemFormik: FormikProps<BridgeRedeemFormikValues>;
+  createAccountFormik: FormikProps<CreateAccountFormikValues>;
 }
 
 export const _useFormiks = (): UseFormiksReturn => {
     const passwordFormik = _usePasswordFormik()
     const createPasswordFormik = _useCreatePasswordFormik()
     const transferFormik = _useTransferFormik()
-    const bridgeFormik = _useBridgeFormik()
+    const bridgeTransferFormik = _useBridgeTransferFormik()
+    const bridgeRedeemFormik = _useBridgeRedeemFormik()
     const createAccountFormik = _useCreateAccountFormik()
 
     return {
         passwordFormik,
         createPasswordFormik,
         transferFormik,
-        bridgeFormik,
-        createAccountFormik
+        bridgeTransferFormik,
+        bridgeRedeemFormik,
+        createAccountFormik,
     }
 }
 
@@ -40,5 +53,6 @@ export const useFormiks = (): UseFormiksReturn => {
 export * from "./usePasswordFormik"
 export * from "./useCreatePasswordFormik"
 export * from "./useTransferFormik"
-export * from "./useBridgeFormik"
+export * from "./useBridgeTransferFormik"
+export * from "./useBridgeRedeemFormik"
 export * from "./useCreateAccountFormik"

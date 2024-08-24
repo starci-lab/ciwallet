@@ -1,6 +1,6 @@
 "use client"
 
-import { useBridgeFormik } from "@/hooks"
+import { useBridgeTransferFormik } from "@/hooks"
 import { StoredAccount, useAppSelector } from "@/redux"
 import { createAptosAccount, createSolanaAccount } from "@/services"
 import { formatAddress } from "@/utils"
@@ -31,7 +31,7 @@ export const BridgeAccountUser = ({account: { imageUrl, name }, accountNumber, t
         "solana": publicKey.toString() ?? ""
     }
 
-    const formik = useBridgeFormik()
+    const formik = useBridgeTransferFormik()
 
     return (
         <Card classNames={{

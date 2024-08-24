@@ -1,3 +1,5 @@
 export * from "./config.slice"
 export * from "./auth.slice"
 export * from "./chain.slice"
+export * from "./tab.slice"
+export * from "./result.slice"

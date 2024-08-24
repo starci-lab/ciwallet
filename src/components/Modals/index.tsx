@@ -5,6 +5,8 @@ import { BridgeSelectTokenModal } from "./BridgeSelectTokenModal"
 import { SelectNetworkModal } from "./SelectNetworkModal"
 import { CreateAccountModal } from "./CreateAccountModal"
 import { BridgeSelectRecipientModal } from "./BridgeSelectRecipientModal"
+import { BridgeTransferResultModal } from "./BridgeTransferResultModal"
+import { BridgeRedeemResultModal } from "./BridgeRedeemResultModal"
 
 export const Modals = () => {
     return (
@@ -15,6 +17,8 @@ export const Modals = () => {
             <SelectNetworkModal />
             <CreateAccountModal />
             <BridgeSelectRecipientModal />
+            <BridgeTransferResultModal />
+            <BridgeRedeemResultModal />
         </div>
     )
 }

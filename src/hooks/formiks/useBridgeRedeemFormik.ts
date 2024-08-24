@@ -15,7 +15,7 @@ import { createAptosAccount, createSolanaAccount, transfer } from "@/services"
 import { useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
 
-export interface BridgeFormikValues {
+export interface BridgeRedeemFormikValues {
   targetChainKey: string;
   targetAccountNumber: 0;
   targetAddress: "";
@@ -23,7 +23,7 @@ export interface BridgeFormikValues {
   tokenId: TokenId;
 }
 
-export const _useBridgeFormik = (): FormikProps<BridgeFormikValues> => {
+export const _useBridgeRedeemFormik = (): FormikProps<BridgeRedeemFormikValues> => {
     const preferenceChainKey = useAppSelector(
         (state) => state.chainReducer.preferenceChainKey
     )
@@ -54,7 +54,7 @@ export const _useBridgeFormik = (): FormikProps<BridgeFormikValues> => {
         formik.setFieldValue("targetAccountNumber", defaultTargetAccountNumber)
     }, [aptosAccountNumber, solanaAccountNumber])
 
-    const initialValues: BridgeFormikValues = {
+    const initialValues: BridgeRedeemFormikValues = {
         amount: 0,
         targetAccountNumber: 0,
         targetAddress: "",
@@ -94,7 +94,7 @@ export const _useBridgeFormik = (): FormikProps<BridgeFormikValues> => {
             }
 
             const address = targetAddress || map[targetChainKey]
-            console.log(chainConfig().chains.find(({ key }) => key === preferenceChainKey)?.chain)
+            if (!signer) return
             const x = await transfer({
                 signer,
                 transferAmount: computeRaw(formik.values.amount),
@@ -128,7 +128,7 @@ export const _useBridgeFormik = (): FormikProps<BridgeFormikValues> => {
     return formik
 }
 
-export const useBridgeFormik = () => {
-    const { bridgeFormik } = useFormiks()
-    return bridgeFormik
+export const useBridgeRedeemFormik = () => {
+    const { bridgeRedeemFormik } = useFormiks()
+    return bridgeRedeemFormik
 }

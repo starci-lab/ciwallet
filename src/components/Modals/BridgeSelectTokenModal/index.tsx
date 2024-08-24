@@ -14,13 +14,13 @@ import {
     Divider,
     CheckboxIcon,
 } from "@nextui-org/react"
-import { useBridgeFormik, useBridgeSelectTokenModalDisclosure } from "@/hooks"
+import { useBridgeTransferFormik, useBridgeSelectTokenModalDisclosure } from "@/hooks"
 import { chainConfig } from "@/config"
 
 export const BridgeSelectTokenModal = () => {
     const { isOpen, onClose } =
     useBridgeSelectTokenModalDisclosure()
-    const formik = useBridgeFormik()
+    const formik = useBridgeTransferFormik()
 
     const tokens = [...chainConfig().tokens]
     return (

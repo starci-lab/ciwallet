@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.11.4",
+    "@aptos-labs/aptos-faucet-client": "0.2.0",
     "@aptos-labs/ts-sdk": "1.27.0",
     "@heroicons/react": "2.1.5",
     "@nextui-org/react": "2.4.6",
