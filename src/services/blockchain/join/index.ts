@@ -1,6 +1,6 @@
-import { aptosExplorerUrls, getAptosBalance } from "../aptos"
+import { aptosExplorerUrls, createAptosAccount, getAptosBalance } from "../aptos"
 import { Network } from "../common"
-import { getSolanaBalance, solanaExplorerUrls } from "../solana"
+import { createSolanaAccount, getSolanaBalance, solanaExplorerUrls } from "../solana"
 
 export interface GetBalanceParams {
   address: string;
@@ -20,6 +20,23 @@ export const getBalance = async ({
         return getAptosBalance(address, network)
     case "solana":
         return getSolanaBalance(address, network)
+    default:
+        throw new Error("Invalid chain key")
+    }
+}
+
+export interface CreateAccountParams {
+    mnemonic: string;
+    accountNumber: number;
+    chainKey: string;
+}
+
+export const createAccount = ({ mnemonic, accountNumber, chainKey }: CreateAccountParams) => {
+    switch (chainKey) {
+    case "aptos":
+        return createAptosAccount({ mnemonic, accountNumber })
+    case "solana":
+        return createSolanaAccount({ mnemonic, accountNumber })
     default:
         throw new Error("Invalid chain key")
     }

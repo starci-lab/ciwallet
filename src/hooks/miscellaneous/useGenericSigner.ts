@@ -30,7 +30,7 @@ export const useGenericSigner = <N extends Network, C extends Chain>(
             })
         )
         const _aptosAccount = _aptosAccounts.find(
-            (account) => account.accountAddress.toString() === address
+            (account) => account.address === address
         )
         if (!_aptosAccount) {
             console.warn(`Aptos account not found for ${address}` )
@@ -39,8 +39,8 @@ export const useGenericSigner = <N extends Network, C extends Chain>(
         return aptosSigner({
             chain: "Aptos",
             network,
-            privateKey: _aptosAccount.privateKey.toString(),
-            address: _aptosAccount.accountAddress.toString(),
+            privateKey: _aptosAccount.privateKey,
+            address: _aptosAccount.address,
             debug: true,
         }) as unknown as SignAndSendSigner<N, C>
     }
@@ -65,7 +65,7 @@ export const useGenericSigner = <N extends Network, C extends Chain>(
         return solanaSigner({
             chain: "Solana",
             network,
-            privateKey: Buffer.from(_solanaAccount.secretKey).toString("hex"),
+            privateKey: _solanaAccount.privateKey,
             debug: true,
         }) as unknown as SignAndSendSigner<N, C>
     }

@@ -5,7 +5,7 @@ import {
     Network as AptosNetwork,
     Account,
 } from "@aptos-labs/ts-sdk"
-import { Network } from "../common"
+import { ChainAccount, Network } from "../common"
 
 export const aptosConfig = (network: Network = Network.Testnet) => {
     const networkMap: Record<Network, AptosNetwork> = {
@@ -36,11 +36,16 @@ export interface CreateAptosAccountParams {
 export const createAptosAccount = ({
     mnemonic,
     accountNumber,
-}: CreateAptosAccountParams) => {
-    return Account.fromDerivationPath({
+}: CreateAptosAccountParams) : ChainAccount => {
+    const account = Account.fromDerivationPath({
         mnemonic,
         path: `m/44'/637'/${accountNumber}'/0'/0'`,
     })
+    return {
+        address: account.accountAddress.toString(),
+        privateKey: account.privateKey.toString(),
+        publicKey: account.publicKey.toString(),
+    }
 }
 
 export const aptosNodes: Record<Network, string> = {

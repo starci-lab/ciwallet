@@ -1,5 +1,5 @@
 import { Cluster, Connection, Keypair, PublicKey, clusterApiUrl } from "@solana/web3.js"
-import { Network, getSeed,  } from "@/services"
+import { ChainAccount, Network, getSeed,  } from "@/services"
 import { computeDenomination } from "@/utils"
 
 export interface CreateSolanaAccountParams {
@@ -10,14 +10,19 @@ export interface CreateSolanaAccountParams {
 export const createSolanaAccount = ({
     mnemonic,
     accountNumber
-}: CreateSolanaAccountParams) => {
+}: CreateSolanaAccountParams) : ChainAccount => {
     const seed = getSeed({
         mnemonic,
         accountNumber,
     })
-    return Keypair.fromSeed(
+    const account = Keypair.fromSeed(
         seed.subarray(0, 32)
     )
+    return {
+        address: account.publicKey.toString(),
+        privateKey: Buffer.from(account.secretKey).toString("hex"),
+        publicKey: account.publicKey.toString(),
+    }
 }
 
 export const solanaClient = (network: Network = Network.Testnet) =>

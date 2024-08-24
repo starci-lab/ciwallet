@@ -16,10 +16,8 @@ import {
 } from "@nextui-org/react"
 import { ChainBalance, useAppSelector } from "@/redux"
 import React from "react"
-import { createAptosAccount, createSolanaAccount } from "@/services"
+import { createAccount } from "@/services"
 import { truncateString } from "@/utils"
-import { AccountAddress } from "@aptos-labs/ts-sdk"
-import { PublicKey } from "@solana/web3.js"
 
 export const TransferTab = () => {
     const formik = useBridgeTransferFormik()
@@ -69,28 +67,14 @@ export const TransferTab = () => {
 
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
 
-    const default1: { accountAddress?: AccountAddress } = {}
-    const { accountAddress } = mnemonic
-        ? createAptosAccount({
+    const default1: { address?: string } = {}
+    const { address } = mnemonic
+        ? createAccount({
             accountNumber: formik.values.targetAccountNumber,
             mnemonic,
+            chainKey: formik.values.targetChainKey
         })
         : default1
-
-    const default2: { publicKey?: PublicKey } = {}
-    const { publicKey } = mnemonic
-        ? createSolanaAccount({
-            accountNumber: formik.values.targetAccountNumber,
-            mnemonic,
-        })
-        : default2
-
-    const map: Record<string, string> = {
-        aptos: accountAddress?.toString() ?? "",
-        solana: publicKey?.toString() ?? "",
-    }
-
-    const address = map[formik.values.targetChainKey]
 
     const isNative = formik.values.tokenId.address === "native"
 
@@ -176,7 +160,7 @@ export const TransferTab = () => {
                             fullWidth
                             onPress={onBridgeSelectRecipientModalDisclosureOpen}
                         >
-                            {truncateString(address)}
+                            {address ? truncateString(address) : ""}
                         </Button>
                     </div>
                 </div>

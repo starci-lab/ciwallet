@@ -11,7 +11,7 @@ import {
 } from "@/config"
 import { useEffect } from "react"
 import { setBridgeTransferResult, useAppDispatch, useAppSelector } from "@/redux"
-import { createAptosAccount, createSolanaAccount, transfer } from "@/services"
+import { createAccount, transfer } from "@/services"
 import { useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
 
@@ -83,22 +83,13 @@ export const _useBridgeTransferFormik =
               amount,
               tokenId
           }) => {
-              const { accountAddress } = createAptosAccount({
+              const { address: createdAddress } = createAccount({
                   accountNumber: targetAccountNumber,
                   mnemonic,
+                  chainKey: targetChainKey,
               })
-
-              const { publicKey } = createSolanaAccount({
-                  accountNumber: targetAccountNumber,
-                  mnemonic,
-              })
-
-              const map: Record<string, string> = {
-                  aptos: accountAddress.toString(),
-                  solana: publicKey.toString() ?? "",
-              }
-
-              const address = targetAddress || map[targetChainKey]
+              
+              const address = targetAddress || createdAddress
               if (!signer) return
               const { txHash, vaa } = await transfer({
                   signer,
