@@ -24,7 +24,7 @@ export const RedeemTab = () => {
         serializedVaa,
         targetChainKey,
         targetAddress,
-    } = storedVaas[selectedVaaIndex]
+    } = { ...storedVaas.filter(({ isUsed }) => !isUsed)[selectedVaaIndex] }
 
     const tokens = [...chainConfig().tokens]
 
