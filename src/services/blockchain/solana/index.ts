@@ -40,4 +40,27 @@ export const getSolanaBalance = async (
     return computeDenomination(amount, 9)
 }
     
+export const solanaExplorerUrls = (
+    value: string,
+    network: Network = Network.Testnet
+) => {
+    switch (network) {
+    case Network.Devnet:
+        return {
+            address: `https://explorer.solana.com/address/${value}?cluster=devnet`,
+            tx: `https://explorer.solana.com/tx/${value}?cluster=devnet`,
+        }
+    case Network.Testnet:
+        return {
+            address: `https://explorer.solana.com/address/${value}?cluster=devnet`,
+            tx: `https://explorer.solana.com/tx/${value}?cluster=devnet`,
+        }
+    case Network.Mainnet:
+        return {
+            address: `https://explorer.solana.com/address/${value}`,
+            tx: `https://explorer.solana.com/tx/${value}`,
+        }
+    }
+}
+
 

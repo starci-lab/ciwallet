@@ -1,132 +1,69 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
-import { TokenId, nativeTokenId } from "@wormhole-foundation/sdk"
 import { useFormiks } from "."
+import { chainConfig, defaultChain } from "@/config"
 import {
-    chainConfig,
-    defaultChain,
-    defaultChainKey,
-    defaultSecondaryChain,
-    defaultSecondaryChainKey,
-} from "@/config"
-import { useEffect } from "react"
-import { useAppSelector } from "@/redux"
-import { createAptosAccount, createSolanaAccount, transfer } from "@/services"
-import { useSigner } from "../miscellaneous"
-import { computeRaw } from "@/utils"
+    setBridgeRedeemResult,
+    useAppDispatch,
+    useAppSelector,
+    useVaa,
+} from "@/redux"
+import { redeem } from "@/services"
+import { useGenericSigner } from "../miscellaneous"
+import { deserialize } from "@wormhole-foundation/sdk"
 
 export interface BridgeRedeemFormikValues {
-  targetChainKey: string;
-  targetAccountNumber: 0;
-  targetAddress: "";
-  amount: number;
-  tokenId: TokenId;
+  dump: "";
 }
 
-export const _useBridgeRedeemFormik = (): FormikProps<BridgeRedeemFormikValues> => {
-    const preferenceChainKey = useAppSelector(
-        (state) => state.chainReducer.preferenceChainKey
-    )
-    const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-    const aptosAccountNumber = useAppSelector(
-        (state) => state.authReducer.accountNumbers.aptos.activeAccountNumber
-    )
-    const solanaAccountNumber = useAppSelector(
-        (state) => state.authReducer.accountNumbers.solana.activeAccountNumber
-    )
+export const _useBridgeRedeemFormik =
+  (): FormikProps<BridgeRedeemFormikValues> => {
+      const initialValues: BridgeRedeemFormikValues = {
+          dump: "",
+      }
 
-    const signer = useSigner(preferenceChainKey)
+      const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        let defaultTargetAccountNumber = 0
-        switch (formik.values.targetChainKey) {
-        case "aptos": {
-            defaultTargetAccountNumber = aptosAccountNumber
-            break
-        }
-        case "solana": {
-            defaultTargetAccountNumber = solanaAccountNumber
-            break
-        }
-        default:
-            break
-        }
-        formik.setFieldValue("targetAccountNumber", defaultTargetAccountNumber)
-    }, [aptosAccountNumber, solanaAccountNumber])
+      const validationSchema = Yup.object({
+      //
+      })
 
-    const initialValues: BridgeRedeemFormikValues = {
-        amount: 0,
-        targetAccountNumber: 0,
-        targetAddress: "",
-        targetChainKey: defaultSecondaryChainKey,
-        tokenId: nativeTokenId(defaultSecondaryChain),
-    }
+      const network = useAppSelector((state) => state.chainReducer.network)
 
-    const validationSchema = Yup.object({
-        amount: Yup.number()
-            .min(0, "Amount must be higher than 0")
-            .required("Amount is required"),
-    })
+      const { selectedVaaIndex, storedVaas } = useAppSelector(
+          (state) => state.vaaReducer
+      )
+      const vaa = { ...storedVaas[selectedVaaIndex] }
 
-    const network = useAppSelector((state) => state.chainReducer.network)
+      const signer = useGenericSigner(vaa.targetChainKey, vaa.targetAddress)
 
-    const formik = useFormik({
-        initialValues,
-        validationSchema,
-        onSubmit: async ({
-            targetAccountNumber,
-            targetAddress,
-            targetChainKey,
-        }) => {
-            const { accountAddress } = createAptosAccount({
-                accountNumber: targetAccountNumber,
-                mnemonic,
-            })
+      const formik = useFormik({
+          initialValues,
+          validationSchema,
+          onSubmit: async () => {
+              if (!signer) return
+              const txHash = await redeem({
+                  signer,
+                  vaa: deserialize(
+                      "TokenBridge:Transfer",
+                      Uint8Array.from(Buffer.from(vaa.serializedVaa, "base64"))
+                  ),
+                  senderChainName:
+            chainConfig().chains.find(({ key }) => key === vaa.fromChainKey)
+                ?.chain ?? defaultChain,
+                  redeemChainName:
+            chainConfig().chains.find(({ key }) => key === vaa.targetChainKey)
+                ?.chain ?? defaultChain,
+                  network,
+              })
 
-            const { publicKey } = createSolanaAccount({
-                accountNumber: targetAccountNumber,
-                mnemonic,
-            })
+              dispatch(setBridgeRedeemResult({ txHash, vaa }))
+              dispatch(useVaa(vaa.serializedVaa))
+          },
+      })
 
-            const map: Record<string, string> = {
-                aptos: accountAddress.toString(),
-                solana: publicKey.toString() ?? "",
-            }
-
-            const address = targetAddress || map[targetChainKey]
-            if (!signer) return
-            const x = await transfer({
-                signer,
-                transferAmount: computeRaw(formik.values.amount),
-                sourceChainName: chainConfig().chains.find(({ key }) => key === preferenceChainKey)?.chain ?? defaultChain,
-                targetChainName: chainConfig().chains.find(({ key }) => key === targetChainKey)?.chain ?? defaultChain,
-                network,
-                recipientAddress: address,
-                tokenAddress: formik.values.tokenId.address,
-            })
-            console.log(x)
-        },
-    })
-
-    useEffect(() => {
-        if (preferenceChainKey === defaultSecondaryChainKey) {
-            formik.setFieldValue("targetChainKey", defaultChainKey)
-        } else {
-            formik.setFieldValue("targetChainKey", defaultSecondaryChainKey)
-        }
-    }, [preferenceChainKey])
-
-    useEffect(() => {
-        formik.setFieldValue("tokenId", {
-            address: "native",
-            chain:
-        chainConfig().chains.find(({ key }) => key === preferenceChainKey)
-            ?.chain ?? "",
-        })
-    }, [preferenceChainKey])
-
-    return formik
-}
+      return formik
+  }
 
 export const useBridgeRedeemFormik = () => {
     const { bridgeRedeemFormik } = useFormiks()

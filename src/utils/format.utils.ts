@@ -13,9 +13,14 @@ export const formatNumber = (
     return numeral(value).format(pattern)
 }
 
-export const formatAddress = (address: string) => {
-    if (address.length < 10) {
+export const truncateString = (
+    address: string,
+    start: number = 6,
+    end: number = 4
+) => {
+    if (address.length < start + end) {
         return address
     }
-    return `${address.slice(0, 6)}...${address.slice(-4)}`
+    if (end === 0) return `${address.slice(0, start)}...`
+    return `${address.slice(0, start)}...${address.slice(-end)}`
 }

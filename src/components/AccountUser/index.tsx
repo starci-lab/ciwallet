@@ -2,7 +2,7 @@
 
 import { StoredAccount, setActiveAccountNumber, useAppDispatch, useAppSelector } from "@/redux"
 import { createAptosAccount, createSolanaAccount } from "@/services"
-import { formatAddress } from "@/utils"
+import { truncateString } from "@/utils"
 import { Card, CardBody, User, CheckboxIcon } from "@nextui-org/react"
 import React from "react"
 
@@ -52,7 +52,7 @@ export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, a
                             </div>
                         }
                         description={
-                            formatAddress(map[preferenceChainKey])
+                            truncateString(map[preferenceChainKey])
                         }/>
                     <CheckboxIcon isSelected={activeAccountNumber === accountNumber} className="w-3"/>
                 </div>   

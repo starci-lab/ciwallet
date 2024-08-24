@@ -14,7 +14,6 @@ import { setBridgeTransferResult, useAppDispatch, useAppSelector } from "@/redux
 import { createAptosAccount, createSolanaAccount, transfer } from "@/services"
 import { useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
-import { useBridgeTransferResultModalDiscloresure } from "../modals"
 
 export interface BridgeTransferFormikValues {
   targetChainKey: string;
@@ -72,7 +71,6 @@ export const _useBridgeTransferFormik =
 
       const network = useAppSelector((state) => state.chainReducer.network)
 
-      const { onOpen } = useBridgeTransferResultModalDiscloresure()
       const dispatch = useAppDispatch()
 
       const formik = useFormik({
@@ -82,6 +80,8 @@ export const _useBridgeTransferFormik =
               targetAccountNumber,
               targetAddress,
               targetChainKey,
+              amount,
+              tokenId
           }) => {
               const { accountAddress } = createAptosAccount({
                   accountNumber: targetAccountNumber,
@@ -102,7 +102,7 @@ export const _useBridgeTransferFormik =
               if (!signer) return
               const { txHash, vaa } = await transfer({
                   signer,
-                  transferAmount: computeRaw(formik.values.amount),
+                  transferAmount: computeRaw(amount),
                   sourceChainName:
             chainConfig().chains.find(({ key }) => key === preferenceChainKey)
                 ?.chain ?? defaultChain,
@@ -111,12 +111,19 @@ export const _useBridgeTransferFormik =
                 ?.chain ?? defaultChain,
                   network,
                   recipientAddress: address,
-                  tokenAddress: formik.values.tokenId.address,
+                  tokenAddress: tokenId.address,
               })
               if (vaa === null) return
               const serializedVaa = Buffer.from(serialize(vaa)).toString("base64")
-              dispatch(setBridgeTransferResult({ serializedVaa, txHash }))    
-              onOpen()
+              dispatch(setBridgeTransferResult({ vaa: {
+                  serializedVaa,
+                  amount: Number(amount),
+                  targetChainKey,
+                  fromChainKey: preferenceChainKey,
+                  targetAddress: address,
+                  fromAddress: signer.address(),
+                  tokenId
+              }, txHash }))
           },
       })
 

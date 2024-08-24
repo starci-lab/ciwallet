@@ -8,6 +8,7 @@ export interface UseSwrsReturn {
 
 export const _useSwrs = () : UseSwrsReturn => {
     const account = _useAccount()
+
     return {
         account
     }

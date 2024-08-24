@@ -4,6 +4,7 @@ import {
     useBridgeTransferFormik,
     useBridgeSelectRecipientModalDisclosure,
     useBridgeSelectTokenModalDisclosure,
+    useBridgeTransferResultModalDiscloresure,
 } from "@/hooks"
 import {
     Input,
@@ -16,7 +17,7 @@ import {
 import { ChainBalance, useAppSelector } from "@/redux"
 import React from "react"
 import { createAptosAccount, createSolanaAccount } from "@/services"
-import { formatAddress } from "@/utils"
+import { truncateString } from "@/utils"
 import { AccountAddress } from "@aptos-labs/ts-sdk"
 import { PublicKey } from "@solana/web3.js"
 
@@ -25,6 +26,9 @@ export const TransferTab = () => {
     const { onOpen } = useBridgeSelectTokenModalDisclosure()
     const { onOpen: onBridgeSelectRecipientModalDisclosureOpen } =
     useBridgeSelectRecipientModalDisclosure()
+
+    const { onOpen: onBridgeTransferResultModalDiscloresureOpen } =
+    useBridgeTransferResultModalDiscloresure()
 
     const preferenceChainKey = useAppSelector(
         (state) => state.chainReducer.preferenceChainKey
@@ -91,7 +95,11 @@ export const TransferTab = () => {
     const isNative = formik.values.tokenId.address === "native"
 
     return (
-        <form className="h-full" onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
+        <form
+            className="h-full"
+            onSubmit={formik.handleSubmit}
+            onReset={formik.handleReset}
+        >
             <div className="w-full h-full flex flex-col justify-between">
                 <div>
                     <div>
@@ -168,11 +176,21 @@ export const TransferTab = () => {
                             fullWidth
                             onPress={onBridgeSelectRecipientModalDisclosureOpen}
                         >
-                            {formatAddress(address)}
+                            {truncateString(address)}
                         </Button>
                     </div>
                 </div>
-                <Button color="primary" type="submit">Transfer</Button>
+                <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={formik.isSubmitting}
+                    onPress={async () => {
+                        await formik.submitForm()
+                        onBridgeTransferResultModalDiscloresureOpen()
+                    }}
+                >
+          Transfer
+                </Button>
             </div>
         </form>
     )

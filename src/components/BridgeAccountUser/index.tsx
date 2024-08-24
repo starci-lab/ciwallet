@@ -3,7 +3,7 @@
 import { useBridgeTransferFormik } from "@/hooks"
 import { StoredAccount, useAppSelector } from "@/redux"
 import { createAptosAccount, createSolanaAccount } from "@/services"
-import { formatAddress } from "@/utils"
+import { truncateString } from "@/utils"
 import { Card, CardBody, User, CheckboxIcon } from "@nextui-org/react"
 import React from "react"
 
@@ -50,7 +50,7 @@ export const BridgeAccountUser = ({account: { imageUrl, name }, accountNumber, t
                             </div>
                         }
                         description={
-                            formatAddress(map[targetChainKey])
+                            truncateString(map[targetChainKey])
                         }/>
                     <CheckboxIcon isSelected={formik.values.targetAccountNumber === accountNumber} className="w-3"/>
                 </div>   

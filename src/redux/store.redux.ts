@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit"
-import { configReducer, authReducer, chainReducer, tabReducer, resultReducer } from "./slices"
+import { configReducer, authReducer, chainReducer, tabReducer, resultReducer, vaaReducer } from "./slices"
 
 export const store = configureStore({
     reducer: {
@@ -7,7 +7,8 @@ export const store = configureStore({
         authReducer,
         chainReducer,
         tabReducer,
-        resultReducer
+        resultReducer,
+        vaaReducer
     },
 })
 

@@ -6,12 +6,14 @@ import {
     useAppDispatch,
     useAppSelector,
     setPreferenceChainKey,
+    setVaas,
 } from "@/redux"
 import {
     foundEncryptedMnemonic,
     loadAccountNumbers,
     loadMnemonic,
     loadPreferenceChainKey,
+    loadVaas,
     savePreferenceChainKey,
 } from "@/services"
 import { loadAccountNumbers as reduxLoadAccountNumbers } from "@/redux"
@@ -43,6 +45,13 @@ export const useLoadFromLocalStorage = () => {
     }, [])
 
     useEffect(() => {
+        const vaas = loadVaas()
+        if (vaas !== null) {
+            dispatch(setVaas(vaas))
+        } 
+    }, [])
+
+    useEffect(() => {
         if (!password) return
         const mnemonic = loadMnemonic(password)
         dispatch(setMnemonic(mnemonic))
@@ -59,4 +68,5 @@ export const useLoadFromLocalStorage = () => {
         if (!preferenceChainKey) return
         savePreferenceChainKey(preferenceChainKey)
     }, [preferenceChainKey])
+    
 }

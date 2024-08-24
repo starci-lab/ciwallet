@@ -9,6 +9,7 @@ import { _useCreateAccountModalDisclosure } from "./useCreateAccountModalDisclor
 import { _useBridgeSelectRecipientModalDisclosure } from "./useBridgeSelectRecipientModalDiscloresure"
 import { _useBridgeRedeemResultModalDiscloresure } from "./useBridgeRedeemResultModalDiscloresure"
 import { _useBridgeTransferResultModalDiscloresure } from "./useBridgeTransferResultModalDiscloresure"
+import { _useBridgeSelectVaaModalDisclosure } from "./useBridgeSelectVaaModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
@@ -19,6 +20,7 @@ export interface UseModalReturn {
     bridgeSelectRecipientModalDisclosure: UseDisclosureReturn
     bridgeRedeemResultModalDisclosure: UseDisclosureReturn
     bridgeTransferResultModalDisclosure: UseDisclosureReturn
+    bridgeSelectVaaModalDisclosure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
@@ -30,6 +32,7 @@ export const _useModals = () : UseModalReturn => {
     const bridgeSelectRecipientModalDisclosure = _useBridgeSelectRecipientModalDisclosure()
     const bridgeRedeemResultModalDisclosure = _useBridgeRedeemResultModalDiscloresure()
     const bridgeTransferResultModalDisclosure = _useBridgeTransferResultModalDiscloresure()
+    const bridgeSelectVaaModalDisclosure = _useBridgeSelectVaaModalDisclosure()
 
     return {
         inviteModalDisclosure,
@@ -39,7 +42,8 @@ export const _useModals = () : UseModalReturn => {
         createAccountModalDisclosure,
         bridgeSelectRecipientModalDisclosure,
         bridgeRedeemResultModalDisclosure,
-        bridgeTransferResultModalDisclosure
+        bridgeTransferResultModalDisclosure,
+        bridgeSelectVaaModalDisclosure
     }
 }
 
@@ -59,3 +63,4 @@ export * from "./useBridgeSelectTokenModalDiscloresure"
 export * from "./useBridgeSelectRecipientModalDiscloresure"
 export * from "./useBridgeTransferResultModalDiscloresure"
 export * from "./useBridgeRedeemResultModalDiscloresure"
+export * from "./useBridgeSelectVaaModalDiscloresure"

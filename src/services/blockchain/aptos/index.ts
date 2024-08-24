@@ -48,3 +48,27 @@ export const aptosNodes: Record<Network, string> = {
     [Network.Mainnet]: "https://api.mainnet.aptoslabs.com/v1",
     [Network.Testnet]: "https://api.testnet.aptoslabs.com/v1",
 }
+
+
+export const aptosExplorerUrls = (
+    value: string,
+    network: Network = Network.Testnet
+) => {
+    switch (network) {
+    case Network.Devnet:
+        return {
+            address: `https://explorer.aptoslabs.com/account/${value}?network=devnet`,
+            tx: `https://explorer.aptoslabs.com/txn/${value}?network=devnet`,
+        }
+    case Network.Testnet:
+        return {
+            address: `https://explorer.aptoslabs.com/account/${value}?network=testnet`,
+            tx: `https://explorer.aptoslabs.com/txn/${value}?network=testnet`,
+        }
+    case Network.Mainnet:
+        return {
+            address: `https://explorer.aptoslabs.com/account/${value}?network=mainnet`,
+            tx: `https://explorer.aptoslabs.com/txn/${value}?network=mainnet`,
+        }
+    }
+}

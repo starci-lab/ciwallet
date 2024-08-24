@@ -27,7 +27,7 @@ import {
 } from "@heroicons/react/24/outline"
 import { useRouter } from "next/navigation"
 import { SendToBackIcon } from "lucide-react"
-import { formatAddress } from "@/utils"
+import { truncateString } from "@/utils"
 
 const Page = () => {
     const { onOpen } = useAccountsModalDisclosure()
@@ -89,7 +89,7 @@ const Page = () => {
                                             <div className="text-primary">{`[${activeAccountNumber}]`}</div>
                                         </div>
                                     }
-                                    description={formatAddress(map[preferenceChainKey].address)}
+                                    description={truncateString(map[preferenceChainKey].address)}
                                 />
                             </CardBody>
                         </Card>

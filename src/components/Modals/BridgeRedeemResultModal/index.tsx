@@ -8,26 +8,44 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    Card,
-    CardBody
+    Link
 } from "@nextui-org/react"
 import { useBridgeRedeemResultModalDiscloresure } from "@/hooks"
+import { useAppSelector } from "@/redux"
+import { getExplorerUrl } from "@/services"
+import { truncateString } from "@/utils"
+import { defaultChainKey } from "@/config"
 
 export const BridgeRedeemResultModal = () => {
     const { isOpen, onClose } =
     useBridgeRedeemResultModalDiscloresure()
+    
+    const result = useAppSelector(state => state.resultReducer.bridge.redeem)
+    const { vaa, txHash } = { ...result }
+
+    const network = useAppSelector(state => state.chainReducer.network)
 
     return (
         <Modal hideCloseButton isOpen={isOpen}>
             <ModalContent>
                 <ModalHeader className="p-4 pb-2 font-bold">Redeem Result</ModalHeader>
                 <ModalBody className="p-4">
-                    <Card>
-                        <CardBody className="p-0">
-                            <div>
-                            </div>
-                        </CardBody>
-                    </Card>
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm">Tx Hash</div>
+                        <Link
+                            showAnchorIcon
+                            isExternal
+                            size="sm"
+                            href={getExplorerUrl({
+                                chainKey: vaa?.targetChainKey ?? defaultChainKey,
+                                value: txHash ?? "",
+                                type: "tx",
+                                network,
+                            })}
+                        >
+                            {txHash ? truncateString(txHash) : null}
+                        </Link>
+                    </div>
                 </ModalBody>
                 <ModalFooter className="p-4 pt-2">
                     <Button color="primary" variant="bordered" onPress={onClose}>
