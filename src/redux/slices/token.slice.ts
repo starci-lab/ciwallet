@@ -7,7 +7,7 @@ export interface TokensState {
 }
 
 const initialState: TokensState = {
-    tokens: {},
+    tokens: chainConfig().tokens,
 }
 
 export interface AddTokenParams {
@@ -28,13 +28,7 @@ export const tokenSlice = createSlice({
             state,
             { payload }: { payload: Record<string, TokenInfos> }
         ) => {
-            state.tokens = chainConfig().tokens
-            const keys = Object.keys(state.tokens)
-            for (const key of keys) {
-                if (!state.tokens[key].tokens.map(({ key }) => key).includes(key)) {
-                    state.tokens[key].tokens.push(...payload[key].tokens)
-                }
-            }
+            state.tokens = payload
         },
         addToken: (
             state,

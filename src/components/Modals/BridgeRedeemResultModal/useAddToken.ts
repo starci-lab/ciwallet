@@ -36,6 +36,7 @@ export const useAddToken = () => {
             foreignChainName: foreignChain?.chain ?? defaultSecondaryChain,
             sourceTokenAddress: tokenId.address.toString(),
         })
+        console.log("address", address)
         dispatch(
             reduxAddToken({
                 chainKey: vaa.targetChainKey,

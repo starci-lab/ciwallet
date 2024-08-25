@@ -1,6 +1,5 @@
 import { defaultChainKey } from "@/config"
 import { ChainAccount, Network } from "@/services"
-import { DeepPartial } from "@apollo/client/utilities"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface ChainState {

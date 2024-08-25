@@ -145,7 +145,7 @@ export const _useBridgeTransferFormik =
           )
           formik.setFieldValue(
               "tokenKey",
-              preferenceChainKey === defaultSecondaryChainKey
+              preferenceChainKey === defaultChainKey
                   ? defaultNativeTokenKey
                   : defaultSecondaryNativeTokenKey
           )

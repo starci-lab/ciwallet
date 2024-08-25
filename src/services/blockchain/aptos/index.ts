@@ -26,14 +26,21 @@ export const getAptosBalance = async (
     network: Network = Network.Testnet
 ) => {
     let amount: number
+
     if (tokenAddress === "native") {
         amount = await aptosClient(network).getAccountAPTAmount({
             accountAddress,
         })
     } else {
+        const { address, module } = tokenAddress as {
+      address: Uint8Array;
+      module: string;
+    }
         amount = await aptosClient(network).getAccountCoinAmount({
             accountAddress,
-            coinType: tokenAddress as unknown as `${string}::${string}::${string}`,
+            coinType: `0x${Buffer.from(address).toString(
+                "hex"
+            )}::${module}` as unknown as `${string}::${string}::${string}`,
         })
     }
     return computeDenomination(amount)

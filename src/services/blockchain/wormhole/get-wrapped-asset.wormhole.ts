@@ -1,6 +1,12 @@
-import { TokenAddress, toNative } from "@wormhole-foundation/sdk-definitions"
+import {
+    TokenAddress,
+    toUniversal,
+} from "@wormhole-foundation/sdk-definitions"
 import { getWormhole } from "./base.wormhole"
 import { Chain, Network } from "@wormhole-foundation/sdk-base"
+import { AptosAddress } from "@wormhole-foundation/sdk-aptos"
+import { UniversalAddress } from "@wormhole-foundation/sdk"
+import { SolanaAddress } from "@wormhole-foundation/sdk-solana"
 
 export interface GetWrappedAssetParams<
   N extends Network,
@@ -26,11 +32,39 @@ export const getWrappedAsset = async <
   TokenAddress<ForeignChainName>
 > => {
     const wormhole = await getWormhole(network)
+    const sourceChain = wormhole.getChain(sourceChainName)
+    const sourceTokenBridge = await sourceChain.getTokenBridge()
     const foreignChain = wormhole.getChain(foreignChainName)
     const foreignTokenBridge = await foreignChain.getTokenBridge()
 
-    return foreignTokenBridge.getWrappedAsset({
-        address: toNative(sourceChainName, sourceTokenAddress),
+    let universalAddress: UniversalAddress
+    
+    if (sourceTokenAddress === "native") {
+        const native = await sourceTokenBridge.getWrappedNative()
+        universalAddress = native.toUniversalAddress()
+    } else {
+        switch (sourceChainName) {
+        case "Aptos": {
+            universalAddress = new AptosAddress(
+                sourceTokenAddress
+            ).toUniversalAddress()
+            break
+        }
+        case "Solana": {
+            universalAddress = new SolanaAddress(
+                sourceTokenAddress
+            ).toUniversalAddress()
+            break
+        }
+        default: {
+            universalAddress = toUniversal(sourceChainName, sourceTokenAddress)
+            break
+        }
+        }
+    }
+
+    return await foreignTokenBridge.getWrappedAsset({
+        address: universalAddress,
         chain: sourceChainName,
     })
 }

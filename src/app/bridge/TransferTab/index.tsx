@@ -36,7 +36,7 @@ export const TransferTab = () => {
     const chains = [...chainConfig().chains.filter(({ key }) => key !== preferenceChainKey)]
 
     const { tokens } = {...useAppSelector(state => state.tokenReducer.tokens[preferenceChainKey])} 
-    const token = { ...tokens.find(({ key }) => key === formik.values.tokenKey) }
+    const token = { ...tokens?.find(({ key }) => key === formik.values.tokenKey) }
 
     const { imageUrl, name, symbol } = { ...token }
 
@@ -48,12 +48,12 @@ export const TransferTab = () => {
         chainKey: formik.values.targetChainKey
     })
 
-    const { balanceSwr } = { ... useBalance({
+    const { balanceSwr } = useBalance({
         chainKey: preferenceChainKey,
         tokenKey: formik.values.tokenKey,
         accountAddress: address
-    }) }
-
+    })
+    
     const { data } = { ...balanceSwr }
 
     return (

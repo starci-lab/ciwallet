@@ -1,11 +1,11 @@
 "use client"
 
-import { TokenInfo } from "@/config"
+import { TokenInfo, chainConfig } from "@/config"
 import { useBalance } from "@/hooks"
 import { useAppSelector } from "@/redux"
 import { createAccount } from "@/services"
 import React from "react"
-import { Card, CardBody, Image } from "@nextui-org/react"
+import { Avatar, Card, CardBody, Image } from "@nextui-org/react"
 
 export interface TokenProps {
     token: TokenInfo
@@ -22,23 +22,38 @@ export const Token = ({ token }: TokenProps) => {
         mnemonic,
     })
 
-    const { balanceSwr } = { ...useBalance({
+    const { balanceSwr } = useBalance({
         accountAddress: account.address,
         chainKey: preferenceChainKey,
         tokenKey : token.key,
-    })}
+    })
     
     const { data } = { ...balanceSwr }
+    const chain = chainConfig().chains.find(({ key }) => key === token.tokenId.chain)
+    const isNative = token.tokenId.address === "native"
 
     return (
         <Card shadow="none" fullWidth>
             <CardBody className="p-3 bg-content2">
                 <div className="flex gap-2 items-center">
-                    <Image
-                        removeWrapper
-                        src={token?.imageUrl}
-                        className="w-10 h-10"
-                    />
+                    <div className="relative">
+                        {
+                            !isNative ? 
+                                <Avatar
+                                    isBordered
+                                    src={chain?.imageUrl}
+                                    classNames={{
+                                        base: "absolute w-5 h-5 bottom-0 right-0 z-20 ring-0 bg-background",
+                                    }}
+                                /> : null
+                        }    
+                        <Image
+                            removeWrapper
+                            src={token?.imageUrl}
+                            className="w-10 h-10"
+                        />
+                    </div>
+                    
                     <div>
                         <div>{token?.name}</div>
                         <div className="text-sm text-foreground-400">

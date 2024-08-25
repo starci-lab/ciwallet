@@ -13,13 +13,9 @@ export const useSaveToLocalStorage = () => {
 
     const dispatch = useAppDispatch()
 
-    const storedVaas = useAppSelector(
-        (state) => state.vaaReducer.storedVaas
-    )
+    const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
 
-    const tokens = useAppSelector(
-        (state) => state.tokenReducer.tokens
-    )
+    const tokens = useAppSelector((state) => state.tokenReducer.tokens)
 
     useEffect(() => {
         if (loaded) {
@@ -40,6 +36,8 @@ export const useSaveToLocalStorage = () => {
     }, [storedVaas])
 
     useEffect(() => {
+        if (tokens.aptos.tokens.length === 1 && tokens.solana.tokens.length === 1)
+            return
         saveTokens(tokens)
     }, [tokens])
 }
