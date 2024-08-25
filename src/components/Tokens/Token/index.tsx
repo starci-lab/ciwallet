@@ -29,7 +29,7 @@ export const Token = ({ token }: TokenProps) => {
     })
     
     const { data } = { ...balanceSwr }
-    const chain = chainConfig().chains.find(({ key }) => key === token.tokenId.chain)
+    const chain = chainConfig().chains.find(({ key }) => key === preferenceChainKey)
     const isNative = token.tokenId.address === "native"
 
     return (
