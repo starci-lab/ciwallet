@@ -30,17 +30,15 @@ export const _useBridgeRedeemFormik =
 
       const network = useAppSelector((state) => state.chainReducer.network)
 
-      const { selectedVaaIndex, storedVaas } = useAppSelector(
-          (state) => state.vaaReducer
-      )
-      const vaa = { ...storedVaas[selectedVaaIndex] }
-
-      const signer = useGenericSigner(vaa.targetChainKey, vaa.targetAddress)
+      const { selectedKey, storedVaas } = useAppSelector(state => state.vaaReducer)
+      const vaa = storedVaas.find(({ key }) => key === selectedKey)
+      const signer = useGenericSigner(vaa?.targetChainKey, vaa?.targetAddress)
 
       const formik = useFormik({
           initialValues,
           validationSchema,
           onSubmit: async () => {
+              if (!vaa) return
               if (!signer) return
               const txHash = await redeem({
                   signer,

@@ -15,14 +15,17 @@ import {
     CheckboxIcon,
 } from "@nextui-org/react"
 import { useBridgeTransferFormik, useBridgeSelectTokenModalDisclosure } from "@/hooks"
-import { chainConfig } from "@/config"
+import { useAppSelector } from "@/redux"
 
 export const BridgeSelectTokenModal = () => {
     const { isOpen, onClose } =
     useBridgeSelectTokenModalDisclosure()
     const formik = useBridgeTransferFormik()
 
-    const tokens = [...chainConfig().tokens]
+    const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
+    const { tokens } = {...useAppSelector(state => state.tokenReducer.tokens[preferenceChainKey])}
+    const _tokens = tokens || []
+    
     return (
         <Modal hideCloseButton isOpen={isOpen}>
             <ModalContent>
@@ -31,7 +34,7 @@ export const BridgeSelectTokenModal = () => {
                     <Card>
                         <CardBody className="p-0">
                             <div>
-                                {tokens.map(({ imageUrl, key, tokenId, name, symbol }, index) => (
+                                {_tokens.map(({ imageUrl, key, tokenId, name, symbol }, index) => (
                                     <div key={key}>
                                         <Card
                                             disableRipple
@@ -50,7 +53,7 @@ export const BridgeSelectTokenModal = () => {
                                                             <div className="text-foreground-400">{symbol}</div>
                                                         </div>
                                                     </div>
-                                                    {formik.values.tokenId.address === tokenId.address && formik.values.tokenId.chain === tokenId.chain && (
+                                                    {formik.values.tokenKey === key && (
                                                         <CheckboxIcon isSelected className="w-3"/>
                                                     )}
                                                 </div>             

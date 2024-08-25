@@ -5,6 +5,7 @@ import {
     useBridgeSelectRecipientModalDisclosure,
     useBridgeSelectTokenModalDisclosure,
     useBridgeTransferResultModalDiscloresure,
+    useBalance
 } from "@/hooks"
 import {
     Input,
@@ -14,7 +15,7 @@ import {
     Select,
     SelectItem,
 } from "@nextui-org/react"
-import { ChainBalance, useAppSelector } from "@/redux"
+import { useAppSelector } from "@/redux"
 import React from "react"
 import { createAccount } from "@/services"
 import { truncateString } from "@/utils"
@@ -32,38 +33,12 @@ export const TransferTab = () => {
         (state) => state.chainReducer.preferenceChainKey
     )
 
-    const aptosBalance = useAppSelector(
-        (state) => state.chainReducer.aptos.balance
-    )
-    const solanaBalance = useAppSelector(
-        (state) => state.chainReducer.solana.balance
-    )
+    const chains = [...chainConfig().chains.filter(({ key }) => key !== preferenceChainKey)]
 
-    const balanceMap: Record<string, ChainBalance> = {
-        aptos: aptosBalance,
-        solana: solanaBalance,
-    }
-    const { amount: nativeAmount } = {
-        ...balanceMap[
-            chainConfig().chains.find(
-                ({ chain }) => formik.values.tokenId.chain === chain
-            )?.key ?? ""
-        ],
-    }
+    const { tokens } = {...useAppSelector(state => state.tokenReducer.tokens[preferenceChainKey])} 
+    const token = { ...tokens.find(({ key }) => key === formik.values.tokenKey) }
 
-    const chains = [
-        ...chainConfig().chains.filter(({ key }) => key !== preferenceChainKey),
-    ]
-
-    const tokens = [...chainConfig().tokens]
-
-    const { imageUrl, name, symbol } = {
-        ...tokens.find(
-            ({ tokenId }) =>
-                tokenId.chain === formik.values.tokenId.chain &&
-        tokenId.address === formik.values.tokenId.address
-        ),
-    }
+    const { imageUrl, name, symbol } = { ...token }
 
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
 
@@ -73,7 +48,13 @@ export const TransferTab = () => {
         chainKey: formik.values.targetChainKey
     })
 
-    const isNative = formik.values.tokenId.address === "native"
+    const { balanceSwr } = { ... useBalance({
+        chainKey: preferenceChainKey,
+        tokenKey: formik.values.tokenKey,
+        accountAddress: address
+    }) }
+
+    const { data } = { ...balanceSwr }
 
     return (
         <form
@@ -110,7 +91,7 @@ export const TransferTab = () => {
                         onBlur={formik.handleBlur}
                         isInvalid={!!(formik.touched.amount && formik.errors.amount)}
                         errorMessage={formik.touched.amount && formik.errors.amount}
-                        description={`Balance: ${isNative ? nativeAmount : 0} ${symbol}`}
+                        description={`Balance: ${data} ${symbol}`}
                         endContent={
                             <div className="text-sm text-foreground-400">{symbol}</div>
                         }

@@ -1,15 +1,13 @@
 "use client"
 import { chainConfig } from "@/config"
-import { StoredVaa } from "@/redux"
-import { truncateString } from "@/utils"
-import { Card, CardBody, CardProps, CheckboxIcon, Image, Spacer } from "@nextui-org/react"
+import { StoredVaa, selectVaa, useAppDispatch, useAppSelector } from "@/redux"
+import { formatDay, truncateString } from "@/utils"
+import { Card, CardBody, CheckboxIcon, Image, Spacer } from "@nextui-org/react"
 import React from "react"
 
-export interface VAAProfileProps extends CardProps {
-  vaa: Omit<StoredVaa, "isUsed" | "key">;
-  selectedVaaIndex: number;
-  index: number;
-  onPress: () => void;
+export interface VAAProfileProps {
+  vaa: Omit<StoredVaa, "isUsed">;
+  selectedKey: string;
 }
 
 export const VAAProfile = ({
@@ -20,30 +18,31 @@ export const VAAProfile = ({
         serializedVaa,
         targetAddress,
         targetChainKey,
-        tokenId,
+        tokenKey,
+        key,
+        createdAt
     },
-    index,
-    selectedVaaIndex,
-    onPress,
-    ...props
+    selectedKey
 }: VAAProfileProps) => {
-    const tokens = [...chainConfig().tokens]
 
-    const token = tokens.find(
-        (token) =>
-            token.tokenId.address === tokenId.address &&
-      token.tokenId.chain === tokenId.chain
-    )
-
+    const tokens = useAppSelector(state => state.tokenReducer.tokens[fromChainKey].tokens)
+    const token = { ...tokens.find(({ key }) => key === tokenKey) }
     const chains = [...chainConfig().chains]
 
     const fromChain = chains.find((chain) => chain.key === fromChainKey)
     const targetChain = chains.find((chain) => chain.key === targetChainKey)
 
+    const dispatch = useAppDispatch()
+    
     return (
         <Card
-            onPress={onPress}
-            {...props}
+            onPress={() => {
+                dispatch(selectVaa(selectedKey))
+            }}
+            shadow="none"
+            fullWidth
+            isPressable
+            disableRipple
         >
             <CardBody className="px-3 py-2">
                 <div className="w-full flex items-center justify-between">
@@ -72,10 +71,18 @@ export const VAAProfile = ({
                                     <div className="text-sm">{truncateString(targetAddress)}</div>
                                 </div>
                             </div>
+                            <div className="flex gap-1 items-center">
+                                <div className="text-sm min-w-[100px] text-foreground-400">
+                      Created At
+                                </div>
+                                <div className="flex gap-1 items-center">
+                                    {formatDay(createdAt)}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <CheckboxIcon
-                        isSelected={selectedVaaIndex === index}
+                        isSelected={selectedKey === key}
                         className="w-3"
                     />
                 </div>

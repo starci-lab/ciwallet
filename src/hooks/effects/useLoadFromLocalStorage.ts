@@ -7,12 +7,14 @@ import {
     useAppSelector,
     setPreferenceChainKey,
     setVaas,
+    setTokens,
 } from "@/redux"
 import {
     foundEncryptedMnemonic,
     loadAccountNumbers,
     loadMnemonic,
     loadPreferenceChainKey,
+    loadTokens,
     loadVaas,
     savePreferenceChainKey,
 } from "@/services"
@@ -48,6 +50,13 @@ export const useLoadFromLocalStorage = () => {
         const vaas = loadVaas()
         if (vaas !== null) {
             dispatch(setVaas(vaas))
+        } 
+    }, [])
+
+    useEffect(() => {
+        const tokens = loadTokens()
+        if (tokens !== null) {
+            dispatch(setTokens(tokens))
         } 
     }, [])
 

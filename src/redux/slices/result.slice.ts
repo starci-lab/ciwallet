@@ -2,15 +2,14 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { StoredVaa } from "./vaa.slice"
 
 export interface BridgeTransferResult {
-    vaa: Omit<StoredVaa, "isUsed" | "key">,
+    vaa: Omit<StoredVaa, "isUsed" | "key" | "createdAt">,
     txHash: string
 }
 
 export interface BridgeRedeemResult {
-    vaa: Omit<StoredVaa, "isUsed" | "key">,
+    vaa: Omit<StoredVaa, "isUsed" | "key" | "createdAt">,
     txHash: string
 }
-
 
 export interface ResultState {
     bridge: {
@@ -25,7 +24,7 @@ const initialState: ResultState = {
 }
 
 export const resultSlice = createSlice({
-    name: "result",
+    name: "resultReducer",
     initialState,
     reducers: {
         setBridgeTransferResult: (state, { payload }: PayloadAction<BridgeTransferResult | undefined>) => {

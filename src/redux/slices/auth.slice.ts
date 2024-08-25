@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface StoredAccount {
-    imageUrl: string;
-    name: string;
+  imageUrl: string;
+  name: string;
 }
 
 export interface ChainAccountNumber {
@@ -10,64 +10,56 @@ export interface ChainAccountNumber {
   activeAccountNumber: number;
 }
 
-export interface AccountNumbers {
-  loaded: boolean;
-  aptos: ChainAccountNumber;
-  solana: ChainAccountNumber;
-}
+export type AccountNumbers = Record<string, ChainAccountNumber>;
 
 export interface AuthState {
   mnemonic: string;
   accountNumbers: AccountNumbers;
   password: string;
   hasAuthBefore: boolean;
+  loaded: boolean;
 }
 
-
-export interface CreateAccountParams{
-    accountNumber: number;
-    chainKey: string;
-    account: StoredAccount;
+export interface CreateAccountParams {
+  accountNumber: number;
+  chainKey: string;
+  account: StoredAccount;
 }
 
-
-export interface SetActiveAccountNumber{
-    preferenceChainKey: string;
-    accountNumber: number;
+export interface SetActiveAccountNumber {
+  preferenceChainKey: string;
+  accountNumber: number;
 }
-
 
 const initialState: AuthState = {
     mnemonic: "",
     accountNumbers: {
-        loaded: false,
         aptos: {
             activeAccountNumber: 0,
-            accounts: 
-                {
-                    0: {
-                        imageUrl: "",
-                        name: "Account 0",
-                    }
+            accounts: {
+                0: {
+                    imageUrl: "",
+                    name: "Account 0",
                 },
+            },
         },
         solana: {
             activeAccountNumber: 0,
-            accounts:
-                {
-                    0: {
-                        imageUrl: "",
-                        name: "Account 0",
-                    }
+            accounts: {
+                0: {
+                    imageUrl: "",
+                    name: "Account 0",
                 },
+            },
         },
     },
+    loaded: false,
     password: "",
     hasAuthBefore: false,
 }
 
 export const authSlice = createSlice({
-    name: "auth",
+    name: "authReducer",
     initialState,
     reducers: {
         setMnemonic: (state, { payload }: PayloadAction<string>) => {
@@ -85,7 +77,7 @@ export const authSlice = createSlice({
             }
         },
         loadAccountNumbers: (state) => {
-            state.accountNumbers.loaded = true
+            state.loaded = true
         },
         createAccount: (
             state,
@@ -94,36 +86,37 @@ export const authSlice = createSlice({
             }: PayloadAction<CreateAccountParams>
         ) => {
             switch (chainKey) {
-            case "aptos":
-            { state.accountNumbers.aptos.accounts[accountNumber] = account
+            case "aptos": {
+                state.accountNumbers.aptos.accounts[accountNumber] = account
                 state.accountNumbers.aptos.activeAccountNumber = accountNumber
                 break
-            }       
-            case "solana":
-            {
+            }
+            case "solana": {
                 state.accountNumbers.solana.accounts[accountNumber] = account
                 state.accountNumbers.solana.activeAccountNumber = accountNumber
                 break
             }
-            default: break
+            default:
+                break
             }
         },
         setActiveAccountNumber: (
             state,
-            {payload: { preferenceChainKey, accountNumber } }: PayloadAction<SetActiveAccountNumber>
+            {
+                payload: { preferenceChainKey, accountNumber },
+            }: PayloadAction<SetActiveAccountNumber>
         ) => {
             switch (preferenceChainKey) {
-            case "aptos":
-            {
+            case "aptos": {
                 state.accountNumbers.aptos.activeAccountNumber = accountNumber
                 break
             }
-            case "solana":
-            {
+            case "solana": {
                 state.accountNumbers.solana.activeAccountNumber = accountNumber
                 break
             }
-            default: break
+            default:
+                break
             }
         },
         setPassword: (state, { payload }: PayloadAction<string>) => {
@@ -135,6 +128,13 @@ export const authSlice = createSlice({
     },
 })
 
-export const { setMnemonic, setAccountNumbers, setPassword, setHasAuthBefore, createAccount, setActiveAccountNumber, loadAccountNumbers } =
-  authSlice.actions
+export const {
+    setMnemonic,
+    setAccountNumbers,
+    setPassword,
+    setHasAuthBefore,
+    createAccount,
+    setActiveAccountNumber,
+    loadAccountNumbers,
+} = authSlice.actions
 export const authReducer = authSlice.reducer

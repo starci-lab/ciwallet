@@ -1,4 +1,4 @@
-import { defaultChainKey } from "@/config"
+import { TokenInfos, defaultChainKey } from "@/config"
 import { EncryptMnemonicParams, EncryptedResult, decrypt, encrypt } from "../cryptography"
 import { AccountNumbers, StoredVaa } from "@/redux"
 
@@ -6,6 +6,7 @@ const ACCOUNT_NUMBERS = "account-numbers"
 const ENCRYPTED_MNEMONIC = "encrypted-mnemonic"
 const PREFERENCE_CHAIN = "preference-chain"
 const VAAS = "vaas"
+const TOKENS = "tokens"
 
 export const saveAccountNumbers = (accountNumbers: AccountNumbers) => {
     localStorage.setItem(ACCOUNT_NUMBERS, JSON.stringify(accountNumbers))
@@ -58,6 +59,17 @@ export const saveVaas = (vaas: Array<StoredVaa>) => {
 
 export const loadVaas = (): Array<StoredVaa> | null => {
     const found = localStorage.getItem(VAAS)
+    return found !== null
+        ? JSON.parse(found)
+        : null
+}
+
+export const saveTokens = (tokens: Record<string, TokenInfos>) => {
+    localStorage.setItem(TOKENS, JSON.stringify(tokens))
+}
+
+export const loadTokens = (): Record<string, TokenInfos> | null => {
+    const found = localStorage.getItem(TOKENS)
     return found !== null
         ? JSON.parse(found)
         : null

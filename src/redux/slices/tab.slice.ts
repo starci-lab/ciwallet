@@ -14,7 +14,7 @@ const initialState: TabState = {
 }
 
 export const tabSlice = createSlice({
-    name: "tab",
+    name: "tabReducer",
     initialState,
     reducers: {
         switchBridgeTab: (state, { payload }: PayloadAction<BridgeTab>) => {

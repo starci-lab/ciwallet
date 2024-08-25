@@ -8,8 +8,8 @@ import {
 import { Chain, SignAndSendSigner, Network } from "@wormhole-foundation/sdk"
 
 export const useGenericSigner = <N extends Network, C extends Chain>(
-    chainKey: string,
-    address: string
+    chainKey?: string,
+    address?: string
 ): SignAndSendSigner<N, C> | undefined => {
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
     const network = useAppSelector((state) => state.chainReducer.network)
@@ -17,7 +17,7 @@ export const useGenericSigner = <N extends Network, C extends Chain>(
         (state) => state.authReducer.accountNumbers
     )
 
-    if (!mnemonic) return
+    if (!(mnemonic && chainKey && address)) return
 
     switch (chainKey) {
     case "aptos": {

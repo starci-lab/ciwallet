@@ -1,13 +1,12 @@
 import { defaultChainKey } from "@/config"
-import { Network } from "@/services"
+import { ChainAccount, Network } from "@/services"
 import { DeepPartial } from "@apollo/client/utilities"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface ChainState {
   network: Network;
   preferenceChainKey: string;
-  aptos: ChainData;
-  solana: ChainData;
+  credentials: ChainCredentials
 }
 
 export interface ChainCredential {
@@ -16,37 +15,19 @@ export interface ChainCredential {
   publicKey: string;
 }
 
-export interface ChainBalance {
-  amount: number;
-  refreshBalanceKey: number;
-}
-
-export interface ChainData {
-  credential: ChainCredential;
-  balance: ChainBalance;
-}
+export type ChainCredentials = Record<string, ChainCredential>;
 
 
 const initialState: ChainState = {
     preferenceChainKey: defaultChainKey,
     network: Network.Testnet,
-    aptos: {
-        balance: {
-            amount: 0,
-            refreshBalanceKey: 0,
-        },
-        credential: {
+    credentials: {
+        aptos: {
             address: "",
             privateKey: "",
             publicKey: "",
         },
-    },
-    solana: {
-        balance: {
-            amount: 0,
-            refreshBalanceKey: 0,
-        },
-        credential: {
+        solana: {
             address: "",
             privateKey: "",
             publicKey: "",
@@ -54,81 +35,39 @@ const initialState: ChainState = {
     },
 }
 
+export interface SetCredentialParams {
+    account: Partial<ChainAccount>,
+    chainKey: string
+}
+
 export const chainSlice = createSlice({
-    name: "chain",
+    name: "chainReducer",
     initialState,
     reducers: {
         setPreferenceChainKey: (state, { payload }: PayloadAction<string>) => {
             state.preferenceChainKey = payload
         },
-        setAptosCredential: (
+        setCredential: (
             state,
             {
-                payload: { address, privateKey, publicKey },
-            }: PayloadAction<DeepPartial<ChainCredential>>
+                payload: { account: {  address, privateKey, publicKey }, chainKey },
+            }: PayloadAction<SetCredentialParams>
         ) => {
             if (address) {
-                state.aptos.credential.address = address
+                state.credentials[chainKey].address = address
             }
             if (privateKey) {
-                state.aptos.credential.privateKey = privateKey
+                state.credentials[chainKey].privateKey = privateKey
             }
             if (publicKey) {
-                state.aptos.credential.publicKey = publicKey
+                state.credentials[chainKey].publicKey = publicKey
             }
-        },
-        setSolanaCredential: (
-            state,
-            {
-                payload: { address, privateKey, publicKey },
-            }: PayloadAction<DeepPartial<ChainCredential>>
-        ) => {
-            if (address) {
-                state.solana.credential.address = address
-            }
-            if (privateKey) {
-                state.solana.credential.privateKey = privateKey
-            }
-            if (publicKey) {
-                state.solana.credential.publicKey = publicKey
-            }
-        },
-        setAptosBalance: (
-            state,
-            {
-                payload,
-            }: PayloadAction<number>
-        ) => {
-            state.aptos.balance.amount = payload
-        },
-        setSolanaBalance: (
-            state,
-            {
-                payload,
-            }: PayloadAction<number>
-        ) => {
-            state.solana.balance.amount = payload
-        },
-        triggerRefreshAptosBalance: (
-            state
-        ) => {
-            state.aptos.balance.refreshBalanceKey += 1
-        },
-        triggerRefreshSolanaBalance: (
-            state
-        ) => {
-            state.solana.balance.refreshBalanceKey += 1
         },
     },
 })
 
 export const {
     setPreferenceChainKey,
-    setAptosCredential,
-    setSolanaCredential,
-    setAptosBalance,
-    setSolanaBalance,
-    triggerRefreshAptosBalance,
-    triggerRefreshSolanaBalance
+    setCredential
 } = chainSlice.actions
 export const chainReducer = chainSlice.reducer

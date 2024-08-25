@@ -1,9 +1,10 @@
 import numeral from "numeral"
+import dayjs from "dayjs"
 
-export const NUMBER_PATTERN = "0.0000a"
+export const NUMBER_PATTERN_1 = "0.0000a"
 
 export enum NumberPattern {
-  First = "0.00000a",
+  First = NUMBER_PATTERN_1,
 }
 
 export const formatNumber = (
@@ -12,6 +13,17 @@ export const formatNumber = (
 ) => {
     return numeral(value).format(pattern)
 }
+
+export const DAY_PATTERN_1 = "HH:mm:ss DD/MM/YYYY"
+
+export enum DayPattern {
+  First = DAY_PATTERN_1,
+}
+
+export const formatDay = (
+    value?: string | Date,
+    pattern: DayPattern = DayPattern.First
+) => dayjs(value).format(pattern)
 
 export const truncateString = (
     address: string,

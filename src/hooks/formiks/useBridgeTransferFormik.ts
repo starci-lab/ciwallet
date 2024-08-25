@@ -1,16 +1,21 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
-import { TokenId, nativeTokenId, serialize } from "@wormhole-foundation/sdk"
+import { serialize } from "@wormhole-foundation/sdk"
 import { useFormiks } from "."
 import {
     chainConfig,
     defaultChain,
     defaultChainKey,
-    defaultSecondaryChain,
+    defaultNativeTokenKey,
     defaultSecondaryChainKey,
+    defaultSecondaryNativeTokenKey,
 } from "@/config"
 import { useEffect } from "react"
-import { setBridgeTransferResult, useAppDispatch, useAppSelector } from "@/redux"
+import {
+    setBridgeTransferResult,
+    useAppDispatch,
+    useAppSelector,
+} from "@/redux"
 import { createAccount, transfer } from "@/services"
 import { useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
@@ -20,7 +25,7 @@ export interface BridgeTransferFormikValues {
   targetAccountNumber: 0;
   targetAddress: "";
   amount: number;
-  tokenId: TokenId;
+  tokenKey: string;
 }
 
 export const _useBridgeTransferFormik =
@@ -60,7 +65,7 @@ export const _useBridgeTransferFormik =
           targetAccountNumber: 0,
           targetAddress: "",
           targetChainKey: defaultSecondaryChainKey,
-          tokenId: nativeTokenId(defaultSecondaryChain),
+          tokenKey: defaultNativeTokenKey,
       }
 
       const validationSchema = Yup.object({
@@ -73,6 +78,9 @@ export const _useBridgeTransferFormik =
 
       const dispatch = useAppDispatch()
 
+      const tokens = useAppSelector((state) => state.tokenReducer.tokens)
+      const { tokens: _tokens } = { ...tokens[preferenceChainKey] }
+
       const formik = useFormik({
           initialValues,
           validationSchema,
@@ -81,19 +89,24 @@ export const _useBridgeTransferFormik =
               targetAddress,
               targetChainKey,
               amount,
-              tokenId
+              tokenKey,
           }) => {
+              const { decimals, tokenId } = {
+                  ..._tokens.find(({ key }) => key === tokenKey),
+              }
+              if (!tokenId) return
+
               const { address: createdAddress } = createAccount({
                   accountNumber: targetAccountNumber,
                   mnemonic,
                   chainKey: targetChainKey,
               })
-              
+
               const address = targetAddress || createdAddress
               if (!signer) return
               const { txHash, vaa } = await transfer({
                   signer,
-                  transferAmount: computeRaw(amount),
+                  transferAmount: computeRaw(amount, decimals || 8),
                   sourceChainName:
             chainConfig().chains.find(({ key }) => key === preferenceChainKey)
                 ?.chain ?? defaultChain,
@@ -106,33 +119,36 @@ export const _useBridgeTransferFormik =
               })
               if (vaa === null) return
               const serializedVaa = Buffer.from(serialize(vaa)).toString("base64")
-              dispatch(setBridgeTransferResult({ vaa: {
-                  serializedVaa,
-                  amount: Number(amount),
-                  targetChainKey,
-                  fromChainKey: preferenceChainKey,
-                  targetAddress: address,
-                  fromAddress: signer.address(),
-                  tokenId
-              }, txHash }))
+              dispatch(
+                  setBridgeTransferResult({
+                      vaa: {
+                          serializedVaa,
+                          amount: Number(amount),
+                          targetChainKey,
+                          fromChainKey: preferenceChainKey,
+                          targetAddress: address,
+                          fromAddress: signer.address(),
+                          tokenKey,
+                      },
+                      txHash,
+                  })
+              )
           },
       })
 
       useEffect(() => {
-          if (preferenceChainKey === defaultSecondaryChainKey) {
-              formik.setFieldValue("targetChainKey", defaultChainKey)
-          } else {
-              formik.setFieldValue("targetChainKey", defaultSecondaryChainKey)
-          }
-      }, [preferenceChainKey])
-
-      useEffect(() => {
-          formik.setFieldValue("tokenId", {
-              address: "native",
-              chain:
-          chainConfig().chains.find(({ key }) => key === preferenceChainKey)
-              ?.chain ?? "",
-          })
+          formik.setFieldValue(
+              "targetChainKey",
+              preferenceChainKey === defaultSecondaryChainKey
+                  ? defaultChainKey
+                  : defaultSecondaryChainKey
+          )
+          formik.setFieldValue(
+              "tokenKey",
+              preferenceChainKey === defaultSecondaryChainKey
+                  ? defaultNativeTokenKey
+                  : defaultSecondaryNativeTokenKey
+          )
       }, [preferenceChainKey])
 
       return formik

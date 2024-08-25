@@ -4,10 +4,10 @@ import { Chain, SignAndSendSigner, Network } from "@wormhole-foundation/sdk"
 
 export const useSigner = <N extends Network, C extends Chain>(chainKey: string) : SignAndSendSigner<N, C> | undefined => {
     const aptosCredential = useAppSelector(
-        (state) => state.chainReducer.aptos.credential
+        (state) => state.chainReducer.credentials.aptos
     )
     const solanaCredential = useAppSelector(
-        (state) => state.chainReducer.solana.credential
+        (state) => state.chainReducer.credentials.solana
     )
 
     const network = useAppSelector((state) => state.chainReducer.network)

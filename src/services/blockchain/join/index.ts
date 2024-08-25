@@ -1,3 +1,4 @@
+import { Chain, TokenAddress } from "@wormhole-foundation/sdk"
 import {
     aptosExplorerUrls,
     createAptosAccount,
@@ -9,15 +10,19 @@ import {
     getSolanaBalance,
     solanaExplorerUrls,
 } from "../solana"
+import { AptosChains } from "@wormhole-foundation/sdk-aptos"
+import { SolanaChains } from "@wormhole-foundation/sdk-solana"
 
 export interface GetBalanceParams {
-  address: string;
+  accountAddress: string;
+  tokenAddress: TokenAddress<Chain>;
   chainKey: string;
   network?: Network;
 }
 
 export const getBalance = async ({
-    address,
+    tokenAddress,
+    accountAddress,
     chainKey,
     network,
 }: GetBalanceParams) => {
@@ -25,9 +30,17 @@ export const getBalance = async ({
 
     switch (chainKey) {
     case "aptos":
-        return getAptosBalance(address, network)
+        return getAptosBalance(
+            accountAddress,
+        tokenAddress as unknown as TokenAddress<AptosChains>,
+        network
+        )
     case "solana":
-        return getSolanaBalance(address, network)
+        return getSolanaBalance(
+            accountAddress,
+        tokenAddress as unknown as TokenAddress<SolanaChains>,
+        network
+        )
     default:
         throw new Error("Invalid chain key")
     }

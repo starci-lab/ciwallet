@@ -1,6 +1,8 @@
 import { Cluster, Connection, Keypair, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { ChainAccount, Network, getSeed,  } from "@/services"
 import { computeDenomination } from "@/utils"
+import { TokenAddress } from "@wormhole-foundation/sdk"
+import { SolanaChains } from "@wormhole-foundation/sdk-solana"
 
 export interface CreateSolanaAccountParams {
     mnemonic: string;
@@ -38,10 +40,12 @@ export const solanaClient = (network: Network = Network.Testnet) =>
 }
 
 export const getSolanaBalance = async (
-    address: string,
+    accountAddress: string,
+    tokenAddress: TokenAddress<SolanaChains>,
     network: Network = Network.Testnet
 ) => {
-    const amount = await solanaClient(network).getBalance(new PublicKey(address))
+    console.log(tokenAddress)
+    const amount = await solanaClient(network).getBalance(new PublicKey(accountAddress))
     return computeDenomination(amount, 9)
 }
     

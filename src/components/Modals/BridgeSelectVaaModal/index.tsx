@@ -11,20 +11,22 @@ import {
     Divider,
     Card,
     CardBody,
+    ScrollShadow,
 } from "@nextui-org/react"
 import { useBridgeSelectVaaModalDisclosure } from "@/hooks"
-import { selectVaa, useAppDispatch, useAppSelector } from "@/redux"
-import { VAAProfile } from "../../VAAProfile"
+import { useAppSelector } from "@/redux"
+import { VAAProfile } from "./VAAProfile"
 
 export const BridgeSelectVaaModal = () => {
     const { isOpen, onClose } = useBridgeSelectVaaModalDisclosure()
 
-    const { selectedVaaIndex, storedVaas } = useAppSelector(
+    const { selectedKey } = useAppSelector(
         (state) => state.vaaReducer
     )
 
-    const dispatch = useAppDispatch()
-
+    const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas.filter(({ isUsed }) => !isUsed))
+    const reversedVaas = [...storedVaas].reverse()
+    
     return (
         <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>
@@ -32,27 +34,21 @@ export const BridgeSelectVaaModal = () => {
                 <ModalBody className="p-4">
                     <Card>
                         <CardBody className="p-0">
-                            <div>
-                                {storedVaas
-                                    .filter(({ isUsed }) => !isUsed)
-                                    .map((vaa, index) => (
-                                        <div key={vaa.key}>
-                                            <VAAProfile
-                                                vaa={vaa}
-                                                index={index}
-                                                selectedVaaIndex={selectedVaaIndex}
-                                                onPress={() => {
-                                                    dispatch(selectVaa(index))
-                                                }}
-                                                shadow="none"
-                                                fullWidth
-                                                isPressable
-                                                disableRipple
-                                            />
-                                            {index !== storedVaas.length - 1 && <Divider />}
-                                        </div>
-                                    ))}
-                            </div>
+                            <ScrollShadow className="max-h-[400px]">
+                                <div>
+                                    {reversedVaas
+                                        .filter(({ isUsed }) => !isUsed)
+                                        .map((vaa, index) => (
+                                            <div key={vaa.key}>
+                                                <VAAProfile
+                                                    vaa={vaa}
+                                                    selectedKey={selectedKey}
+                                                />
+                                                {index !== storedVaas.length - 1 && <Divider />}
+                                            </div>
+                                        ))}
+                                </div>
+                            </ScrollShadow>
                         </CardBody>
                     </Card>
                 </ModalBody>

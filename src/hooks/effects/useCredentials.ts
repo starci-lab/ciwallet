@@ -1,6 +1,5 @@
 import {
-    setAptosCredential,
-    setSolanaCredential,
+    setCredential,
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
@@ -15,24 +14,30 @@ export const useCredentials = () => {
 
     useEffect(() => {
         if (!mnemonic) return
-        const credentials = createAptosAccount({
+        const account = createAptosAccount({
             mnemonic,
             accountNumber: accountNumbers.aptos.activeAccountNumber,
         })
 
         dispatch(
-            setAptosCredential(credentials)
+            setCredential({
+                account,
+                chainKey: "aptos",
+            })
         )
     }, [mnemonic, accountNumbers.aptos])
 
     useEffect(() => {
         if (!mnemonic) return
-        const credentials = createSolanaAccount({
+        const account = createSolanaAccount({
             mnemonic,
             accountNumber: accountNumbers.solana.activeAccountNumber,
         })
         dispatch(
-            setSolanaCredential(credentials)
+            setCredential({
+                account,
+                chainKey: "solana",
+            })
         )
     }, [mnemonic, accountNumbers.solana])
 }

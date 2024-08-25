@@ -9,7 +9,7 @@ const initialState: ConfigState = {
 }
 
 export const configSlice = createSlice({
-    name: "config",
+    name: "configReducer",
     initialState,
     reducers: {
         toggleDarkMode: (state) => {

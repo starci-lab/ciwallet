@@ -6,6 +6,8 @@ import {
     Account,
 } from "@aptos-labs/ts-sdk"
 import { ChainAccount, Network } from "../common"
+import { TokenAddress } from "@wormhole-foundation/sdk"
+import { AptosChains } from "@wormhole-foundation/sdk-aptos"
 
 export const aptosConfig = (network: Network = Network.Testnet) => {
     const networkMap: Record<Network, AptosNetwork> = {
@@ -19,12 +21,21 @@ export const aptosClient = (network: Network = Network.Testnet) =>
     new Aptos(aptosConfig(network))
 
 export const getAptosBalance = async (
-    address: string,
+    accountAddress: string,
+    tokenAddress: TokenAddress<AptosChains>,
     network: Network = Network.Testnet
 ) => {
-    const amount = await aptosClient(network).getAccountAPTAmount({
-        accountAddress: address,
-    })
+    let amount: number
+    if (tokenAddress === "native") {
+        amount = await aptosClient(network).getAccountAPTAmount({
+            accountAddress,
+        })
+    } else {
+        amount = await aptosClient(network).getAccountCoinAmount({
+            accountAddress,
+            coinType: tokenAddress as unknown as `${string}::${string}::${string}`,
+        })
+    }
     return computeDenomination(amount)
 }
 
@@ -36,7 +47,7 @@ export interface CreateAptosAccountParams {
 export const createAptosAccount = ({
     mnemonic,
     accountNumber,
-}: CreateAptosAccountParams) : ChainAccount => {
+}: CreateAptosAccountParams): ChainAccount => {
     const account = Account.fromDerivationPath({
         mnemonic,
         path: `m/44'/637'/${accountNumber}'/0'/0'`,
@@ -53,7 +64,6 @@ export const aptosNodes: Record<Network, string> = {
     [Network.Mainnet]: "https://api.mainnet.aptoslabs.com/v1",
     [Network.Testnet]: "https://api.testnet.aptoslabs.com/v1",
 }
-
 
 export const aptosExplorerUrls = (
     value: string,

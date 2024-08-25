@@ -18,7 +18,7 @@ import {
     useAccountsModalDisclosure,
 } from "@/hooks"
 import { chainConfig, constantConfig } from "@/config"
-import { ChainAccountNumber, ChainCredential, useAppSelector } from "@/redux"
+import { useAppSelector } from "@/redux"
 import {
     BellIcon,
     Cog6ToothIcon,
@@ -36,30 +36,14 @@ const Page = () => {
     )
     const router = useRouter()
 
-    const aptosCredential = useAppSelector(
-        (state) => state.chainReducer.aptos.credential
-    )
-    const solanaCredential = useAppSelector(
-        (state) => state.chainReducer.solana.credential
+    const { address } = useAppSelector(
+        (state) => state.chainReducer.credentials[preferenceChainKey]
     )
 
-    const map: Record<string, ChainCredential> = {
-        aptos: aptosCredential,
-        solana: solanaCredential,
-    }
-
-    const { aptos, solana } = useAppSelector(
-        (state) => state.authReducer.accountNumbers
+    const { accounts, activeAccountNumber } = useAppSelector(
+        (state) => state.authReducer.accountNumbers[preferenceChainKey]
     )
 
-    const accountsMap: Record<string, ChainAccountNumber> = {
-        aptos,
-        solana,
-    }
-
-    const activeAccountNumber =
-    accountsMap[preferenceChainKey].activeAccountNumber
-    const accounts = accountsMap[preferenceChainKey].accounts
     const { name, imageUrl } = accounts[activeAccountNumber]
 
     const { onOpen: onSelectNetworkModalOpen } =
@@ -75,7 +59,7 @@ const Page = () => {
                             base: "p-0 bg-inhenrit",
                         }}
                         size="sm"
-                        codeString={map[preferenceChainKey].address}
+                        codeString={address}
                     >
                         <Card disableRipple isPressable onPress={onOpen} shadow="none">
                             <CardBody className="p-0">
@@ -89,7 +73,7 @@ const Page = () => {
                                             <div className="text-primary">{`[${activeAccountNumber}]`}</div>
                                         </div>
                                     }
-                                    description={truncateString(map[preferenceChainKey].address)}
+                                    description={truncateString(address)}
                                 />
                             </CardBody>
                         </Card>
