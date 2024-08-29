@@ -30,7 +30,7 @@ export const chainConfig = (): ChainConfig => {
                 name: "Solana",
                 tokens: [
                     {
-                        key: "solana",
+                        key: "solana-native",
                         address: "native",
                         imageUrl: "/icons/solana.svg",
                         name: "Solana",

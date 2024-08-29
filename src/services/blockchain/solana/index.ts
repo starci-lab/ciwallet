@@ -56,22 +56,14 @@ export const getSolanaBalance = async (
         return computeDenomination(amount, 9)
     }
     default: {
-        try{
-            const x = await solanaClient(network).getTokenAccountsByOwner(
-                new PublicKey(accountAddress),
-                {
-                    mint: new PublicKey(tokenAddress.toString()),
-                }
-            )
-            console.log(x)
-        }catch(e){
-            console.log(e)
-        }
-  
-        const amount = await solanaClient(network).getBalance(
-            new PublicKey(accountAddress)
+        if (accountAddress === "") return
+        const result = await solanaClient(network).getParsedTokenAccountsByOwner(
+            new PublicKey(accountAddress),
+            {
+                mint: new PublicKey(tokenAddress),
+            }
         )
-        return computeDenomination(amount, 9)
+        return result.value[0].account.data.parsed.info.tokenAmount.uiAmount
     }
     }
 }
