@@ -29,8 +29,9 @@ export const Token = ({ token }: TokenProps) => {
     })
     
     const { data } = { ...balanceSwr }
-    const chain = chainConfig().chains.find(({ key }) => key === preferenceChainKey)
-    const isNative = token.tokenId.address === "native"
+
+    const chain = chainConfig().chains[preferenceChainKey]
+    const isNative = token.address === "native"
 
     return (
         <Card shadow="none" fullWidth>

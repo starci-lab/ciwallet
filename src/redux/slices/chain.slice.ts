@@ -1,11 +1,13 @@
-import { defaultChainKey } from "@/config"
+import { ChainInfo, TokenInfo, chainConfig, defaultChainKey } from "@/config"
 import { ChainAccount, Network } from "@/services"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { v4 } from "uuid"
 
 export interface ChainState {
   network: Network;
   preferenceChainKey: string;
   credentials: ChainCredentials
+  chains: Record<string, ChainInfo>;
 }
 
 export interface ChainCredential {
@@ -32,12 +34,18 @@ const initialState: ChainState = {
             publicKey: "",
         },
     },
+    chains: chainConfig().chains,
 }
 
 export interface SetCredentialParams {
     account: Partial<ChainAccount>,
     chainKey: string
 }
+
+export interface AddTokenParams {
+    chainKey: string;
+    tokenInfo: Omit<TokenInfo, "key">;
+}  
 
 export const chainSlice = createSlice({
     name: "chainReducer",
@@ -62,11 +70,29 @@ export const chainSlice = createSlice({
                 state.credentials[chainKey].publicKey = publicKey
             }
         },
+        setChain: (
+            state,
+            { payload }: { payload: Record<string, ChainInfo> }
+        ) => {
+            state.chains = payload
+        },
+        addToken: (
+            state,
+            { payload: { chainKey, tokenInfo } }: { payload: AddTokenParams }
+        ) => {
+            const tokenInfos = state.chains[chainKey].tokens
+            tokenInfos.push({
+                ...tokenInfo,
+                key: v4(),
+            })
+        },
     },
 })
 
 export const {
     setPreferenceChainKey,
-    setCredential
+    setCredential,
+    addToken,
+    setChain
 } = chainSlice.actions
 export const chainReducer = chainSlice.reducer

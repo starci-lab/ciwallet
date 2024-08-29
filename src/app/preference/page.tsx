@@ -2,7 +2,7 @@
 import React from "react"
 import { Container } from "@/components"
 import { Button, Image, Select, SelectItem, Spacer } from "@nextui-org/react"
-import { chainConfig, constantConfig, defaultChainKey } from "@/config"
+import { chainConfig, chainInfos, constantConfig, defaultChainKey } from "@/config"
 import { setPreferenceChainKey, useAppDispatch, useAppSelector } from "@/redux"
 import { useRouter } from "next/navigation"
 
@@ -24,7 +24,7 @@ const Page = () => {
                         <Image
                             className="w-6 h-6"
                             src={
-                                chainConfig().chains.find(({ key }) => key === preferenceChainKey)
+                                chainConfig().chains[preferenceChainKey]
                                     ?.imageUrl
                             }
                         />
@@ -36,7 +36,7 @@ const Page = () => {
                         dispatch(setPreferenceChainKey(selectedChain))
                     }}
                 >
-                    {chainConfig().chains.map(({ key, name, imageUrl }) => (
+                    {chainInfos.map(({ key, name, imageUrl }) => (
                         <SelectItem
                             startContent={<Image className="w-5 h-5" src={imageUrl} />}
                             key={key}

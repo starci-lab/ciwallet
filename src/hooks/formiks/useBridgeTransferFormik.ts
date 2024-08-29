@@ -1,10 +1,8 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
-import { serialize } from "@wormhole-foundation/sdk"
+import { serialize, toNative } from "@wormhole-foundation/sdk"
 import { useFormiks } from "."
 import {
-    chainConfig,
-    defaultChain,
     defaultChainKey,
     defaultNativeTokenKey,
     defaultSecondaryChainKey,
@@ -78,8 +76,8 @@ export const _useBridgeTransferFormik =
 
       const dispatch = useAppDispatch()
 
-      const tokens = useAppSelector((state) => state.tokenReducer.tokens)
-      const { tokens: _tokens } = { ...tokens[preferenceChainKey] }
+      const chains = useAppSelector((state) => state.chainReducer.chains)
+      const { tokens } = { ...chains[preferenceChainKey] }
 
       const formik = useFormik({
           initialValues,
@@ -91,10 +89,10 @@ export const _useBridgeTransferFormik =
               amount,
               tokenKey,
           }) => {
-              const { decimals, tokenId } = {
-                  ..._tokens.find(({ key }) => key === tokenKey),
+              const { decimals, address: _address } = {
+                  ...tokens.find(({ key }) => key === tokenKey),
               }
-              if (!tokenId) return
+              if (!_address) return
 
               const { address: createdAddress } = createAccount({
                   accountNumber: targetAccountNumber,
@@ -108,14 +106,11 @@ export const _useBridgeTransferFormik =
                   signer,
                   transferAmount: computeRaw(amount, decimals || 8),
                   sourceChainName:
-            chainConfig().chains.find(({ key }) => key === preferenceChainKey)
-                ?.chain ?? defaultChain,
-                  targetChainName:
-            chainConfig().chains.find(({ key }) => key === targetChainKey)
-                ?.chain ?? defaultChain,
+                  chains[preferenceChainKey].chain,
+                  targetChainName: chains[targetChainKey].chain,
                   network,
                   recipientAddress: address,
-                  tokenAddress: tokenId.address,
+                  tokenAddress: toNative(chains[preferenceChainKey].chain, address)
               })
               if (vaa === null) return
               const serializedVaa = Buffer.from(serialize(vaa)).toString("base64")

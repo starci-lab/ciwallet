@@ -17,7 +17,7 @@ import {
     useSelectNetworkModalDisclosure,
     useAccountsModalDisclosure,
 } from "@/hooks"
-import { chainConfig, constantConfig } from "@/config"
+import { constantConfig } from "@/config"
 import { useAppSelector } from "@/redux"
 import {
     BellIcon,
@@ -49,6 +49,7 @@ const Page = () => {
     const { onOpen: onSelectNetworkModalOpen } =
     useSelectNetworkModalDisclosure()
 
+    const chains = useAppSelector((state) => state.chainReducer.chains)
     return (
         <Container hasPadding>
             <div className="w-full">
@@ -93,9 +94,7 @@ const Page = () => {
                             <Image
                                 className="w-5 h-5"
                                 src={
-                                    chainConfig().chains.find(
-                                        ({ key }) => key === preferenceChainKey
-                                    )?.imageUrl
+                                    chains[preferenceChainKey].imageUrl
                                 }
                             />
                         </Button>

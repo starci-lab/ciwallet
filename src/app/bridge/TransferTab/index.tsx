@@ -1,11 +1,11 @@
 "use client"
-import { chainConfig, defaultChainKey } from "@/config"
+import { defaultChainKey } from "@/config"
 import {
     useBridgeTransferFormik,
     useBridgeSelectRecipientModalDisclosure,
     useBridgeSelectTokenModalDisclosure,
     useBridgeTransferResultModalDiscloresure,
-    useBalance
+    useBalance,
 } from "@/hooks"
 import {
     Input,
@@ -33,10 +33,12 @@ export const TransferTab = () => {
         (state) => state.chainReducer.preferenceChainKey
     )
 
-    const chains = [...chainConfig().chains.filter(({ key }) => key !== preferenceChainKey)]
+    const chains = useAppSelector((state) => state.chainReducer.chains)
 
-    const { tokens } = {...useAppSelector(state => state.tokenReducer.tokens[preferenceChainKey])} 
-    const token = { ...tokens?.find(({ key }) => key === formik.values.tokenKey) }
+    const tokens = chains[preferenceChainKey].tokens
+    const token = {
+        ...tokens?.find(({ key }) => key === formik.values.tokenKey),
+    }
 
     const { imageUrl, name, symbol } = { ...token }
 
@@ -45,15 +47,15 @@ export const TransferTab = () => {
     const { address } = createAccount({
         accountNumber: formik.values.targetAccountNumber,
         mnemonic,
-        chainKey: formik.values.targetChainKey
+        chainKey: formik.values.targetChainKey,
     })
 
     const { balanceSwr } = useBalance({
         chainKey: preferenceChainKey,
         tokenKey: formik.values.tokenKey,
-        accountAddress: address
+        accountAddress: address,
     })
-    
+
     const { data } = { ...balanceSwr }
 
     return (
@@ -102,11 +104,7 @@ export const TransferTab = () => {
                             <Image
                                 removeWrapper
                                 className="w-5 h-5"
-                                src={
-                                    chainConfig().chains.find(
-                                        ({ key }) => key === formik.values.targetChainKey
-                                    )?.imageUrl
-                                }
+                                src={chains[formik.values.targetChainKey].imageUrl}
                             />
                         }
                         label="Select Target Chain"
@@ -119,15 +117,17 @@ export const TransferTab = () => {
                             formik.setFieldValue("targetChainKey", selectedChainKey)
                         }}
                     >
-                        {chains.map(({ key, name, imageUrl }) => (
-                            <SelectItem
-                                startContent={<Image className="w-5 h-5" src={imageUrl} />}
-                                key={key}
-                                value={key}
-                            >
-                                {name}
-                            </SelectItem>
-                        ))}
+                        {Object.values(chains)
+                            .filter(({ key }) => key !== preferenceChainKey)
+                            .map(({ key, name, imageUrl }) => (
+                                <SelectItem
+                                    startContent={<Image className="w-5 h-5" src={imageUrl} />}
+                                    key={key}
+                                    value={key}
+                                >
+                                    {name}
+                                </SelectItem>
+                            ))}
                     </Select>
                     <Spacer y={4} />
                     <div>

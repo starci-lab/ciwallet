@@ -23,8 +23,7 @@ export const BridgeSelectTokenModal = () => {
     const formik = useBridgeTransferFormik()
 
     const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
-    const { tokens } = {...useAppSelector(state => state.tokenReducer.tokens[preferenceChainKey])}
-    const _tokens = tokens || []
+    const tokens = useAppSelector(state => state.chainReducer.chains[preferenceChainKey].tokens)
     
     return (
         <Modal hideCloseButton isOpen={isOpen}>
@@ -34,7 +33,7 @@ export const BridgeSelectTokenModal = () => {
                     <Card>
                         <CardBody className="p-0">
                             <div>
-                                {_tokens.map(({ imageUrl, key, tokenId, name, symbol }, index) => (
+                                {tokens.map(({ imageUrl, key, name, symbol }, index) => (
                                     <div key={key}>
                                         <Card
                                             disableRipple
@@ -42,7 +41,7 @@ export const BridgeSelectTokenModal = () => {
                                             shadow="none"
                                             fullWidth
                                             isPressable
-                                            onPress={() => formik.setFieldValue("tokenId", tokenId)}
+                                            onPress={() => formik.setFieldValue("tokenKey", key)}
                                         >
                                             <CardBody className="px-3 py-2">
                                                 <div className="flex items-center justify-between">

@@ -15,6 +15,7 @@
     "@heroicons/react": "2.1.5",
     "@nextui-org/react": "2.4.6",
     "@reduxjs/toolkit": "2.2.7",
+    "@solana/spl-token": "0.4.8",
     "@solana/web3.js": "^1.95.3",
     "@wormhole-foundation/sdk": "0.10.2",
     "@wormhole-foundation/sdk-aptos": "0.10.2",

@@ -5,9 +5,8 @@ import {
     Network as AptosNetwork,
     Account,
 } from "@aptos-labs/ts-sdk"
-import { ChainAccount, Network } from "../common"
-import { TokenAddress } from "@wormhole-foundation/sdk"
-import { AptosChains } from "@wormhole-foundation/sdk-aptos"
+import { ChainAccount, Network, TokenMetadata } from "../common"
+import { AptosAddress } from "@wormhole-foundation/sdk-aptos"
 
 export const aptosConfig = (network: Network = Network.Testnet) => {
     const networkMap: Record<Network, AptosNetwork> = {
@@ -20,9 +19,16 @@ export const aptosConfig = (network: Network = Network.Testnet) => {
 export const aptosClient = (network: Network = Network.Testnet) =>
     new Aptos(aptosConfig(network))
 
+export const getAptosTokenAddress = (tokenAddress: string) => {
+    if (tokenAddress === "native") throw new Error("Native token not supported")
+    return `${new AptosAddress(
+        tokenAddress
+    ).toString()}` as `${string}::${string}::${string}`
+}
+
 export const getAptosBalance = async (
     accountAddress: string,
-    tokenAddress: TokenAddress<AptosChains>,
+    tokenAddress: string,
     network: Network = Network.Testnet
 ) => {
     let amount: number
@@ -32,15 +38,9 @@ export const getAptosBalance = async (
             accountAddress,
         })
     } else {
-        const { address, module } = tokenAddress as {
-      address: Uint8Array;
-      module: string;
-    }
         amount = await aptosClient(network).getAccountCoinAmount({
             accountAddress,
-            coinType: `0x${Buffer.from(address).toString(
-                "hex"
-            )}::${module}` as unknown as `${string}::${string}::${string}`,
+            coinType: tokenAddress as unknown as `${string}::${string}::${string}`,
         })
     }
     return computeDenomination(amount)
@@ -92,5 +92,22 @@ export const aptosExplorerUrls = (
             address: `https://explorer.aptoslabs.com/account/${value}?network=mainnet`,
             tx: `https://explorer.aptoslabs.com/txn/${value}?network=mainnet`,
         }
+    }
+}
+
+export const getAptosTokenMetadata = async (
+    tokenAddress: string,
+    network: Network = Network.Testnet
+): Promise<TokenMetadata> => {
+    const { symbol, name, decimals } = await aptosClient(
+        network
+    ).getFungibleAssetMetadataByAssetType({
+        assetType: tokenAddress as unknown as `${string}::${string}::${string}`,
+    })
+    console.log(symbol, name, decimals)
+    return {
+        symbol,
+        name,
+        decimals,
     }
 }

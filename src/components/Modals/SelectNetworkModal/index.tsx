@@ -14,7 +14,6 @@ import {
     Divider,
     CheckboxIcon,
 } from "@nextui-org/react"
-import { chainConfig } from "@/config"
 import { setPreferenceChainKey, useAppDispatch, useAppSelector } from "@/redux"
 import { useSelectNetworkModalDisclosure } from "@/hooks"
 
@@ -24,7 +23,7 @@ export const SelectNetworkModal = () => {
 
     const dispatch = useAppDispatch()
 
-    const chains = [...chainConfig().chains]
+    const chains = Object.values(useAppSelector(state => state.chainReducer.chains))
     const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
 
     return (

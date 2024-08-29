@@ -1,25 +1,30 @@
-import { Cluster, Connection, Keypair, PublicKey, clusterApiUrl } from "@solana/web3.js"
-import { ChainAccount, Network, getSeed,  } from "@/services"
+import {
+    Cluster,
+    Connection,
+    Keypair,
+    PublicKey,
+    clusterApiUrl,
+} from "@solana/web3.js"
 import { computeDenomination } from "@/utils"
 import { TokenAddress } from "@wormhole-foundation/sdk"
 import { SolanaChains } from "@wormhole-foundation/sdk-solana"
+import { getSeed } from "@/services/cryptography"
+import { ChainAccount, TokenMetadata, Network } from "../common"
 
 export interface CreateSolanaAccountParams {
-    mnemonic: string;
-    accountNumber: number;
-  }
-  
+  mnemonic: string;
+  accountNumber: number;
+}
+
 export const createSolanaAccount = ({
     mnemonic,
-    accountNumber
-}: CreateSolanaAccountParams) : ChainAccount => {
+    accountNumber,
+}: CreateSolanaAccountParams): ChainAccount => {
     const seed = getSeed({
         mnemonic,
         accountNumber,
     })
-    const account = Keypair.fromSeed(
-        seed.subarray(0, 32)
-    )
+    const account = Keypair.fromSeed(seed.subarray(0, 32))
     return {
         address: account.publicKey.toString(),
         privateKey: Buffer.from(account.secretKey).toString("hex"),
@@ -27,8 +32,7 @@ export const createSolanaAccount = ({
     }
 }
 
-export const solanaClient = (network: Network = Network.Testnet) =>
-{
+export const solanaClient = (network: Network = Network.Testnet) => {
     const networkMap: Record<Network, Cluster> = {
         [Network.Devnet]: "devnet",
         [Network.Mainnet]: "mainnet-beta",
@@ -41,14 +45,37 @@ export const solanaClient = (network: Network = Network.Testnet) =>
 
 export const getSolanaBalance = async (
     accountAddress: string,
-    tokenAddress: TokenAddress<SolanaChains>,
+    tokenAddress: string,
     network: Network = Network.Testnet
 ) => {
-    console.log(tokenAddress)
-    const amount = await solanaClient(network).getBalance(new PublicKey(accountAddress))
-    return computeDenomination(amount, 9)
+    switch (tokenAddress) {
+    case "native": {
+        const amount = await solanaClient(network).getBalance(
+            new PublicKey(accountAddress)
+        )
+        return computeDenomination(amount, 9)
+    }
+    default: {
+        try{
+            const x = await solanaClient(network).getTokenAccountsByOwner(
+                new PublicKey(accountAddress),
+                {
+                    mint: new PublicKey(tokenAddress.toString()),
+                }
+            )
+            console.log(x)
+        }catch(e){
+            console.log(e)
+        }
+  
+        const amount = await solanaClient(network).getBalance(
+            new PublicKey(accountAddress)
+        )
+        return computeDenomination(amount, 9)
+    }
+    }
 }
-    
+
 export const solanaExplorerUrls = (
     value: string,
     network: Network = Network.Testnet
@@ -72,4 +99,13 @@ export const solanaExplorerUrls = (
     }
 }
 
-
+export const getSolanaTokenMetadata = async (
+    tokenAddress: TokenAddress<SolanaChains>,
+    network: Network = Network.Testnet
+): Promise<TokenMetadata> => {
+    return {
+        decimals: 9,
+        name: "Solana",
+        symbol: "SOL",
+    }
+}

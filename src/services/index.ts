@@ -1,5 +1,5 @@
 export * from "./backend"
 export * from "./cryptography"
 export * from "./download"
-export * from "./local-storage"
+export * from "./storage"
 export * from "./blockchain"

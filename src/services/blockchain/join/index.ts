@@ -1,21 +1,22 @@
-import { Chain, TokenAddress } from "@wormhole-foundation/sdk"
+import { TokenAddress } from "@wormhole-foundation/sdk"
 import {
     aptosExplorerUrls,
     createAptosAccount,
     getAptosBalance,
+    getAptosTokenMetadata,
 } from "../aptos"
 import { ChainAccount, Network } from "../common"
 import {
     createSolanaAccount,
     getSolanaBalance,
+    getSolanaTokenMetadata,
     solanaExplorerUrls,
 } from "../solana"
-import { AptosChains } from "@wormhole-foundation/sdk-aptos"
 import { SolanaChains } from "@wormhole-foundation/sdk-solana"
 
 export interface GetBalanceParams {
   accountAddress: string;
-  tokenAddress: TokenAddress<Chain>;
+  tokenAddress: string;
   chainKey: string;
   network?: Network;
 }
@@ -32,14 +33,14 @@ export const getBalance = async ({
     case "aptos":
         return getAptosBalance(
             accountAddress,
-        tokenAddress as unknown as TokenAddress<AptosChains>,
-        network
+            tokenAddress,
+            network
         )
     case "solana":
         return getSolanaBalance(
             accountAddress,
-        tokenAddress as unknown as TokenAddress<SolanaChains>,
-        network
+            tokenAddress,
+            network
         )
     default:
         throw new Error("Invalid chain key")
@@ -94,6 +95,35 @@ export const getExplorerUrl = ({
         return aptosExplorerUrls(value, network)[type]
     case "solana":
         return solanaExplorerUrls(value, network)[type]
+    default:
+        throw new Error("Invalid chain key")
+    }
+}
+
+export interface GetTokenMetadataParams {
+  tokenAddress: string;
+  network?: Network;
+  chainKey: string;
+}
+
+export const getTokenMetadata = async ({
+    chainKey,
+    tokenAddress,
+    network,
+}: GetTokenMetadataParams) => {
+    network = network || Network.Testnet
+
+    switch (chainKey) {
+    case "aptos":
+        return await getAptosTokenMetadata(
+            tokenAddress,
+            network
+        )
+    case "solana":
+        return await getSolanaTokenMetadata(
+        tokenAddress as TokenAddress<SolanaChains>,
+        network
+        )
     default:
         throw new Error("Invalid chain key")
     }
