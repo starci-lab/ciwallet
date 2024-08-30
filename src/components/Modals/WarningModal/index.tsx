@@ -29,7 +29,10 @@ export const WarningModal = () => {
                     <Button color="danger" variant="bordered" onPress={onClose}>
             Cancel
                     </Button>
-                    <Button color="danger" onPress={processFn}>
+                    <Button color="danger" onPress={async () => {
+                        await processFn()
+                        onClose()
+                    }}>
             Process
                     </Button>
                 </ModalFooter>

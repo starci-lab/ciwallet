@@ -6,7 +6,7 @@ export interface MiscellaneousState {
 
 export interface Warning {
     warningMessage: string,
-    processFn: () => void
+    processFn: (() => void) | (() => Promise<void>)
 }
 
 const initialState: MiscellaneousState = {
