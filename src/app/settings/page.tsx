@@ -9,12 +9,13 @@ import React from "react"
 import { DarkModeSwitch } from "./DarkModeSwitch"
 import { constantConfig } from "@/config"
 import { setWarning, useAppDispatch } from "@/redux"
+import { removeEncryptedMnemonic } from "@/services"
 
 const Page = () => {
     const router = useRouter()
     const { onOpen: onMnemonicModalOpen }  = useMnemonicModalDisclosure()
     const { onOpen: onPrivateKeyModalOpen }  = usePrivateKeyModalDisclosure()
-    const { onOpen: onWarningModalOpen, isOpen }  = useWarningModalDisclosure()
+    const { onOpen: onWarningModalOpen }  = useWarningModalDisclosure()
     const dispatch = useAppDispatch()
     return (
         <Container hasPadding>
@@ -74,7 +75,10 @@ const Page = () => {
                     <Button color="danger" onPress={() => {
                         dispatch(setWarning({
                             warningMessage: "Are you sure you want to sign out?",
-                            processFn: () => { router.push(constantConfig().path.auth) }
+                            processFn: () => { 
+                                removeEncryptedMnemonic()
+                                router.push(constantConfig().path.auth)
+                            }
                         }))
                         onWarningModalOpen()
                     }}> Sign Out</Button>
