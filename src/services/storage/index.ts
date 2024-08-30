@@ -8,11 +8,11 @@ import {
 import { AccountNumbers, StoredVaa } from "@/redux"
 import { deserialize, serialize } from "./serialization.storage"
 
-const ACCOUNT_NUMBERS = "account-numbers"
-const ENCRYPTED_MNEMONIC = "encrypted-mnemonic"
-const PREFERENCE_CHAIN = "preference-chain"
-const VAAS = "vaas"
-const CHAINS = "chains"
+const ACCOUNT_NUMBERS = "ciwallet-account-numbers"
+const ENCRYPTED_MNEMONIC = "ciwallet-encrypted-mnemonic"
+const PREFERENCE_CHAIN = "ciwallet-preference-chain"
+const VAAS = "ciwallet-vaas"
+const CHAINS = "ciwallet-chains"
 
 export const saveAccountNumbers = (accountNumbers: AccountNumbers) => {
     localStorage.setItem(ACCOUNT_NUMBERS, serialize(accountNumbers))
