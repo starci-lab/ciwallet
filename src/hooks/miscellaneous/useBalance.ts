@@ -17,9 +17,11 @@ export const useBalance = ({
     tokenKey,
     chainKey,
 }: UseBalanceParams): UseBalanceReturn => {
+    const refreshBalanceKey = useAppSelector(state => state.refreshReducer.refreshBalanceKey)
     const tokens = useAppSelector((state) => state.chainReducer.chains[chainKey]).tokens
     const network = useAppSelector((state) => state.chainReducer.network)
-    const balanceSwr = useSWR(["BALANCE_SWR", tokenKey], async () => {
+    
+    const balanceSwr = useSWR(["BALANCE_SWR", tokenKey, refreshBalanceKey], async () => {
         const token = tokens?.find(({ key }) => key === tokenKey)
         if (!token) return 0
         const balance = await getBalance({

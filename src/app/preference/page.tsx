@@ -15,7 +15,7 @@ const Page = () => {
 
     return (
         <Container centerContent hasPadding>
-            <div>
+            <div className="w-full">
                 <div className="text-2xl font-bold">Select your preference chain</div>
                 <Spacer y={12} />
                 <Select

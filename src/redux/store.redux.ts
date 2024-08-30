@@ -6,6 +6,7 @@ import {
     tabReducer,
     resultReducer,
     vaaReducer,
+    refreshReducer,
 } from "./slices"
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
         tabReducer,
         resultReducer,
         vaaReducer,
+        refreshReducer
     },
 })
 

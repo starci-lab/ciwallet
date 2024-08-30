@@ -12,21 +12,24 @@ import {
     Spacer,
     Tooltip,
     Snippet,
+    Tabs,
+    Tab,
 } from "@nextui-org/react"
 import {
     useSelectNetworkModalDisclosure,
     useAccountsModalDisclosure,
 } from "@/hooks"
 import { constantConfig } from "@/config"
-import { useAppSelector } from "@/redux"
+import { triggerRefreshBalance, useAppDispatch, useAppSelector } from "@/redux"
 import {
     BellIcon,
     Cog6ToothIcon,
     PaperAirplaneIcon,
+    PlusIcon,
     QrCodeIcon,
 } from "@heroicons/react/24/outline"
 import { useRouter } from "next/navigation"
-import { SendToBackIcon } from "lucide-react"
+import { RefreshCcwIcon, SendToBackIcon } from "lucide-react"
 import { truncateString } from "@/utils"
 
 const Page = () => {
@@ -50,6 +53,8 @@ const Page = () => {
     useSelectNetworkModalDisclosure()
 
     const chains = useAppSelector((state) => state.chainReducer.chains)
+    const dispatch = useAppDispatch()
+
     return (
         <Container hasPadding>
             <div className="w-full">
@@ -130,6 +135,20 @@ const Page = () => {
                 </div>
             </div>
             <Spacer y={6} />
+            <div className="flex items-center justify-between">
+                <Tabs>
+                    <Tab title="Tokens" />
+                    <Tab title="NFTs" />
+                </Tabs>
+                <div className="flex gap-2">
+                    <Link as="button" onPress={() => dispatch(triggerRefreshBalance())}>
+                        <RefreshCcwIcon strokeWidth={1.5} className="w-5 h-5" />
+                    </Link>
+                    <Link as="button">
+                        <PlusIcon className="w-5 h-5" />
+                    </Link>
+                </div>
+            </div>
             <Tokens />
         </Container>
     )
