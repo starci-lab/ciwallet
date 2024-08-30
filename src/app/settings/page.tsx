@@ -9,7 +9,7 @@ import React from "react"
 import { DarkModeSwitch } from "./DarkModeSwitch"
 import { constantConfig } from "@/config"
 import { setWarning, useAppDispatch } from "@/redux"
-import { removeEncryptedMnemonic } from "@/services"
+import { clearStorage } from "@/services"
 
 const Page = () => {
     const router = useRouter()
@@ -76,7 +76,7 @@ const Page = () => {
                         dispatch(setWarning({
                             warningMessage: "Are you sure you want to sign out?",
                             processFn: () => { 
-                                removeEncryptedMnemonic()
+                                clearStorage()
                                 router.push(constantConfig().path.auth)
                             }
                         }))

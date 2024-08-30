@@ -34,7 +34,11 @@ export const saveEncryptedMnemonic = ({
     localStorage.setItem(ENCRYPTED_MNEMONIC, serialize(result))
 }
 
-export const removeEncryptedMnemonic = () => {
+export const clearStorage = () => {
+    localStorage.removeItem(VAAS)
+    localStorage.removeItem(PREFERENCE_CHAIN)
+    localStorage.removeItem(CHAINS)
+    localStorage.removeItem(ACCOUNT_NUMBERS)
     localStorage.removeItem(ENCRYPTED_MNEMONIC)
 }
 
