@@ -14,7 +14,7 @@ const Page = () => {
         <Container centerContent hasPadding>
             <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className="w-full">
                 <div className="text-2xl font-bold">Create your password</div>
-                <Spacer y={12} />
+                <Spacer y={6} />
                 <Input
                     id="password"
                     label=""
@@ -33,7 +33,7 @@ const Page = () => {
                                 : <EyeSlashIcon className="w-5 h-5"/>
                         }</Link>}
                 />
-                <Spacer y={12} />
+                <Spacer y={6} />
                 <Button fullWidth color="primary" type="submit">
           Continue
                 </Button>

@@ -7,5 +7,7 @@ export const constantConfig = () => ({
         home: "/home",
         password: "/password",
         bridge: "/bridge",
+        mnemonicInput: "/mnemonic-input",
+        settings: "/settings",
     }
 })

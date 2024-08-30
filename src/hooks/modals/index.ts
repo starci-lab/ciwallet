@@ -3,7 +3,7 @@ import { use } from "react"
 import { HooksContext } from "../provider.hooks"
 import { _useInviteModalDisclosure } from "./useInviteModalDiscloresure"
 import { _useBridgeSelectTokenModalDisclosure } from "./useBridgeSelectTokenModalDiscloresure"
-import { _useSelectNetworkModalDisclosure } from "./useSelectNetworkModalDiscloresure"
+import { _useWarningModalDisclosure } from "./useWarningModalDiscloresure"
 import { _useAccountsModalDisclosure } from "./useAccountsModalDiscloresure"
 import { _useCreateAccountModalDisclosure } from "./useCreateAccountModalDiscloresure"
 import { _useBridgeSelectRecipientModalDisclosure } from "./useBridgeSelectRecipientModalDiscloresure"
@@ -11,6 +11,9 @@ import { _useBridgeRedeemResultModalDiscloresure } from "./useBridgeRedeemResult
 import { _useBridgeTransferResultModalDiscloresure } from "./useBridgeTransferResultModalDiscloresure"
 import { _useBridgeSelectVaaModalDisclosure } from "./useBridgeSelectVaaModalDiscloresure"
 import { _useErrorModalDisclosure } from "./useErrorModalDiscloresure"
+import { _usePrivateKeyModalDisclosure } from "./usePrivateKeyModalDiscloresure"
+import { _useMnemonicModalDisclosure } from "./useMnemonicModalDiscloresure"
+import { _useSelectNetworkModalDisclosure } from "./useSelectNetworkModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
@@ -23,6 +26,9 @@ export interface UseModalReturn {
     bridgeTransferResultModalDisclosure: UseDisclosureReturn
     bridgeSelectVaaModalDisclosure: UseDisclosureReturn
     errorModalDisclosure: UseDisclosureReturn
+    privateKeyModalDisclosure: UseDisclosureReturn
+    mnemonicModalDisclosure: UseDisclosureReturn
+    warningModalDiscloresure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
@@ -36,6 +42,9 @@ export const _useModals = () : UseModalReturn => {
     const bridgeTransferResultModalDisclosure = _useBridgeTransferResultModalDiscloresure()
     const bridgeSelectVaaModalDisclosure = _useBridgeSelectVaaModalDisclosure()
     const errorModalDisclosure = _useErrorModalDisclosure()
+    const privateKeyModalDisclosure = _usePrivateKeyModalDisclosure()
+    const mnemonicModalDisclosure = _useMnemonicModalDisclosure()
+    const warningModalDiscloresure = _useWarningModalDisclosure()
 
     return {
         inviteModalDisclosure,
@@ -47,7 +56,10 @@ export const _useModals = () : UseModalReturn => {
         bridgeRedeemResultModalDisclosure,
         bridgeTransferResultModalDisclosure,
         bridgeSelectVaaModalDisclosure,
-        errorModalDisclosure
+        errorModalDisclosure,
+        privateKeyModalDisclosure,
+        mnemonicModalDisclosure,
+        warningModalDiscloresure
     }
 }
 
@@ -61,7 +73,7 @@ export const useModals = () : UseModalReturn => {
 export * from "./useInviteModalDiscloresure"
 export * from "./useAccountsModalDiscloresure"
 export * from "./useBridgeSelectTokenModalDiscloresure"
-export * from "./useSelectNetworkModalDiscloresure"
+export * from "./useWarningModalDiscloresure"
 export * from "./useCreateAccountModalDiscloresure"
 export * from "./useBridgeSelectTokenModalDiscloresure"
 export * from "./useBridgeSelectRecipientModalDiscloresure"
@@ -69,3 +81,7 @@ export * from "./useBridgeTransferResultModalDiscloresure"
 export * from "./useBridgeRedeemResultModalDiscloresure"
 export * from "./useBridgeSelectVaaModalDiscloresure"
 export * from "./useErrorModalDiscloresure"
+export * from "./usePrivateKeyModalDiscloresure"
+export * from "./useMnemonicModalDiscloresure"
+export * from "./useWarningModalDiscloresure"
+export * from "./useSelectNetworkModalDiscloresure"

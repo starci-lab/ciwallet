@@ -85,7 +85,7 @@ const Page = () => {
                         </Card>
                     </Snippet>
                     <div className="flex gap-2 items-center">
-                        <Link as="button" color="foreground">
+                        <Link as="button" onPress={() => router.push(constantConfig().path.settings)} color="foreground">
                             <Cog6ToothIcon className="w-5 h-5" />
                         </Link>
                         <Link as="button" color="foreground">

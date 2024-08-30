@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import {
-    configReducer,
+    miscellaneousReducer,
     authReducer,
     chainReducer,
     tabReducer,
@@ -11,7 +11,7 @@ import {
 
 export const store = configureStore({
     reducer: {
-        configReducer,
+        miscellaneousReducer,
         authReducer,
         chainReducer,
         tabReducer,
@@ -19,6 +19,9 @@ export const store = configureStore({
         vaaReducer,
         refreshReducer
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false,
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>;

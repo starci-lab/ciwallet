@@ -1,6 +1,7 @@
 import {
     generateMnemonic as _generateMnemonic,
     mnemonicToSeedSync,
+    validateMnemonic as _validateMnemonic
 } from "bip39"
 import { sha256Hash } from "../sha256"
 
@@ -21,3 +22,4 @@ export const mnemonicToSeed = ({
         sha256Hash(password).substring(0, 32)
     )
 
+export const validateMnemonic = (mnemonic: string) => _validateMnemonic(mnemonic)

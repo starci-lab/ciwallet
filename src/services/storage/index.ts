@@ -34,6 +34,10 @@ export const saveEncryptedMnemonic = ({
     localStorage.setItem(ENCRYPTED_MNEMONIC, serialize(result))
 }
 
+export const removeEncryptedMnemonic = () => {
+    localStorage.removeItem(ENCRYPTED_MNEMONIC)
+}
+
 export const loadMnemonic = (password: string) => {
     const found = localStorage.getItem(ENCRYPTED_MNEMONIC)
     if (!found) return ""

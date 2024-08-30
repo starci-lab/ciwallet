@@ -9,6 +9,9 @@ import { BridgeTransferResultModal } from "./BridgeTransferResultModal"
 import { BridgeRedeemResultModal } from "./BridgeRedeemResultModal"
 import { BridgeSelectVaaModal } from "./BridgeSelectVaaModal"
 import { ErrorModal } from "./ErrorModal"
+import { MnemonicModal } from "./MnemonicModal"
+import { PrivateKeyModal } from "./PrivateKeyModal"
+import { WarningModal } from "./WarningModal"
 
 export const Modals = () => {
     return (
@@ -23,6 +26,9 @@ export const Modals = () => {
             <BridgeRedeemResultModal />
             <BridgeSelectVaaModal />
             <ErrorModal />
+            <MnemonicModal />
+            <PrivateKeyModal />
+            <WarningModal />
         </div>
     )
 }

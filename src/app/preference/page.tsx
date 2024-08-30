@@ -17,7 +17,7 @@ const Page = () => {
         <Container centerContent hasPadding>
             <div className="w-full">
                 <div className="text-2xl font-bold">Select your preference chain</div>
-                <Spacer y={12} />
+                <Spacer y={6} />
                 <Select
                     size="lg"
                     startContent={
@@ -46,7 +46,7 @@ const Page = () => {
                         </SelectItem>
                     ))}
                 </Select>
-                <Spacer y={12} />
+                <Spacer y={6} />
                 <Button
                     onPress={() => {
                         router.push(constantConfig().path.createPassword)

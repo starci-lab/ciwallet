@@ -7,6 +7,8 @@ import { Provider as ReduxProvider } from "react-redux"
 import { store } from "@/redux"
 import { Modals } from "@/components"
 import { TestProvider } from "@/tests"
+import { ToastContainer } from "@/toasts"
+import {ThemeProvider as NextThemesProvider} from "next-themes"
 
 export const WrappedLayout = ({
     children,
@@ -14,11 +16,14 @@ export const WrappedLayout = ({
     return (
         <TestProvider isTesting={false}>
             <NextUIProvider>
-                <ReduxProvider store={store}>
-                    <HooksProvider>
-                        {children}
-                        <Modals/>
-                    </HooksProvider>  
+                <ReduxProvider store={store}>  
+                    <NextThemesProvider attribute="class" enableSystem>
+                        <HooksProvider>
+                            {children}
+                            <Modals/>
+                        </HooksProvider> 
+                    </NextThemesProvider>            
+                    <ToastContainer/>
                 </ReduxProvider>      
             </NextUIProvider>
         </TestProvider>

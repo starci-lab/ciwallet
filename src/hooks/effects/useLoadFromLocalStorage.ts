@@ -21,6 +21,7 @@ import {
 import { loadAccountNumbers as reduxLoadAccountNumbers } from "@/redux"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
+import { triggerInvalidPasswordToast } from "@/toasts"
 
 export const useLoadFromLocalStorage = () => {
     const dispatch = useAppDispatch()
@@ -64,9 +65,14 @@ export const useLoadFromLocalStorage = () => {
 
     useEffect(() => {
         if (!password) return
-        const mnemonic = loadMnemonic(password)
-        dispatch(setMnemonic(mnemonic))
-        router.push(constantConfig().path.home)
+        try{
+            const mnemonic = loadMnemonic(password)
+            dispatch(setMnemonic(mnemonic))
+            router.push(constantConfig().path.home)
+        } catch (ex) {
+            console.error(ex)
+            triggerInvalidPasswordToast()
+        }
     }, [password])
 
     const firstMount = useRef(false)
