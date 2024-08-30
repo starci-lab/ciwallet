@@ -12,7 +12,7 @@ const Page = () => {
         <Container centerContent hasPadding>
             <div className="w-full">
                 <div className="grid place-items-center gap-4 w-full">
-                    <Image removeWrapper src="/logo.svg" height={200} />
+                    <Image removeWrapper src="/logo.svg" height={120} />
                 </div>  
                 <Spacer y={12}/>
                 <div className="grid gap-4 w-full">

@@ -1,3 +1,4 @@
+"use client"
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react"
 import React from "react"
 import { useErrorModalDisclosure } from "@/hooks"
