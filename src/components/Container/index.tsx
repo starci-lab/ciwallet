@@ -12,7 +12,7 @@ export const Container = ({
 }: ContainerProps) => {
     return (
         <div
-            className={`max-w-[400px] mx-auto ${hasPadding ? "p-6" : ""} ${
+            className={`max-w-[600px] mx-auto ${hasPadding ? "p-6" : ""} ${
                 centerContent ? "grid place-items-center" : ""
             } h-screen`}
         >
