@@ -13,6 +13,7 @@ import {
     solanaExplorerUrls,
 } from "../solana"
 import { SolanaChains } from "@wormhole-foundation/sdk-solana"
+import { createEvmAccount, bscExplorerUrls, getBscBalance } from "../evm"
 
 export interface GetBalanceParams {
   accountAddress: string;
@@ -42,6 +43,12 @@ export const getBalance = async ({
             tokenAddress,
             network
         )
+    case "bsc":
+        return getBscBalance(
+            accountAddress,
+            tokenAddress,
+            network
+        )
     default:
         throw new Error("Invalid chain key")
     }
@@ -66,9 +73,11 @@ export const createAccount = ({
         }
     switch (chainKey) {
     case "aptos":
-        return createAptosAccount({ mnemonic, accountNumber })
+        return createAptosAccount(mnemonic, accountNumber)
     case "solana":
-        return createSolanaAccount({ mnemonic, accountNumber })
+        return createSolanaAccount(mnemonic, accountNumber)
+    case "bsc":
+        return createEvmAccount(mnemonic, accountNumber)
     default:
         throw new Error("Invalid chain key")
     }
@@ -95,6 +104,8 @@ export const getExplorerUrl = ({
         return aptosExplorerUrls(value, network)[type]
     case "solana":
         return solanaExplorerUrls(value, network)[type]
+    case "bsc":
+        return bscExplorerUrls(value, network)[type]
     default:
         throw new Error("Invalid chain key")
     }

@@ -29,7 +29,11 @@ const Page = () => {
                 >
                     {mnemonic || "lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum"}
                 </Snippet>
-                <Spacer y={12} />
+                <Spacer y={12} />        
+                <Button onPress={() => router.push(constantConfig().path.preference)} color="primary" fullWidth>
+          Continue
+                </Button>
+                <Spacer y={2} />
                 <Button
                     onPress={() =>
                         downloadTextFile("mnemonic.txt", mnemonic)
@@ -39,10 +43,6 @@ const Page = () => {
                     fullWidth
                 >
           Save
-                </Button>
-                <Spacer y={2} />
-                <Button onPress={() => router.push(constantConfig().path.preference)} color="primary" fullWidth>
-          Continue
                 </Button>
             </div>
         </Container>

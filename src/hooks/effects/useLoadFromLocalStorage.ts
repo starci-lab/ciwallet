@@ -35,6 +35,8 @@ export const useLoadFromLocalStorage = () => {
         dispatch(setHasAuthBefore(found))
         if (found) {
             router.push(constantConfig().path.password)
+        } else {
+            router.push(constantConfig().path.auth)
         }
     }, [])
 

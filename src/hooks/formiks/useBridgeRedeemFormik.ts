@@ -1,7 +1,6 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
 import { useFormiks } from "."
-import { chainConfig, defaultChain } from "@/config"
 import {
     setBridgeRedeemResult,
     useAppDispatch,
@@ -23,6 +22,8 @@ export const _useBridgeRedeemFormik =
       }
 
       const dispatch = useAppDispatch()
+
+      const chains = useAppSelector((state) => state.chainReducer.chains)
 
       const validationSchema = Yup.object({
       //
@@ -46,12 +47,8 @@ export const _useBridgeRedeemFormik =
                       "TokenBridge:Transfer",
                       Uint8Array.from(Buffer.from(vaa.serializedVaa, "base64"))
                   ),
-                  senderChainName:
-            chainConfig().chains.find(({ key }) => key === vaa.fromChainKey)
-                ?.chain ?? defaultChain,
-                  redeemChainName:
-            chainConfig().chains.find(({ key }) => key === vaa.targetChainKey)
-                ?.chain ?? defaultChain,
+                  senderChainName: chains[vaa.fromChainKey].chain,
+                  redeemChainName: chains[vaa.targetChainKey].chain,
                   network,
               })
 

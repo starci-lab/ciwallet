@@ -17,11 +17,13 @@ export interface StoredVaa {
 export interface VaaState {
   storedVaas: Array<StoredVaa>;
   selectedKey: string;
+  saveStoredVaasKey: number;
 }
 
 const initialState: VaaState = {
     storedVaas: [],
     selectedKey: "",
+    saveStoredVaasKey: 0,
 }
 
 export const vaaSlice = createSlice({
@@ -37,9 +39,17 @@ export const vaaSlice = createSlice({
             state,
             { payload }: { payload: Omit<StoredVaa, "isUsed" | "key" | "createdAt"> }
         ) => {
-            state.storedVaas.push({ ...payload, isUsed: false, key: v4(), createdAt: new Date().toISOString() })
+            state.storedVaas.push({
+                ...payload,
+                isUsed: false,
+                key: v4(),
+                createdAt: new Date().toISOString(),
+            })
             state.selectedKey =
         state.storedVaas.findLast(({ isUsed }) => !isUsed)?.key || ""
+        },
+        triggerSaveStoredVaas: (state) => {
+            state.saveStoredVaasKey++
         },
         useVaa: (state, { payload }: { payload: string }) => {
             state.storedVaas = state.storedVaas.map((vaa) => {
@@ -57,5 +67,11 @@ export const vaaSlice = createSlice({
     },
 })
 
-export const { addStoredVaa, useVaa, setVaas, selectVaa } = vaaSlice.actions
+export const {
+    addStoredVaa,
+    useVaa,
+    setVaas,
+    selectVaa,
+    triggerSaveStoredVaas,
+} = vaaSlice.actions
 export const vaaReducer = vaaSlice.reducer

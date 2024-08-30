@@ -1,5 +1,4 @@
 "use client"
-import { chainConfig } from "@/config"
 import { StoredVaa, selectVaa, useAppDispatch, useAppSelector } from "@/redux"
 import { formatDay, truncateString } from "@/utils"
 import { Card, CardBody, CheckboxIcon, Image, Spacer } from "@nextui-org/react"
@@ -25,12 +24,11 @@ export const VAAProfile = ({
     selectedKey
 }: VAAProfileProps) => {
 
-    const tokens = useAppSelector(state => state.tokenReducer.tokens[fromChainKey].tokens)
-    const token = { ...tokens.find(({ key }) => key === tokenKey) }
-    const chains = [...chainConfig().chains]
-
-    const fromChain = chains.find((chain) => chain.key === fromChainKey)
-    const targetChain = chains.find((chain) => chain.key === targetChainKey)
+    const chains = useAppSelector(state => state.chainReducer.chains)
+    const tokens = chains[fromChainKey].tokens
+    const fromChain = chains[fromChainKey]
+    const targetChain = chains[targetChainKey]
+    const token = tokens.find(({ key }) => key === tokenKey)
 
     const dispatch = useAppDispatch()
     

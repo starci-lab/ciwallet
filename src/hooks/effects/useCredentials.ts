@@ -1,9 +1,9 @@
+import { setCredential, useAppDispatch, useAppSelector } from "@/redux"
 import {
-    setCredential,
-    useAppDispatch,
-    useAppSelector,
-} from "@/redux"
-import { createAptosAccount, createSolanaAccount } from "@/services"
+    createAptosAccount,
+    createSolanaAccount,
+    createEvmAccount,
+} from "@/services"
 import { useEffect } from "react"
 
 export const useCredentials = () => {
@@ -14,10 +14,10 @@ export const useCredentials = () => {
 
     useEffect(() => {
         if (!mnemonic) return
-        const account = createAptosAccount({
+        const account = createAptosAccount(
             mnemonic,
-            accountNumber: accountNumbers.aptos.activeAccountNumber,
-        })
+            accountNumbers.aptos.activeAccountNumber
+        )
 
         dispatch(
             setCredential({
@@ -29,10 +29,10 @@ export const useCredentials = () => {
 
     useEffect(() => {
         if (!mnemonic) return
-        const account = createSolanaAccount({
+        const account = createSolanaAccount(
             mnemonic,
-            accountNumber: accountNumbers.solana.activeAccountNumber,
-        })
+            accountNumbers.solana.activeAccountNumber
+        )
         dispatch(
             setCredential({
                 account,
@@ -40,4 +40,18 @@ export const useCredentials = () => {
             })
         )
     }, [mnemonic, accountNumbers.solana])
+
+    useEffect(() => {
+        if (!mnemonic) return
+        const account = createEvmAccount(
+            mnemonic,
+            accountNumbers.bsc.activeAccountNumber
+        )
+        dispatch(
+            setCredential({
+                account,
+                chainKey: "bsc",
+            })
+        )
+    }, [mnemonic, accountNumbers.bsc])
 }

@@ -16,25 +16,15 @@ import {
     useBridgeTransferFormik,
     useBridgeSelectRecipientModalDisclosure,
 } from "@/hooks"
-import { ChainAccountNumber, useAppSelector } from "@/redux"
+import { useAppSelector } from "@/redux"
 import { BridgeAccountUser } from "../../BridgeAccountUser"
 
 export const BridgeSelectRecipientModal = () => {
     const { isOpen, onClose } = useBridgeSelectRecipientModalDisclosure()
     const formik = useBridgeTransferFormik()
 
-    const aptos =
-    useAppSelector(state => state.authReducer.accountNumbers.aptos)
-    const solana =
-    useAppSelector(state => state.authReducer.accountNumbers.solana)
-
-    const map : Record<string, ChainAccountNumber> = {
-        aptos,
-        solana
-    }
-
-    const { accounts } = map[formik.values.targetChainKey]
-
+    const accounts =
+    useAppSelector(state => state.authReducer.accountNumbers[formik.values.targetChainKey].accounts)
     const entries = Object.entries(accounts)
 
     return (

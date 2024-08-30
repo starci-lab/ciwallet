@@ -10,6 +10,7 @@ import { _useBridgeSelectRecipientModalDisclosure } from "./useBridgeSelectRecip
 import { _useBridgeRedeemResultModalDiscloresure } from "./useBridgeRedeemResultModalDiscloresure"
 import { _useBridgeTransferResultModalDiscloresure } from "./useBridgeTransferResultModalDiscloresure"
 import { _useBridgeSelectVaaModalDisclosure } from "./useBridgeSelectVaaModalDiscloresure"
+import { _useErrorModalDisclosure } from "./useErrorModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
@@ -21,6 +22,7 @@ export interface UseModalReturn {
     bridgeRedeemResultModalDisclosure: UseDisclosureReturn
     bridgeTransferResultModalDisclosure: UseDisclosureReturn
     bridgeSelectVaaModalDisclosure: UseDisclosureReturn
+    errorModalDisclosure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
@@ -33,6 +35,7 @@ export const _useModals = () : UseModalReturn => {
     const bridgeRedeemResultModalDisclosure = _useBridgeRedeemResultModalDiscloresure()
     const bridgeTransferResultModalDisclosure = _useBridgeTransferResultModalDiscloresure()
     const bridgeSelectVaaModalDisclosure = _useBridgeSelectVaaModalDisclosure()
+    const errorModalDisclosure = _useErrorModalDisclosure()
 
     return {
         inviteModalDisclosure,
@@ -43,7 +46,8 @@ export const _useModals = () : UseModalReturn => {
         bridgeSelectRecipientModalDisclosure,
         bridgeRedeemResultModalDisclosure,
         bridgeTransferResultModalDisclosure,
-        bridgeSelectVaaModalDisclosure
+        bridgeSelectVaaModalDisclosure,
+        errorModalDisclosure
     }
 }
 
@@ -64,3 +68,4 @@ export * from "./useBridgeSelectRecipientModalDiscloresure"
 export * from "./useBridgeTransferResultModalDiscloresure"
 export * from "./useBridgeRedeemResultModalDiscloresure"
 export * from "./useBridgeSelectVaaModalDiscloresure"
+export * from "./useErrorModalDiscloresure"

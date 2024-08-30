@@ -11,15 +11,10 @@ import { SolanaChains } from "@wormhole-foundation/sdk-solana"
 import { getSeed } from "@/services/cryptography"
 import { ChainAccount, TokenMetadata, Network } from "../common"
 
-export interface CreateSolanaAccountParams {
-  mnemonic: string;
-  accountNumber: number;
-}
-
-export const createSolanaAccount = ({
-    mnemonic,
-    accountNumber,
-}: CreateSolanaAccountParams): ChainAccount => {
+export const createSolanaAccount = (
+    mnemonic: string,
+    accountNumber: number
+): ChainAccount => {
     const seed = getSeed({
         mnemonic,
         accountNumber,

@@ -46,15 +46,8 @@ export const getAptosBalance = async (
     return computeDenomination(amount)
 }
 
-export interface CreateAptosAccountParams {
-  mnemonic: string;
-  accountNumber: number;
-}
-
-export const createAptosAccount = ({
-    mnemonic,
-    accountNumber,
-}: CreateAptosAccountParams): ChainAccount => {
+export const createAptosAccount = (mnemonic: string,
+    accountNumber: number): ChainAccount => {
     const account = Account.fromDerivationPath({
         mnemonic,
         path: `m/44'/637'/${accountNumber}'/0'/0'`,

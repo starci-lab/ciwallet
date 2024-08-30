@@ -14,7 +14,7 @@ import {
     Link,
 } from "@nextui-org/react"
 import { useAccountsModalDisclosure, useCreateAccountModalDisclosure } from "@/hooks"
-import { ChainAccountNumber, useAppSelector } from "@/redux"
+import { useAppSelector } from "@/redux"
 import { AccountUser } from "../../AccountUser"
 import { PlusIcon } from "@heroicons/react/24/outline"
 
@@ -22,22 +22,10 @@ export const AccountsModal = () => {
     const { isOpen, onClose } = useAccountsModalDisclosure()
     const { onOpen: onCreateAccountModalOpen } = useCreateAccountModalDisclosure()
 
-    const preferenceChainKey = useAppSelector(
-        (state) => state.chainReducer.preferenceChainKey
+    const preferenceChainKey = useAppSelector((state) => state.chainReducer.preferenceChainKey)
+    const { accounts, activeAccountNumber } = useAppSelector(
+        (state) => state.authReducer.accountNumbers[preferenceChainKey]
     )
-    const aptosAccountNumber = useAppSelector(
-        (state) => state.authReducer.accountNumbers.aptos
-    )
-    const solanaAccountNumber = useAppSelector(
-        (state) => state.authReducer.accountNumbers.solana
-    )
-
-    const map: Record<string, ChainAccountNumber> = {
-        aptos: aptosAccountNumber,
-        solana: solanaAccountNumber,
-    }
-
-    const { activeAccountNumber, accounts } = map[preferenceChainKey]
 
     const entries = Object.entries(accounts)
 

@@ -8,6 +8,7 @@ export interface ChainState {
   preferenceChainKey: string;
   credentials: ChainCredentials
   chains: Record<string, ChainInfo>;
+  saveChainsKey: number;
 }
 
 export interface ChainCredential {
@@ -33,8 +34,14 @@ const initialState: ChainState = {
             privateKey: "",
             publicKey: "",
         },
+        bsc: {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        }
     },
     chains: chainConfig().chains,
+    saveChainsKey: 0,
 }
 
 export interface SetCredentialParams {
@@ -76,6 +83,9 @@ export const chainSlice = createSlice({
         ) => {
             state.chains = payload
         },
+        triggerSaveChains: (state) => {
+            state.saveChainsKey++
+        },
         addToken: (
             state,
             { payload: { chainKey, tokenInfo } }: { payload: AddTokenParams }
@@ -93,6 +103,7 @@ export const {
     setPreferenceChainKey,
     setCredential,
     addToken,
-    setChain
+    setChain,
+    triggerSaveChains
 } = chainSlice.actions
 export const chainReducer = chainSlice.reducer

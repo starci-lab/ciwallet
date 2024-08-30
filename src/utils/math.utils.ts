@@ -21,7 +21,7 @@ export const computeDenomination = (
         const decimalMultiplier = BigInt(10 ** fractionDigits)
         const divisor = BigInt(10 ** decimals)
         const result = (amount * decimalMultiplier) / divisor
-        return Number(result / decimalMultiplier)
+        return Number(result) / Number(decimalMultiplier)
     }
 }
 

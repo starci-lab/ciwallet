@@ -1,13 +1,13 @@
 
 import {
     SignAndSendSigner,
-    TokenAddress,
     VAA,
-    toNative,
+    toNative
 } from "@wormhole-foundation/sdk-definitions"
 import { getWormhole } from "./base.wormhole"
 import { Chain, Network } from "@wormhole-foundation/sdk-base"
-import { signSendWait } from "@wormhole-foundation/sdk"
+import { WormholeMessageId, signSendWait } from "@wormhole-foundation/sdk"
+import { sleep } from "@/utils"
 
 export interface TransferParams<
     N extends Network,
@@ -17,7 +17,7 @@ export interface TransferParams<
     network: N
     transferAmount: bigint
     recipientAddress: string
-    tokenAddress: TokenAddress<SourceChainName>
+    tokenAddress: string
     sourceChainName: SourceChainName
     targetChainName: TargetChainName
     signer: SignAndSendSigner<N, SourceChainName>
@@ -44,14 +44,15 @@ export const transfer = async <
     const wormhole = await getWormhole(network)
     const sourceChain = wormhole.getChain(sourceChainName)
     const sourceTokenBridge = await sourceChain.getTokenBridge()
-    
+
+    console.log(tokenAddress)
     const txGenerator = sourceTokenBridge.transfer(
         toNative(sourceChainName, signer.address()),
         {
             chain: targetChainName,
             address: toNative(targetChainName, recipientAddress),
         },
-        tokenAddress,
+        tokenAddress !== "native" ? toNative(sourceChainName, tokenAddress) : "native",
         transferAmount
     )
 
@@ -59,7 +60,18 @@ export const transfer = async <
 
     const { txid } = transactionIds.at(-1)!
 
-    const [wormholeMessage] = await sourceChain.parseTransaction(txid)
+    let wormholeMessage: WormholeMessageId | undefined = undefined
+    for (let repeat = 0; repeat < 30; repeat++) {
+        console.log(`Checking for wormhole message ${txid} - ${repeat}`)
+        const [_wormholeMessage] = await sourceChain.parseTransaction(txid)
+        if (_wormholeMessage) {
+            wormholeMessage = _wormholeMessage
+            break
+        } else {
+            await sleep(1000)
+        }
+    }
+    if (!wormholeMessage) throw new Error("Wormhole message not found")
 
     const vaa = await wormhole.getVaa(
         wormholeMessage,

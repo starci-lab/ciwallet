@@ -1,32 +1,47 @@
 import { useAppSelector } from "@/redux"
-import { aptosSigner, solanaSigner } from "@/services"
+import { aptosSigner, evmSigner, solanaSigner } from "@/services"
 import { Chain, SignAndSendSigner, Network } from "@wormhole-foundation/sdk"
 
-export const useSigner = <N extends Network, C extends Chain>(chainKey: string) : SignAndSendSigner<N, C> | undefined => {
-    const aptosCredential = useAppSelector(
-        (state) => state.chainReducer.credentials.aptos
-    )
-    const solanaCredential = useAppSelector(
-        (state) => state.chainReducer.credentials.solana
-    )
-
+export const useSigner = <N extends Network, C extends Chain>(
+    chainKey: string
+): SignAndSendSigner<N, C> | undefined => {
     const network = useAppSelector((state) => state.chainReducer.network)
+    const credential = useAppSelector(
+        (state) => state.chainReducer.credentials[chainKey]
+    )
 
-    const map : Record<string, SignAndSendSigner<N, C> | undefined> = {
-        aptos: aptosCredential.privateKey ? aptosSigner({
+    if (
+        credential.privateKey === "" ||
+    credential.publicKey === "" ||
+    credential.address === ""
+    )
+        return
+
+    switch (chainKey) {
+    case "aptos": {
+        return aptosSigner({
             chain: "Aptos",
             network,
-            privateKey: aptosCredential.privateKey,
-            address: aptosCredential.address,
-            debug: true
-        }) as unknown as SignAndSendSigner<N, C> : undefined,
-        
-        solana: solanaCredential.privateKey ? solanaSigner({
+            privateKey: credential.privateKey,
+            address: credential.address,
+            debug: true,
+        }) as unknown as SignAndSendSigner<N, C>
+    }
+    case "solana": {
+        return solanaSigner({
             chain: "Solana",
             network,
-            privateKey: solanaCredential.privateKey,
-            debug: true
-        }) as unknown as SignAndSendSigner<N, C> : undefined,
+            privateKey: credential.privateKey,
+            debug: true,
+        }) as unknown as SignAndSendSigner<N, C>
     }
-    return map[chainKey]
+    case "bsc": {
+        return evmSigner({
+            chain: "Bsc",
+            network,
+            privateKey: credential.privateKey,
+            debug: true,
+        }) as unknown as SignAndSendSigner<N, C>
+    }
+    }
 }

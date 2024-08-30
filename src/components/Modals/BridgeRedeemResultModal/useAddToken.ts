@@ -1,8 +1,9 @@
-import { defaultChain, defaultChainKey, defaultSecondaryChain } from "@/config"
+import { defaultChainKey, defaultSecondaryChain } from "@/config"
 import {
     useAppSelector,
     useAppDispatch,
     addToken as reduxAddToken,
+    triggerSaveChains,
 } from "@/redux"
 import { getTokenMetadata, getWrappedAsset } from "@/services"
 import useSWRMutation, { SWRMutationResponse } from "swr/mutation"
@@ -15,7 +16,7 @@ export interface UseAddTokenReturn {
 export const useAddToken = () => {
     const result = useAppSelector((state) => state.resultReducer.bridge.redeem)
     const { vaa } = { ...result }
-    
+
     const dispatch = useAppDispatch()
     const network = useAppSelector((state) => state.chainReducer.network)
 
@@ -34,14 +35,14 @@ export const useAddToken = () => {
 
         const address = await getWrappedAsset({
             network,
-            sourceChainName: sourceChain?.chain ?? defaultChain,
-            foreignChainName: foreignChain?.chain ?? defaultSecondaryChain,
+            sourceChainName: sourceChain.chain,
+            foreignChainName: foreignChain.chain,
             sourceTokenAddress: tokenAddress,
         })
-
+        console.log(`Wrapped asset address: ${address}`)
         const result = await getTokenMetadata({
             network,
-            tokenAddress: tokenAddress,
+            tokenAddress: address.toString(),
             chainKey: foreignChain?.key ?? defaultSecondaryChain
         })
 
@@ -57,6 +58,10 @@ export const useAddToken = () => {
                     ...result,
                 }
             })
+        )
+
+        dispatch(
+            triggerSaveChains()
         )
     }) 
 

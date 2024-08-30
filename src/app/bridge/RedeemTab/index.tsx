@@ -2,6 +2,7 @@
 import {
     useBridgeRedeemFormik,
     useBridgeRedeemResultModalDiscloresure,
+    useErrorModalDisclosure,
 } from "@/hooks"
 import { Button } from "@nextui-org/react"
 import React from "react"
@@ -17,6 +18,9 @@ export const RedeemTab = () => {
     const { onOpen: onBridgeRedeemResultModalOpen } =
     useBridgeRedeemResultModalDiscloresure()
 
+    const { onOpen: onErrorModalDisclosureOpen } =
+    useErrorModalDisclosure()
+    
     const hasVaa = storedVaas.length > 0
     
     return (
@@ -32,8 +36,13 @@ export const RedeemTab = () => {
                     isDisabled={!hasVaa}
                     isLoading={formik.isSubmitting}
                     onPress={async () => {
-                        await formik.submitForm()
-                        onBridgeRedeemResultModalOpen()
+                        try{
+                            await formik.submitForm()
+                            onBridgeRedeemResultModalOpen()
+                        } catch (ex) {
+                            console.error(ex)
+                            onErrorModalDisclosureOpen()
+                        }
                     }}
                     fullWidth
                 >

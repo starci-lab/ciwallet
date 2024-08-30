@@ -6,6 +6,7 @@ import {
     useBridgeSelectTokenModalDisclosure,
     useBridgeTransferResultModalDiscloresure,
     useBalance,
+    useErrorModalDisclosure,
 } from "@/hooks"
 import {
     Input,
@@ -28,6 +29,9 @@ export const TransferTab = () => {
 
     const { onOpen: onBridgeTransferResultModalDiscloresureOpen } =
     useBridgeTransferResultModalDiscloresure()
+
+    const { onOpen: onErrorModalDisclosureOpen } =
+    useErrorModalDisclosure()
 
     const preferenceChainKey = useAppSelector(
         (state) => state.chainReducer.preferenceChainKey
@@ -147,8 +151,14 @@ export const TransferTab = () => {
                     type="submit"
                     isLoading={formik.isSubmitting}
                     onPress={async () => {
-                        await formik.submitForm()
-                        onBridgeTransferResultModalDiscloresureOpen()
+                        try{
+                            await formik.submitForm()
+                            onBridgeTransferResultModalDiscloresureOpen()
+                        } catch (ex) {
+                            console.error(ex)
+                            onErrorModalDisclosureOpen()
+                        }
+                        
                     }}
                 >
           Transfer

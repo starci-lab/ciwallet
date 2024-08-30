@@ -12,7 +12,6 @@ export const aptosSigner = ({
     address,
     debug
 } : SignerParams<Network, AptosChains>) => {
-    
     const account = Account.fromPrivateKey({
         privateKey: new Ed25519PrivateKey(privateKey),
         address

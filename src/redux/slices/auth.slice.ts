@@ -52,6 +52,15 @@ const initialState: AuthState = {
                 },
             },
         },
+        bsc: {
+            activeAccountNumber: 0,
+            accounts: {
+                0: {
+                    imageUrl: "",
+                    name: "Account 0",
+                },
+            },
+        },
     },
     loaded: false,
     password: "",
@@ -67,13 +76,16 @@ export const authSlice = createSlice({
         },
         setAccountNumbers: (
             state,
-            { payload: { aptos, solana } }: PayloadAction<Partial<AccountNumbers>>
+            { payload: { aptos, solana, bsc } }: PayloadAction<Partial<AccountNumbers>>
         ) => {
             if (aptos) {
                 state.accountNumbers.aptos = aptos
             }
             if (solana) {
                 state.accountNumbers.solana = solana
+            }
+            if (bsc) {
+                state.accountNumbers.bsc = bsc
             }
         },
         loadAccountNumbers: (state) => {
@@ -85,20 +97,8 @@ export const authSlice = createSlice({
                 payload: { chainKey, account, accountNumber },
             }: PayloadAction<CreateAccountParams>
         ) => {
-            switch (chainKey) {
-            case "aptos": {
-                state.accountNumbers.aptos.accounts[accountNumber] = account
-                state.accountNumbers.aptos.activeAccountNumber = accountNumber
-                break
-            }
-            case "solana": {
-                state.accountNumbers.solana.accounts[accountNumber] = account
-                state.accountNumbers.solana.activeAccountNumber = accountNumber
-                break
-            }
-            default:
-                break
-            }
+            state.accountNumbers[chainKey].accounts[accountNumber] = account
+            state.accountNumbers[chainKey].activeAccountNumber = accountNumber
         },
         setActiveAccountNumber: (
             state,
@@ -106,18 +106,7 @@ export const authSlice = createSlice({
                 payload: { preferenceChainKey, accountNumber },
             }: PayloadAction<SetActiveAccountNumber>
         ) => {
-            switch (preferenceChainKey) {
-            case "aptos": {
-                state.accountNumbers.aptos.activeAccountNumber = accountNumber
-                break
-            }
-            case "solana": {
-                state.accountNumbers.solana.activeAccountNumber = accountNumber
-                break
-            }
-            default:
-                break
-            }
+            state.accountNumbers[preferenceChainKey].activeAccountNumber = accountNumber
         },
         setPassword: (state, { payload }: PayloadAction<string>) => {
             state.password = payload

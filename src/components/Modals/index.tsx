@@ -8,6 +8,7 @@ import { BridgeSelectRecipientModal } from "./BridgeSelectRecipientModal"
 import { BridgeTransferResultModal } from "./BridgeTransferResultModal"
 import { BridgeRedeemResultModal } from "./BridgeRedeemResultModal"
 import { BridgeSelectVaaModal } from "./BridgeSelectVaaModal"
+import { ErrorModal } from "./ErrorModal"
 
 export const Modals = () => {
     return (
@@ -21,6 +22,7 @@ export const Modals = () => {
             <BridgeTransferResultModal />
             <BridgeRedeemResultModal />
             <BridgeSelectVaaModal />
+            <ErrorModal />
         </div>
     )
 }

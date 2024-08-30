@@ -47,6 +47,32 @@ export const chainConfig = (): ChainConfig => {
                     },
                 ],
             },
+            bsc: {
+                key: "bsc",
+                imageUrl: "/icons/bsc.svg",
+                wormholeChainId: 4,
+                chain: "Bsc",
+                platform: "Evm",
+                name: "Binance Smart Chain",
+                tokens: [
+                    {
+                        key: "bsc-native",
+                        address: "native",
+                        imageUrl: "/icons/bsc.svg",
+                        name: "Binance Coin",
+                        symbol: "BNB",
+                        decimals: 18,
+                    },
+                    {
+                        key: "bsc-usdt",
+                        address: "0xDcbA7F0D49885D5C9e7CDF3e27897a5F3cdfbf62",
+                        imageUrl: "/icons/usdt.svg",
+                        name: "USD Tether",
+                        symbol: "USDT",
+                        decimals: 18,
+                    },
+                ],
+            },
         },
     }
 }

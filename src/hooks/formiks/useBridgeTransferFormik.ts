@@ -1,20 +1,20 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
-import { serialize, toNative } from "@wormhole-foundation/sdk"
+import { serialize } from "@wormhole-foundation/sdk"
 import { useFormiks } from "."
 import {
     defaultChainKey,
     defaultNativeTokenKey,
     defaultSecondaryChainKey,
-    defaultSecondaryNativeTokenKey,
 } from "@/config"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import {
     setBridgeTransferResult,
+    triggerSaveStoredVaas,
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
-import { createAccount, transfer } from "@/services"
+import { createAccount, transfer, hasWrappedAsset, createAttestation, submitAttestation } from "@/services"
 import { useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
 
@@ -38,8 +38,6 @@ export const _useBridgeTransferFormik =
       const solanaAccountNumber = useAppSelector(
           (state) => state.authReducer.accountNumbers.solana.activeAccountNumber
       )
-
-      const signer = useSigner(preferenceChainKey)
 
       useEffect(() => {
           let defaultTargetAccountNumber = 0
@@ -77,7 +75,12 @@ export const _useBridgeTransferFormik =
       const dispatch = useAppDispatch()
 
       const chains = useAppSelector((state) => state.chainReducer.chains)
-      const { tokens } = { ...chains[preferenceChainKey] }
+      const tokens = chains[preferenceChainKey].tokens
+
+      const signer = useSigner(preferenceChainKey)
+
+      const [tempTargetChainKey, setTempTargetChainKey] = useState(defaultChainKey)
+      const targetSigner = useSigner(tempTargetChainKey)
 
       const formik = useFormik({
           initialValues,
@@ -102,6 +105,33 @@ export const _useBridgeTransferFormik =
 
               const address = targetAddress || createdAddress
               if (!signer) return
+              const hasWrapped = await hasWrappedAsset({
+                  foreignChainName: chains[targetChainKey].chain,
+                  network,
+                  sourceChainName: chains[preferenceChainKey].chain,
+                  sourceTokenAddress: _address
+              })
+              console.log(`Has Wrapped: ${hasWrapped}`)
+              if (!hasWrapped) {
+                  const { txHash, vaa } = await createAttestation({
+                      chainName: chains[preferenceChainKey].chain,
+                      network,
+                      tokenAddress: _address,
+                      signer
+                  })
+                  console.log(`Create Attestation transaction hash: ${txHash}`)
+                  console.log(`VAA: ${vaa}`)
+                  if (!vaa) return
+                  if (!targetSigner) return
+                  const _txHash = await submitAttestation({
+                      network,
+                      signer: targetSigner,
+                      targetChainName: chains[targetChainKey].chain,
+                      vaa
+                  })
+                  console.log(`Submit Attestation transaction hash: ${_txHash}`)
+              }
+
               const { txHash, vaa } = await transfer({
                   signer,
                   transferAmount: computeRaw(amount, decimals || 8),
@@ -110,7 +140,7 @@ export const _useBridgeTransferFormik =
                   targetChainName: chains[targetChainKey].chain,
                   network,
                   recipientAddress: address,
-                  tokenAddress: toNative(chains[preferenceChainKey].chain, address)
+                  tokenAddress: _address
               })
               if (vaa === null) return
               const serializedVaa = Buffer.from(serialize(vaa)).toString("base64")
@@ -128,8 +158,16 @@ export const _useBridgeTransferFormik =
                       txHash,
                   })
               )
-          },
-      })
+              dispatch(
+                  triggerSaveStoredVaas()
+              )
+          }
+      } 
+      )
+
+      useEffect(() => {
+          setTempTargetChainKey(formik.values.targetChainKey)
+      }, [formik.values.targetChainKey])
 
       useEffect(() => {
           formik.setFieldValue(
@@ -140,9 +178,7 @@ export const _useBridgeTransferFormik =
           )
           formik.setFieldValue(
               "tokenKey",
-              preferenceChainKey === defaultChainKey
-                  ? defaultNativeTokenKey
-                  : defaultSecondaryNativeTokenKey
+              chains[preferenceChainKey].tokens[0].key
           )
       }, [preferenceChainKey])
 

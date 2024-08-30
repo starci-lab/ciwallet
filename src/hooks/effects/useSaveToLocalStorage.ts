@@ -13,9 +13,9 @@ export const useSaveToLocalStorage = () => {
 
     const dispatch = useAppDispatch()
 
-    const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
+    const { storedVaas, saveStoredVaasKey } = useAppSelector((state) => state.vaaReducer)
 
-    const chains = useAppSelector((state) => state.chainReducer.chains)
+    const { chains, saveChainsKey } = useAppSelector((state) => state.chainReducer)
 
     useEffect(() => {
         if (loaded) {
@@ -30,12 +30,12 @@ export const useSaveToLocalStorage = () => {
     }, [vaa])
 
     useEffect(() => {
-        if (storedVaas.length) {
-            saveVaas(storedVaas)
-        }
-    }, [storedVaas])
+        if (!saveStoredVaasKey) return
+        saveVaas(storedVaas)
+    }, [saveStoredVaasKey])
 
     useEffect(() => {
+        if (!saveChainsKey) return
         saveChains(chains)
-    }, [chains])
+    }, [saveChainsKey])
 }

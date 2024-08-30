@@ -1,12 +1,10 @@
-import {
-    TokenAddress,
-} from "@wormhole-foundation/sdk-definitions"
 import { getWormhole } from "./base.wormhole"
 import { Chain, Network } from "@wormhole-foundation/sdk-base"
 import { UniversalAddress } from "@wormhole-foundation/sdk"
 import { getUniversalAddress } from "./get-address.wormhole"
 
-export interface GetWrappedAssetParams<
+
+export interface HasWrappedAssetParams<
   N extends Network,
   SourceChainName extends Chain,
   ForeignChainName extends Chain
@@ -17,7 +15,7 @@ export interface GetWrappedAssetParams<
   foreignChainName: ForeignChainName;
 }
 
-export const getWrappedAsset = async <
+export const hasWrappedAsset = async <
   N extends Network,
   SourceChainName extends Chain,
   ForeignChainName extends Chain
@@ -26,15 +24,14 @@ export const getWrappedAsset = async <
     sourceTokenAddress,
     sourceChainName,
     foreignChainName,
-}: GetWrappedAssetParams<N, SourceChainName, ForeignChainName>): Promise<
-  TokenAddress<ForeignChainName>
+}: HasWrappedAssetParams<N, SourceChainName, ForeignChainName>): Promise<boolean
 > => {
     const wormhole = await getWormhole(network)
     const sourceChain = wormhole.getChain(sourceChainName)
     const sourceTokenBridge = await sourceChain.getTokenBridge()
     const foreignChain = wormhole.getChain(foreignChainName)
     const foreignTokenBridge = await foreignChain.getTokenBridge()
-  
+
     let universalAddress: UniversalAddress
     
     if (sourceTokenAddress === "native") {
@@ -44,7 +41,7 @@ export const getWrappedAsset = async <
         universalAddress = getUniversalAddress(sourceChainName, sourceTokenAddress)
     }
 
-    return await foreignTokenBridge.getWrappedAsset({
+    return await foreignTokenBridge.hasWrappedAsset({
         address: universalAddress,
         chain: sourceChainName,
     })
