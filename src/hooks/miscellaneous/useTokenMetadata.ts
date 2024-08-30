@@ -15,12 +15,11 @@ export const useTokenMetadata = ({
     tokenKey,
     chainKey,
 }: UseTokenMetadataParams): UseTokenMetadataReturn => {
-    const { tokens } = {
-        ...useAppSelector((state) => state.tokenReducer.tokens[chainKey]),
+    const tokens = {
+        ...useAppSelector((state) => state.chainReducer.chains[chainKey].tokens),
     }
     const network = useAppSelector((state) => state.chainReducer.network)
-    const { tokenId } = { ...tokens.find((token) => token.key === tokenKey) }
-    const { address } = { ...tokenId }
+    const { address } = { ...tokens.find((token) => token.key === tokenKey) }
 
     const tokenMetadataSwr = useSWR(
         ["TOKEN_METADATA_SWR", tokenKey],
