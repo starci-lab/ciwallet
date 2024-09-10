@@ -1,12 +1,18 @@
-import { ChainInfo, TokenInfo, chainConfig, defaultChainKey } from "@/config"
-import { ChainAccount, Network } from "@/services"
+import {
+    ChainInfo,
+    Network,
+    TokenInfo,
+    blockchainConfig,
+    defaultChainKey,
+} from "@/config"
+import { ChainAccount } from "@/services"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { v4 } from "uuid"
 
 export interface ChainState {
   network: Network;
   preferenceChainKey: string;
-  credentials: ChainCredentials
+  credentials: ChainCredentials;
   chains: Record<string, ChainInfo>;
   saveChainsKey: number;
 }
@@ -18,7 +24,6 @@ export interface ChainCredential {
 }
 
 export type ChainCredentials = Record<string, ChainCredential>;
-
 
 const initialState: ChainState = {
     preferenceChainKey: defaultChainKey,
@@ -38,21 +43,21 @@ const initialState: ChainState = {
             address: "",
             privateKey: "",
             publicKey: "",
-        }
+        },
     },
-    chains: chainConfig().chains,
+    chains: blockchainConfig().chains,
     saveChainsKey: 0,
 }
 
 export interface SetCredentialParams {
-    account: Partial<ChainAccount>,
-    chainKey: string
+  account: Partial<ChainAccount>;
+  chainKey: string;
 }
 
 export interface AddTokenParams {
-    chainKey: string;
-    tokenInfo: Omit<TokenInfo, "key">;
-}  
+  chainKey: string;
+  tokenInfo: Omit<TokenInfo, "key">;
+}
 
 export const chainSlice = createSlice({
     name: "chainReducer",
@@ -64,7 +69,10 @@ export const chainSlice = createSlice({
         setCredential: (
             state,
             {
-                payload: { account: {  address, privateKey, publicKey }, chainKey },
+                payload: {
+                    account: { address, privateKey, publicKey },
+                    chainKey,
+                },
             }: PayloadAction<SetCredentialParams>
         ) => {
             if (address) {
@@ -77,10 +85,7 @@ export const chainSlice = createSlice({
                 state.credentials[chainKey].publicKey = publicKey
             }
         },
-        setChain: (
-            state,
-            { payload }: { payload: Record<string, ChainInfo> }
-        ) => {
+        setChain: (state, { payload }: { payload: Record<string, ChainInfo> }) => {
             state.chains = payload
         },
         triggerSaveChains: (state) => {
@@ -90,11 +95,8 @@ export const chainSlice = createSlice({
             state,
             { payload: { chainKey, tokenInfo } }: { payload: AddTokenParams }
         ) => {
-            const tokenInfos = state.chains[chainKey].tokens
-            tokenInfos.push({
-                ...tokenInfo,
-                key: v4(),
-            })
+            const key = v4()
+            state.chains[chainKey].tokens[key] = { ...tokenInfo, key }
         },
     },
 })
@@ -104,6 +106,6 @@ export const {
     setCredential,
     addToken,
     setChain,
-    triggerSaveChains
+    triggerSaveChains,
 } = chainSlice.actions
 export const chainReducer = chainSlice.reducer

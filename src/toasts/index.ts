@@ -1,2 +1,2 @@
-export * from "./invalid-password.toast"
+export * from "./base.toast"
 export * from "./container.toast"
