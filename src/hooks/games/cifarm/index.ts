@@ -15,3 +15,5 @@ export const useCifarm = () => {
     const { cifarm } = useGames()
     return cifarm
 }
+
+export * from "./useCifarmNakama"
