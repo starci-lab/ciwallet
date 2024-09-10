@@ -24,7 +24,7 @@ export const Token = ({ token }: TokenProps) => {
     })
 
     const { balanceSwr } = useBalance({
-        accountAddress: account.address,
+        accountAddress: account?.address,
         chainKey: preferenceChainKey,
         tokenKey : token.key,
     })

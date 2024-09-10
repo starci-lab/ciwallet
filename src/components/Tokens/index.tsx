@@ -11,7 +11,7 @@ export const Tokens = () => {
 
     const tokens = Object.values(useAppSelector(
         (state) => state.blockchainReducer.chains[preferenceChainKey].tokens
-    ))
+    )) 
 
     return (
         <div>
