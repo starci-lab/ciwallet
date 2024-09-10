@@ -23,8 +23,11 @@ export const BridgeTransferResultModal = () => {
     const result = useAppSelector((state) => state.resultReducer.bridge.transfer)
     const { vaa, txHash } = { ...result }
 
-    const { preferenceChainKey, network } = useAppSelector(
-        (state) => state.blockchainReducer
+    const network = useAppSelector(
+        (state) => state.blockchainReducer.network
+    )
+    const preferenceChainKey = useAppSelector(
+        (state) => state.blockchainReducer.preferenceChainKey
     )
 
     return (

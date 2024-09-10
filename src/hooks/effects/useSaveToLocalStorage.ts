@@ -3,8 +3,11 @@ import { saveAccountNumbers, saveChains, saveVaas } from "@/services"
 import { useEffect } from "react"
 
 export const useSaveToLocalStorage = () => {
-    const { loaded, accountNumbers } = useAppSelector(
-        (state) => state.authReducer
+    const loaded = useAppSelector(
+        (state) => state.authReducer.loaded
+    )
+    const accountNumbers = useAppSelector(
+        (state) => state.authReducer.accountNumbers
     )
 
     const vaa = useAppSelector(
@@ -13,10 +16,11 @@ export const useSaveToLocalStorage = () => {
 
     const dispatch = useAppDispatch()
 
-    const { storedVaas, saveStoredVaasKey } = useAppSelector((state) => state.vaaReducer)
+    const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
+    const saveStoredVaasKey = useAppSelector((state) => state.vaaReducer.saveStoredVaasKey)
 
-    const { chains, saveChainsKey } = useAppSelector((state) => state.blockchainReducer)
-
+    const chains = useAppSelector((state) => state.blockchainReducer.chains)
+    const saveChainsKey = useAppSelector((state) => state.blockchainReducer.saveChainsKey)
     useEffect(() => {
         if (loaded) {
             saveAccountNumbers(accountNumbers)

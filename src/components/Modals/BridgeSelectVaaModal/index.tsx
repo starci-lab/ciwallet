@@ -20,8 +20,8 @@ import { VAAProfile } from "./VAAProfile"
 export const BridgeSelectVaaModal = () => {
     const { isOpen, onClose } = useBridgeSelectVaaModalDisclosure()
 
-    const { selectedKey } = useAppSelector(
-        (state) => state.vaaReducer
+    const selectedKey = useAppSelector(
+        (state) => state.vaaReducer.selectedKey
     )
 
     const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas.filter(({ isUsed }) => !isUsed))

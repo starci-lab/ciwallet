@@ -31,7 +31,8 @@ export const _useBridgeRedeemFormik =
 
       const network = useAppSelector((state) => state.blockchainReducer.network)
 
-      const { selectedKey, storedVaas } = useAppSelector(state => state.vaaReducer)
+      const selectedKey = useAppSelector(state => state.vaaReducer.selectedKey)
+      const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas)
       const vaa = storedVaas.find(({ key }) => key === selectedKey)
       const signer = useGenericSigner(vaa?.targetChainKey, vaa?.targetAddress)
 

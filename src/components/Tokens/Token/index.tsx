@@ -13,8 +13,8 @@ export interface TokenProps {
 
 export const Token = ({ token }: TokenProps) => {
     const mnemonic = useAppSelector(state => state.authReducer.mnemonic)
-    const { preferenceChainKey } = useAppSelector(state => state.blockchainReducer)
-    const { activeAccountNumber } = useAppSelector(state => state.authReducer.accountNumbers[preferenceChainKey])
+    const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
+    const activeAccountNumber = useAppSelector(state => state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber)
     const network = useAppSelector(state => state.blockchainReducer.network)
 
     const account = createAccount({

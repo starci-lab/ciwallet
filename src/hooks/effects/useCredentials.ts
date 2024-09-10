@@ -5,8 +5,11 @@ import {
 import { useEffect } from "react"
 
 export const useCredentials = () => {
-    const { mnemonic, accountNumbers } = useAppSelector(
-        (state) => state.authReducer
+    const mnemonic = useAppSelector(
+        (state) => state.authReducer.mnemonic
+    )
+    const accountNumbers = useAppSelector(
+        (state) => state.authReducer.accountNumbers
     )
     const dispatch = useAppDispatch()
 

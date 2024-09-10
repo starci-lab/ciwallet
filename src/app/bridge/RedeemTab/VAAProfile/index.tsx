@@ -8,7 +8,9 @@ import React from "react"
 export const VAAProfile = () => {
     const { onOpen } = useBridgeSelectVaaModalDisclosure()
 
-    const { selectedKey, storedVaas } = useAppSelector(state => state.vaaReducer)
+    const selectedKey = useAppSelector(state => state.vaaReducer.selectedKey)
+    const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas)
+    
     const vaa = storedVaas.find(({ key }) => key === selectedKey)
     const {
         tokenKey,

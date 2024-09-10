@@ -39,12 +39,15 @@ const Page = () => {
     )
     const router = useRouter()
 
-    const { address } = useAppSelector(
-        (state) => state.blockchainReducer.credentials[preferenceChainKey]
+    const address = useAppSelector(
+        (state) => state.blockchainReducer.credentials[preferenceChainKey].address
     )
 
-    const { accounts, activeAccountNumber } = useAppSelector(
-        (state) => state.authReducer.accountNumbers[preferenceChainKey]
+    const accounts = useAppSelector(
+        (state) => state.authReducer.accountNumbers[preferenceChainKey].accounts
+    )
+    const activeAccountNumber = useAppSelector(
+        (state) => state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
     )
 
     const { name, imageUrl } = accounts[activeAccountNumber]
