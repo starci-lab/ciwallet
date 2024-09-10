@@ -60,7 +60,7 @@ export const _useCifarmNakama = () : UseCifarmNakamaReturn => {
                 _publicKey = address
             }
 
-            const session = await client.authenticateCustom("<string>", false, undefined, {
+            const session = await client.authenticateCustom("starci", false, undefined, {
                 message,
                 publicKey: _publicKey,
                 signature,
