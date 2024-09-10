@@ -9,5 +9,6 @@ export const constantConfig = () => ({
         bridge: "/bridge",
         mnemonicInput: "/mnemonic-input",
         settings: "/settings",
+        cifarm: "/cifarm"
     }
 })

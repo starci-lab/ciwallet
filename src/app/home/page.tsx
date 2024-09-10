@@ -142,7 +142,7 @@ const Page = () => {
             </div>
             <Spacer y={6} />
             <div>
-                <Link as="button" className="flex">
+                <Link onPress={() => router.push(constantConfig().path.cifarm)} as="button" className="flex">
                     <Image removeWrapper src="/icons/cifarm.png" className="w-16 h-16" />
                 </Link>
             </div>
