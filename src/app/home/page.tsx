@@ -47,7 +47,8 @@ const Page = () => {
         (state) => state.authReducer.accountNumbers[preferenceChainKey].accounts
     )
     const activeAccountNumber = useAppSelector(
-        (state) => state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
+        (state) =>
+            state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
     )
 
     const { name, imageUrl } = accounts[activeAccountNumber]
@@ -88,7 +89,11 @@ const Page = () => {
                         </Card>
                     </Snippet>
                     <div className="flex gap-2 items-center">
-                        <Link as="button" onPress={() => router.push(constantConfig().path.settings)} color="foreground">
+                        <Link
+                            as="button"
+                            onPress={() => router.push(constantConfig().path.settings)}
+                            color="foreground"
+                        >
                             <Cog6ToothIcon className="w-5 h-5" />
                         </Link>
                         <Link as="button" color="foreground">
@@ -101,9 +106,7 @@ const Page = () => {
                         >
                             <Image
                                 className="w-5 h-5"
-                                src={
-                                    chains[preferenceChainKey].imageUrl
-                                }
+                                src={chains[preferenceChainKey].imageUrl}
                             />
                         </Button>
                     </div>
@@ -136,6 +139,12 @@ const Page = () => {
                         </Button>
                     </Tooltip>
                 </div>
+            </div>
+            <Spacer y={6} />
+            <div>
+                <Link as="button" className="flex">
+                    <Image removeWrapper src="/icons/cifarm.png" className="w-16 h-16" />
+                </Link>
             </div>
             <Spacer y={6} />
             <div className="flex items-center justify-between">
