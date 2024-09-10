@@ -22,8 +22,8 @@ export const BridgeSelectTokenModal = () => {
     useBridgeSelectTokenModalDisclosure()
     const formik = useBridgeTransferFormik()
 
-    const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
-    const tokens = useAppSelector(state => state.chainReducer.chains[preferenceChainKey].tokens)
+    const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
+    const tokens = Object.values(useAppSelector(state => state.blockchainReducer.chains[preferenceChainKey].tokens)) 
     
     return (
         <Modal hideCloseButton isOpen={isOpen}>

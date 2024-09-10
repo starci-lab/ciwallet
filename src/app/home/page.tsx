@@ -35,12 +35,12 @@ import { truncateString } from "@/utils"
 const Page = () => {
     const { onOpen } = useAccountsModalDisclosure()
     const preferenceChainKey = useAppSelector(
-        (state) => state.chainReducer.preferenceChainKey
+        (state) => state.blockchainReducer.preferenceChainKey
     )
     const router = useRouter()
 
     const { address } = useAppSelector(
-        (state) => state.chainReducer.credentials[preferenceChainKey]
+        (state) => state.blockchainReducer.credentials[preferenceChainKey]
     )
 
     const { accounts, activeAccountNumber } = useAppSelector(
@@ -52,7 +52,7 @@ const Page = () => {
     const { onOpen: onSelectNetworkModalOpen } =
     useSelectNetworkModalDisclosure()
 
-    const chains = useAppSelector((state) => state.chainReducer.chains)
+    const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const dispatch = useAppDispatch()
 
     return (

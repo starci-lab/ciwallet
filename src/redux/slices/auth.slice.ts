@@ -61,6 +61,15 @@ const initialState: AuthState = {
                 },
             },
         },
+        avalanche: {
+            activeAccountNumber: 0,
+            accounts: {
+                0: {
+                    imageUrl: "",
+                    name: "Account 0",
+                },
+            },
+        },
     },
     loaded: false,
     password: "",

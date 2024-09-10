@@ -1,6 +1,6 @@
 "use client"
 
-import { TokenInfo, chainConfig } from "@/config"
+import { TokenInfo, blockchainConfig } from "@/config"
 import { useBalance } from "@/hooks"
 import { useAppSelector } from "@/redux"
 import { createAccount } from "@/services"
@@ -13,9 +13,10 @@ export interface TokenProps {
 
 export const Token = ({ token }: TokenProps) => {
     const mnemonic = useAppSelector(state => state.authReducer.mnemonic)
-    const { preferenceChainKey } = useAppSelector(state => state.chainReducer)
+    const { preferenceChainKey } = useAppSelector(state => state.blockchainReducer)
     const { activeAccountNumber } = useAppSelector(state => state.authReducer.accountNumbers[preferenceChainKey])
-    
+    const network = useAppSelector(state => state.blockchainReducer.network)
+
     const account = createAccount({
         accountNumber: activeAccountNumber,
         chainKey: preferenceChainKey,
@@ -30,8 +31,8 @@ export const Token = ({ token }: TokenProps) => {
     
     const { data } = { ...balanceSwr }
 
-    const chain = chainConfig().chains[preferenceChainKey]
-    const isNative = token.address === "native"
+    const chain = blockchainConfig().chains[preferenceChainKey]
+    const isNative = token.addresses[network] === "native"
 
     return (
         <Card shadow="none" fullWidth>

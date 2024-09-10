@@ -7,7 +7,7 @@ import {
     useAppSelector,
     useVaa,
 } from "@/redux"
-import { redeem } from "@/services"
+import { parseNetwork, redeem } from "@/services"
 import { useGenericSigner } from "../miscellaneous"
 import { deserialize } from "@wormhole-foundation/sdk"
 
@@ -23,13 +23,13 @@ export const _useBridgeRedeemFormik =
 
       const dispatch = useAppDispatch()
 
-      const chains = useAppSelector((state) => state.chainReducer.chains)
+      const chains = useAppSelector((state) => state.blockchainReducer.chains)
 
       const validationSchema = Yup.object({
       //
       })
 
-      const network = useAppSelector((state) => state.chainReducer.network)
+      const network = useAppSelector((state) => state.blockchainReducer.network)
 
       const { selectedKey, storedVaas } = useAppSelector(state => state.vaaReducer)
       const vaa = storedVaas.find(({ key }) => key === selectedKey)
@@ -49,7 +49,7 @@ export const _useBridgeRedeemFormik =
                   ),
                   senderChainName: chains[vaa.fromChainKey].chain,
                   redeemChainName: chains[vaa.targetChainKey].chain,
-                  network,
+                  network: parseNetwork(network),
               })
 
               dispatch(setBridgeRedeemResult({ txHash, vaa }))

@@ -44,6 +44,11 @@ const initialState: ChainState = {
             privateKey: "",
             publicKey: "",
         },
+        avalanche: {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        },
     },
     chains: blockchainConfig().chains,
     saveChainsKey: 0,
@@ -59,8 +64,8 @@ export interface AddTokenParams {
   tokenInfo: Omit<TokenInfo, "key">;
 }
 
-export const chainSlice = createSlice({
-    name: "chainReducer",
+export const blockchainSlice = createSlice({
+    name: "blockchainReducer",
     initialState,
     reducers: {
         setPreferenceChainKey: (state, { payload }: PayloadAction<string>) => {
@@ -107,5 +112,5 @@ export const {
     addToken,
     setChain,
     triggerSaveChains,
-} = chainSlice.actions
-export const chainReducer = chainSlice.reducer
+} = blockchainSlice.actions
+export const blockchainReducer = blockchainSlice.reducer

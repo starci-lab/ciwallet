@@ -21,13 +21,13 @@ import {
 import { loadAccountNumbers as reduxLoadAccountNumbers } from "@/redux"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
-import { triggerInvalidPasswordToast } from "@/toasts"
+import { triggerErrorToast } from "@/toasts"
 
 export const useLoadFromLocalStorage = () => {
     const dispatch = useAppDispatch()
 
     const password = useAppSelector((state) => state.authReducer.password)
-    const preferenceChainKey = useAppSelector((state) => state.chainReducer.preferenceChainKey)
+    const preferenceChainKey = useAppSelector((state) => state.blockchainReducer.preferenceChainKey)
     
     const router = useRouter()
 
@@ -71,7 +71,7 @@ export const useLoadFromLocalStorage = () => {
             router.push(constantConfig().path.home)
         } catch (ex) {
             console.error(ex)
-            triggerInvalidPasswordToast()
+            triggerErrorToast("Invalid password")
         }
     }, [password])
 

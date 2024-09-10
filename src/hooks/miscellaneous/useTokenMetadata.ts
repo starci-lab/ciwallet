@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/redux"
-import { TokenMetadata, getTokenMetadata } from "@/services"
+import { BlockchainTokenService, TokenMetadata } from "@/services"
 import useSWR, { SWRResponse } from "swr"
 
 export interface UseTokenMetadataParams {
@@ -8,29 +8,25 @@ export interface UseTokenMetadataParams {
 }
 
 export interface UseTokenMetadataReturn {
-  tokenMetadataSwr: SWRResponse<TokenMetadata | undefined, unknown>;
+  tokenMetadataSwr: SWRResponse<TokenMetadata, unknown>;
 }
 
 export const useTokenMetadata = ({
     tokenKey,
     chainKey,
 }: UseTokenMetadataParams): UseTokenMetadataReturn => {
-    const tokens = {
-        ...useAppSelector((state) => state.chainReducer.chains[chainKey].tokens),
-    }
-    const network = useAppSelector((state) => state.chainReducer.network)
-    const { address } = { ...tokens.find((token) => token.key === tokenKey) }
+    const network = useAppSelector((state) => state.blockchainReducer.network)
 
     const tokenMetadataSwr = useSWR(
         ["TOKEN_METADATA_SWR", tokenKey],
         async () => {
-            if (!address) return
-
-            return await getTokenMetadata({
+            const tokenService = new BlockchainTokenService({
                 chainKey,
+                tokenKey,
                 network,
-                tokenAddress: address,
             })
+
+            return await tokenService.getTokenMetadata()
         }
     )
 

@@ -23,8 +23,8 @@ export const SelectNetworkModal = () => {
 
     const dispatch = useAppDispatch()
 
-    const chains = Object.values(useAppSelector(state => state.chainReducer.chains))
-    const preferenceChainKey = useAppSelector(state => state.chainReducer.preferenceChainKey)
+    const chains = Object.values(useAppSelector(state => state.blockchainReducer.chains))
+    const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
 
     return (
         <Modal hideCloseButton isOpen={isOpen}>

@@ -15,7 +15,7 @@ export const useSaveToLocalStorage = () => {
 
     const { storedVaas, saveStoredVaasKey } = useAppSelector((state) => state.vaaReducer)
 
-    const { chains, saveChainsKey } = useAppSelector((state) => state.chainReducer)
+    const { chains, saveChainsKey } = useAppSelector((state) => state.blockchainReducer)
 
     useEffect(() => {
         if (loaded) {

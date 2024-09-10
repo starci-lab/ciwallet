@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/redux"
-import { getBalance } from "@/services"
+import { BlockchainTokenService } from "@/services"
 import useSWR, { SWRResponse } from "swr"
 
 export interface UseBalanceParams {
@@ -9,7 +9,7 @@ export interface UseBalanceParams {
 }
 
 export interface UseBalanceReturn {
-    balanceSwr: SWRResponse<number, unknown>;
+  balanceSwr: SWRResponse<number | undefined, unknown>;
 }
 
 export const useBalance = ({
@@ -17,23 +17,26 @@ export const useBalance = ({
     tokenKey,
     chainKey,
 }: UseBalanceParams): UseBalanceReturn => {
-    const refreshBalanceKey = useAppSelector(state => state.refreshReducer.refreshBalanceKey)
-    const tokens = useAppSelector((state) => state.chainReducer.chains[chainKey]).tokens
-    const network = useAppSelector((state) => state.chainReducer.network)
-    
-    const balanceSwr = useSWR(["BALANCE_SWR", tokenKey, refreshBalanceKey], async () => {
-        const token = tokens?.find(({ key }) => key === tokenKey)
-        if (!token) return 0
-        const balance = await getBalance({
-            chainKey,
-            network,
-            accountAddress,
-            tokenAddress: token.address,
-        })
-        return balance
-    })
+    const refreshBalanceKey = useAppSelector(
+        (state) => state.refreshReducer.refreshBalanceKey
+    )
+    const network = useAppSelector((state) => state.blockchainReducer.network)
+
+    const balanceSwr = useSWR(
+        ["BALANCE_SWR", tokenKey, refreshBalanceKey],
+        async () => {
+            const tokenService = new BlockchainTokenService(
+                {
+                    chainKey,
+                    tokenKey,
+                    network
+                }
+            )
+            return await tokenService.getBalance({ accountAddress })
+        }
+    )
 
     return {
-        balanceSwr
+        balanceSwr,
     }
 }

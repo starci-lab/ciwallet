@@ -12,7 +12,7 @@ import { Network as WormholeNetwork } from "@wormhole-foundation/sdk"
 import { SignerParams } from "../base.wormhole"
 import { ethers } from "ethers"
 import { evmHttpRpcUrl } from "../../rpcs"
-import { parseWormholeNetwork } from "../../common"
+import { chainToChainKey, parseWormholeNetwork } from "../../common"
 
 export class EvmSigner<N extends Network, C extends EvmChains>
 implements SignAndSendSigner<N, C>
@@ -57,7 +57,7 @@ export const evmSigner = ({
     chain,
     debug,
 }: SignerParams<WormholeNetwork, EvmChains>) => {
-    const rpcUrl = evmHttpRpcUrl(chain, parseWormholeNetwork(network))
+    const rpcUrl = evmHttpRpcUrl(chainToChainKey(chain), parseWormholeNetwork(network))
     const evmClient = new ethers.JsonRpcProvider(rpcUrl)
     return new EvmSigner(chain, privateKey, evmClient, debug)
 }

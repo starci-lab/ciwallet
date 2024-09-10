@@ -1,11 +1,11 @@
-import { defaultChainKey, defaultSecondaryChain } from "@/config"
+import { Network, defaultChainKey, defaultSecondaryChain } from "@/config"
 import {
     useAppSelector,
     useAppDispatch,
     addToken as reduxAddToken,
     triggerSaveChains,
 } from "@/redux"
-import { getTokenMetadata, getWrappedAsset } from "@/services"
+import { BlockchainTokenService, getWrappedAsset, parseNetwork } from "@/services"
 import useSWRMutation, { SWRMutationResponse } from "swr/mutation"
 
 export interface UseAddTokenReturn {
@@ -18,33 +18,33 @@ export const useAddToken = () => {
     const { vaa } = { ...result }
 
     const dispatch = useAppDispatch()
-    const network = useAppSelector((state) => state.chainReducer.network)
+    const network = useAppSelector((state) => state.blockchainReducer.network)
 
-    const chains = useAppSelector(state => state.chainReducer.chains)
+    const chains = useAppSelector(state => state.blockchainReducer.chains)
     const tokens = chains[vaa?.fromChainKey ?? defaultChainKey].tokens
 
     const addTokenSwrMutation = useSWRMutation("ADD_TOKEN_SWR_MUTATION", async () => {
         if (!vaa) return
-
-        const token = tokens.find(({key}) => key === vaa.tokenKey)
+        const token = tokens[vaa.tokenKey]
         if (!token) return
-        const { imageUrl, address: tokenAddress } = token
+        const { imageUrl, addresses } = token
+        const tokenAddress = addresses[network]
 
         const sourceChain = chains[vaa.fromChainKey]
         const foreignChain = chains[vaa.targetChainKey]
 
         const address = await getWrappedAsset({
-            network,
+            network: parseNetwork(network),
             sourceChainName: sourceChain.chain,
             foreignChainName: foreignChain.chain,
             sourceTokenAddress: tokenAddress,
         })
         console.log(`Wrapped asset address: ${address}`)
-        const result = await getTokenMetadata({
-            network,
-            tokenAddress: address.toString(),
-            chainKey: foreignChain?.key ?? defaultSecondaryChain
-        })
+        const result = await new BlockchainTokenService({
+            chainKey: foreignChain.key ?? defaultSecondaryChain, 
+            tokenAddress: address.toString(), 
+            network
+        }).getTokenMetadata()
 
         result.name = result.name || `Wrapped ${token.name}`
         result.symbol = result.symbol || token.symbol
@@ -54,7 +54,10 @@ export const useAddToken = () => {
                 chainKey: vaa.targetChainKey,
                 tokenInfo: {
                     imageUrl,
-                    address: address.toString(),
+                    addresses: {
+                        [Network.Mainnet]: network === Network.Mainnet ? address.toString() : "",
+                        [Network.Testnet]: network === Network.Testnet ? address.toString() : ""
+                    },
                     ...result,
                 }
             })

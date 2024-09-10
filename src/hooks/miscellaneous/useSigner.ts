@@ -1,15 +1,15 @@
 import { useAppSelector } from "@/redux"
-import { aptosSigner, evmSigner, solanaSigner } from "@/services"
+import { chainKeyToChain, parseNetwork, signer } from "@/services"
 import { Chain, SignAndSendSigner, Network } from "@wormhole-foundation/sdk"
 
 export const useSigner = <N extends Network, C extends Chain>(
     chainKey: string
 ): SignAndSendSigner<N, C> | undefined => {
-    const network = useAppSelector((state) => state.chainReducer.network)
+    const network = useAppSelector((state) => state.blockchainReducer.network)
     const credential = useAppSelector(
-        (state) => state.chainReducer.credentials[chainKey]
+        (state) => state.blockchainReducer.credentials[chainKey]
     )
-
+    if (!credential) return
     if (
         credential.privateKey === "" ||
     credential.publicKey === "" ||
@@ -17,31 +17,12 @@ export const useSigner = <N extends Network, C extends Chain>(
     )
         return
 
-    switch (chainKey) {
-    case "aptos": {
-        return aptosSigner({
-            chain: "Aptos",
-            network,
-            privateKey: credential.privateKey,
-            address: credential.address,
-            debug: true,
-        }) as unknown as SignAndSendSigner<N, C>
-    }
-    case "solana": {
-        return solanaSigner({
-            chain: "Solana",
-            network,
-            privateKey: credential.privateKey,
-            debug: true,
-        }) as unknown as SignAndSendSigner<N, C>
-    }
-    case "bsc": {
-        return evmSigner({
-            chain: "Bsc",
-            network,
-            privateKey: credential.privateKey,
-            debug: true,
-        }) as unknown as SignAndSendSigner<N, C>
-    }
-    }
+    const chain = chainKeyToChain(chainKey)
+    return signer({
+        chain,
+        network: parseNetwork(network),
+        privateKey: credential.privateKey,
+        address: credential.address,
+        debug: true,
+    }) as unknown as SignAndSendSigner<N, C>
 }

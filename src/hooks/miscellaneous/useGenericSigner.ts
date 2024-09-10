@@ -1,9 +1,9 @@
 import { useAppSelector } from "@/redux"
 import {
-    aptosSigner,
+    chainKeyToChain,
     createAccount,
-    evmSigner,
-    solanaSigner,
+    parseNetwork,
+    signer,
 } from "@/services"
 import { Chain, SignAndSendSigner, Network } from "@wormhole-foundation/sdk"
 
@@ -12,7 +12,7 @@ export const useGenericSigner = <N extends Network, C extends Chain>(
     address?: string
 ): SignAndSendSigner<N, C> | undefined => {
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-    const network = useAppSelector((state) => state.chainReducer.network)
+    const network = useAppSelector((state) => state.blockchainReducer.network)
     const _accountNumbers = useAppSelector(
         (state) => state.authReducer.accountNumbers
     )
@@ -32,44 +32,14 @@ export const useGenericSigner = <N extends Network, C extends Chain>(
     const account = _accounts.find(
         (account) => account.address === address
     )
+    if (!account) return 
 
-    switch (chainKey) {
-    case "aptos": {
-        if (!account) {
-            console.warn(`Aptos account not found for ${address}` )
-            return
-        }
-        return aptosSigner({
-            chain: "Aptos",
-            network,
-            privateKey: account.privateKey,
-            address: account.address,
-            debug: true,
-        }) as unknown as SignAndSendSigner<N, C>
-    }
-    case "solana": {
-        if (!account) {
-            console.warn(`Solana account not found for ${address}` )
-            return
-        }
-        return solanaSigner({
-            chain: "Solana",
-            network,
-            privateKey: account.privateKey,
-            debug: true,
-        }) as unknown as SignAndSendSigner<N, C>
-    }
-    case "bsc": {
-        if (!account) {
-            console.warn(`Bsc account not found for ${address}` )
-            return
-        }
-        return evmSigner({
-            chain: "Bsc",
-            network,
-            privateKey: account.privateKey,
-            debug: true,
-        }) as unknown as SignAndSendSigner<N, C>
-    }
-    }
+    const chain = chainKeyToChain(chainKey)
+    return signer({
+        chain,
+        network: parseNetwork(network),
+        privateKey: account.privateKey,
+        address: account.address,
+        debug: true,
+    }) as unknown as SignAndSendSigner<N, C>
 }

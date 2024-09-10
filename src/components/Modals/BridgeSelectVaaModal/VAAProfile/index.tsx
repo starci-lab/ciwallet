@@ -24,11 +24,11 @@ export const VAAProfile = ({
     selectedKey
 }: VAAProfileProps) => {
 
-    const chains = useAppSelector(state => state.chainReducer.chains)
+    const chains = useAppSelector(state => state.blockchainReducer.chains)
     const tokens = chains[fromChainKey].tokens
     const fromChain = chains[fromChainKey]
     const targetChain = chains[targetChainKey]
-    const token = tokens.find(({ key }) => key === tokenKey)
+    const token = tokens[tokenKey]
 
     const dispatch = useAppDispatch()
     

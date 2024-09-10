@@ -1,9 +1,7 @@
 import { Network } from "@/config"
+import { ExplorerUrlParams } from "./types.explorer"
 
-export const aptosExplorerUrl = (
-    value: string,
-    network: Network = Network.Testnet
-) => {
+export const aptosExplorerUrl = ({ network, value}: ExplorerUrlParams) => {
     switch (network) {
     case Network.Testnet:
         return {

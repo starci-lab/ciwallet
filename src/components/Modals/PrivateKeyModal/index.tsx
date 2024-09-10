@@ -16,10 +16,10 @@ import { downloadTextFile } from "@/services"
 export const PrivateKeyModal = () => {
     const { isOpen, onClose } = usePrivateKeyModalDisclosure()
     const preferenceChainKey = useAppSelector(
-        (state) => state.chainReducer.preferenceChainKey
+        (state) => state.blockchainReducer.preferenceChainKey
     )
     const privateKey = useAppSelector(
-        (state) => state.chainReducer.credentials[preferenceChainKey].privateKey
+        (state) => state.blockchainReducer.credentials[preferenceChainKey].privateKey
     )
 
     return (

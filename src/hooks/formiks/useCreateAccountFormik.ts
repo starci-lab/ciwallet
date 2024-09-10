@@ -10,7 +10,7 @@ export interface CreateAccountFormikValues {
 export const _useCreateAccountFormik =
   (): FormikProps<CreateAccountFormikValues> => {
       const preferenceChainKey = useAppSelector(
-          (state) => state.chainReducer.preferenceChainKey
+          (state) => state.blockchainReducer.preferenceChainKey
       )
       const accountNumbers = useAppSelector(
           (state) => state.authReducer.accountNumbers
@@ -31,27 +31,12 @@ export const _useCreateAccountFormik =
           onSubmit: ({ accountNumber }) => {
               let _accountNumber: number
               if (!accountNumber) {
-                  let maxAccountNumber = 0
-                  switch (preferenceChainKey) {
-                  case "aptos": {
-                      maxAccountNumber = Math.max(
-                          ...Object.keys(accountNumbers.aptos.accounts).map((key) =>
-                              Number.parseInt(key)
-                          )
+    
+                  const maxAccountNumber = Math.max(
+                      ...Object.keys(accountNumbers[preferenceChainKey].accounts).map((key) =>
+                          Number.parseInt(key)
                       )
-                      break
-                  }
-                  case "solana": {
-                      maxAccountNumber = Math.max(
-                          ...Object.keys(accountNumbers.solana.accounts).map(
-                              (key) => Number.parseInt(key)
-                          )
-                      )
-                      break
-                  }
-                  default:
-                      break
-                  }
+                  )
 
                   _accountNumber = maxAccountNumber + 1
               } else {

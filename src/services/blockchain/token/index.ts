@@ -1,40 +1,45 @@
 import {
     Network,
-    defaultChainKey,
-    nativeTokenKey,
 } from "@/config"
 import { GetBalanceParams, _getBalance } from "./get-balance.token"
+import { _getTokenMetadata } from "./get-token-metadata"
 
+export interface BlockchainTokenServiceConstructorParams {
+    chainKey: string,
+    tokenKey?: string,
+    network?: Network,
+    tokenAddress?: string
+}
 export class BlockchainTokenService {
-    private network: Network
-
     constructor(
-        private chainKey: string = defaultChainKey,
-        private tokenKey: string = nativeTokenKey,
-        network?: Network
+        private readonly params: BlockchainTokenServiceConstructorParams
     ) {
-        this.network = network || Network.Testnet
+        params.network = params.network || Network.Testnet
     }
 
     public async getBalance({
         accountAddress,
     }: Pick<GetBalanceParams, "accountAddress">) {
-        return _getBalance({
-            accountAddress,
-            chainKey: this.chainKey,
-            tokenKey: this.tokenKey,
-            network: this.network,
-        })
+        if (this.params.chainKey) {
+            return await _getBalance({
+                accountAddress,
+                chainKey: this.params.chainKey,
+                tokenAddress: this.params.tokenAddress,
+                tokenKey: this.params.tokenKey,
+                network: this.params.network,
+            })
+        }
     }
 
-    public async getTokenMetadata({
-        accountAddress,
-    }: Pick<GetBalanceParams, "accountAddress">) {
-        return _getBalance({
-            accountAddress,
-            chainKey: this.chainKey,
-            tokenKey: this.tokenKey,
-            network: this.network,
+    public async getTokenMetadata() {
+        return _getTokenMetadata({
+            chainKey: this.params.chainKey,
+            tokenAddress: this.params.tokenAddress,
+            tokenKey: this.params.tokenKey,
+            network: this.params.network,
         })
     }
 }
+
+export * from "./get-balance.token"
+export * from "./get-token-metadata"

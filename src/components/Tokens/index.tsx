@@ -6,12 +6,12 @@ import { Spacer } from "@nextui-org/react"
 
 export const Tokens = () => {
     const preferenceChainKey = useAppSelector(
-        (state) => state.chainReducer.preferenceChainKey
+        (state) => state.blockchainReducer.preferenceChainKey
     )
 
-    const tokens = useAppSelector(
-        (state) => state.chainReducer.chains[preferenceChainKey].tokens
-    )
+    const tokens = Object.values(useAppSelector(
+        (state) => state.blockchainReducer.chains[preferenceChainKey].tokens
+    ))
 
     return (
         <div>

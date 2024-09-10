@@ -1,5 +1,5 @@
 import { Network } from "@/config"
-import { Network as WormholeNetwork } from "@wormhole-foundation/sdk"
+import { Chain, Network as WormholeNetwork } from "@wormhole-foundation/sdk"
 
 export enum Platform {
   Evm = "evm",
@@ -48,4 +48,24 @@ export interface ChainAccount {
   address: string;
   privateKey: string;
   publicKey: string;
+}
+
+export const chainKeyToChain = (chainKey: string) : Chain => {
+    switch (chainKey) {
+    case "aptos": return "Aptos"
+    case "solana": return "Solana"
+    case "avalanche": return "Avalanche"
+    case "bsc": return "Bsc"
+    default: throw new Error(`Chain not found : ${chainKey}`)
+    }
+}
+
+export const chainToChainKey = (chainKey: Chain) : string => {
+    switch (chainKey) {
+    case "Aptos": return "aptos"
+    case "Solana": return "solana"
+    case "Avalanche": return "avalanche"
+    case "Bsc": return "bsc"
+    default: throw new Error(`Chain not found : ${chainKey}`)
+    }
 }

@@ -2,7 +2,7 @@ import { Account } from "@aptos-labs/ts-sdk"
 import { ChainAccount } from "../common"
 import { CreateAccountParams } from "./types.creation"
 
-export const _createAptosAccount = ({
+export const createAptosAccount = ({
     accountNumber,
     mnemonic,
 }: Omit<CreateAccountParams, "chainKey">): ChainAccount => {

@@ -15,7 +15,7 @@ import {
 import { useBridgeTransferResultModalDiscloresure } from "@/hooks"
 import { useAppSelector } from "@/redux"
 import { truncateString } from "@/utils"
-import { getExplorerUrl } from "@/services"
+import { explorerUrl } from "@/services"
 
 export const BridgeTransferResultModal = () => {
     const { isOpen, onClose } = useBridgeTransferResultModalDiscloresure()
@@ -24,7 +24,7 @@ export const BridgeTransferResultModal = () => {
     const { vaa, txHash } = { ...result }
 
     const { preferenceChainKey, network } = useAppSelector(
-        (state) => state.chainReducer
+        (state) => state.blockchainReducer
     )
 
     return (
@@ -53,7 +53,7 @@ export const BridgeTransferResultModal = () => {
                                 showAnchorIcon
                                 isExternal
                                 size="sm"
-                                href={getExplorerUrl({
+                                href={explorerUrl({
                                     chainKey: preferenceChainKey,
                                     value: txHash ?? "",
                                     type: "tx",

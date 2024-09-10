@@ -3,7 +3,7 @@ import { getSeed } from "../../cryptography"
 import { Keypair } from "@solana/web3.js"
 import { CreateAccountParams } from "./types.creation"
 
-export const _createSolanaAccount = ({
+export const createSolanaAccount = ({
     accountNumber,
     mnemonic,
 }: Omit<CreateAccountParams, "chainKey">): ChainAccount => {

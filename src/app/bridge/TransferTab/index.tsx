@@ -34,15 +34,13 @@ export const TransferTab = () => {
     useErrorModalDisclosure()
 
     const preferenceChainKey = useAppSelector(
-        (state) => state.chainReducer.preferenceChainKey
+        (state) => state.blockchainReducer.preferenceChainKey
     )
 
-    const chains = useAppSelector((state) => state.chainReducer.chains)
+    const chains = useAppSelector((state) => state.blockchainReducer.chains)
 
     const tokens = chains[preferenceChainKey].tokens
-    const token = {
-        ...tokens?.find(({ key }) => key === formik.values.tokenKey),
-    }
+    const token = tokens[formik.values.tokenKey]
 
     const { imageUrl, name, symbol } = { ...token }
 

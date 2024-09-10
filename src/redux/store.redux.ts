@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit"
 import {
     miscellaneousReducer,
     authReducer,
-    chainReducer,
+    blockchainReducer,
     tabReducer,
     resultReducer,
     vaaReducer,
@@ -13,7 +13,7 @@ export const store = configureStore({
     reducer: {
         miscellaneousReducer,
         authReducer,
-        chainReducer,
+        blockchainReducer,
         tabReducer,
         resultReducer,
         vaaReducer,

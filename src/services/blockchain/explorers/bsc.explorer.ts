@@ -1,8 +1,8 @@
 import { Network } from "@/config"
+import { ExplorerUrlParams } from "./types.explorer"
 
 export const bscExplorerUrl = (
-    value: string,
-    network: Network = Network.Testnet
+    { network, value}: ExplorerUrlParams
 ) => {
     switch (network) {
     case Network.Testnet:

@@ -6,7 +6,8 @@ import { Platform, chainKeyToPlatform } from "../common"
 
 export interface GetTokenMetadataParams {
   chainKey: string;
-  tokenKey: string;
+  tokenAddress?: string;
+  tokenKey?: string;
   network?: Network;
 }
 
@@ -20,12 +21,22 @@ export const _getEvmTokenMetadata = async ({
     chainKey,
     tokenKey,
     network,
+    tokenAddress
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
+    if (tokenKey === "native") {
+        const { decimals, symbol, name } =
+    blockchainConfig().chains[chainKey].tokens[tokenKey]
+        return {
+            decimals,
+            name,
+            symbol,
+        }
+    }
     network = network || Network.Testnet
-    const tokenAddress =
-    blockchainConfig().chains[chainKey].tokens[tokenKey].addresses[network]
-
-    if (chainKey === "native") throw new Error("native not support")
+    if (tokenKey) {
+        tokenAddress = blockchainConfig().chains[chainKey].tokens[tokenKey].addresses[network]
+    }
+    if (!tokenAddress) throw new Error("Token address not found")
 
     network = network || Network.Testnet
     const rpcUrl = evmHttpRpcUrl(chainKey, network)
@@ -48,12 +59,23 @@ export const _getAptosTokenMetadata = async ({
     chainKey,
     tokenKey,
     network,
+    tokenAddress
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
+    if (tokenKey === "native") {
+        const { decimals, symbol, name } =
+    blockchainConfig().chains[chainKey].tokens[tokenKey]
+        return {
+            decimals,
+            name,
+            symbol,
+        }
+    }
     network = network || Network.Testnet
-    const tokenAddress =
-    blockchainConfig().chains[chainKey].tokens[tokenKey].addresses[network]
+    if (tokenKey) {
+        tokenAddress = blockchainConfig().chains[chainKey].tokens[tokenKey].addresses[network]
+    }
+    if (!tokenAddress) throw new Error("Token address not found")
 
-    if (chainKey === "native") throw new Error("native not support")
     network = network || Network.Testnet
     const { name, symbol, decimals } = await aptosClient(
         network
@@ -67,13 +89,18 @@ export const _getAptosTokenMetadata = async ({
 }
 
 export const _getSolanaTokenMetadata = async ({
+    tokenKey,
     chainKey,
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
-    if (chainKey === "native") throw new Error("native not support")
-    // network = network || Network.Testnet
-    // const { name, symbol, decimals } = await solanaClient(
-    //     network
-    // ).get({ assetType: tokenAddress })
+    if (tokenKey === "native") {
+        const { decimals, symbol, name } =
+    blockchainConfig().chains[chainKey].tokens[tokenKey]
+        return {
+            decimals,
+            name,
+            symbol,
+        }
+    }
 
     return {
         name: "",
@@ -84,15 +111,7 @@ export const _getSolanaTokenMetadata = async ({
 
 export const _getTokenMetadata = async (params: GetTokenMetadataParams) => {
     params.network = params.network || Network.Testnet
-    const { decimals, symbol, name } =
-    blockchainConfig().chains[params.chainKey].tokens[params.tokenKey]
-    if (params.chainKey === "native")
-        return {
-            decimals,
-            name,
-            symbol,
-        }
-
+    
     const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
     case Platform.Evm:

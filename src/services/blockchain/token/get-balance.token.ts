@@ -8,7 +8,8 @@ import { Platform, chainKeyToPlatform } from "../common"
 
 export interface GetBalanceParams {
   chainKey: string;
-  tokenKey: string;
+  tokenKey?: string;
+  tokenAddress?: string;
   network?: Network;
   accountAddress: string;
 }
@@ -20,6 +21,8 @@ export const _getEvmBalance = async ({
     accountAddress,
 }: GetBalanceParams): Promise<number> => {
     network = network || Network.Testnet
+    if (!tokenKey) throw new Error("Cannot find balance without tokenKey")
+
     const { decimals, addresses } = blockchainConfig().chains[chainKey].tokens[tokenKey]
     const tokenAddress = addresses[network]
 
@@ -46,6 +49,8 @@ export const _getAptosBalance = async ({
     accountAddress,
 }: GetBalanceParams): Promise<number> => {
     network = network || Network.Testnet
+    if (!tokenKey) throw new Error("Cannot find balance without tokenKey")
+
     const { decimals, addresses } = blockchainConfig().chains[chainKey].tokens[tokenKey]
     const tokenAddress = addresses[network]
 
@@ -71,6 +76,8 @@ export const _getSolanaBalance = async ({
     accountAddress,
 }: GetBalanceParams): Promise<number> => {
     network = network || Network.Testnet
+    if (!tokenKey) throw new Error("Cannot find balance without tokenKey")
+
     const { decimals, addresses } = blockchainConfig().chains[chainKey].tokens[tokenKey]
     const tokenAddress = addresses[network]
 

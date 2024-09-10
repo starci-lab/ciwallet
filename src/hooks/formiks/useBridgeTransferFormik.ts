@@ -4,7 +4,7 @@ import { serialize } from "@wormhole-foundation/sdk"
 import { useFormiks } from "."
 import {
     defaultChainKey,
-    defaultNativeTokenKey,
+    nativeTokenKey,
     defaultSecondaryChainKey,
 } from "@/config"
 import { useEffect, useState } from "react"
@@ -14,7 +14,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
-import { createAccount, transfer, hasWrappedAsset, createAttestation, submitAttestation } from "@/services"
+import { createAccount, transfer, hasWrappedAsset, createAttestation, submitAttestation, parseNetwork } from "@/services"
 import { useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
 
@@ -29,7 +29,7 @@ export interface BridgeTransferFormikValues {
 export const _useBridgeTransferFormik =
   (): FormikProps<BridgeTransferFormikValues> => {
       const preferenceChainKey = useAppSelector(
-          (state) => state.chainReducer.preferenceChainKey
+          (state) => state.blockchainReducer.preferenceChainKey
       )
       const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
       const aptosAccountNumber = useAppSelector(
@@ -61,7 +61,7 @@ export const _useBridgeTransferFormik =
           targetAccountNumber: 0,
           targetAddress: "",
           targetChainKey: defaultSecondaryChainKey,
-          tokenKey: defaultNativeTokenKey,
+          tokenKey: nativeTokenKey,
       }
 
       const validationSchema = Yup.object({
@@ -70,11 +70,11 @@ export const _useBridgeTransferFormik =
               .required("Amount is required"),
       })
 
-      const network = useAppSelector((state) => state.chainReducer.network)
+      const network = useAppSelector((state) => state.blockchainReducer.network)
 
       const dispatch = useAppDispatch()
 
-      const chains = useAppSelector((state) => state.chainReducer.chains)
+      const chains = useAppSelector((state) => state.blockchainReducer.chains)
       const tokens = chains[preferenceChainKey].tokens
 
       const signer = useSigner(preferenceChainKey)
@@ -92,9 +92,8 @@ export const _useBridgeTransferFormik =
               amount,
               tokenKey,
           }) => {
-              const { decimals, address: _address } = {
-                  ...tokens.find(({ key }) => key === tokenKey),
-              }
+              const { decimals, addresses } = tokens[tokenKey]
+              const _address = addresses[network]
               if (!_address) return
 
               const { address: createdAddress } = createAccount({
@@ -107,7 +106,7 @@ export const _useBridgeTransferFormik =
               if (!signer) return
               const hasWrapped = await hasWrappedAsset({
                   foreignChainName: chains[targetChainKey].chain,
-                  network,
+                  network: parseNetwork(network),
                   sourceChainName: chains[preferenceChainKey].chain,
                   sourceTokenAddress: _address
               })
@@ -115,7 +114,7 @@ export const _useBridgeTransferFormik =
               if (!hasWrapped) {
                   const { txHash, vaa } = await createAttestation({
                       chainName: chains[preferenceChainKey].chain,
-                      network,
+                      network: parseNetwork(network),
                       tokenAddress: _address,
                       signer
                   })
@@ -124,7 +123,7 @@ export const _useBridgeTransferFormik =
                   if (!vaa) return
                   if (!targetSigner) return
                   const _txHash = await submitAttestation({
-                      network,
+                      network: parseNetwork(network),
                       signer: targetSigner,
                       targetChainName: chains[targetChainKey].chain,
                       vaa
@@ -138,7 +137,7 @@ export const _useBridgeTransferFormik =
                   sourceChainName:
                   chains[preferenceChainKey].chain,
                   targetChainName: chains[targetChainKey].chain,
-                  network,
+                  network: parseNetwork(network),
                   recipientAddress: address,
                   tokenAddress: _address
               })
@@ -178,7 +177,7 @@ export const _useBridgeTransferFormik =
           )
           formik.setFieldValue(
               "tokenKey",
-              chains[preferenceChainKey].tokens[0].key
+              nativeTokenKey
           )
       }, [preferenceChainKey])
 

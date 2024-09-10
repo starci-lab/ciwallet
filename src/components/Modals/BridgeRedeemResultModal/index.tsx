@@ -15,9 +15,9 @@ import {
 } from "@nextui-org/react"
 import { useBridgeRedeemResultModalDiscloresure } from "@/hooks"
 import { useAppSelector } from "@/redux"
-import { getExplorerUrl } from "@/services"
+import { explorerUrl } from "@/services"
 import { truncateString } from "@/utils"
-import { defaultChainKey } from "@/config"
+import { defaultChainKey, nativeTokenKey } from "@/config"
 import { useAddToken } from "./useAddToken"
 
 export const BridgeRedeemResultModal = () => {
@@ -27,14 +27,14 @@ export const BridgeRedeemResultModal = () => {
     const result = useAppSelector(state => state.resultReducer.bridge.redeem)
     const { vaa, txHash } = { ...result }
     const { tokenKey } = { ...vaa}
-    const chain = useAppSelector(state => state.chainReducer.chains[vaa?.fromChainKey ?? defaultChainKey])
-    const token = chain.tokens.find(({ key }) => key === tokenKey)
+    const chain = useAppSelector(state => state.blockchainReducer.chains[vaa?.fromChainKey ?? defaultChainKey])
+    const token = chain.tokens[tokenKey ?? nativeTokenKey]
     
-    const network = useAppSelector(state => state.chainReducer.network)
+    const network = useAppSelector(state => state.blockchainReducer.network)
 
     const { addTokenSwrMutation: { trigger } } = useAddToken()
 
-    const fromChain = useAppSelector(state => state.chainReducer.chains[vaa?.fromChainKey ?? defaultChainKey])
+    const fromChain = useAppSelector(state => state.blockchainReducer.chains[vaa?.fromChainKey ?? defaultChainKey])
 
     return (
         <Modal hideCloseButton isOpen={isOpen}>
@@ -88,7 +88,7 @@ export const BridgeRedeemResultModal = () => {
                                 showAnchorIcon
                                 isExternal
                                 size="sm"
-                                href={getExplorerUrl({
+                                href={explorerUrl({
                                     chainKey: vaa?.targetChainKey ?? defaultChainKey,
                                     value: txHash ?? "",
                                     type: "tx",

@@ -22,7 +22,7 @@ export const AccountsModal = () => {
     const { isOpen, onClose } = useAccountsModalDisclosure()
     const { onOpen: onCreateAccountModalOpen } = useCreateAccountModalDisclosure()
 
-    const preferenceChainKey = useAppSelector((state) => state.chainReducer.preferenceChainKey)
+    const preferenceChainKey = useAppSelector((state) => state.blockchainReducer.preferenceChainKey)
     const { accounts, activeAccountNumber } = useAppSelector(
         (state) => state.authReducer.accountNumbers[preferenceChainKey]
     )
