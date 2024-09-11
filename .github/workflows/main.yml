@@ -10,6 +10,13 @@ jobs:
   docker-compose:
     runs-on: self-hosted
     environment: docker
+    env:
+        NEXT_PUBLIC_CIFARM_CORE_KEY: ${{vars.NEXT_PUBLIC_CIFARM_CORE_KEY}}
+        NEXT_PUBLIC_CIFARM_CORE_HOST: ${{vars.NEXT_PUBLIC_CIFARM_CORE_HOST}}
+        NEXT_PUBLIC_CIFARM_CORE_PORT: ${{vars.NEXT_PUBLIC_CIFARM_CORE_PORT}}
+        NEXT_PUBLIC_CIFARM_CORE_USE_SSL: ${{vars.NEXT_PUBLIC_CIFARM_CORE_USE_SSL}}
+        NEXT_PUBLIC_CIFARM_PERIPHERY_API_URL: ${{vars.NEXT_PUBLIC_CIFARM_PERIPHERY_API_URL}}
+        NEXT_PUBLIC_CIFARM_PERIPHERY_GRAPHQL_URL: ${{vars.NEXT_PUBLIC_CIFARM_PERIPHERY_GRAPHQL_URL}}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2 
