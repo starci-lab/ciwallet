@@ -83,7 +83,7 @@ COPY package.json .
 
 #copy public, then pull code from cifarm build and cop to 
 COPY public ./public
-ADD https://github.com/starci-lab/cifarm-build.git ./public/games/cifarm
+ADD https://github.com/starci-lab/cifarm-build.git ./public/games/cifarm-build
 
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.

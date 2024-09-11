@@ -8,7 +8,7 @@ export interface UseUnityReturn {
 }
 
 const FILE_NAME = "cifarm-build"
-const BUILD_PATH = `games/${FILE_NAME}/Build`
+const BUILD_PATH = "games/cifarm-build/Build"
 
 export const _useUnity = () : UseUnityReturn => {
     const unity = useUnityContext({

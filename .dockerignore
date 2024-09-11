@@ -12,6 +12,7 @@
 **/.gitignore
 **/.project
 **/.settings
+**/cifarm-build
 **/.toolstarget
 **/.vs
 **/.vscode
