@@ -12,7 +12,7 @@ export const WrappedUnityCanvas = () => {
         <div className="w-full h-full">
             <Unity
                 className="w-full h-full"
-                devicePixelRatio={1}
+                devicePixelRatio={window.devicePixelRatio}
                 unityProvider={unityProvider}
             />
         </div> 
