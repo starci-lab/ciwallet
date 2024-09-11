@@ -1,16 +1,20 @@
 "use client"
 import { Container } from "@/components"
-import { useCifarmNakama } from "@/hooks"
 import { Spinner } from "@nextui-org/react"
 import React from "react"
+import { useNakama } from "./useNakama"
+import { UnityCanvas } from "./UnityCanvas"
 
 const Page = () => {
-    const { cifarmAuthSwr } = useCifarmNakama()
+    const { session } = useNakama()
+
     return (
-        <Container centerContent hasPadding>
-            {cifarmAuthSwr.isMutating ? (
+        <Container centerContent>
+            {!session ? (
                 <Spinner label="Authenticating..." size="lg" />
-            ) : null}
+            ) : (
+                <UnityCanvas />
+            )}
         </Container>
     )
 }

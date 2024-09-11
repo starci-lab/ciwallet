@@ -2,15 +2,15 @@ import { constantConfig, envConfig } from "@/config"
 import { useAppSelector } from "@/redux"
 import { usePathname } from "next/navigation"
 import { Client, Session } from "@heroiclabs/nakama-js"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { Platform, chainKeyToPlatform, requestMessage, signMessage } from "@/services"
 import useSWRMutation, { SWRMutationResponse } from "swr/mutation"
-import { useCifarm } from "."
+import { HooksContext } from "./provider.hooks"
 
 const CIFARM_AUTH="CIFARM_AUTH"
 
-export interface UseCifarmNakamaReturn {
-    cifarmAuthSwr: SWRMutationResponse<
+export interface UseNakamaReturn {
+    authSwr: SWRMutationResponse<
     void,
     unknown,
     typeof CIFARM_AUTH
@@ -19,10 +19,10 @@ export interface UseCifarmNakamaReturn {
   session: Session | undefined;
 }
 
-export const _useCifarmNakama = () : UseCifarmNakamaReturn => {
+export const _useNakama = () : UseNakamaReturn => {
     const [client, setClient] = useState<Client | undefined>()
     const [session, setSession] = useState<Session | undefined>()
-
+    
     const pathname = usePathname()
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
     useEffect(() => {
@@ -41,7 +41,7 @@ export const _useCifarmNakama = () : UseCifarmNakamaReturn => {
     const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
     const { privateKey, publicKey, address } = useAppSelector(state => state.blockchainReducer.credentials[preferenceChainKey])
 
-    const cifarmAuthSwr = useSWRMutation(
+    const authSwr = useSWRMutation(
         CIFARM_AUTH,
         async () => {
             const {
@@ -73,19 +73,19 @@ export const _useCifarmNakama = () : UseCifarmNakamaReturn => {
     useEffect(() => {
         if (!client) return
         const handleEffect = async () => {
-            await cifarmAuthSwr.trigger()
+            await authSwr.trigger()
         }
         handleEffect()
     }, [client])
 
     return {
-        cifarmAuthSwr,
+        authSwr,
         client,
         session,
     }
 }
 
-export const useCifarmNakama = () => {
-    const { nakama } = useCifarm()
+export const useNakama = () => {
+    const { nakama } = use(HooksContext)!
     return nakama
 }

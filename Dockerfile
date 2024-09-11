@@ -72,12 +72,18 @@ FROM base as final
 # Use production node environment by default.
 ENV NODE_ENV production
 
+# mkdir
+RUN mkdir -p ./public/games/cifarm
+
 # Run the application as a non-root user.
 USER node
 
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
+
+#copy public, then pull code from cifarm build and cop to 
 COPY public ./public
+ADD https://github.com/starci-lab/cifarm-build.git ./public/games/cifarm
 
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.
