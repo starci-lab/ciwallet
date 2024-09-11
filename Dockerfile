@@ -40,9 +40,6 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci
 
-# Copy the rest of the source files into the image.
-COPY . .
-
 #Add the next public env
 ARG NEXT_PUBLIC_CIFARM_CORE_KEY
 ENV NEXT_PUBLIC_CIFARM_CORE_KEY $NEXT_PUBLIC_CIFARM_CORE_KEY
@@ -61,6 +58,9 @@ ENV NEXT_PUBLIC_CIFARM_PERIPHERY_API_URL $NEXT_PUBLIC_CIFARM_PERIPHERY_API_URL
 
 ARG NEXT_PUBLIC_CIFARM_PERIPHERY_GRAPHQL_URL
 ENV NEXT_PUBLIC_CIFARM_PERIPHERY_GRAPHQL_URL $NEXT_PUBLIC_CIFARM_PERIPHERY_GRAPHQL_URL
+
+# Copy the rest of the source files into the image.
+COPY . .
 
 # Run the build script.
 RUN npm run build
