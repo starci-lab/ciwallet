@@ -2,7 +2,12 @@ services:
   server:
     build:
       context: ..
-    env_file:
-      ../.env.local
+      args:
+        NEXT_PUBLIC_CIFARM_CORE_KEY: "defaultkey"
+        NEXT_PUBLIC_CIFARM_CORE_HOST: "localhost"
+        NEXT_PUBLIC_CIFARM_CORE_PORT: 7350
+        NEXT_PUBLIC_CIFARM_CORE_USE_SSL: false
+        NEXT_PUBLIC_CIFARM_PERIPHERY_API_URL: "https://api.cifarm.starci.net/api/v1"
+        NEXT_PUBLIC_CIFARM_PERIPHERY_GRAPHQL_URL: "https://api.cifarm.starci.net/graphql"
     ports:
       - 3053:3000
