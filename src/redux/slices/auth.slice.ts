@@ -18,6 +18,7 @@ export interface AuthState {
   password: string;
   hasAuthBefore: boolean;
   loaded: boolean;
+  initialized: boolean;
 }
 
 export interface CreateAccountParams {
@@ -74,6 +75,7 @@ const initialState: AuthState = {
     loaded: false,
     password: "",
     hasAuthBefore: false,
+    initialized: false,
 }
 
 export const authSlice = createSlice({
@@ -123,6 +125,9 @@ export const authSlice = createSlice({
         setHasAuthBefore: (state, { payload }: PayloadAction<boolean>) => {
             state.hasAuthBefore = payload
         },
+        setInitialized: (state, { payload }: PayloadAction<boolean>) => {
+            state.initialized = payload
+        },
     },
 })
 
@@ -134,5 +139,6 @@ export const {
     createAccount,
     setActiveAccountNumber,
     loadAccountNumbers,
+    setInitialized
 } = authSlice.actions
 export const authReducer = authSlice.reducer

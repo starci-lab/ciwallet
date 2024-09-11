@@ -1,6 +1,6 @@
 import { useUnity } from "./useUnity"
 import { Unity } from "react-unity-webgl"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
 import { Spinner } from "@nextui-org/react"
 
@@ -8,6 +8,27 @@ export const WrappedUnityCanvas = () => {
     const {
         unity: { unityProvider, isLoaded },
     } = useUnity()
+
+    const [devicePixelRatio, setDevicePixelRatio] = useState(
+        window.devicePixelRatio
+    )
+
+    useEffect(
+        () => {
+            const updateDevicePixelRatio = () => {
+                setDevicePixelRatio(window.devicePixelRatio)
+            }
+            const mediaMatcher = window.matchMedia(
+                `screen and (resolution: ${devicePixelRatio}dppx)`
+            )
+            mediaMatcher.addEventListener("change", updateDevicePixelRatio)
+            return () => {
+                mediaMatcher.removeEventListener("change", updateDevicePixelRatio)
+            }
+        },
+        [devicePixelRatio]
+    )
+    
 
     return (
         <div className="w-full h-full relative">
@@ -19,7 +40,7 @@ export const WrappedUnityCanvas = () => {
 
             <Unity
                 className="w-full h-full"
-                devicePixelRatio={window.devicePixelRatio}
+                devicePixelRatio={devicePixelRatio}
                 unityProvider={unityProvider}
             />
         </div>

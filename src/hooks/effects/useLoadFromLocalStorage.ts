@@ -7,7 +7,8 @@ import {
     useAppSelector,
     setPreferenceChainKey,
     setVaas,
-    setChain
+    setChain,
+    setInitialized
 } from "@/redux"
 import {
     foundEncryptedMnemonic,
@@ -33,12 +34,13 @@ export const useLoadFromLocalStorage = () => {
 
     useEffect(() => {
         const found = foundEncryptedMnemonic()
-        dispatch(setHasAuthBefore(found))
         if (found) {
             router.push(constantConfig().path.password)
         } else {
             router.push(constantConfig().path.auth)
         }
+        dispatch(setHasAuthBefore(found))
+        dispatch(setInitialized(true))
     }, [])
 
     useEffect(() => {
