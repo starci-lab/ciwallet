@@ -9,10 +9,10 @@ services:
         NEXT_PUBLIC_CIFARM_CORE_USE_SSL: false
         NEXT_PUBLIC_CIFARM_PERIPHERY_API_URL: "https://api.cifarm.starci.net/api/v1"
         NEXT_PUBLIC_CIFARM_PERIPHERY_GRAPHQL_URL: "https://api.cifarm.starci.net/graphql"
-        NEXT_PUBLIC_CIFARM_LOADER_URL: "https://api.cifarm.starci.net/api/v1/packages/loader"
-        NEXT_PUBLIC_CIFARM_DATA_URL: "https://api.cifarm.starci.net/api/v1/packages/data"
+        NEXT_PUBLIC_CIFARM_LOADER_URL:    "https://api.cifarm.starci.net/api/v1/packages/loader"
+        NEXT_PUBLIC_CIFARM_DATA_URL:      "https://api.cifarm.starci.net/api/v1/packages/data"
         NEXT_PUBLIC_CIFARM_FRAMEWORK_URL: "https://api.cifarm.starci.net/api/v1/packages/framework"
-        NEXT_PUBLIC_CIFARM_WASM_URL: "https://api.cifarm.starci.net/api/v1/packages/wasm"
+        NEXT_PUBLIC_CIFARM_WASM_URL:      "https://api.cifarm.starci.net/api/v1/packages/wasm"
     env_file:
       ../.env.docker
     ports:
