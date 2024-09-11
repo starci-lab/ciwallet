@@ -13,9 +13,9 @@ const BUILD_PATH = "games/cifarm-build/Build"
 export const _useUnity = () : UseUnityReturn => {
     const unity = useUnityContext({
         loaderUrl: `${BUILD_PATH}/${FILE_NAME}.loader.js`,
-        dataUrl: `${BUILD_PATH}/${FILE_NAME}.data.unityweb`,
-        frameworkUrl: `${BUILD_PATH}/${FILE_NAME}.framework.js.unityweb`,
-        codeUrl: `${BUILD_PATH}/${FILE_NAME}.wasm.unityweb`,
+        dataUrl: `${BUILD_PATH}/${FILE_NAME}.data`,
+        frameworkUrl: `${BUILD_PATH}/${FILE_NAME}.framework.js`,
+        codeUrl: `${BUILD_PATH}/${FILE_NAME}.wasm`,
     })
     
     return {
