@@ -2,7 +2,7 @@ services:
   server:
     build:
       context: ..
-    environment:
+    args:
       NODE_ENV: production
       NEXT_PUBLIC_CIFARM_CORE_KEY: ${NEXT_PUBLIC_CIFARM_CORE_KEY}
       NEXT_PUBLIC_CIFARM_CORE_HOST: ${NEXT_PUBLIC_CIFARM_CORE_HOST}
