@@ -7,13 +7,10 @@ import { Platform, chainKeyToPlatform, requestMessage, signMessage } from "@/ser
 import useSWRMutation, { SWRMutationResponse } from "swr/mutation"
 import { HooksContext } from "./provider.hooks"
 
-const CIFARM_AUTH="CIFARM_AUTH"
-
 export interface UseNakamaReturn {
     authSwr: SWRMutationResponse<
     void,
-    unknown,
-    typeof CIFARM_AUTH
+    unknown
   >;
   client: Client | undefined;
   session: Session | undefined;
@@ -42,7 +39,7 @@ export const _useNakama = () : UseNakamaReturn => {
     const { privateKey, publicKey, address } = useAppSelector(state => state.blockchainReducer.credentials[preferenceChainKey])
 
     const authSwr = useSWRMutation(
-        CIFARM_AUTH,
+        "CIFARM_AUTH_SWR",
         async () => {
             const {
                 data: { message },
