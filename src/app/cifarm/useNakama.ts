@@ -37,6 +37,7 @@ export const _useNakama = () : UseNakamaReturn => {
 
     const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
     const { privateKey, publicKey, address } = useAppSelector(state => state.blockchainReducer.credentials[preferenceChainKey])
+    const network = useAppSelector(state => state.blockchainReducer.network)
 
     const authSwr = useSWRMutation(
         "CIFARM_AUTH_SWR",
@@ -61,7 +62,8 @@ export const _useNakama = () : UseNakamaReturn => {
                 message,
                 publicKey: _publicKey,
                 signature,
-                chainKey: preferenceChainKey
+                chainKey: preferenceChainKey,
+                network
             })
             setSession(session)
         }
