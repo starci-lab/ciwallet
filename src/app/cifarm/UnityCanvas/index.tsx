@@ -3,10 +3,13 @@ import { Unity } from "react-unity-webgl"
 import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
 import { Spinner } from "@nextui-org/react"
+import { useAppSelector } from "@/redux"
+
+const TIME_OUT = 1000
 
 export const WrappedUnityCanvas = () => {
     const {
-        unity: { unityProvider, isLoaded },
+        unity: { unityProvider, isLoaded, sendMessage },
     } = useUnity()
 
     const [devicePixelRatio, setDevicePixelRatio] = useState(
@@ -28,7 +31,14 @@ export const WrappedUnityCanvas = () => {
         },
         [devicePixelRatio]
     )
-    
+
+    const cifarmCrendentials = useAppSelector(state => state.authReducer.credentials.cifarm)
+    useEffect(() => {
+        if (!isLoaded) return 
+        setTimeout(() => {
+            sendMessage("NakamaService", "SetCredentials", JSON.stringify(cifarmCrendentials))
+        }, TIME_OUT)
+    }, [isLoaded])
 
     return (
         <div className="w-full h-full relative">

@@ -12,6 +12,14 @@ export interface ChainAccountNumber {
 
 export type AccountNumbers = Record<string, ChainAccountNumber>;
 
+export interface Credentials {
+  message: string;
+  publicKey: string;
+  signature: string;
+  chainKey: string;
+  network: string;
+}
+
 export interface AuthState {
   mnemonic: string;
   accountNumbers: AccountNumbers;
@@ -19,6 +27,9 @@ export interface AuthState {
   hasAuthBefore: boolean;
   loaded: boolean;
   initialized: boolean;
+  credentials: {
+    cifarm: Credentials;
+  };
 }
 
 export interface CreateAccountParams {
@@ -76,6 +87,15 @@ const initialState: AuthState = {
     password: "",
     hasAuthBefore: false,
     initialized: false,
+    credentials: {
+        cifarm: {
+            chainKey: "",
+            message: "",
+            network: "",
+            publicKey: "",
+            signature: "",
+        },
+    },
 }
 
 export const authSlice = createSlice({
@@ -87,7 +107,9 @@ export const authSlice = createSlice({
         },
         setAccountNumbers: (
             state,
-            { payload: { aptos, solana, bsc } }: PayloadAction<Partial<AccountNumbers>>
+            {
+                payload: { aptos, solana, bsc },
+            }: PayloadAction<Partial<AccountNumbers>>
         ) => {
             if (aptos) {
                 state.accountNumbers.aptos = aptos
@@ -117,7 +139,8 @@ export const authSlice = createSlice({
                 payload: { preferenceChainKey, accountNumber },
             }: PayloadAction<SetActiveAccountNumber>
         ) => {
-            state.accountNumbers[preferenceChainKey].activeAccountNumber = accountNumber
+            state.accountNumbers[preferenceChainKey].activeAccountNumber =
+        accountNumber
         },
         setPassword: (state, { payload }: PayloadAction<string>) => {
             state.password = payload
@@ -127,6 +150,9 @@ export const authSlice = createSlice({
         },
         setInitialized: (state, { payload }: PayloadAction<boolean>) => {
             state.initialized = payload
+        },
+        setCifarmCredentials: (state, { payload }: PayloadAction<Credentials>) => {
+            state.credentials.cifarm = payload
         },
     },
 })
@@ -139,6 +165,7 @@ export const {
     createAccount,
     setActiveAccountNumber,
     loadAccountNumbers,
-    setInitialized
+    setInitialized,
+    setCifarmCredentials
 } = authSlice.actions
 export const authReducer = authSlice.reducer
