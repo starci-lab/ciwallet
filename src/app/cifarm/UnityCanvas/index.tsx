@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
 import { Spinner } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
+import { Container } from "@/components"
 
 const TIME_OUT = 1000
 
@@ -42,9 +43,9 @@ export const WrappedUnityCanvas = () => {
     return (
         <div className="w-full h-full relative">
             {!isLoaded ? (
-                <div className="w-full h-full place-items-center grid p-6">
+                <Container centerContent hasPadding>
                     <Spinner label="Loading..." size="lg"/>
-                </div>     
+                </Container>     
             ) : null}
 
             <Unity
