@@ -2,7 +2,7 @@ import { useUnity } from "./useUnity"
 import { Unity } from "react-unity-webgl"
 import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
-import { Progress } from "@nextui-org/react"
+import { Progress, Spinner } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
 import { Container } from "@/components"
 
@@ -10,7 +10,7 @@ const TIME_OUT = 1000
 
 export const WrappedUnityCanvas = () => {
     const {
-        unity: { unityProvider, isLoaded, sendMessage, loadingProgression },
+        unity: { unityProvider, isLoaded, sendMessage },
     } = useUnity()
 
     const [devicePixelRatio, setDevicePixelRatio] = useState(
@@ -44,7 +44,7 @@ export const WrappedUnityCanvas = () => {
         <div className="w-full h-full relative">
             {!isLoaded ? (
                 <Container centerContent hasPadding>
-                    <Progress value={loadingProgression} label="Game loading..."/>  
+                    <Spinner label="Loading..." size="lg"/>
                 </Container>     
             ) : null}
 
