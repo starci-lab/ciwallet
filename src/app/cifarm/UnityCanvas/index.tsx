@@ -2,7 +2,7 @@ import { useUnity } from "./useUnity"
 import { Unity } from "react-unity-webgl"
 import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
-import { Progress, Spinner } from "@nextui-org/react"
+import { Spinner } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
 import { Container } from "@/components"
 
