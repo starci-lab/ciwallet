@@ -7,7 +7,7 @@ export const useSigner = <N extends Network, C extends Chain>(
 ): SignAndSendSigner<N, C> | undefined => {
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const credential = useAppSelector(
-        (state) => state.blockchainReducer.credentials[chainKey]
+        (state) => state.authReducer.credentials[chainKey]
     )
     if (!credential) return
     if (

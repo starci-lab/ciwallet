@@ -7,6 +7,7 @@ import {
     resultReducer,
     vaaReducer,
     refreshReducer,
+    gameReducer
 } from "./slices"
 
 export const store = configureStore({
@@ -17,7 +18,8 @@ export const store = configureStore({
         tabReducer,
         resultReducer,
         vaaReducer,
-        refreshReducer
+        refreshReducer,
+        gameReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false,

@@ -40,7 +40,7 @@ const Page = () => {
     const router = useRouter()
 
     const address = useAppSelector(
-        (state) => state.blockchainReducer.credentials[preferenceChainKey].address
+        (state) => state.authReducer.credentials[preferenceChainKey].address
     )
 
     const accounts = useAppSelector(

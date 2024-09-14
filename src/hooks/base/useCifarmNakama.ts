@@ -41,7 +41,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
         (state) => state.blockchainReducer.preferenceChainKey
     )
     const { privateKey, publicKey, address } = useAppSelector(
-        (state) => state.blockchainReducer.credentials[preferenceChainKey]
+        (state) => state.authReducer.credentials[preferenceChainKey]
     )
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const dispatch = useAppDispatch()

@@ -19,7 +19,7 @@ export const PrivateKeyModal = () => {
         (state) => state.blockchainReducer.preferenceChainKey
     )
     const privateKey = useAppSelector(
-        (state) => state.blockchainReducer.credentials[preferenceChainKey].privateKey
+        (state) => state.authReducer.credentials[preferenceChainKey].privateKey
     )
 
     return (

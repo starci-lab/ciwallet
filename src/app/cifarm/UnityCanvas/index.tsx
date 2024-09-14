@@ -32,7 +32,7 @@ export const WrappedUnityCanvas = () => {
         [devicePixelRatio]
     )
 
-    const cifarmCrendentials = useAppSelector(state => state.authReducer.credentials.cifarm)
+    const cifarmCrendentials = useAppSelector(state => state.gameReducer.cifarm.credentials)
     useEffect(() => {
         if (!isLoaded) return 
         setTimeout(() => {

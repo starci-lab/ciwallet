@@ -1,3 +1,4 @@
+import { ChainAccount } from "@/services"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface StoredAccount {
@@ -12,14 +13,6 @@ export interface ChainAccountNumber {
 
 export type AccountNumbers = Record<string, ChainAccountNumber>;
 
-export interface Credentials {
-  message: string;
-  publicKey: string;
-  signature: string;
-  chainKey: string;
-  network: string;
-}
-
 export interface AuthState {
   mnemonic: string;
   accountNumbers: AccountNumbers;
@@ -27,9 +20,7 @@ export interface AuthState {
   hasAuthBefore: boolean;
   loaded: boolean;
   initialized: boolean;
-  credentials: {
-    cifarm: Credentials;
-  };
+  credentials: ChainCredentials;
 }
 
 export interface CreateAccountParams {
@@ -42,6 +33,19 @@ export interface SetActiveAccountNumber {
   preferenceChainKey: string;
   accountNumber: number;
 }
+
+export interface ChainCredential {
+  address: string;
+  privateKey: string;
+  publicKey: string;
+}
+
+export interface SetCredentialParams {
+  account: Partial<ChainAccount>;
+  chainKey: string;
+}
+
+export type ChainCredentials = Record<string, ChainCredential>;
 
 const initialState: AuthState = {
     mnemonic: "",
@@ -83,19 +87,32 @@ const initialState: AuthState = {
             },
         },
     },
+    credentials: {
+        aptos: {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        },
+        solana: {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        },
+        bsc: {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        },
+        avalanche: {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        },
+    },
     loaded: false,
     password: "",
     hasAuthBefore: false,
     initialized: false,
-    credentials: {
-        cifarm: {
-            chainKey: "",
-            message: "",
-            network: "",
-            publicKey: "",
-            signature: "",
-        },
-    },
 }
 
 export const authSlice = createSlice({
@@ -119,6 +136,25 @@ export const authSlice = createSlice({
             }
             if (bsc) {
                 state.accountNumbers.bsc = bsc
+            }
+        },
+        setCredential: (
+            state,
+            {
+                payload: {
+                    account: { address, privateKey, publicKey },
+                    chainKey,
+                },
+            }: PayloadAction<SetCredentialParams>
+        ) => {
+            if (address) {
+                state.credentials[chainKey].address = address
+            }
+            if (privateKey) {
+                state.credentials[chainKey].privateKey = privateKey
+            }
+            if (publicKey) {
+                state.credentials[chainKey].publicKey = publicKey
             }
         },
         loadAccountNumbers: (state) => {
@@ -151,9 +187,6 @@ export const authSlice = createSlice({
         setInitialized: (state, { payload }: PayloadAction<boolean>) => {
             state.initialized = payload
         },
-        setCifarmCredentials: (state, { payload }: PayloadAction<Credentials>) => {
-            state.credentials.cifarm = payload
-        },
     },
 })
 
@@ -166,6 +199,6 @@ export const {
     setActiveAccountNumber,
     loadAccountNumbers,
     setInitialized,
-    setCifarmCredentials
+    setCredential,
 } = authSlice.actions
 export const authReducer = authSlice.reducer
