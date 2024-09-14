@@ -2,14 +2,15 @@ import { useUnity } from "./useUnity"
 import { Unity } from "react-unity-webgl"
 import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
-import { Spinner } from "@nextui-org/react"
+import { Progress } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
+import { Container } from "@/components"
 
 const TIME_OUT = 1000
 
 export const WrappedUnityCanvas = () => {
     const {
-        unity: { unityProvider, isLoaded, sendMessage },
+        unity: { unityProvider, isLoaded, sendMessage, loadingProgression },
     } = useUnity()
 
     const [devicePixelRatio, setDevicePixelRatio] = useState(
@@ -39,13 +40,12 @@ export const WrappedUnityCanvas = () => {
             sendMessage("NakamaService", "SetCredentials", JSON.stringify(cifarmCrendentials))
         }, TIME_OUT)
     }, [isLoaded])
-
     return (
         <div className="w-full h-full relative">
             {!isLoaded ? (
-                <div className="w-full h-full absolute place-items-center grid">
-                    <Spinner size="lg" label="Loading..." />
-                </div>
+                <Container centerContent hasPadding>
+                    <Progress value={loadingProgression} label="Game loading..."/>  
+                </Container>     
             ) : null}
 
             <Unity
