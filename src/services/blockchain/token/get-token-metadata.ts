@@ -6,8 +6,7 @@ import { Platform, chainKeyToPlatform } from "../common"
 
 export interface GetTokenMetadataParams {
   chainKey: string;
-  tokenAddress?: string;
-  tokenKey?: string;
+  tokenAddress: string;
   network?: Network;
 }
 
@@ -19,13 +18,13 @@ export interface TokenMetadata {
 
 export const _getEvmTokenMetadata = async ({
     chainKey,
-    tokenKey,
     network,
     tokenAddress
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
-    if (tokenKey === "native") {
+    if (!tokenAddress) throw new Error("Token address not found")
+    if (tokenAddress === "native") {
         const { decimals, symbol, name } =
-    blockchainConfig().chains[chainKey].tokens[tokenKey]
+    blockchainConfig().chains[chainKey].tokens["native"]
         return {
             decimals,
             name,
@@ -33,12 +32,7 @@ export const _getEvmTokenMetadata = async ({
         }
     }
     network = network || Network.Testnet
-    if (tokenKey) {
-        tokenAddress = blockchainConfig().chains[chainKey].tokens[tokenKey].addresses[network]
-    }
-    if (!tokenAddress) throw new Error("Token address not found")
 
-    network = network || Network.Testnet
     const rpcUrl = evmHttpRpcUrl(chainKey, network)
     const provider = new JsonRpcProvider(rpcUrl)
     const contract = new Contract(tokenAddress, erc20Abi, provider)
@@ -57,24 +51,19 @@ export const _getEvmTokenMetadata = async ({
 
 export const _getAptosTokenMetadata = async ({
     chainKey,
-    tokenKey,
     network,
     tokenAddress
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
-    if (tokenKey === "native") {
+    if (!tokenAddress) throw new Error("Token address not found")
+    if (tokenAddress === "native") {
         const { decimals, symbol, name } =
-    blockchainConfig().chains[chainKey].tokens[tokenKey]
+        blockchainConfig().chains[chainKey].tokens["native"]
         return {
             decimals,
             name,
             symbol,
         }
     }
-    network = network || Network.Testnet
-    if (tokenKey) {
-        tokenAddress = blockchainConfig().chains[chainKey].tokens[tokenKey].addresses[network]
-    }
-    if (!tokenAddress) throw new Error("Token address not found")
 
     network = network || Network.Testnet
     const { name, symbol, decimals } = await aptosClient(
@@ -89,12 +78,12 @@ export const _getAptosTokenMetadata = async ({
 }
 
 export const _getSolanaTokenMetadata = async ({
-    tokenKey,
+    tokenAddress,
     chainKey,
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
-    if (tokenKey === "native") {
+    if (tokenAddress === "native") {
         const { decimals, symbol, name } =
-    blockchainConfig().chains[chainKey].tokens[tokenKey]
+    blockchainConfig().chains[chainKey].tokens["native"]
         return {
             decimals,
             name,

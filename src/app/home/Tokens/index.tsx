@@ -15,7 +15,6 @@ export const Tokens = () => {
 
     return (
         <div>
-            <Spacer y={4} />
             <div className="grid gap-2">
                 {tokens.map((token) => (
                     <Token key={token.key} token={token} />

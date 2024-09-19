@@ -6,10 +6,10 @@ import { _getTokenMetadata } from "./get-token-metadata"
 
 export interface BlockchainTokenServiceConstructorParams {
     chainKey: string,
-    tokenKey?: string,
     network?: Network,
-    tokenAddress?: string
+    tokenAddress: string
 }
+
 export class BlockchainTokenService {
     constructor(
         private readonly params: BlockchainTokenServiceConstructorParams
@@ -25,7 +25,6 @@ export class BlockchainTokenService {
                 accountAddress,
                 chainKey: this.params.chainKey,
                 tokenAddress: this.params.tokenAddress,
-                tokenKey: this.params.tokenKey,
                 network: this.params.network,
             })
         }
@@ -35,7 +34,6 @@ export class BlockchainTokenService {
         return _getTokenMetadata({
             chainKey: this.params.chainKey,
             tokenAddress: this.params.tokenAddress,
-            tokenKey: this.params.tokenKey,
             network: this.params.network,
         })
     }

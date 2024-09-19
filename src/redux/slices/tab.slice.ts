@@ -5,12 +5,19 @@ export enum BridgeTab {
     Redeem = "redeem",
 }
 
+export enum AssetsTab {
+    Tokens = "tokens",
+    NFTs = "nfts",
+}
+
 export interface TabState {
   bridgeTab: BridgeTab
+  assetsTab: AssetsTab
 }
 
 const initialState: TabState = {
-    bridgeTab: BridgeTab.Transfer
+    bridgeTab: BridgeTab.Transfer,
+    assetsTab: AssetsTab.Tokens
 }
 
 export const tabSlice = createSlice({
@@ -19,9 +26,12 @@ export const tabSlice = createSlice({
     reducers: {
         switchBridgeTab: (state, { payload }: PayloadAction<BridgeTab>) => {
             state.bridgeTab = payload
+        },
+        switchAssetsTab: (state, { payload }: PayloadAction<AssetsTab>) => {
+            state.assetsTab = payload
         }
     }
 })
 
-export const { switchBridgeTab } = tabSlice.actions
+export const { switchBridgeTab, switchAssetsTab } = tabSlice.actions
 export const tabReducer = tabSlice.reducer

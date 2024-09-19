@@ -16,13 +16,14 @@ export const useTokenMetadata = ({
     chainKey,
 }: UseTokenMetadataParams): UseTokenMetadataReturn => {
     const network = useAppSelector((state) => state.blockchainReducer.network)
-
+    const chains = useAppSelector(state => state.blockchainReducer.chains)
+    const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
     const tokenMetadataSwr = useSWR(
         ["TOKEN_METADATA_SWR", tokenKey],
         async () => {
             const tokenService = new BlockchainTokenService({
                 chainKey,
-                tokenKey,
+                tokenAddress: chains[preferenceChainKey].tokens[tokenKey].addresses[network],
                 network,
             })
 

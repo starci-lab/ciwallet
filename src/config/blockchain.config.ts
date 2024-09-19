@@ -26,7 +26,26 @@ export const blockchainConfig = (): ChainConfig => {
                         symbol: "AVAX",
                         decimals: 8,
                     },
-                }
+                },
+                nftGroups: {
+                    cifarm: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        key: "cifarm",
+                        nfts: {
+                            premiumTile: {
+                                key: "premiumTile",
+                                addresses: {
+                                    [Network.Mainnet]: "",
+                                    [Network.Testnet]: "0x410d3e15058e8544B14FD1a317E330f693444673",
+                                },
+                                imageUrl: "/icons/premium-tile.png",
+                                name: "CiFarm Premium Tile",
+                                symbol: "CPT",
+                            },
+                        },
+                    },
+                },
             },
             aptos: {
                 key: "aptos",
@@ -45,6 +64,14 @@ export const blockchainConfig = (): ChainConfig => {
                         name: "Aptos",
                         symbol: "APT",
                         decimals: 8,
+                    },
+                },
+                nftGroups: {
+                    cifarm: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        key: "cifarm",
+                        nfts: {},
                     },
                 },
             },
@@ -78,6 +105,14 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 6,
                     },
                 },
+                nftGroups: {
+                    cifarm: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        key: "cifarm",
+                        nfts: {},
+                    },
+                },
             },
             bsc: {
                 key: "bsc",
@@ -109,6 +144,14 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 18,
                     },
                 },
+                nftGroups: {
+                    cifarm: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        key: "cifarm",
+                        nfts: {},
+                    },
+                },
             },
         },
     }
@@ -119,7 +162,8 @@ export const chainInfos = Object.values(blockchainConfig().chains)
 
 export const defaultChainKey = blockchainConfig().chains[chains[0]].key
 export const defaultChain = blockchainConfig().chains[chains[0]].chain
-export const defaultSecondaryChainKey = blockchainConfig().chains[chains[1]].key
+export const defaultSecondaryChainKey =
+  blockchainConfig().chains[chains[1]].key
 export const defaultSecondaryChain = blockchainConfig().chains[chains[1]].chain
 
 export const nativeTokenKey = "native"
@@ -131,6 +175,7 @@ export interface ChainInfo {
   chain: Chain;
   name: string;
   tokens: Record<string, TokenInfo>;
+  nftGroups: Record<string, NftGroupInfo>;
 }
 
 export interface TokenInfo {
@@ -140,6 +185,21 @@ export interface TokenInfo {
   name: string;
   symbol: string;
   decimals: number;
+}
+
+export interface NftGroupInfo {
+  key: string;
+  imageUrl: string;
+  name: string;
+  nfts: Record<string, NftInfo>;
+}
+
+export interface NftInfo {
+  key: string;
+  addresses: Record<Network, string>;
+  imageUrl: string;
+  name: string;
+  symbol: string;
 }
 
 export interface ChainConfig {
