@@ -43,9 +43,9 @@ export const WrappedUnityCanvas = () => {
     return (
         <div className="w-full h-full relative">
             {!isLoaded ? (
-                <Container centerContent hasPadding>
+                <div className="absolute w-full h-full place-items-center grid">
                     <Spinner label="Loading..." size="lg"/>
-                </Container>     
+                </div>
             ) : null}
 
             <Unity
