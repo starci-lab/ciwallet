@@ -35,7 +35,7 @@ export const _getEvmBalance = async ({
             await contract.getFunction("balanceOf").staticCall(accountAddress),
             await contract.getFunction("decimals").staticCall(),
         ])
-        return computeDenomination(balance, decimals)
+        return computeDenomination(balance, Number(decimals))
     }
 }
 

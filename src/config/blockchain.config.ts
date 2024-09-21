@@ -24,8 +24,30 @@ export const blockchainConfig = (): ChainConfig => {
                         imageUrl: "/icons/avalanche.svg",
                         name: "Avalanche",
                         symbol: "AVAX",
-                        decimals: 8,
+                        decimals: 18,
                     },
+                    $CARROT: {
+                        key: "$CARROT",
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "0xA9E72Ae9FfEc2a10AA9b6d617d1faf4953A2dADD",
+                        },
+                        name: "$CARROT Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CARROT.png",
+                        symbol: "$CARROT"
+                    },
+                    $CAULI: {
+                        key: "$CAULI",
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "0x93ED1074fa946946309CdBe0cc873c58d6a725F1",
+                        },
+                        name: "$CAULI Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CAULI.png",
+                        symbol: "$CAULI"
+                    }
                 },
                 nftGroups: {
                     cifarm: {
