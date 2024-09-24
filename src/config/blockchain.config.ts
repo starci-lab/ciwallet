@@ -93,7 +93,18 @@ export const blockchainConfig = (): ChainConfig => {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
                         key: "cifarm",
-                        nfts: {},
+                        nfts: {
+                            premiumTile: {
+                                key: "premiumTile",
+                                addresses: {
+                                    [Network.Mainnet]: "",
+                                    [Network.Testnet]: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
+                                },
+                                imageUrl: "/icons/premium-tile.png",
+                                name: "CiFarm Premium Tile",
+                                symbol: "CPT",
+                            },
+                        },
                     },
                 },
             },
@@ -132,7 +143,18 @@ export const blockchainConfig = (): ChainConfig => {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
                         key: "cifarm",
-                        nfts: {},
+                        nfts: {
+                            premiumTile: {
+                                key: "premiumTile",
+                                addresses: {
+                                    [Network.Mainnet]: "",
+                                    [Network.Testnet]: "0x26e36d9baaa360ef03ffac616758b0b067ca5a89d6972168ca58a33b1f4fb329",
+                                },
+                                imageUrl: "/icons/premium-tile.png",
+                                name: "CiFarm Premium Tile",
+                                symbol: "CPT",
+                            },
+                        },
                     },
                 },
             },
