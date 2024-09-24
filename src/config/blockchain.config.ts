@@ -87,6 +87,28 @@ export const blockchainConfig = (): ChainConfig => {
                         symbol: "APT",
                         decimals: 8,
                     },
+                    $CARROT: {
+                        key: "$CARROT",
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "",
+                        },
+                        name: "$CARROT Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CARROT.png",
+                        symbol: "$CARROT"
+                    },
+                    $CAULI: {
+                        key: "$CAULI",
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "",
+                        },
+                        name: "$CAULI Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CAULI.png",
+                        symbol: "$CAULI"
+                    }
                 },
                 nftGroups: {
                     cifarm: {
@@ -137,6 +159,28 @@ export const blockchainConfig = (): ChainConfig => {
                         symbol: "USDC",
                         decimals: 6,
                     },
+                    $CARROT: {
+                        key: "$CARROT",
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "",
+                        },
+                        name: "$CARROT Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CARROT.png",
+                        symbol: "$CARROT"
+                    },
+                    $CAULI: {
+                        key: "$CAULI",
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "",
+                        },
+                        name: "$CAULI Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CAULI.png",
+                        symbol: "$CAULI"
+                    }
                 },
                 nftGroups: {
                     cifarm: {
