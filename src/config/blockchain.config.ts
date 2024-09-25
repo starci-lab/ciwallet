@@ -102,7 +102,7 @@ export const blockchainConfig = (): ChainConfig => {
                         key: "$CAULI",
                         addresses: {
                             [Network.Mainnet]: "",
-                            [Network.Testnet]: "",
+                            [Network.Testnet]: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
                         },
                         name: "$CAULI Token",
                         decimals: 18,

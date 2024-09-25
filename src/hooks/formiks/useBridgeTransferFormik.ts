@@ -104,33 +104,36 @@ export const _useBridgeTransferFormik =
 
               const address = targetAddress || createdAddress
               if (!signer) return
-              const hasWrapped = await hasWrappedAsset({
-                  foreignChainName: chains[targetChainKey].chain,
-                  network: parseNetwork(network),
-                  sourceChainName: chains[preferenceChainKey].chain,
-                  sourceTokenAddress: _address
-              })
-              console.log(`Has Wrapped: ${hasWrapped}`)
-              if (!hasWrapped) {
-                  const { txHash, vaa } = await createAttestation({
-                      chainName: chains[preferenceChainKey].chain,
-                      network: parseNetwork(network),
-                      tokenAddress: _address,
-                      signer
-                  })
-                  console.log(`Create Attestation transaction hash: ${txHash}`)
-                  console.log(`VAA: ${vaa}`)
-                  if (!vaa) return
-                  if (!targetSigner) return
-                  const _txHash = await submitAttestation({
-                      network: parseNetwork(network),
-                      signer: targetSigner,
-                      targetChainName: chains[targetChainKey].chain,
-                      vaa
-                  })
-                  console.log(`Submit Attestation transaction hash: ${_txHash}`)
-              }
 
+              if (_address !== "native") {
+                  const hasWrapped = await hasWrappedAsset({
+                      foreignChainName: chains[targetChainKey].chain,
+                      network: parseNetwork(network),
+                      sourceChainName: chains[preferenceChainKey].chain,
+                      sourceTokenAddress: _address
+                  })
+                  console.log(`Has Wrapped: ${hasWrapped}`)
+                  if (!hasWrapped) {
+                      const { txHash, vaa } = await createAttestation({
+                          chainName: chains[preferenceChainKey].chain,
+                          network: parseNetwork(network),
+                          tokenAddress: _address,
+                          signer
+                      })
+                      console.log(`Create Attestation transaction hash: ${txHash}`)
+                      console.log(`VAA: ${vaa}`)
+                      if (!vaa) return
+                      if (!targetSigner) return
+                      const _txHash = await submitAttestation({
+                          network: parseNetwork(network),
+                          signer: targetSigner,
+                          targetChainName: chains[targetChainKey].chain,
+                          vaa
+                      })
+                      console.log(`Submit Attestation transaction hash: ${_txHash}`)
+                  }
+              }
+              
               const { txHash, vaa } = await transfer({
                   signer,
                   transferAmount: computeRaw(amount, decimals || 8),

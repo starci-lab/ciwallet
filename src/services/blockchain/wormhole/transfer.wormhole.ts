@@ -44,8 +44,7 @@ export const transfer = async <
     const wormhole = await getWormhole(network)
     const sourceChain = wormhole.getChain(sourceChainName)
     const sourceTokenBridge = await sourceChain.getTokenBridge()
-
-    console.log(tokenAddress)
+    
     const txGenerator = sourceTokenBridge.transfer(
         toNative(sourceChainName, signer.address()),
         {
@@ -74,6 +73,7 @@ export const transfer = async <
     if (!wormholeMessage) throw new Error("Wormhole message not found")
 
     const vaa = await wormhole.getVaa(
+
         wormholeMessage,
         "TokenBridge:Transfer",
         60_000
