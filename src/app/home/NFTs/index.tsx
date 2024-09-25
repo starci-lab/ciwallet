@@ -49,7 +49,7 @@ export const NFTs = () => {
                                             startContent={
                                                 <Image
                                                     className="w-6"
-                                                     removeWrapper
+                                                    removeWrapper
                                                     src={nfts[key].imageUrl}
                                                 />
                                             }

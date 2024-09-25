@@ -120,7 +120,7 @@ export const blockchainConfig = (): ChainConfig => {
                                 key: "premiumTile",
                                 addresses: {
                                     [Network.Mainnet]: "",
-                                    [Network.Testnet]: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
+                                    [Network.Testnet]: "0x26e36d9baaa360ef03ffac616758b0b067ca5a89d6972168ca58a33b1f4fb329",
                                 },
                                 imageUrl: "/icons/premium-tile.png",
                                 name: "CiFarm Premium Tile",
@@ -163,7 +163,7 @@ export const blockchainConfig = (): ChainConfig => {
                         key: "$CARROT",
                         addresses: {
                             [Network.Mainnet]: "",
-                            [Network.Testnet]: "",
+                            [Network.Testnet]: "FnQEAh9NNPzE26Z8iBq9onU3gzynGeHbPVy8gdwHFYee",
                         },
                         name: "$CARROT Token",
                         decimals: 18,
@@ -174,7 +174,7 @@ export const blockchainConfig = (): ChainConfig => {
                         key: "$CAULI",
                         addresses: {
                             [Network.Mainnet]: "",
-                            [Network.Testnet]: "",
+                            [Network.Testnet]: "4XqC5una95jkts6EUcuiicVQr18ZVPhJCzKVj9hYTEC7",
                         },
                         name: "$CAULI Token",
                         decimals: 18,
@@ -192,7 +192,7 @@ export const blockchainConfig = (): ChainConfig => {
                                 key: "premiumTile",
                                 addresses: {
                                     [Network.Mainnet]: "",
-                                    [Network.Testnet]: "0x26e36d9baaa360ef03ffac616758b0b067ca5a89d6972168ca58a33b1f4fb329",
+                                    [Network.Testnet]: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
                                 },
                                 imageUrl: "/icons/premium-tile.png",
                                 name: "CiFarm Premium Tile",

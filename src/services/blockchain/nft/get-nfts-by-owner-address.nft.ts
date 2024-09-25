@@ -94,9 +94,10 @@ export const _getSolanaNftsByOwnerAddress = async ({
     take,
 }: GetNftsByOwnerAddressParams): Promise<GetNftsByOwnerAddressResult> => {
     network = network || Network.Testnet
+
     const rpc = solanaHttpRpcUrl(chainKey, network)
     const umi = createUmi(rpc)
-
+    console.log(nftAddress)
     let nfts = await fetchAllDigitalAssetByOwner(umi, publicKey(accountAddress))
     nfts = nfts.filter(nft => {
         if (isSome(nft.metadata.collection)) {

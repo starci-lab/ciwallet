@@ -1,9 +1,9 @@
-import { useAppSelector } from "@/redux";
+import { useAppSelector } from "@/redux"
 import {
-  BlockchainNftService,
-  GetNftsByOwnerAddressResult,
-} from "@/services";
-import useSWR, { SWRResponse } from "swr";
+    BlockchainNftService,
+    GetNftsByOwnerAddressResult,
+} from "@/services"
+import useSWR, { SWRResponse } from "swr"
 
 export interface UseNFTsParams {
   accountAddress: string;
@@ -18,29 +18,29 @@ export interface UseNFTsReturn {
 }
 
 export const useNFTs = ({
-  accountAddress,
-  nftAddress,
-  chainKey,
-  skip,
-  take,
+    accountAddress,
+    nftAddress,
+    chainKey,
+    skip,
+    take,
 }: UseNFTsParams): UseNFTsReturn => {
-  const network = useAppSelector((state) => state.blockchainReducer.network);
-  const nftsSwr = useSWR(["NFTS_SWR", nftAddress, accountAddress, skip, take], async () => {
-    skip = skip || 0;
-    take = take || 5;
-    const nftService = new BlockchainNftService({
-      chainKey,
-      nftAddress,
-      network,
-    });
-    return await nftService.getNftsByOwnerAddress({
-      accountAddress,
-      skip,
-      take,
-    });
-  });
+    const network = useAppSelector((state) => state.blockchainReducer.network)
+    const nftsSwr = useSWR(["NFTS_SWR", nftAddress, accountAddress, skip, take], async () => {
+        skip = skip || 0
+        take = take || 5
+        const nftService = new BlockchainNftService({
+            chainKey,
+            nftAddress,
+            network,
+        })
+        return await nftService.getNftsByOwnerAddress({
+            accountAddress,
+            skip,
+            take,
+        })
+    })
 
-  return {
-    nftsSwr,
-  };
-};
+    return {
+        nftsSwr,
+    }
+}

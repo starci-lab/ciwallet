@@ -2,6 +2,7 @@
 import { NftInfo } from "@/config"
 import { useNFTs } from "@/hooks"
 import { useAppSelector } from "@/redux"
+import { truncateString } from "@/utils"
 import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
 import React from "react"
 
@@ -15,7 +16,7 @@ export const NFTCollection = ({ nft }: NFTCollectionProps) => {
     )
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const credentials = useAppSelector((state) => state.authReducer.credentials)
-
+    
     const { nftsSwr } = useNFTs({
         accountAddress: credentials[preferenceChainKey].address,
         chainKey: preferenceChainKey,
@@ -35,10 +36,9 @@ export const NFTCollection = ({ nft }: NFTCollectionProps) => {
                         </CardBody>
                         <CardFooter className="py-3 pb-3 pt-0">
                             <div className="flex items-center justify-between w-full">
-                                <div className="font-bold text-sm">#{record.tokenId}</div>
+                                <div className="font-bold text-sm">#{truncateString(record.tokenId, 3, 0) }</div>
                                 <Link isExternal showAnchorIcon href={record.tokenURI} size="sm">URI</Link>
                             </div>
-               
                         </CardFooter>
                     </Card>
                 ))}
