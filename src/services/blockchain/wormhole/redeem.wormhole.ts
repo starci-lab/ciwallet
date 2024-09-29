@@ -30,7 +30,6 @@ export const redeem = async <
     redeemChainName,
     signer,
 }: RedeemParams<N, RedeemChainName, SenderChainName>) => {
-
     const wormhole = await getWormhole(network)
     const redeemChain = wormhole.getChain(redeemChainName)
  

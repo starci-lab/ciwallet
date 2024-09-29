@@ -1,12 +1,12 @@
 import { Network } from "@/config"
-import { Cluster, Connection, clusterApiUrl } from "@solana/web3.js"
+import { _solanaHttpRpcUrl } from "./solana.solana"
+export * from "./solana.solana"
 
-export const solanaClient = (network: Network = Network.Testnet) => {
-    const networkMap: Record<Network, Cluster> = {
-        [Network.Mainnet]: "mainnet-beta",
-        [Network.Testnet]: "devnet",
+export const solanaHttpRpcUrl = (chainKey: string, network: Network) => {
+    switch (chainKey) {
+    case "solana": {
+        return _solanaHttpRpcUrl(network)
     }
-    return new Connection(clusterApiUrl(networkMap[network]), {
-        commitment: "confirmed",
-    })
+    default: throw new Error(`Chain not supported: ${chainKey}`)
+    }
 }
