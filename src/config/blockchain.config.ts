@@ -175,6 +175,45 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
             },
+            algorand: {
+                key: "algorand",
+                imageUrl: "/icons/algorand.svg",
+                wormholeChainId: 8,
+                chain: "Algorand",
+                name: "Algorand",
+                tokens: {
+                    native: {
+                        key: "native",
+                        imageUrl: "/icons/algorand.svg",
+                        name: "Algorand",
+                        symbol: "ALGO",
+                        addresses: {
+                            [Network.Mainnet]: "native", // Replace with actual address if available
+                            [Network.Testnet]: "native", // Replace with actual address if available
+                        },
+                        decimals: 18,
+                    },
+                    usdt: {
+                        key: "usdt",
+                        addresses: {
+                            [Network.Mainnet]: "", // Replace with actual address if available
+                            [Network.Testnet]: "0xDcbA7F0D49885D5C9e7CDF3e27897a5F3cdfbf62",
+                        },
+                        imageUrl: "/icons/usdt.svg",
+                        name: "USD Tether",
+                        symbol: "USDT",
+                        decimals: 18,
+                    },
+                },
+                nftGroups: {
+                    cifarm: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        key: "cifarm",
+                        nfts: {},
+                    },
+                },
+            },
         },
     }
 }

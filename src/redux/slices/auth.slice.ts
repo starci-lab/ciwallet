@@ -86,6 +86,15 @@ const initialState: AuthState = {
                 },
             },
         },
+        algorand: {
+            activeAccountNumber: 0,
+            accounts: {
+                0: {
+                    imageUrl: "",
+                    name: "Account 0",
+                },
+            },
+        },
     },
     credentials: {
         aptos: {
@@ -104,6 +113,11 @@ const initialState: AuthState = {
             publicKey: "",
         },
         avalanche: {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        },
+        algorand: {
             address: "",
             privateKey: "",
             publicKey: "",
