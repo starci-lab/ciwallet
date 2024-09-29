@@ -1,8 +1,8 @@
 "use client"
 import { Container } from "@/components"
 import React, { useEffect } from "react"
-import { downloadTextFile } from "@/services"
-import { setMnemonic, useAppDispatch, useAppSelector } from "@/redux"
+import { MnemonicWords, downloadTextFile } from "@/services"
+import { addAlgorandMnemonic, setMnemonic, useAppDispatch, useAppSelector } from "@/redux"
 import { Button, Snippet, Spacer } from "@nextui-org/react"
 import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
@@ -15,6 +15,12 @@ const Page = () => {
     useEffect(() => {
         const mnemonic = getMnemonic()
         dispatch(setMnemonic(mnemonic))
+    }, [])
+
+    useEffect(() => {
+        //add algorand mnemonic
+        const mnemonic = getMnemonic(MnemonicWords._25_WORDS)
+        dispatch(addAlgorandMnemonic(mnemonic))
     }, [])
 
     const router = useRouter()

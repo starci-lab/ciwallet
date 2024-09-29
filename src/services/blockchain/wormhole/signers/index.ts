@@ -13,6 +13,8 @@ import { AptosChains } from "@wormhole-foundation/sdk-aptos"
 import { aptosSigner } from "./aptos.signer"
 import { solanaSigner } from "./solana.signer"
 import { SolanaChains } from "@wormhole-foundation/sdk-solana"
+import { AlgorandChains } from "@wormhole-foundation/sdk-algorand"
+import { algorandSigner } from "./algorand.signer"
 
 export const signer = (params: SignerParams<WormholeNetwork, Chain>) => {
     const platform = chainToPlatform(params.chain)
@@ -25,5 +27,6 @@ export const signer = (params: SignerParams<WormholeNetwork, Chain>) => {
         return solanaSigner(
         params as SignerParams<WormholeNetwork, SolanaChains>
         )
-    }
-}
+    case "Algorand": 
+        return algorandSigner(params as SignerParams<WormholeNetwork, AlgorandChains>)
+    }}

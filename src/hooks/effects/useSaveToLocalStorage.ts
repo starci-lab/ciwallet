@@ -21,6 +21,7 @@ export const useSaveToLocalStorage = () => {
 
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const saveChainsKey = useAppSelector((state) => state.blockchainReducer.saveChainsKey)
+    
     useEffect(() => {
         if (loaded) {
             saveAccountNumbers(accountNumbers)

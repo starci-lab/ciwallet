@@ -1,8 +1,11 @@
 import { Network, blockchainConfig } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
-import { aptosClient, evmHttpRpcUrl } from "../rpcs"
+import { algorandClient, aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl } from "../rpcs"
 import { erc20Abi } from "../abis"
 import { Platform, chainKeyToPlatform } from "../common"
+import { fetchDigitalAsset, mplTokenMetadata } from "@metaplex-foundation/mpl-token-metadata"
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
+import { publicKey } from "@metaplex-foundation/umi"
 
 export interface GetTokenMetadataParams {
   chainKey: string;
@@ -80,6 +83,7 @@ export const _getAptosTokenMetadata = async ({
 export const _getSolanaTokenMetadata = async ({
     tokenAddress,
     chainKey,
+    network
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
     if (tokenAddress === "native") {
         const { decimals, symbol, name } =
@@ -90,11 +94,38 @@ export const _getSolanaTokenMetadata = async ({
             symbol,
         }
     }
+    network = network || Network.Testnet
+    const umi = createUmi(solanaHttpRpcUrl(chainKey, network)).use(mplTokenMetadata())
+    const asset = await fetchDigitalAsset(umi, publicKey(tokenAddress))
 
     return {
-        name: "",
-        decimals: 0,
-        symbol: "",
+        name: asset.metadata.name,
+        symbol: asset.metadata.symbol,
+        decimals: asset.mint.decimals || 0,
+    }
+}
+
+export const _getAlgorandTokenMetadata = async ({
+    tokenAddress,
+    chainKey,
+    network
+}: GetTokenMetadataParams): Promise<TokenMetadata> => {
+    if (tokenAddress === "native") {
+        const { decimals, symbol, name } =
+    blockchainConfig().chains[chainKey].tokens["native"]
+        return {
+            decimals,
+            name,
+            symbol,
+        }
+    }
+    network = network || Network.Testnet
+    const assetId = BigInt(tokenAddress)
+    const account = await algorandClient(network).getAssetByID(assetId).do()
+    return {
+        name: account.params.name || "",
+        decimals: account.params.decimals || 0,
+        symbol: account.params.unitName || "",
     }
 }
 
@@ -109,5 +140,7 @@ export const _getTokenMetadata = async (params: GetTokenMetadataParams) => {
         return _getAptosTokenMetadata(params)
     case Platform.Solana:
         return _getSolanaTokenMetadata(params)
+    case Platform.Algorand:
+        return _getAlgorandTokenMetadata(params)
     }
 }

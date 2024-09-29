@@ -4,7 +4,7 @@ import { useFormiks } from "."
 import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
 import { useAppSelector } from "@/redux"
-import { saveEncryptedMnemonic } from "@/services"
+import { saveEncryptedAlgorandMnemonics, saveEncryptedMnemonic } from "@/services"
 
 export interface CreatePasswordFormikValues {
     password: string;
@@ -15,6 +15,7 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
     const router = useRouter()
 
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
+    const algorandMnemonics = useAppSelector((state) => state.authReducer.algorandMnemonics)
 
     const initialValues: CreatePasswordFormikValues = {
         password: "",
@@ -32,6 +33,10 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
         onSubmit: ({ password }) => {
             saveEncryptedMnemonic({
                 mnemonic,
+                password
+            })
+            saveEncryptedAlgorandMnemonics({
+                algorandMnemonics,
                 password
             })
             router.push(constantConfig().path.home)

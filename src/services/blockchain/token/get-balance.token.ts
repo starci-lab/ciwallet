@@ -1,6 +1,6 @@
 import { Network, blockchainConfig } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
-import { aptosClient, evmHttpRpcUrl, solanaClient } from "../rpcs"
+import { algorandClient, aptosClient, evmHttpRpcUrl, solanaClient } from "../rpcs"
 import { erc20Abi } from "../abis"
 import { computeDenomination } from "@/utils"
 import { PublicKey } from "@solana/web3.js"
@@ -24,7 +24,7 @@ export const _getEvmBalance = async ({
 
     const rpcUrl = evmHttpRpcUrl(chainKey, network)
     const provider = new JsonRpcProvider(rpcUrl)
-    if (tokenAddress == "native") {
+    if (tokenAddress === "native") {
         const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
         if (!decimals) throw new Error("decimals must not undefined")
         const balance = await provider.getBalance(accountAddress)
@@ -52,7 +52,7 @@ export const _getAptosBalance = async ({
     if (!decimals) throw new Error("decimals must not undefined")
     network = network || Network.Testnet
     
-    if (tokenAddress == "native") { 
+    if (tokenAddress === "native") { 
         const balance = await aptosClient(network).getAccountAPTAmount({
             accountAddress
         })
@@ -80,7 +80,7 @@ export const _getSolanaBalance = async ({
     if (!decimals) throw new Error("decimals must not undefined")
     network = network || Network.Testnet
 
-    if (tokenAddress == "native") {
+    if (tokenAddress === "native") {
         const balance = await solanaClient(network).getBalance(new PublicKey(accountAddress))
         return computeDenomination(balance, decimals)
     } else {
@@ -94,11 +94,37 @@ export const _getSolanaBalance = async ({
     }
 }
 
+export const _getAlgorandBalance = async ({
+    chainKey,
+    tokenAddress,
+    network,
+    accountAddress,
+}: GetBalanceParams): Promise<number> => {
+    if (!tokenAddress) throw new Error("Cannot find balance without token address")
+    network = network || Network.Testnet
+    
+    const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
+    if (!decimals) throw new Error("decimals must not undefined")
+    network = network || Network.Testnet
+    
+    let assetId = BigInt(0)
+    if (tokenAddress !== "native") {
+        assetId = BigInt(tokenAddress)
+    }
+    const accountInfo = await algorandClient(network).accountInformation(accountAddress).do()
+    const assets = accountInfo.assets
+    if (!assets) return 0
+    const foundAsset = assets.find((asset) => asset.assetId === assetId)
+    if (!foundAsset) return 0
+    return computeDenomination(foundAsset.amount, decimals)
+}
+
 export const _getBalance = (params: GetBalanceParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
     case Platform.Evm: return _getEvmBalance(params)
     case Platform.Aptos: return _getAptosBalance(params)
     case Platform.Solana: return _getSolanaBalance(params)
+    case Platform.Algorand: return _getAlgorandBalance(params)
     }
 }

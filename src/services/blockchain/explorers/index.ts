@@ -14,6 +14,8 @@ export const explorerUrl = (params: ExplorerUrlParams) => {
         return bscExplorerUrl(params)[params.type]
     case "solana":
         return solanaExplorerUrl(params)[params.type]
+    case "algorand":
+        return solanaExplorerUrl(params)[params.type]
     default:
         throw new Error(`Chain not supported: ${params.chainKey}`)
     }

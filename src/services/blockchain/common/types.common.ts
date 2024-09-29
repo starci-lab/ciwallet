@@ -5,6 +5,7 @@ export enum Platform {
   Evm = "evm",
   Aptos = "aptops",
   Solana = "solana",
+  Algorand = "algorand"
 }
 
 export const chainKeyToPlatform = (chainKey: string): Platform => {
@@ -17,6 +18,8 @@ export const chainKeyToPlatform = (chainKey: string): Platform => {
         return Platform.Solana
     case "aptos":
         return Platform.Aptos
+    case "algorand":
+        return Platform.Algorand
     default:
         throw new Error(`Chain not supported: ${chainKey}`)
     }

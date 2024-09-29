@@ -8,11 +8,13 @@ import {
     setPreferenceChainKey,
     setVaas,
     setChain,
-    setInitialized
+    setInitialized,
+    setAlgorandMnemonics
 } from "@/redux"
 import {
     foundEncryptedMnemonic,
     loadAccountNumbers,
+    loadAlgorandMnemonics,
     loadChains,
     loadMnemonic,
     loadPreferenceChainKey,
@@ -70,6 +72,22 @@ export const useLoadFromLocalStorage = () => {
         try{
             const mnemonic = loadMnemonic(password)
             dispatch(setMnemonic(mnemonic))
+
+            //bonus algorand, not need to check
+            const mnemonics = loadAlgorandMnemonics(password)
+            dispatch(setAlgorandMnemonics(mnemonics))
+            router.push(constantConfig().path.home)
+        } catch (ex) {
+            console.error(ex)
+            triggerErrorToast("Invalid password")
+        }
+    }, [password])
+
+    useEffect(() => {
+        if (!password) return
+        try{
+            const mnemonics = loadAlgorandMnemonics(password)
+            dispatch(setAlgorandMnemonics(mnemonics))
             router.push(constantConfig().path.home)
         } catch (ex) {
             console.error(ex)

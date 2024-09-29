@@ -2,6 +2,7 @@ import { Wallet } from "ethers"
 import { Platform, chainKeyToPlatform } from "../common"
 import nacl from "tweetnacl"
 import { Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk"
+import algosdk from "algosdk"
 
 export interface SignMessageParams {
     message: string,
@@ -30,6 +31,11 @@ export const aptosSignMessage = ({ message, privateKey }: SignMessageParams) => 
     return ed25519PrivateKey.sign(message).toString()
 }
 
+export const algorandSignMessage = ({ message, privateKey }: SignMessageParams) => {
+    return algosdk.signBytes(Buffer.from(message, "base64"), Buffer.from(privateKey, "hex")).toString()
+}
+
+
 export const signMessage = (params: SignMessageParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
 
@@ -42,6 +48,9 @@ export const signMessage = (params: SignMessageParams) => {
     }
     case Platform.Aptos: {
         return aptosSignMessage(params)
+    }
+    case Platform.Algorand: {
+        return algorandSignMessage(params)
     }
     default: throw new Error(`Platform not supported: ${platform}`)
     }

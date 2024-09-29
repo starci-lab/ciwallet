@@ -1,15 +1,19 @@
 import { ChainInfo, defaultChainKey } from "@/config"
 import {
+    EncryptAlgorandMnemonicsParams,
     EncryptMnemonicParams,
     EncryptedResult,
-    decrypt,
-    encrypt,
+    decryptAlgorandMnemonics,
+    decryptMnemonic,
+    encryptAlgorandMnemonics,
+    encryptMnemonic,
 } from "../cryptography"
 import { AccountNumbers, StoredVaa } from "@/redux"
 import { deserialize, serialize } from "./serialization.storage"
 
 const ACCOUNT_NUMBERS = "ciwallet-account-numbers"
 const ENCRYPTED_MNEMONIC = "ciwallet-encrypted-mnemonic"
+const ALGORAND_ENCRYPTED_MNEMONICS = "ciwallet-algorand-encrypted-mnemonics"
 const PREFERENCE_CHAIN = "ciwallet-preference-chain"
 const VAAS = "ciwallet-vaas"
 const CHAINS = "ciwallet-chains"
@@ -27,11 +31,22 @@ export const saveEncryptedMnemonic = ({
     mnemonic,
     password,
 }: EncryptMnemonicParams) => {
-    const result = encrypt({
-        data: mnemonic,
-        key: password,
+    const result = encryptMnemonic({
+        mnemonic,
+        password,
     })
     localStorage.setItem(ENCRYPTED_MNEMONIC, serialize(result))
+}
+
+export const saveEncryptedAlgorandMnemonics = ({
+    algorandMnemonics,
+    password,
+}: EncryptAlgorandMnemonicsParams) => {
+    const result = encryptAlgorandMnemonics({
+        algorandMnemonics,
+        password,
+    })
+    localStorage.setItem(ALGORAND_ENCRYPTED_MNEMONICS, serialize(result))
 }
 
 export const clearStorage = () => {
@@ -46,10 +61,19 @@ export const loadMnemonic = (password: string) => {
     const found = localStorage.getItem(ENCRYPTED_MNEMONIC)
     if (!found) return ""
     const encryptedResult = deserialize(found) as EncryptedResult
-    return decrypt({
-        key: password,
-        encryptedData: encryptedResult.data,
-        iv: encryptedResult.iv,
+    return decryptMnemonic({
+        password,
+        encryptedResult,
+    })
+}
+
+export const loadAlgorandMnemonics = (password: string) => {
+    const found = localStorage.getItem(ALGORAND_ENCRYPTED_MNEMONICS)
+    if (!found) return []
+    const encryptedResult = deserialize(found) as EncryptedResult
+    return decryptAlgorandMnemonics({
+        password,
+        encryptedResult,
     })
 }
 

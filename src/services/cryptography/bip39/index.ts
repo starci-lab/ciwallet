@@ -3,9 +3,14 @@ import {
     mnemonicToSeedSync,
     validateMnemonic as _validateMnemonic
 } from "bip39"
+
 import { sha256Hash } from "../sha256"
 
-export const generateMnemonic = () => _generateMnemonic()
+export const generateMnemonic = (numWords: number = 24) => {
+    if (numWords === 12) return _generateMnemonic()
+    if (numWords === 24) return _generateMnemonic(256)
+    return ""
+}
 
 export interface MnemonicToSeedParams {
   mnemonic: string;

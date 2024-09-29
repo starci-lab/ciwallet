@@ -15,6 +15,7 @@ export type AccountNumbers = Record<string, ChainAccountNumber>;
 
 export interface AuthState {
   mnemonic: string;
+  algorandMnemonics: Array<string>;
   accountNumbers: AccountNumbers;
   password: string;
   hasAuthBefore: boolean;
@@ -49,6 +50,7 @@ export type ChainCredentials = Record<string, ChainCredential>;
 
 const initialState: AuthState = {
     mnemonic: "",
+    algorandMnemonics: [],
     accountNumbers: {
         aptos: {
             activeAccountNumber: 0,
@@ -136,6 +138,12 @@ export const authSlice = createSlice({
         setMnemonic: (state, { payload }: PayloadAction<string>) => {
             state.mnemonic = payload
         },
+        setAlgorandMnemonics: (state, { payload }: PayloadAction<Array<string>>) => {
+            state.algorandMnemonics = payload
+        },
+        addAlgorandMnemonic: (state, { payload }: PayloadAction<string>) => {
+            state.algorandMnemonics.push(payload)
+        },
         setAccountNumbers: (
             state,
             {
@@ -210,9 +218,11 @@ export const {
     setPassword,
     setHasAuthBefore,
     createAccount,
+    setAlgorandMnemonics,
     setActiveAccountNumber,
     loadAccountNumbers,
     setInitialized,
     setCredential,
+    addAlgorandMnemonic
 } = authSlice.actions
 export const authReducer = authSlice.reducer
