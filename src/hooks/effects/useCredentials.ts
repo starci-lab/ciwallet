@@ -1,12 +1,11 @@
 import { setCredential, useAppDispatch, useAppSelector } from "@/redux"
-import {
-    createAccount
-} from "@/services"
+import { createAccount } from "@/services"
 import { useEffect } from "react"
 
 export const useCredentials = () => {
-    const mnemonic = useAppSelector(
-        (state) => state.authReducer.mnemonic
+    const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
+    const algorandMnemonics = useAppSelector(
+        (state) => state.authReducer.algorandMnemonics
     )
     const accountNumbers = useAppSelector(
         (state) => state.authReducer.accountNumbers
@@ -17,16 +16,15 @@ export const useCredentials = () => {
     const solanaChainKey = "solana"
     const bscChainKey = "bsc"
     const avalanacheChainKey = "avalanche"
+    const algorandChainKey = "algorand"
 
     useEffect(() => {
         if (!mnemonic) return
-        const account = createAccount(
-            {
-                chainKey:  aptosChainKey,
-                mnemonic,
-                accountNumber: accountNumbers[aptosChainKey].activeAccountNumber,
-            }
-        )
+        const account = createAccount({
+            chainKey: aptosChainKey,
+            mnemonic,
+            accountNumber: accountNumbers[aptosChainKey].activeAccountNumber,
+        })
 
         dispatch(
             setCredential({
@@ -38,13 +36,11 @@ export const useCredentials = () => {
 
     useEffect(() => {
         if (!mnemonic) return
-        const account = createAccount(
-            {
-                chainKey: solanaChainKey,
-                mnemonic,
-                accountNumber: accountNumbers[solanaChainKey].activeAccountNumber,
-            }
-        )
+        const account = createAccount({
+            chainKey: solanaChainKey,
+            mnemonic,
+            accountNumber: accountNumbers[solanaChainKey].activeAccountNumber,
+        })
         dispatch(
             setCredential({
                 account,
@@ -59,8 +55,7 @@ export const useCredentials = () => {
             chainKey: avalanacheChainKey,
             mnemonic,
             accountNumber: accountNumbers[avalanacheChainKey].activeAccountNumber,
-        }
-        )
+        })
         dispatch(
             setCredential({
                 account,
@@ -75,13 +70,28 @@ export const useCredentials = () => {
             chainKey: bscChainKey,
             mnemonic,
             accountNumber: accountNumbers[bscChainKey].activeAccountNumber,
-        }
-        )
+        })
         dispatch(
             setCredential({
                 account,
-                chainKey: avalanacheChainKey,
+                chainKey: bscChainKey,
             })
         )
     }, [mnemonic, accountNumbers[bscChainKey]])
+
+    useEffect(() => {
+        if (!algorandMnemonics) return
+        const account = createAccount({
+            chainKey: algorandChainKey,
+            mnemonic:
+        algorandMnemonics[accountNumbers[algorandChainKey].activeAccountNumber],
+            accountNumber: 0,
+        })
+        dispatch(
+            setCredential({
+                account,
+                chainKey: algorandChainKey,
+            })
+        )
+    }, [algorandMnemonics, accountNumbers[algorandChainKey]])
 }

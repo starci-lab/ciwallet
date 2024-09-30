@@ -107,12 +107,13 @@ export const _getAlgorandBalance = async ({
     if (!decimals) throw new Error("decimals must not undefined")
     network = network || Network.Testnet
     
-    let assetId = BigInt(0)
-    if (tokenAddress !== "native") {
-        assetId = BigInt(tokenAddress)
-    }
     const accountInfo = await algorandClient(network).accountInformation(accountAddress).do()
+    if (tokenAddress === "native") {
+        return computeDenomination(accountInfo.amount, decimals)
+    }
+
     const assets = accountInfo.assets
+    const assetId = BigInt(tokenAddress)
     if (!assets) return 0
     const foundAsset = assets.find((asset) => asset.assetId === assetId)
     if (!foundAsset) return 0

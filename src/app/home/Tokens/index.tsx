@@ -2,7 +2,6 @@
 import { useAppSelector } from "@/redux"
 import React from "react"
 import { Token } from "./Token"
-import { Spacer } from "@nextui-org/react"
 
 export const Tokens = () => {
     const preferenceChainKey = useAppSelector(

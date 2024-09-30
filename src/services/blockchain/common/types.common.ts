@@ -59,6 +59,7 @@ export const chainKeyToChain = (chainKey: string) : Chain => {
     case "solana": return "Solana"
     case "avalanche": return "Avalanche"
     case "bsc": return "Bsc"
+    case "algorand": return "Algorand"
     default: throw new Error(`Chain not found : ${chainKey}`)
     }
 }

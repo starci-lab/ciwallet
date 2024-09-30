@@ -257,7 +257,7 @@ export const blockchainConfig = (): ChainConfig => {
                             [Network.Mainnet]: "native", // Replace with actual address if available
                             [Network.Testnet]: "native", // Replace with actual address if available
                         },
-                        decimals: 18,
+                        decimals: 6,
                     },
                     usdt: {
                         key: "usdt",
@@ -268,7 +268,7 @@ export const blockchainConfig = (): ChainConfig => {
                         imageUrl: "/icons/usdt.svg",
                         name: "USD Tether",
                         symbol: "USDT",
-                        decimals: 18,
+                        decimals: 6,
                     },
                 },
                 nftGroups: {
