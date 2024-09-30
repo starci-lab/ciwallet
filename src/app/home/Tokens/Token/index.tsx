@@ -26,7 +26,6 @@ export const Token = ({ token }: TokenProps) => {
     const network = useAppSelector((state) => state.blockchainReducer.network)
 
     //if-else, case algorand
-    console.log(preferenceChainKey)
     const _mnemonic =
     preferenceChainKey !== "algorand"
         ? mnemonic
@@ -69,7 +68,7 @@ export const Token = ({ token }: TokenProps) => {
                     <div>
                         <div>{token?.name}</div>
                         <div className="text-sm text-foreground-400">
-                            {data} {token?.symbol}
+                            {data || 0} {token?.symbol}
                         </div>
                     </div>
                 </div>
