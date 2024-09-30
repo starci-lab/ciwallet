@@ -16,8 +16,7 @@ export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, a
     const mnemonic = useAppSelector(state => state.authReducer.mnemonic)
     const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
     const algorandMnemonics = useAppSelector(state => state.authReducer.algorandMnemonics)
-    const _mnemonic = preferenceChainKey !== "algorand" ? mnemonic : algorandMnemonics[activeAccountNumber]
-
+    const _mnemonic = preferenceChainKey === "algorand" ? algorandMnemonics[activeAccountNumber] : mnemonic
     const dispatch = useAppDispatch()
 
     const { address } = createAccount({
@@ -25,7 +24,7 @@ export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, a
         mnemonic: _mnemonic,
         chainKey: preferenceChainKey
     })
-    console.log(address)
+
     return (
         <Card classNames={{
             base: "!bg-transparent"

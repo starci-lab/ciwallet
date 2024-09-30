@@ -13,24 +13,34 @@ import {
     CardBody,
     Link,
 } from "@nextui-org/react"
-import { useAccountsModalDisclosure, useCreateAccountModalDisclosure } from "@/hooks"
+import {
+    useAccountsModalDisclosure,
+    useCreateAccountFormik,
+    useCreateAccountModalDisclosure,
+} from "@/hooks"
 import { useAppSelector } from "@/redux"
 import { AccountUser } from "../../AccountUser"
 import { PlusIcon } from "@heroicons/react/24/outline"
 
 export const AccountsModal = () => {
     const { isOpen, onClose } = useAccountsModalDisclosure()
-    const { onOpen: onCreateAccountModalOpen } = useCreateAccountModalDisclosure()
+    const { onOpen: onCreateAccountModalOpen } =
+    useCreateAccountModalDisclosure()
 
-    const preferenceChainKey = useAppSelector((state) => state.blockchainReducer.preferenceChainKey)
+    const preferenceChainKey = useAppSelector(
+        (state) => state.blockchainReducer.preferenceChainKey
+    )
     const activeAccountNumber = useAppSelector(
-        (state) => state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
+        (state) =>
+            state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
     )
     const accounts = useAppSelector(
         (state) => state.authReducer.accountNumbers[preferenceChainKey].accounts
     )
 
     const entries = Object.entries(accounts)
+
+    const formik = useCreateAccountFormik()
 
     return (
         <Modal isOpen={isOpen} hideCloseButton>
@@ -45,19 +55,26 @@ export const AccountsModal = () => {
                                         <AccountUser
                                             accountNumber={Number.parseInt(accountNumber)}
                                             account={account}
-                                            key={accountNumber}
                                             activeAccountNumber={activeAccountNumber}
                                         />
-                                        {
-                                            index !== entries.length - 1 &&
-                                            <Divider />
-                                        }
+                                        {index !== entries.length - 1 && <Divider />}
                                     </div>
                                 ))}
-                            </div>       
+                            </div>
                         </CardBody>
-                    </Card> 
-                    <Link as="button" onPress={onCreateAccountModalOpen} size="sm" color="primary">
+                    </Card>
+                    <Link
+                        as="button"
+                        onPress={async () => {
+                            if (preferenceChainKey === "algorand") {
+                                await formik.submitForm()
+                                return
+                            }
+                            onCreateAccountModalOpen()
+                        }}
+                        size="sm"
+                        color="primary"
+                    >
                         <div className="flex gap-1 items-center">
                             <PlusIcon className="w-5 h-5" />
                             <div>Create Account</div>

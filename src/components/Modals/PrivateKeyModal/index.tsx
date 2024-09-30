@@ -21,7 +21,6 @@ export const PrivateKeyModal = () => {
     const privateKey = useAppSelector(
         (state) => state.authReducer.credentials[preferenceChainKey].privateKey
     )
-
     return (
         <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>

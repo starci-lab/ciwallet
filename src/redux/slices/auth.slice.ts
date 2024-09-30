@@ -17,6 +17,8 @@ export interface AuthState {
   mnemonic: string;
   algorandMnemonics: Array<string>;
   accountNumbers: AccountNumbers;
+  saveAlgorandMnemonicsKey: number;
+  saveAccountNumbersKey: number;
   password: string;
   hasAuthBefore: boolean;
   loaded: boolean;
@@ -50,6 +52,8 @@ export type ChainCredentials = Record<string, ChainCredential>;
 
 const initialState: AuthState = {
     mnemonic: "",
+    saveAccountNumbersKey: 0,
+    saveAlgorandMnemonicsKey: 0,
     algorandMnemonics: [],
     accountNumbers: {
         aptos: {
@@ -147,7 +151,7 @@ export const authSlice = createSlice({
         setAccountNumbers: (
             state,
             {
-                payload: { aptos, solana, bsc },
+                payload: { aptos, solana, bsc, algorand },
             }: PayloadAction<Partial<AccountNumbers>>
         ) => {
             if (aptos) {
@@ -159,6 +163,15 @@ export const authSlice = createSlice({
             if (bsc) {
                 state.accountNumbers.bsc = bsc
             }
+            if (algorand) {
+                state.accountNumbers.algorand = algorand
+            }
+        },
+        triggerSaveAccountNumbers: (state) => {
+            state.saveAccountNumbersKey++
+        },
+        triggerSaveAlgorandMnemonics: (state) => {
+            state.saveAlgorandMnemonicsKey++
         },
         setCredential: (
             state,
@@ -219,9 +232,11 @@ export const {
     setHasAuthBefore,
     createAccount,
     setAlgorandMnemonics,
+    triggerSaveAlgorandMnemonics,
     setActiveAccountNumber,
     loadAccountNumbers,
     setInitialized,
+    triggerSaveAccountNumbers,
     setCredential,
     addAlgorandMnemonic
 } = authSlice.actions
