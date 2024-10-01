@@ -7,14 +7,14 @@ import {
     nativeTokenKey,
     defaultSecondaryChainKey,
 } from "@/config"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import {
     setBridgeTransferResult,
     triggerSaveStoredVaas,
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
-import { createAccount, transfer, hasWrappedAsset, createAttestation, submitAttestation, parseNetwork } from "@/services"
+import { createAccount, transfer, parseNetwork } from "@/services"
 import { useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
 
@@ -79,9 +79,6 @@ export const _useBridgeTransferFormik =
 
       const signer = useSigner(preferenceChainKey)
 
-      const [tempTargetChainKey, setTempTargetChainKey] = useState(defaultChainKey)
-      const targetSigner = useSigner(tempTargetChainKey)
-
       const formik = useFormik({
           initialValues,
           validationSchema,
@@ -104,35 +101,6 @@ export const _useBridgeTransferFormik =
 
               const address = targetAddress || createdAddress
               if (!signer) return
-
-              if (_address !== "native") {
-                  const hasWrapped = await hasWrappedAsset({
-                      foreignChainName: chains[targetChainKey].chain,
-                      network: parseNetwork(network),
-                      sourceChainName: chains[preferenceChainKey].chain,
-                      sourceTokenAddress: _address
-                  })
-                  console.log(`Has Wrapped: ${hasWrapped}`)
-                  if (!hasWrapped) {
-                      const { txHash, vaa } = await createAttestation({
-                          chainName: chains[preferenceChainKey].chain,
-                          network: parseNetwork(network),
-                          tokenAddress: _address,
-                          signer
-                      })
-                      console.log(`Create Attestation transaction hash: ${txHash}`)
-                      console.log(`VAA: ${vaa}`)
-                      if (!vaa) return
-                      if (!targetSigner) return
-                      const _txHash = await submitAttestation({
-                          network: parseNetwork(network),
-                          signer: targetSigner,
-                          targetChainName: chains[targetChainKey].chain,
-                          vaa
-                      })
-                      console.log(`Submit Attestation transaction hash: ${_txHash}`)
-                  }
-              }
               
               const { txHash, vaa } = await transfer({
                   signer,
@@ -166,10 +134,6 @@ export const _useBridgeTransferFormik =
           }
       } 
       )
-
-      useEffect(() => {
-          setTempTargetChainKey(formik.values.targetChainKey)
-      }, [formik.values.targetChainKey])
 
       useEffect(() => {
           formik.setFieldValue(
