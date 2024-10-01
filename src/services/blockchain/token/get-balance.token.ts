@@ -5,7 +5,6 @@ import { erc20Abi } from "../abis"
 import { computeDenomination } from "@/utils"
 import { PublicKey } from "@solana/web3.js"
 import { Platform, chainKeyToPlatform } from "../common"
-import { AssetHolding } from "algosdk/dist/types/client/v2/algod/models/types"
 
 export interface GetBalanceParams {
   chainKey: string;
@@ -113,7 +112,7 @@ export const _getAlgorandBalance = async ({
         return computeDenomination(accountInfo.amount, decimals)
     }
 
-    const assets = accountInfo.assets as Array<AssetHolding>
+    const assets = accountInfo.assets
     const assetId = BigInt(tokenAddress)
     if (!assets) return 0
     const foundAsset = assets.find((asset) => asset.assetId === assetId)

@@ -120,7 +120,7 @@ export const _getAlgorandTokenMetadata = async ({
         }
     }
     network = network || Network.Testnet
-    const assetId = Number(tokenAddress)
+    const assetId = BigInt(tokenAddress)
     const account = await algorandClient(network).getAssetByID(assetId).do()
     return {
         name: account.params.name || "",
