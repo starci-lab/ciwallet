@@ -13,6 +13,7 @@ import { MnemonicModal } from "./MnemonicModal"
 import { PrivateKeyModal } from "./PrivateKeyModal"
 import { WarningModal } from "./WarningModal"
 import { BridgeWrapSelectTokenModal } from "./BridgeWrapSelectTokenModal"
+import { BridgeWrapModal } from "./BridgeWrapModal"
 
 export const Modals = () => {
     return (
@@ -31,6 +32,7 @@ export const Modals = () => {
             <PrivateKeyModal />
             <WarningModal />
             <BridgeWrapSelectTokenModal />
+            <BridgeWrapModal />
         </div>
     )
 }

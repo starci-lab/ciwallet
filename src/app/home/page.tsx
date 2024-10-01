@@ -77,6 +77,7 @@ const Page = () => {
                         hideSymbol
                         classNames={{
                             base: "p-0 bg-inhenrit",
+                            pre: "font-inherit",
                         }}
                         size="sm"
                         codeString={address}

@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface MiscellaneousState {
   warning: Warning
+  
 }
 
 export interface Warning {

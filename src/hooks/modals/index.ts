@@ -15,6 +15,7 @@ import { _usePrivateKeyModalDisclosure } from "./usePrivateKeyModalDiscloresure"
 import { _useMnemonicModalDisclosure } from "./useMnemonicModalDiscloresure"
 import { _useSelectNetworkModalDisclosure } from "./useSelectNetworkModalDiscloresure"
 import { _useBridgeSelectTokenModalDisclosure } from "./useBridgeSelectTokenModalDiscloresure"
+import { _useBridgeWrapModalDisclosure } from "./useBridgeWrapSelectChain"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
@@ -31,6 +32,7 @@ export interface UseModalReturn {
     mnemonicModalDisclosure: UseDisclosureReturn
     warningModalDiscloresure: UseDisclosureReturn
     bridgeWrapSelectTokenModalDisclosure: UseDisclosureReturn
+    bridgeWrapModalDisclosure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
@@ -48,6 +50,7 @@ export const _useModals = () : UseModalReturn => {
     const mnemonicModalDisclosure = _useMnemonicModalDisclosure()
     const warningModalDiscloresure = _useWarningModalDisclosure()
     const bridgeWrapSelectTokenModalDisclosure = _useBridgeWrapSelectTokenModalDisclosure()
+    const bridgeWrapModalDisclosure = _useBridgeWrapModalDisclosure()
 
     return {
         inviteModalDisclosure,
@@ -63,7 +66,8 @@ export const _useModals = () : UseModalReturn => {
         privateKeyModalDisclosure,
         mnemonicModalDisclosure,
         warningModalDiscloresure,
-        bridgeWrapSelectTokenModalDisclosure
+        bridgeWrapSelectTokenModalDisclosure,
+        bridgeWrapModalDisclosure
     }
 }
 
@@ -90,3 +94,4 @@ export * from "./useMnemonicModalDiscloresure"
 export * from "./useWarningModalDiscloresure"
 export * from "./useSelectNetworkModalDiscloresure"
 export * from "./useBridgeSelectTokenModalDiscloresure"
+export * from "./useBridgeWrapSelectChain"

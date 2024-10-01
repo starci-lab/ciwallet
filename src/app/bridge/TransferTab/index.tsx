@@ -18,7 +18,9 @@ import {
 } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
 import React from "react"
-import { createAccount } from "@/services"
+import {
+    createAccount,
+} from "@/services"
 import { truncateString } from "@/utils"
 
 export const TransferTab = () => {
@@ -30,8 +32,7 @@ export const TransferTab = () => {
     const { onOpen: onBridgeTransferResultModalDiscloresureOpen } =
     useBridgeTransferResultModalDiscloresure()
 
-    const { onOpen: onErrorModalDisclosureOpen } =
-    useErrorModalDisclosure()
+    const { onOpen: onErrorModalDisclosureOpen } = useErrorModalDisclosure()
 
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
@@ -59,7 +60,7 @@ export const TransferTab = () => {
     })
 
     const { data } = { ...balanceSwr }
-
+   
     return (
         <form
             className="h-full"
@@ -84,8 +85,8 @@ export const TransferTab = () => {
                                 </div>
                             </div>
                         </Button>
-                        <Spacer y={4} />
                     </div>
+                    <Spacer y={4} />
                     <Input
                         id="amount"
                         label="Amount"
@@ -108,7 +109,7 @@ export const TransferTab = () => {
                             <Image
                                 removeWrapper
                                 className="w-5 h-5"
-                                src={chains[formik.values.targetChainKey].imageUrl}
+                                src={chains[formik.values.targetChainKey]?.imageUrl}
                             />
                         }
                         label="Select Target Chain"
@@ -151,14 +152,13 @@ export const TransferTab = () => {
                     type="submit"
                     isLoading={formik.isSubmitting}
                     onPress={async () => {
-                        try{
+                        try {
                             await formik.submitForm()
                             onBridgeTransferResultModalDiscloresureOpen()
                         } catch (ex) {
                             console.error(ex)
                             onErrorModalDisclosureOpen()
                         }
-                        
                     }}
                 >
           Transfer
