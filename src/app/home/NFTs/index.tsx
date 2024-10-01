@@ -28,7 +28,7 @@ export const NFTs = () => {
                 const keys = Object.keys(nfts)
                 return (
                     <Card key={groupKey}>
-                        <CardBody className="px-3 py-2.5">
+                        <CardBody className="p-3">
                             <div className="flex gap-2 items-center">
                                 <Image
                                     removeWrapper
