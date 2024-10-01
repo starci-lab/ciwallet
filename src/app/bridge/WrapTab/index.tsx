@@ -56,28 +56,32 @@ export const WrapTab = () => {
         async () => {
             const wrappedTokens: Record<string, WrappedToken> = {}
             const promises: Array<Promise<void>> = []
-
             for (const chain of Object.values(chains)) {
                 const promise = async () => {
-                    const has = await hasWrappedAsset({
-                        network: parseNetwork(network),
-                        sourceChainName,
-                        foreignChainName: chain.chain,
-                        sourceTokenAddress: token.addresses[network],
-                    })
-                    if (has) {
-                        const tokenAddress = await getWrappedAsset({
+                    try {
+                        if (chain.chain === sourceChainName) return
+                        const has = await hasWrappedAsset({
                             network: parseNetwork(network),
                             sourceChainName,
                             foreignChainName: chain.chain,
                             sourceTokenAddress: token.addresses[network],
-                        })
-                        if (tokenAddress) {
-                            wrappedTokens[chain.chain] = {
-                                key: chain.key,
-                                tokenAddress: toWormholeNative(chain.chain, tokenAddress),
+                        })    
+                        if (has) {
+                            const tokenAddress = await getWrappedAsset({
+                                network: parseNetwork(network),
+                                sourceChainName,
+                                foreignChainName: chain.chain,
+                                sourceTokenAddress: token.addresses[network],
+                            })
+                            if (tokenAddress) {
+                                wrappedTokens[chain.chain] = {
+                                    key: chain.key,
+                                    tokenAddress: toWormholeNative(chain.chain, tokenAddress),
+                                }
                             }
                         }
+                    } catch (ex) {
+                        console.error(ex)
                     }
                 }
                 promises.push(promise())
@@ -105,7 +109,9 @@ export const WrapTab = () => {
 
     const { onOpen: onBridgeWrapModalOpen } = useBridgeWrapModalDisclosure()
 
-    const isOriginal = (!originalAssetSwr.data) || (originalAssetSwr.data?.chain === chains[preferenceChainKey].chain)
+    const isOriginal =
+    !originalAssetSwr.data ||
+    originalAssetSwr.data?.chain === chains[preferenceChainKey].chain
     return (
         <div className="w-full h-full flex flex-col justify-between">
             <div>
@@ -193,9 +199,9 @@ export const WrapTab = () => {
                         <div>
                             <div className="text-sm">This is a wrapped token.</div>
                             <Spacer y={1} />
-                            <div className="flex gap-2 items-center">  
+                            <div className="flex gap-2 items-center">
                                 <div className="text-sm">Original Chain:</div>
-                                <div className="flex gap-1 items-center">  
+                                <div className="flex gap-1 items-center">
                                     <Image
                                         removeWrapper
                                         className="w-5 h-5"
@@ -218,7 +224,11 @@ export const WrapTab = () => {
                     )}
                 </div>
             </div>
-            <Button color="primary" isDisabled={!isOriginal} onPress={onBridgeWrapModalOpen}>
+            <Button
+                color="primary"
+                isDisabled={!isOriginal}
+                onPress={onBridgeWrapModalOpen}
+            >
         Create Wrapped
             </Button>
         </div>
