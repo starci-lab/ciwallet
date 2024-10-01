@@ -12,6 +12,7 @@ import { RedeemTab } from "./RedeemTab"
 import { useRouter } from "next/navigation"
 import { ArrowLeftIcon } from "@heroicons/react/24/outline"
 import { Container } from "@/components"
+import { WrapTab } from "./WrapTab"
 
 const Page = () => {
     const bridgeTab = useAppSelector((state) => state.tabReducer.bridgeTab)
@@ -47,6 +48,9 @@ const Page = () => {
                     >
                         <Tab key={BridgeTab.Transfer} title="Transfer">
                             <TransferTab />
+                        </Tab>
+                        <Tab key={BridgeTab.Wrap} title="Wrap">
+                            <WrapTab />
                         </Tab>
                         <Tab key={BridgeTab.Redeem} title="Redeem">
                             <RedeemTab />

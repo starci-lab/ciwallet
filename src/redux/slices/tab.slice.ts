@@ -3,6 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 export enum BridgeTab {
     Transfer = "transfer",
     Redeem = "redeem",
+    Wrap = "wrap",
 }
 
 export enum AssetsTab {

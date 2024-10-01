@@ -21,18 +21,30 @@ export const useBalance = ({
         (state) => state.refreshReducer.refreshBalanceKey
     )
     const network = useAppSelector((state) => state.blockchainReducer.network)
-    const chains = useAppSelector(state => state.blockchainReducer.chains)
-    const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
+    const chains = useAppSelector((state) => state.blockchainReducer.chains)
+    const preferenceChainKey = useAppSelector(
+        (state) => state.blockchainReducer.preferenceChainKey
+    )
+    const activeAccountNumber = useAppSelector(
+        (state) =>
+            state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
+    )
+
     const balanceSwr = useSWR(
-        ["BALANCE_SWR", tokenKey, refreshBalanceKey, preferenceChainKey],
+        [
+            "BALANCE_SWR",
+            tokenKey,
+            refreshBalanceKey,
+            preferenceChainKey,
+            activeAccountNumber,
+        ],
         async () => {
-            const tokenService = new BlockchainTokenService(
-                {
-                    chainKey,
-                    tokenAddress: chains[preferenceChainKey].tokens[tokenKey].addresses[network],
-                    network
-                }
-            )
+            const tokenService = new BlockchainTokenService({
+                chainKey,
+                tokenAddress:
+          chains[preferenceChainKey].tokens[tokenKey].addresses[network],
+                network,
+            })
             return await tokenService.getBalance({ accountAddress })
         }
     )

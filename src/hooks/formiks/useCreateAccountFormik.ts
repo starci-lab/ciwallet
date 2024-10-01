@@ -30,9 +30,10 @@ export const _useCreateAccountFormik =
           initialValues,
           validationSchema,
           onSubmit: ({ accountNumber }) => {
-              if (preferenceChainKey === "algorand") {
+              //algorand
+              if (preferenceChainKey === "algorand") {                  
                   const mnemonic = getMnemonic(MnemonicWords._25_WORDS)
-                  dispatch(addAlgorandMnemonic(mnemonic))
+
                   let _accountNumber: number
                   if (!accountNumber) {
       
@@ -46,6 +47,7 @@ export const _useCreateAccountFormik =
                   } else {
                       _accountNumber = Number.parseInt(accountNumber)
                   }
+                  
                   dispatch(createAccount({
                       accountNumber: _accountNumber,
                       account: {
@@ -54,6 +56,7 @@ export const _useCreateAccountFormik =
                       },
                       chainKey: preferenceChainKey,
                   }))
+                  dispatch(addAlgorandMnemonic(mnemonic))
                   dispatch(triggerSaveAlgorandMnemonics())
                   dispatch(triggerSaveAccountNumbers())
                   return

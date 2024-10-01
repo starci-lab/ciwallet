@@ -69,21 +69,23 @@ export const TransferTab = () => {
             <div className="w-full h-full flex flex-col justify-between">
                 <div>
                     <div>
-                        <div className="text-sm">Select Token</div>
-                        <Spacer y={1.5} />
-                    </div>
-                    <Button className="px-3 bg-content2" onPress={onOpen} fullWidth>
-                        <div className="flex gap-2 items-center w-full">
-                            <div className="flex gap-2 items-center">
-                                <Image className="w-5 h-5" src={imageUrl} />
-                                <div className="flex gap-1 items-center">
-                                    <div>{name}</div>
-                                    <div className="text-foreground-400">{symbol}</div>
+                        <div>
+                            <div className="text-sm">Select Token</div>
+                            <Spacer y={1.5} />
+                        </div>
+                        <Button className="px-3 bg-content2" onPress={onOpen} fullWidth>
+                            <div className="flex gap-2 items-center w-full">
+                                <div className="flex gap-2 items-center">
+                                    <Image className="w-5 h-5" src={imageUrl} />
+                                    <div className="flex gap-1 items-center">
+                                        <div>{name}</div>
+                                        <div className="text-foreground-400">{symbol}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Button>
-                    <Spacer y={4} />
+                        </Button>
+                        <Spacer y={4} />
+                    </div>
                     <Input
                         id="amount"
                         label="Amount"

@@ -28,7 +28,7 @@ const Page = () => {
                         errorMessage={formik.touched.mnemonic && formik.errors.mnemonic}
                     />
                     <Spacer y={1.5} />
-                    <Link size="sm" as="button" onPress={() => router.push(constantConfig().path.create)}>
+                    <Link size="sm" as="button" onPress={() => router.push(constantConfig().path.mnemonic)}>
                         <div className="text-sm">Create</div>
                     </Link>
                     <Spacer y={6} />

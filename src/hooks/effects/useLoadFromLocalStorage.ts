@@ -47,6 +47,8 @@ export const useLoadFromLocalStorage = () => {
 
     useEffect(() => {
         const accountNumbers = loadAccountNumbers()
+        console.log(accountNumbers)
+        console.log("Loaded account numbers")
         if (accountNumbers !== null) {
             dispatch(setAccountNumbers(accountNumbers))
         }   
@@ -71,11 +73,11 @@ export const useLoadFromLocalStorage = () => {
         if (!password) return
         try{
             const mnemonic = loadMnemonic(password)
-            dispatch(setMnemonic(mnemonic))
+            const algorandMnemonics = loadAlgorandMnemonics(password)
 
-            //bonus algorand, not need to check
-            const mnemonics = loadAlgorandMnemonics(password)
-            dispatch(setAlgorandMnemonics(mnemonics))
+            dispatch(setMnemonic(mnemonic))
+            dispatch(setAlgorandMnemonics(algorandMnemonics))
+
             router.push(constantConfig().path.home)
         } catch (ex) {
             console.error(ex)

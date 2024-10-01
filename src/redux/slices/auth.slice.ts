@@ -151,9 +151,12 @@ export const authSlice = createSlice({
         setAccountNumbers: (
             state,
             {
-                payload: { aptos, solana, bsc, algorand },
+                payload: { aptos, solana, bsc, algorand, avalanche },
             }: PayloadAction<Partial<AccountNumbers>>
         ) => {
+            if (avalanche) {
+                state.accountNumbers.avalanche = avalanche
+            }
             if (aptos) {
                 state.accountNumbers.aptos = aptos
             }

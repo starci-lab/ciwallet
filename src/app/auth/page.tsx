@@ -18,7 +18,7 @@ const Page = () => {
                 <div className="grid gap-4 w-full">
                     <Button
                         variant="flat"
-                        onPress={() => router.push(constantConfig().path.create)}
+                        onPress={() => router.push(constantConfig().path.mnemonic)}
                     >
             Create
                     </Button>

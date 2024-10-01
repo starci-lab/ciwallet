@@ -2,7 +2,7 @@ import { UseDisclosureReturn } from "@nextui-org/use-disclosure"
 import { use } from "react"
 import { HooksContext } from "../provider.hooks"
 import { _useInviteModalDisclosure } from "./useInviteModalDiscloresure"
-import { _useBridgeSelectTokenModalDisclosure } from "./useBridgeSelectTokenModalDiscloresure"
+import { _useBridgeWrapSelectTokenModalDisclosure } from "./useBridgeWrapSelectTokenModalDiscloresure"
 import { _useWarningModalDisclosure } from "./useWarningModalDiscloresure"
 import { _useAccountsModalDisclosure } from "./useAccountsModalDiscloresure"
 import { _useCreateAccountModalDisclosure } from "./useCreateAccountModalDiscloresure"
@@ -14,6 +14,7 @@ import { _useErrorModalDisclosure } from "./useErrorModalDiscloresure"
 import { _usePrivateKeyModalDisclosure } from "./usePrivateKeyModalDiscloresure"
 import { _useMnemonicModalDisclosure } from "./useMnemonicModalDiscloresure"
 import { _useSelectNetworkModalDisclosure } from "./useSelectNetworkModalDiscloresure"
+import { _useBridgeSelectTokenModalDisclosure } from "./useBridgeSelectTokenModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
@@ -29,6 +30,7 @@ export interface UseModalReturn {
     privateKeyModalDisclosure: UseDisclosureReturn
     mnemonicModalDisclosure: UseDisclosureReturn
     warningModalDiscloresure: UseDisclosureReturn
+    bridgeWrapSelectTokenModalDisclosure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
@@ -45,6 +47,7 @@ export const _useModals = () : UseModalReturn => {
     const privateKeyModalDisclosure = _usePrivateKeyModalDisclosure()
     const mnemonicModalDisclosure = _useMnemonicModalDisclosure()
     const warningModalDiscloresure = _useWarningModalDisclosure()
+    const bridgeWrapSelectTokenModalDisclosure = _useBridgeWrapSelectTokenModalDisclosure()
 
     return {
         inviteModalDisclosure,
@@ -59,7 +62,8 @@ export const _useModals = () : UseModalReturn => {
         errorModalDisclosure,
         privateKeyModalDisclosure,
         mnemonicModalDisclosure,
-        warningModalDiscloresure
+        warningModalDiscloresure,
+        bridgeWrapSelectTokenModalDisclosure
     }
 }
 
@@ -72,10 +76,10 @@ export const useModals = () : UseModalReturn => {
 
 export * from "./useInviteModalDiscloresure"
 export * from "./useAccountsModalDiscloresure"
-export * from "./useBridgeSelectTokenModalDiscloresure"
+export * from "./useBridgeWrapSelectTokenModalDiscloresure"
 export * from "./useWarningModalDiscloresure"
 export * from "./useCreateAccountModalDiscloresure"
-export * from "./useBridgeSelectTokenModalDiscloresure"
+export * from "./useBridgeWrapSelectTokenModalDiscloresure"
 export * from "./useBridgeSelectRecipientModalDiscloresure"
 export * from "./useBridgeTransferResultModalDiscloresure"
 export * from "./useBridgeRedeemResultModalDiscloresure"
@@ -85,3 +89,4 @@ export * from "./usePrivateKeyModalDiscloresure"
 export * from "./useMnemonicModalDiscloresure"
 export * from "./useWarningModalDiscloresure"
 export * from "./useSelectNetworkModalDiscloresure"
+export * from "./useBridgeSelectTokenModalDiscloresure"

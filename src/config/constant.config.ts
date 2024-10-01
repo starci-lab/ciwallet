@@ -1,7 +1,7 @@
 export const constantConfig = () => ({
     path: {
         auth: "/auth",
-        create: "/create",
+        mnemonic: "/mnemonic",
         preference: "/preference",
         createPassword: "/create-password",
         home: "/home",

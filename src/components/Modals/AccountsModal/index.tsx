@@ -37,7 +37,10 @@ export const AccountsModal = () => {
     const accounts = useAppSelector(
         (state) => state.authReducer.accountNumbers[preferenceChainKey].accounts
     )
-
+    const accountNumbers = useAppSelector(
+        (state) => state.authReducer.accountNumbers
+    )
+    console.log(accountNumbers)
     const entries = Object.entries(accounts)
 
     const formik = useCreateAccountFormik()
