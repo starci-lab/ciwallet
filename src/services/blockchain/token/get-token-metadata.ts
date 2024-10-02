@@ -130,8 +130,6 @@ export const _getAlgorandTokenMetadata = async ({
 }
 
 export const _getTokenMetadata = async (params: GetTokenMetadataParams) => {
-    params.network = params.network || Network.Testnet
-    
     const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
     case Platform.Evm:

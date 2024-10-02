@@ -14,6 +14,9 @@ import { PrivateKeyModal } from "./PrivateKeyModal"
 import { WarningModal } from "./WarningModal"
 import { BridgeWrapSelectTokenModal } from "./BridgeWrapSelectTokenModal"
 import { BridgeWrapModal } from "./BridgeWrapModal"
+import { TransferSelectTokenModal } from "./TransferSelectTokenModal"
+import { ConfirmModal } from "./ConfirmModal"
+import { TransactionModal } from "./TransactionModal"
 
 export const Modals = () => {
     return (
@@ -33,6 +36,9 @@ export const Modals = () => {
             <WarningModal />
             <BridgeWrapSelectTokenModal />
             <BridgeWrapModal />
+            <TransferSelectTokenModal />
+            <ConfirmModal />
+            <TransactionModal />
         </div>
     )
 }

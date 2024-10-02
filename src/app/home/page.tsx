@@ -128,7 +128,7 @@ const Page = () => {
                 <div className="flex gap-2">
                     <Tooltip content="Transfer">
                         <Button
-                            onPress={() => router.push(constantConfig().path.bridge)}
+                            onPress={() => router.push(constantConfig().path.transfer)}
                             variant="flat"
                             isIconOnly
                         >

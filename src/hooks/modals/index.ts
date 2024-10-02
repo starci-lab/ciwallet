@@ -3,7 +3,7 @@ import { use } from "react"
 import { HooksContext } from "../provider.hooks"
 import { _useInviteModalDisclosure } from "./useInviteModalDiscloresure"
 import { _useBridgeWrapSelectTokenModalDisclosure } from "./useBridgeWrapSelectTokenModalDiscloresure"
-import { _useWarningModalDisclosure } from "./useWarningModalDiscloresure"
+import { _useConfirmModalDisclosure } from "./useConfirmModalDiscloresure"
 import { _useAccountsModalDisclosure } from "./useAccountsModalDiscloresure"
 import { _useCreateAccountModalDisclosure } from "./useCreateAccountModalDiscloresure"
 import { _useBridgeSelectRecipientModalDisclosure } from "./useBridgeSelectRecipientModalDiscloresure"
@@ -16,6 +16,8 @@ import { _useMnemonicModalDisclosure } from "./useMnemonicModalDiscloresure"
 import { _useSelectNetworkModalDisclosure } from "./useSelectNetworkModalDiscloresure"
 import { _useBridgeSelectTokenModalDisclosure } from "./useBridgeSelectTokenModalDiscloresure"
 import { _useBridgeWrapModalDisclosure } from "./useBridgeWrapSelectChain"
+import { _useTransferSelectTokenModalDisclosure } from "./useTransferSelectTokenDiscloresure"
+import { _useWarningModalDisclosure } from "./useWarningModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
@@ -33,6 +35,9 @@ export interface UseModalReturn {
     warningModalDiscloresure: UseDisclosureReturn
     bridgeWrapSelectTokenModalDisclosure: UseDisclosureReturn
     bridgeWrapModalDisclosure: UseDisclosureReturn
+    transferSelectTokenModalDiscloresure: UseDisclosureReturn
+    confirmModalDiscloresure: UseDisclosureReturn
+    transactionModalDiscloresure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
@@ -51,6 +56,9 @@ export const _useModals = () : UseModalReturn => {
     const warningModalDiscloresure = _useWarningModalDisclosure()
     const bridgeWrapSelectTokenModalDisclosure = _useBridgeWrapSelectTokenModalDisclosure()
     const bridgeWrapModalDisclosure = _useBridgeWrapModalDisclosure()
+    const transferSelectTokenModalDiscloresure = _useTransferSelectTokenModalDisclosure()
+    const confirmModalDiscloresure = _useConfirmModalDisclosure()
+    const transactionModalDiscloresure = _useConfirmModalDisclosure()
 
     return {
         inviteModalDisclosure,
@@ -67,7 +75,10 @@ export const _useModals = () : UseModalReturn => {
         mnemonicModalDisclosure,
         warningModalDiscloresure,
         bridgeWrapSelectTokenModalDisclosure,
-        bridgeWrapModalDisclosure
+        bridgeWrapModalDisclosure,
+        transferSelectTokenModalDiscloresure,
+        confirmModalDiscloresure,
+        transactionModalDiscloresure
     }
 }
 
@@ -81,7 +92,7 @@ export const useModals = () : UseModalReturn => {
 export * from "./useInviteModalDiscloresure"
 export * from "./useAccountsModalDiscloresure"
 export * from "./useBridgeWrapSelectTokenModalDiscloresure"
-export * from "./useWarningModalDiscloresure"
+export * from "./useConfirmModalDiscloresure"
 export * from "./useCreateAccountModalDiscloresure"
 export * from "./useBridgeWrapSelectTokenModalDiscloresure"
 export * from "./useBridgeSelectRecipientModalDiscloresure"
@@ -91,7 +102,10 @@ export * from "./useBridgeSelectVaaModalDiscloresure"
 export * from "./useErrorModalDiscloresure"
 export * from "./usePrivateKeyModalDiscloresure"
 export * from "./useMnemonicModalDiscloresure"
-export * from "./useWarningModalDiscloresure"
+export * from "./useConfirmModalDiscloresure"
 export * from "./useSelectNetworkModalDiscloresure"
 export * from "./useBridgeSelectTokenModalDiscloresure"
 export * from "./useBridgeWrapSelectChain"
+export * from "./useTransferSelectTokenDiscloresure"
+export * from "./useWarningModalDiscloresure"
+export * from "./useTransactionModalDiscloresure"
