@@ -6,6 +6,7 @@ import {
 } from "@/config"
 import { useAppSelector } from "@/redux"
 import { BlockchainTokenService } from "@/services"
+import { triggerTransactionToast } from "@/toasts"
 
 export interface TransferFormikValues {
   recipientAddress: string;
@@ -39,7 +40,7 @@ export const _useTransferFormik =
               recipientAddress,
               amount,
               tokenKey,
-          }) => {
+          }) => {       
               const tokenAddress = tokens[tokenKey].addresses[network]
               const tokenService = new BlockchainTokenService({
                   tokenAddress,
@@ -52,10 +53,13 @@ export const _useTransferFormik =
                   recipientAddress,
                   fromAddress: credentials.address,
               })
-              console.log(txHash)
-          }
-      } 
-      )
+              triggerTransactionToast({
+                  chainKey: preferenceChainKey,
+                  network,
+                  txHash
+              })
+          } 
+      })
 
       return formik
   }

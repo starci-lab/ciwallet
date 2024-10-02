@@ -20,7 +20,7 @@ export const TransactionModal = () => {
     return (
         <Modal hideCloseButton isOpen={isOpen}>
             <ModalContent>
-                <ModalHeader className="p-4 pb-2 font-bold">Transaction</ModalHeader>
+                <ModalHeader className="p-4 pb-2 font-bold">Transaction Result</ModalHeader>
                 <ModalBody className="p-4">
                     <Card>
                         <CardBody className="p-0">

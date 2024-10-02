@@ -11,10 +11,16 @@ export interface Warning {
     processFn: (() => void) | (() => Promise<void>)
 }
 
+export enum Type {
+    Transfer = "Transfer",
+    Approve = "Approve",
+}
+
 export interface Confirm {
     confirmMessage: ReactNode,
     processFn: (() => void) | (() => Promise<void>)
     id: string,
+    type?: Type,
 }
 
 const initialState: MiscellaneousState = {
@@ -30,6 +36,7 @@ const initialState: MiscellaneousState = {
             console.log("Confirm process function not set")
         },
         id: "",
+        type: Type.Transfer,
     }
 }
 

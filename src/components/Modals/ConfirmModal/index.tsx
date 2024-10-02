@@ -6,26 +6,37 @@ import {
     ModalBody,
     ModalFooter,
     Button,
+    Spacer,
+    Chip,
 } from "@nextui-org/react"
 import React from "react"
-import { useConfirmModalDisclosure } from "@/hooks"
-import { useAppSelector } from "@/redux"
+import { useConfirmModalDisclosure, useErrorModalDisclosure } from "@/hooks"
+import { Type, useAppSelector } from "@/redux"
 import useSWRMutation from "swr/mutation"
 
 export const ConfirmModal = () => {
     const { isOpen, onClose } = useConfirmModalDisclosure()
-    const { processFn, confirmMessage, id } = useAppSelector(
-        (state) => state.miscellaneousReducer.confirm
+    const confirm = useAppSelector((state) => state.miscellaneousReducer.confirm)
+    const _type = confirm.type || Type.Transfer
+    const { trigger, isMutating } = useSWRMutation(
+        ["PROCESS", confirm.id],
+        confirm.processFn
     )
-
-    const { trigger, isMutating } = useSWRMutation(["PROCESS", id ], processFn)
+    const { onOpen: onErrorModalDisclosureOpen } = useErrorModalDisclosure()
 
     return (
         <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>
                 <ModalHeader className="p-4 pb-2 font-bold">Confirm</ModalHeader>
                 <ModalBody className="p-4">
-                    <div className="text-sm">{confirmMessage}</div>
+                    <div>
+                        <div className="flex gap-2 items-center h-5">
+                            <div className="text-sm">Type:</div>
+                            <Chip variant="flat">{_type}</Chip>
+                        </div>
+                        <Spacer y={4} />
+                        <div className="text-sm">{confirm.confirmMessage}</div>
+                    </div>
                 </ModalBody>
                 <ModalFooter className="p-4 pt-2">
                     <Button color="primary" variant="bordered" onPress={onClose}>
@@ -35,8 +46,14 @@ export const ConfirmModal = () => {
                         color="primary"
                         isLoading={isMutating}
                         onPress={async () => {
-                            await trigger()
-                            onClose()
+                            try {
+                                await trigger()
+                            } catch (ex) {
+                                console.error(ex)
+                                onErrorModalDisclosureOpen()
+                            } finally {
+                                onClose()
+                            }
                         }}
                     >
             Process
