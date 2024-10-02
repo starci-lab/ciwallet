@@ -24,8 +24,8 @@ export const BridgeSelectVaaModal = () => {
         (state) => state.vaaReducer.selectedKey
     )
 
-    const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas.filter(({ isUsed }) => !isUsed))
-    const reversedVaas = [...storedVaas].reverse()
+    const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas).filter(({ isUsed }) => !isUsed)
+    const reversedVaas = storedVaas.reverse()
     
     return (
         <Modal isOpen={isOpen} hideCloseButton>
