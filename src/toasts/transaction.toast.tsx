@@ -24,6 +24,7 @@ export const triggerTransactionToast = ({
             <div className="flex gap-2 items-center">
                 <div>Tx Hash:</div>
                 <Link
+                    isExternal
                     href={explorerUrl({ chainKey, network, value: txHash, type: "tx" })}
                 >
                     {truncateString(txHash)}
