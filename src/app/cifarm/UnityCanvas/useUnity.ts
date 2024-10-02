@@ -9,6 +9,7 @@ export interface UseUnityReturn {
 }
 
 export const _useUnity = (): UseUnityReturn => {
+    
     const handleCacheControl = (url: string) => {
         if (url.match(/\.data/) || url.match(/\.bundle/)) {
             return "must-revalidate"
