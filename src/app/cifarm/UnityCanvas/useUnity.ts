@@ -3,14 +3,15 @@ import { useUnityContext } from "react-unity-webgl"
 import { UnityContextHook } from "react-unity-webgl/distribution/types/unity-context-hook"
 import { HooksContext } from "./provider.hooks"
 import { envConfig } from "@/config"
+import { UnityCacheControlMode } from "react-unity-webgl/distribution/types/unity-cache-control-mode"
 
 export interface UseUnityReturn {
   unity: UnityContextHook;
 }
 
 export const _useUnity = (): UseUnityReturn => {
-    
-    const handleCacheControl = (url: string) => {
+
+    const handleCacheControl = (url: string): UnityCacheControlMode => {
         if (url.match(/\.data/) || url.match(/\.bundle/)) {
             return "must-revalidate"
         }
