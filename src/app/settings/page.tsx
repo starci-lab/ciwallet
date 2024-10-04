@@ -2,13 +2,13 @@
 import { Container } from "@/components"
 import { useMnemonicModalDisclosure, usePrivateKeyModalDisclosure, useWarningModalDisclosure } from "@/hooks"
 import { KeyIcon } from "@heroicons/react/24/outline"
-import { Spacer, Link, Card, CardBody, CardHeader, Button } from "@nextui-org/react"
+import { Spacer, Link, Card, CardBody, CardHeader, Button, Snippet } from "@nextui-org/react"
 import { ArrowLeftIcon, SproutIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import React from "react"
 import { DarkModeSwitch } from "./DarkModeSwitch"
 import { constantConfig } from "@/config"
-import { setWarning, useAppDispatch } from "@/redux"
+import { setWarning, useAppDispatch, useAppSelector } from "@/redux"
 import { clearStorage } from "@/services"
 
 const Page = () => {
@@ -17,9 +17,11 @@ const Page = () => {
     const { onOpen: onPrivateKeyModalOpen }  = usePrivateKeyModalDisclosure()
     const { onOpen: onWarningModalOpen }  = useWarningModalDisclosure()
     const dispatch = useAppDispatch()
+    const telegramInfo = useAppSelector((state) => state.authReducer.telegramInfo)
+
     return (
         <Container hasPadding>
-            <div className="flex flex-col gap-6 h-full w-full justify-between">
+            <div className="flex flex-col h-full w-full justify-between">
                 <div>
                     <div className="flex gap-2 items-center">
                         <Link as="button" onPress={() => router.back()} color="foreground">
@@ -31,7 +33,46 @@ const Page = () => {
                     <div className="text-xs text-foreground-400">
             Settings
                     </div>
-                    <Spacer y={12} />
+                </div>
+                <Spacer y={6} />
+                <div>
+                    <Card>
+                        <CardHeader>
+                            <div>
+                                <div className="text-large font-bold">Telegram</div>
+                                <div className="text-xs text-foreground-400">Manage your telegram account</div>
+                            </div> 
+                        </CardHeader>
+                        <CardBody>
+                            <div className="flex gap-2 items-center">
+                                <div className="text-sm w-[100px]">Telegram ID: </div>
+                                <Snippet
+                                    hideSymbol
+                                    classNames={{
+                                        base: "p-0 bg-inhenrit",
+                                        pre: "font-inherit",
+                                    }}
+                                    codeString={telegramInfo.id?.toString()}
+                                >
+                                    {telegramInfo.id?.toString()}
+                                </Snippet>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <div className="text-sm  w-[100px]">Username: </div>
+                                <Snippet
+                                    hideSymbol
+                                    classNames={{
+                                        base: "p-0 bg-inhenrit",
+                                        pre: "font-inherit",
+                                    }}
+                                    codeString={telegramInfo.username?.toString()}
+                                >
+                                    {telegramInfo.username?.toString()}
+                                </Snippet>
+                            </div>
+                        </CardBody>
+                    </Card>
+                    <Spacer y={4} />
                     <Card>
                         <CardHeader>
                             <div>
@@ -54,7 +95,7 @@ const Page = () => {
                             </Button>
                         </CardBody>
                     </Card>
-                    <Spacer y={6} />
+                    <Spacer y={4} />
                     <Card>
                         <CardHeader>
                             <div>
@@ -70,6 +111,7 @@ const Page = () => {
                         </CardBody>
                     </Card>
                 </div>
+                <Spacer y={6} />
                 <div className="grid gap-2">
                     <Button color="danger" onPress={() => router.push(constantConfig().path.password)} variant="bordered"> Lock </Button>
                     <Button color="danger" onPress={() => {
@@ -83,7 +125,6 @@ const Page = () => {
                         onWarningModalOpen()
                     }}> Sign Out</Button>
                 </div>
-                
             </div>
         </Container>
     )

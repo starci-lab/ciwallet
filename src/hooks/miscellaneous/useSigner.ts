@@ -9,7 +9,6 @@ export const useSigner = <N extends Network, C extends Chain>(
     const credential = useAppSelector(
         (state) => state.authReducer.credentials[chainKey]
     )
-    console.log(credential)
     if (!credential) return
     if (
         credential.privateKey === "" ||

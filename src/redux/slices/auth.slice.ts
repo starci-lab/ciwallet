@@ -16,6 +16,7 @@ export type AccountNumbers = Record<string, ChainAccountNumber>;
 export interface AuthState {
   mnemonic: string;
   algorandMnemonics: Array<string>;
+  telegramInfo: TelegramInfo;
   accountNumbers: AccountNumbers;
   saveAlgorandMnemonicsKey: number;
   saveAccountNumbersKey: number;
@@ -50,11 +51,19 @@ export interface SetCredentialParams {
 
 export type ChainCredentials = Record<string, ChainCredential>;
 
+export interface TelegramInfo {
+    id: number
+    username: string
+}
 const initialState: AuthState = {
     mnemonic: "",
+    algorandMnemonics: [],
+    telegramInfo: {
+        id: 0,
+        username: "",
+    },
     saveAccountNumbersKey: 0,
     saveAlgorandMnemonicsKey: 0,
-    algorandMnemonics: [],
     accountNumbers: {
         aptos: {
             activeAccountNumber: 0,
@@ -144,6 +153,9 @@ export const authSlice = createSlice({
         },
         setAlgorandMnemonics: (state, { payload }: PayloadAction<Array<string>>) => {
             state.algorandMnemonics = payload
+        },
+        setTelegramInfo: (state, { payload }: PayloadAction<TelegramInfo>) => {
+            state.telegramInfo = payload
         },
         addAlgorandMnemonic: (state, { payload }: PayloadAction<string>) => {
             state.algorandMnemonics.push(payload)
@@ -238,6 +250,7 @@ export const {
     triggerSaveAlgorandMnemonics,
     setActiveAccountNumber,
     loadAccountNumbers,
+    setTelegramInfo,
     setInitialized,
     triggerSaveAccountNumbers,
     setCredential,
