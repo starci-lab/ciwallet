@@ -280,6 +280,67 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
             },
+            sui: {
+                key: "sui",
+                imageUrl: "/icons/sui.svg",
+                wormholeChainId: 22,
+                chain: "Sui",
+                name: "Sui",
+                tokens: {
+                    native: {
+                        key: "native",
+                        addresses: {
+                            [Network.Mainnet]: "native",
+                            [Network.Testnet]: "native",
+                        },
+                        imageUrl: "/icons/sui.svg",
+                        name: "Sui",
+                        symbol: "SUI",
+                        decimals: 8,
+                    },
+                    $CARROT: {
+                        key: "$CARROT",
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "",
+                        },
+                        name: "$CARROT Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CARROT.png",
+                        symbol: "$CARROT"
+                    },
+                    $CAULI: {
+                        key: "$CAULI",
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
+                        },
+                        name: "$CAULI Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CAULI.png",
+                        symbol: "$CAULI"
+                    }
+                },
+                nftGroups: {
+                    cifarm: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        key: "cifarm",
+                        nfts: {
+                            premiumTile: {
+                                key: "premiumTile",
+                                addresses: {
+                                    [Network.Mainnet]: "",
+                                    [Network.Testnet]: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
+                                },
+                                imageUrl: "/icons/premium-tile.png",
+                                name: "CiFarm Premium Tile",
+                                symbol: "CPT",
+                            },
+                        },
+                    },
+                },
+            },
         },
     }
 }

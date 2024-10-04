@@ -108,6 +108,15 @@ const initialState: AuthState = {
                 },
             },
         },
+        sui: {
+            activeAccountNumber: 0,
+            accounts: {
+                0: {
+                    imageUrl: "",
+                    name: "Account 0",
+                },
+            },
+        },
     },
     credentials: {
         aptos: {
@@ -135,6 +144,11 @@ const initialState: AuthState = {
             privateKey: "",
             publicKey: "",
         },
+        sui: {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        },
     },
     loaded: false,
     password: "",
@@ -155,7 +169,7 @@ export const authSlice = createSlice({
         setAccountNumbers: (
             state,
             {
-                payload: { aptos, solana, bsc, algorand, avalanche },
+                payload: { aptos, solana, bsc, algorand, avalanche, sui },
             }: PayloadAction<Partial<AccountNumbers>>
         ) => {
             if (avalanche) {
@@ -172,6 +186,9 @@ export const authSlice = createSlice({
             }
             if (algorand) {
                 state.accountNumbers.algorand = algorand
+            }
+            if (sui) {
+                state.accountNumbers.sui = sui
             }
         },
         triggerSaveAccountNumbers: (state) => {

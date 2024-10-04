@@ -5,7 +5,8 @@ export enum Platform {
   Evm = "evm",
   Aptos = "aptops",
   Solana = "solana",
-  Algorand = "algorand"
+  Algorand = "algorand",
+  Sui = "sui"
 }
 
 export const chainKeyToPlatform = (chainKey: string): Platform => {
@@ -20,6 +21,8 @@ export const chainKeyToPlatform = (chainKey: string): Platform => {
         return Platform.Aptos
     case "algorand":
         return Platform.Algorand
+    case "sui":
+        return Platform.Sui
     default:
         throw new Error(`Chain not supported: ${chainKey}`)
     }
@@ -60,6 +63,7 @@ export const chainKeyToChain = (chainKey: string) : Chain => {
     case "avalanche": return "Avalanche"
     case "bsc": return "Bsc"
     case "algorand": return "Algorand"
+    case "sui": return "Sui"
     default: throw new Error(`Chain not found : ${chainKey}`)
     }
 }
@@ -70,6 +74,7 @@ export const chainToChainKey = (chainKey: Chain) : string => {
     case "Solana": return "solana"
     case "Avalanche": return "avalanche"
     case "Bsc": return "bsc"
+    case "Sui": return "sui"
     default: throw new Error(`Chain not found : ${chainKey}`)
     }
 }

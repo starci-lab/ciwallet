@@ -3,6 +3,8 @@ import { aptosExplorerUrl } from "./aptos.explorer"
 import { bscExplorerUrl } from "./bsc.explorer"
 import { solanaExplorerUrl } from "./solana.explorer"
 import { ExplorerUrlParams } from "./types.explorer"
+import { suiExplorerUrl } from "./sui.explorer"
+import { algorandExplorerUrl } from "./algorand.explorer"
 
 export const explorerUrl = (params: ExplorerUrlParams) => {
     switch (params.chainKey) {
@@ -14,8 +16,10 @@ export const explorerUrl = (params: ExplorerUrlParams) => {
         return bscExplorerUrl(params)[params.type]
     case "solana":
         return solanaExplorerUrl(params)[params.type]
+    case "sui":
+        return suiExplorerUrl(params)[params.type]
     case "algorand":
-        return solanaExplorerUrl(params)[params.type]
+        return algorandExplorerUrl(params)[params.type]
     default:
         throw new Error(`Chain not supported: ${params.chainKey}`)
     }

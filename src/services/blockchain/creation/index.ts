@@ -3,6 +3,7 @@ import { createAlgorandAccount } from "./algorand.creation"
 import { createAptosAccount } from "./aptos.creation"
 import { createEvmAccount } from "./evm.creation"
 import { createSolanaAccount } from "./solana.creation"
+import { createSuiAccount } from "./sui.creation"
 import { CreateAccountParams } from "./types.creation"
 
 export const createAccount = ({
@@ -36,6 +37,11 @@ export const createAccount = ({
         })
     case Platform.Algorand:
         return createAlgorandAccount({
+            accountNumber,
+            mnemonic,
+        })
+    case Platform.Sui:
+        return createSuiAccount({
             accountNumber,
             mnemonic,
         })

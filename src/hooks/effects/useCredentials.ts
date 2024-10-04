@@ -15,6 +15,7 @@ export const useCredentials = () => {
     const bscChainKey = "bsc"
     const avalanacheChainKey = "avalanche"
     const algorandChainKey = "algorand"
+    const suiChainKey = "sui"
 
     useEffect(() => {
         if (!mnemonic) return
@@ -69,7 +70,6 @@ export const useCredentials = () => {
             mnemonic,
             accountNumber: accountNumbers[bscChainKey].activeAccountNumber,
         })
-        console.log(account)
         dispatch(
             setCredential({
                 account,
@@ -85,7 +85,6 @@ export const useCredentials = () => {
             mnemonic: mnemonic,
             accountNumber: accountNumbers[algorandChainKey].activeAccountNumber,
         })
-        console.log(account)
         dispatch(
             setCredential({
                 account,
@@ -93,4 +92,19 @@ export const useCredentials = () => {
             })
         )
     }, [mnemonic, accountNumbers[algorandChainKey]])
+
+    useEffect(() => {
+        if (!mnemonic) return
+        const account = createAccount({
+            chainKey: suiChainKey,
+            mnemonic: mnemonic,
+            accountNumber: accountNumbers[suiChainKey].activeAccountNumber,
+        })
+        dispatch(
+            setCredential({
+                account,
+                chainKey: suiChainKey,
+            })
+        )
+    }, [mnemonic, accountNumbers[suiChainKey]])
 }
