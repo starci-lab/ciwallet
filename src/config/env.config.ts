@@ -1,4 +1,5 @@
 export const envConfig = () => ({
+    isDev: process.env.NODE_ENV !== "production",
     externals: {
         cifarm: {
             core: {
