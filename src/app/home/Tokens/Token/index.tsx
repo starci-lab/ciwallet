@@ -13,9 +13,6 @@ export interface TokenProps {
 
 export const Token = ({ token }: TokenProps) => {
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-    const algorandMnemonics = useAppSelector(
-        (state) => state.authReducer.algorandMnemonics
-    )
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
@@ -25,16 +22,10 @@ export const Token = ({ token }: TokenProps) => {
     )
     const network = useAppSelector((state) => state.blockchainReducer.network)
 
-    //if-else, case algorand
-    const _mnemonic =
-    preferenceChainKey !== "algorand"
-        ? mnemonic
-        : algorandMnemonics[activeAccountNumber]
-
     const account = createAccount({
         accountNumber: activeAccountNumber,
         chainKey: preferenceChainKey,
-        mnemonic: _mnemonic,
+        mnemonic,
     })
 
     const { balanceSwr } = useBalance({

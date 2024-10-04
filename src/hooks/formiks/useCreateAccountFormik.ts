@@ -1,8 +1,7 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
 import { useFormiks } from "."
-import { addAlgorandMnemonic, createAccount, triggerSaveAccountNumbers, triggerSaveAlgorandMnemonics, useAppDispatch, useAppSelector } from "@/redux"
-import { getMnemonic, MnemonicWords } from "@/services"
+import { createAccount, triggerSaveAccountNumbers, useAppDispatch, useAppSelector } from "@/redux"
 
 export interface CreateAccountFormikValues {
   accountNumber: string;
@@ -32,8 +31,6 @@ export const _useCreateAccountFormik =
           onSubmit: ({ accountNumber }) => {
               //algorand
               if (preferenceChainKey === "algorand") {                  
-                  const mnemonic = getMnemonic(MnemonicWords._25_WORDS)
-
                   let _accountNumber: number
                   if (!accountNumber) {
       
@@ -56,8 +53,6 @@ export const _useCreateAccountFormik =
                       },
                       chainKey: preferenceChainKey,
                   }))
-                  dispatch(addAlgorandMnemonic(mnemonic))
-                  dispatch(triggerSaveAlgorandMnemonics())
                   dispatch(triggerSaveAccountNumbers())
                   return
               }

@@ -15,14 +15,11 @@ interface AccountUserProps {
 export const AccountUser = ({account: { imageUrl, name }, activeAccountNumber, accountNumber}: AccountUserProps) => {
     const mnemonic = useAppSelector(state => state.authReducer.mnemonic)
     const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
-    const algorandMnemonic = useAppSelector(state => state.authReducer.algorandMnemonics[accountNumber])
-    const _mnemonic = preferenceChainKey === "algorand" ? algorandMnemonic : mnemonic
-    console.log(accountNumber, _mnemonic)
     const dispatch = useAppDispatch()
 
     const { address } = createAccount({
         accountNumber,
-        mnemonic: _mnemonic,
+        mnemonic,
         chainKey: preferenceChainKey
     })
 

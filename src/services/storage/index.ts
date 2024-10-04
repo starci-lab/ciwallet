@@ -1,11 +1,8 @@
 import { ChainInfo, defaultChainKey } from "@/config"
 import {
-    EncryptAlgorandMnemonicsParams,
     EncryptMnemonicParams,
     EncryptedResult,
-    decryptAlgorandMnemonics,
     decryptMnemonic,
-    encryptAlgorandMnemonics,
     encryptMnemonic,
 } from "../cryptography"
 import { AccountNumbers, StoredVaa } from "@/redux"
@@ -13,7 +10,6 @@ import { deserialize, serialize } from "./serialization.storage"
 
 const ACCOUNT_NUMBERS = "ciwallet-account-numbers"
 const ENCRYPTED_MNEMONIC = "ciwallet-encrypted-mnemonic"
-const ALGORAND_ENCRYPTED_MNEMONICS = "ciwallet-algorand-encrypted-mnemonics"
 const PREFERENCE_CHAIN = "ciwallet-preference-chain"
 const VAAS = "ciwallet-vaas"
 const CHAINS = "ciwallet-chains"
@@ -38,17 +34,6 @@ export const saveEncryptedMnemonic = ({
     localStorage.setItem(ENCRYPTED_MNEMONIC, serialize(result))
 }
 
-export const saveEncryptedAlgorandMnemonics = ({
-    algorandMnemonics,
-    password,
-}: EncryptAlgorandMnemonicsParams) => {
-    const result = encryptAlgorandMnemonics({
-        algorandMnemonics,
-        password,
-    })
-    localStorage.setItem(ALGORAND_ENCRYPTED_MNEMONICS, serialize(result))
-}
-
 export const clearStorage = () => {
     localStorage.removeItem(VAAS)
     localStorage.removeItem(PREFERENCE_CHAIN)
@@ -62,16 +47,6 @@ export const loadMnemonic = (password: string) => {
     if (!found) return ""
     const encryptedResult = deserialize(found) as EncryptedResult
     return decryptMnemonic({
-        password,
-        encryptedResult,
-    })
-}
-
-export const loadAlgorandMnemonics = (password: string) => {
-    const found = localStorage.getItem(ALGORAND_ENCRYPTED_MNEMONICS)
-    if (!found) return []
-    const encryptedResult = deserialize(found) as EncryptedResult
-    return decryptAlgorandMnemonics({
         password,
         encryptedResult,
     })

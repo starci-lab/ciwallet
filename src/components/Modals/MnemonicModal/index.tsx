@@ -17,7 +17,6 @@ import { downloadTextFile } from "@/services"
 export const MnemonicModal = () => {
     const { isOpen, onClose } = useMnemonicModalDisclosure()
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-    const algorandMnemonics = useAppSelector((state) => state.authReducer.algorandMnemonics)
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
@@ -28,8 +27,6 @@ export const MnemonicModal = () => {
     const chain = useAppSelector(
         (state) => state.blockchainReducer.chains[preferenceChainKey]
     )
-
-    const _mnemonic = preferenceChainKey === "algorand" ? algorandMnemonics[activeAccountNumber] : mnemonic
 
     return (
         <Modal isOpen={isOpen} hideCloseButton>
@@ -43,10 +40,10 @@ export const MnemonicModal = () => {
                                 classNames={{
                                     pre: "text-justify !whitespace-pre-line !line-clamp-5",
                                 }}
-                                codeString={_mnemonic}
+                                codeString={mnemonic}
                                 fullWidth
                             >
-                                {_mnemonic}
+                                {mnemonic}
                             </Snippet>  
                             { preferenceChainKey === "algorand" && (
                                 <>

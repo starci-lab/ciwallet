@@ -9,7 +9,6 @@ import { constantConfig } from "@/config"
 
 const Page = () => {
     const formik = usePasswordFormik()
-
     const [isVisible, setIsVisible] = useState(false)
     const router = useRouter()
     return (

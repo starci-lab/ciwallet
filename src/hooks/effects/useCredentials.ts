@@ -4,9 +4,7 @@ import { useEffect } from "react"
 
 export const useCredentials = () => {
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-    const algorandMnemonics = useAppSelector(
-        (state) => state.authReducer.algorandMnemonics
-    )
+    console.log(mnemonic)
     const accountNumbers = useAppSelector(
         (state) => state.authReducer.accountNumbers
     )
@@ -71,6 +69,7 @@ export const useCredentials = () => {
             mnemonic,
             accountNumber: accountNumbers[bscChainKey].activeAccountNumber,
         })
+        console.log(account)
         dispatch(
             setCredential({
                 account,
@@ -80,18 +79,18 @@ export const useCredentials = () => {
     }, [mnemonic, accountNumbers[bscChainKey]])
 
     useEffect(() => {
-        if (!algorandMnemonics) return
+        if (!mnemonic) return
         const account = createAccount({
             chainKey: algorandChainKey,
-            mnemonic:
-        algorandMnemonics[accountNumbers[algorandChainKey].activeAccountNumber],
-            accountNumber: 0,
+            mnemonic: mnemonic,
+            accountNumber: accountNumbers[algorandChainKey].activeAccountNumber,
         })
+        console.log(account)
         dispatch(
             setCredential({
                 account,
                 chainKey: algorandChainKey,
             })
         )
-    }, [algorandMnemonics, accountNumbers[algorandChainKey]])
+    }, [mnemonic, accountNumbers[algorandChainKey]])
 }
