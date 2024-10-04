@@ -1,6 +1,6 @@
 import { Network, blockchainConfig } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
-import { algorandClient, aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl } from "../rpcs"
+import { algorandClient, aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl, suiClient } from "../rpcs"
 import { erc20Abi } from "../abis"
 import { Platform, chainKeyToPlatform } from "../common"
 import { fetchDigitalAsset, mplTokenMetadata } from "@metaplex-foundation/mpl-token-metadata"
@@ -129,6 +129,36 @@ export const _getAlgorandTokenMetadata = async ({
     }
 }
 
+export const _getSuiTokenMetadata = async ({
+    chainKey,
+    network,
+    tokenAddress
+}: GetTokenMetadataParams): Promise<TokenMetadata> => {
+    if (!tokenAddress) throw new Error("Token address not found")
+    if (tokenAddress === "native") {
+        const { decimals, symbol, name } =
+        blockchainConfig().chains[chainKey].tokens["native"]
+        return {
+            decimals,
+            name,
+            symbol,
+        }
+    }
+
+    network = network || Network.Testnet
+    const metadata = await suiClient(
+        network
+    ).getCoinMetadata({ coinType: tokenAddress })
+    if (!metadata) throw new Error("Sui coin metadata not found")
+    const { name, decimals, symbol } = metadata 
+
+    return {
+        name,
+        decimals,
+        symbol,
+    }
+}
+
 export const _getTokenMetadata = async (params: GetTokenMetadataParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
@@ -140,5 +170,7 @@ export const _getTokenMetadata = async (params: GetTokenMetadataParams) => {
         return _getSolanaTokenMetadata(params)
     case Platform.Algorand:
         return _getAlgorandTokenMetadata(params)
+    case Platform.Sui:
+        return _getSuiTokenMetadata(params)
     }
 }

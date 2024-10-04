@@ -1,6 +1,6 @@
 import { Network, blockchainConfig } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
-import { algorandClient, aptosClient, evmHttpRpcUrl, solanaClient } from "../rpcs"
+import { algorandClient, aptosClient, evmHttpRpcUrl, solanaClient, suiClient } from "../rpcs"
 import { erc20Abi } from "../abis"
 import { computeDenomination } from "@/utils"
 import { PublicKey } from "@solana/web3.js"
@@ -58,7 +58,9 @@ export const _getAptosBalance = async ({
         })
         return computeDenomination(balance, decimals)
     } else {
-
+        const { decimals } = await aptosClient(network).getFungibleAssetMetadataByAssetType({
+            assetType: tokenAddress as `${string}::${string}::${string}`
+        })
         const balance = await aptosClient(network).getAccountCoinAmount({
             coinType: tokenAddress as `${string}::${string}::${string}`,
             accountAddress
@@ -120,6 +122,38 @@ export const _getAlgorandBalance = async ({
     return computeDenomination(foundAsset.amount, decimals)
 }
 
+export const _getSuiBalance = async ({
+    chainKey,
+    tokenAddress,
+    network,
+    accountAddress,
+}: GetBalanceParams): Promise<number> => {
+    if (!tokenAddress) throw new Error("Cannot find balance without token address")
+    network = network || Network.Testnet
+
+    const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
+    if (!decimals) throw new Error("decimals must not undefined")
+    network = network || Network.Testnet
+    
+    if (tokenAddress === "native") { 
+        const balance = await suiClient(network).getBalance({
+            owner: accountAddress,
+            coinType: "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI"
+        })
+        return computeDenomination(BigInt(balance.totalBalance), decimals)
+    } else {
+        const metadata = await suiClient(network).getCoinMetadata({
+            coinType: tokenAddress,
+        })
+        if (!metadata) throw new Error("Sui coin metadata not found")
+        const balance = await suiClient(network).getBalance({
+            coinType: tokenAddress,
+            owner: accountAddress
+        })
+        return computeDenomination(BigInt(balance.totalBalance), metadata.decimals)
+    }
+}
+
 export const _getBalance = (params: GetBalanceParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
@@ -127,5 +161,6 @@ export const _getBalance = (params: GetBalanceParams) => {
     case Platform.Aptos: return _getAptosBalance(params)
     case Platform.Solana: return _getSolanaBalance(params)
     case Platform.Algorand: return _getAlgorandBalance(params)
+    case Platform.Sui: return _getSuiBalance(params)
     }
 }
