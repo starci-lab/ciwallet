@@ -12,3 +12,5 @@ export const suiClient = (network: Network) => {
     const rpcUrl = getFullnodeUrl(suiNetwork)
     return new SuiClient({ url: rpcUrl })
 }
+
+export const SUI_COIN_TYPE = "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI"

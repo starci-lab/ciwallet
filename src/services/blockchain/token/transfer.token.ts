@@ -1,21 +1,42 @@
 import { blockchainConfig, Network } from "@/config"
-import { algorandClient, aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl } from "../rpcs"
+import {
+    algorandClient,
+    aptosClient,
+    evmHttpRpcUrl,
+    solanaHttpRpcUrl,
+    SUI_COIN_TYPE,
+    suiClient,
+} from "../rpcs"
 import { Contract, JsonRpcProvider, Wallet } from "ethers"
 import { erc20Abi } from "../abis"
 import { computeRaw } from "@/utils"
-import { mplTokenMetadata, fetchDigitalAsset } from "@metaplex-foundation/mpl-token-metadata"
+import {
+    mplTokenMetadata,
+    fetchDigitalAsset,
+} from "@metaplex-foundation/mpl-token-metadata"
 import { keypairIdentity, publicKey, sol } from "@metaplex-foundation/umi"
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import {
     findAssociatedTokenPda,
     transferTokens,
-    transferSol
+    transferSol,
 } from "@metaplex-foundation/mpl-toolbox"
 import { base58 } from "@metaplex-foundation/umi/serializers"
 import { Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk"
 import { APTOS_COIN } from "aptos"
-import { makePaymentTxnWithSuggestedParamsFromObject, secretKeyToMnemonic, mnemonicToSecretKey, waitForConfirmation, makeAssetTransferTxnWithSuggestedParamsFromObject } from "algosdk"
+import {
+    makePaymentTxnWithSuggestedParamsFromObject,
+    secretKeyToMnemonic,
+    mnemonicToSecretKey,
+    waitForConfirmation,
+    makeAssetTransferTxnWithSuggestedParamsFromObject,
+} from "algosdk"
 import { chainKeyToPlatform, Platform } from "../common"
+import {
+    Transaction,
+    SerialTransactionExecutor,
+} from "@mysten/sui/transactions"
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519"
 
 export interface TransferParams {
   chainKey: string;
@@ -83,8 +104,12 @@ export const _transferSolana = async ({
     const recipientPublicKey = publicKey(recipientAddress)
 
     if (tokenAddress === "native") {
-        const umi = createUmi(solanaHttpRpcUrl(chainKey, network)).use(mplTokenMetadata())
-        const keypair = umi.eddsa.createKeypairFromSecretKey(Buffer.from(privateKey, "hex"))
+        const umi = createUmi(solanaHttpRpcUrl(chainKey, network)).use(
+            mplTokenMetadata()
+        )
+        const keypair = umi.eddsa.createKeypairFromSecretKey(
+            Buffer.from(privateKey, "hex")
+        )
         umi.use(keypairIdentity(keypair))
 
         const { signature } = await transferSol(umi, {
@@ -96,10 +121,14 @@ export const _transferSolana = async ({
 
         return { txHash }
     } else {
-        const umi = createUmi(solanaHttpRpcUrl(chainKey, network)).use(mplTokenMetadata())
+        const umi = createUmi(solanaHttpRpcUrl(chainKey, network)).use(
+            mplTokenMetadata()
+        )
         const asset = await fetchDigitalAsset(umi, publicKey(tokenAddress))
 
-        const keypair = umi.eddsa.createKeypairFromSecretKey(Buffer.from(privateKey, "hex"))
+        const keypair = umi.eddsa.createKeypairFromSecretKey(
+            Buffer.from(privateKey, "hex")
+        )
         umi.use(keypairIdentity(keypair))
 
         const tokenPublicKey = publicKey(tokenAddress)
@@ -130,7 +159,7 @@ export const _transferAptos = async ({
     privateKey,
     recipientAddress,
     amount,
-    fromAddress
+    fromAddress,
 }: TransferParams): Promise<TransferResult> => {
     if (!tokenAddress)
         throw new Error("Cannot find balance without token address")
@@ -185,7 +214,7 @@ export const _transferAlgorand = async ({
     if (!tokenAddress)
         throw new Error("Cannot find balance without token address")
     network = network || Network.Testnet
-    
+
     const client = algorandClient(network)
     const mnemonic = secretKeyToMnemonic(Buffer.from(privateKey, "hex"))
     const account = mnemonicToSecretKey(mnemonic)
@@ -225,7 +254,48 @@ export const _transferAlgorand = async ({
     }
 }
 
-export const transferToken = async (params: TransferParams): Promise<TransferResult> => {
+export const _transferSui = async ({
+    chainKey,
+    tokenAddress,
+    network,
+    privateKey,
+    recipientAddress,
+    amount,
+}: TransferParams): Promise<TransferResult> => {
+    if (!tokenAddress)
+        throw new Error("Cannot find balance without token address")
+    network = network || Network.Testnet
+
+    const client = suiClient(network)
+    const executor = new SerialTransactionExecutor({
+        client,
+        signer: Ed25519Keypair.fromSecretKey(privateKey)
+    })
+
+    if (tokenAddress === "native") {
+        const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
+        if (!decimals) throw new Error("decimals must not undefined")
+        const tx = new Transaction()
+        const [coin] = tx.splitCoins(SUI_COIN_TYPE, [computeRaw(amount, decimals)])
+        tx.transferObjects([coin], recipientAddress)
+        const { digest } = await executor.executeTransaction(tx)
+        return { txHash: digest }
+    } else {
+        const metadata = await suiClient(network).getCoinMetadata({
+            coinType: tokenAddress,
+        })
+        if (!metadata) throw new Error("Sui coin metadata not found")
+        const tx = new Transaction()
+        const [coin] = tx.splitCoins(tokenAddress, [computeRaw(amount, metadata.decimals)])
+        tx.transferObjects([coin], recipientAddress)
+        const { digest } = await executor.executeTransaction(tx)
+        return { txHash: digest }
+    }
+}
+
+export const transferToken = async (
+    params: TransferParams
+): Promise<TransferResult> => {
     const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
     case Platform.Evm:
@@ -236,5 +306,7 @@ export const transferToken = async (params: TransferParams): Promise<TransferRes
         return _transferSolana(params)
     case Platform.Algorand:
         return _transferAlgorand(params)
+    case Platform.Sui:
+        return _transferSui(params)
     }
 }

@@ -1,6 +1,6 @@
 import { Network, blockchainConfig } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
-import { algorandClient, aptosClient, evmHttpRpcUrl, solanaClient, suiClient } from "../rpcs"
+import { algorandClient, aptosClient, evmHttpRpcUrl, solanaClient, SUI_COIN_TYPE, suiClient } from "../rpcs"
 import { erc20Abi } from "../abis"
 import { computeDenomination } from "@/utils"
 import { PublicKey } from "@solana/web3.js"
@@ -138,7 +138,7 @@ export const _getSuiBalance = async ({
     if (tokenAddress === "native") { 
         const balance = await suiClient(network).getBalance({
             owner: accountAddress,
-            coinType: "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI"
+            coinType: SUI_COIN_TYPE
         })
         return computeDenomination(BigInt(balance.totalBalance), decimals)
     } else {
