@@ -53,12 +53,14 @@ export type ChainCredentials = Record<string, ChainCredential>;
 export interface TelegramInfo {
     id: number
     username: string
+    referrerUserId: string
 }
 const initialState: AuthState = {
     mnemonic: "",
     telegramInfo: {
         id: 0,
         username: "",
+        referrerUserId: ""
     },
     saveAccountNumbersKey: 0,
     saveAlgorandMnemonicsKey: 0,
