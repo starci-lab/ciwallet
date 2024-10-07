@@ -25,7 +25,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
     const pathname = usePathname()
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
     const referrerUserId = useAppSelector((state) => state.authReducer.telegramInfo.referrerUserId)
-
+ 
     useEffect(() => {
         if (pathname != constantConfig().path.cifarm) return
         if (mnemonic === "") return
