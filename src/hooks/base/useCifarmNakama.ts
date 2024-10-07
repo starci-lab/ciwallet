@@ -89,6 +89,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
                 network,
                 publicKey: _publicKey,
                 signature,
+                telegramInitDataRaw
             })
         )
     })
