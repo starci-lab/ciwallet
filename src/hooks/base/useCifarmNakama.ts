@@ -25,6 +25,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
     const pathname = usePathname()
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
     const referrerUserId = useAppSelector((state) => state.authReducer.telegramInfo.referrerUserId)
+    const telegramInitDataRaw = useAppSelector((state) => state.authReducer.telegramInfo.initDataRaw)
 
     useEffect(() => {
         if (pathname != constantConfig().path.cifarm) return
@@ -64,7 +65,6 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
         if (platform === Platform.Evm) {
             _publicKey = address
         }
-        console.log(referrerUserId)
 
         const session = await client.authenticateCustom(
             "starci",
@@ -77,6 +77,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
                 chainKey: preferenceChainKey,
                 network,
                 referrerUserId,
+                telegramInitDataRaw,
             }
         )
 
