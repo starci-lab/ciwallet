@@ -54,13 +54,16 @@ export interface TelegramInfo {
     id: number
     username: string
     referrerUserId: string
+    initDataRaw: string
 }
+
 const initialState: AuthState = {
     mnemonic: "",
     telegramInfo: {
         id: 0,
         username: "",
-        referrerUserId: ""
+        referrerUserId: "",
+        initDataRaw: ""
     },
     saveAccountNumbersKey: 0,
     saveAlgorandMnemonicsKey: 0,
