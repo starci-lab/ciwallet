@@ -12,12 +12,12 @@ export interface UseUnityReturn {
 export const _useUnity = (): UseUnityReturn => {
 
     const handleCacheControl = (url: string): UnityCacheControlMode => {
-        if (url.match(/\.data/) || url.match(/\.bundle/)) {
-            return "must-revalidate"
-        }
-        if (url.match(/\.mp4/) || url.match(/\.wav/)) {
-            return "immutable"
-        }
+        // if (url.match(/\.data/) || url.match(/\.bundle/)) {
+        //     return "must-revalidate"
+        // }
+        // if (url.match(/\.mp4/) || url.match(/\.wav/)) {
+        //     return "immutable"
+        // }
         return "no-store"
     }
       
@@ -26,6 +26,7 @@ export const _useUnity = (): UseUnityReturn => {
         dataUrl: envConfig().externals.cifarm.packages.dataUrl,
         frameworkUrl: envConfig().externals.cifarm.packages.frameworkUrl,
         codeUrl: envConfig().externals.cifarm.packages.wasmUrl,
+        cacheControl: handleCacheControl
     })
 
     return {
