@@ -26,7 +26,6 @@ export const _useUnity = (): UseUnityReturn => {
         dataUrl: envConfig().externals.cifarm.packages.dataUrl,
         frameworkUrl: envConfig().externals.cifarm.packages.frameworkUrl,
         codeUrl: envConfig().externals.cifarm.packages.wasmUrl,
-        cacheControl: handleCacheControl
     })
 
     return {
