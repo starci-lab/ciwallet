@@ -6,6 +6,7 @@ export interface Credentials {
   signature: string;
   chainKey: string;
   network: string;
+  telegramInitDataRaw: string;
 }
 
 export interface GameState {
@@ -22,6 +23,7 @@ const initialState: GameState = {
             network: "",
             publicKey: "",
             signature: "",
+            telegramInitDataRaw: ""
         } 
     },
 }

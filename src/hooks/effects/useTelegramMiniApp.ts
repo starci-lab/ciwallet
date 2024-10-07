@@ -7,15 +7,16 @@ export const useTelegramMiniApp = () => {
     if (typeof window === "undefined") return
     //if (envConfig().isDev) return
     
-    const { initData } = retrieveLaunchParams()
+    const { initData, initDataRaw } = retrieveLaunchParams()
     const dispatch = useAppDispatch()
-
     useEffect(() => {
         if (!initData) return
+        if (!initDataRaw) return
         dispatch(setTelegramInfo({
             id: initData?.user?.id || 0, 
             username: initData?.user?.username || "",
-            referrerUserId: initData?.startParam || ""
+            referrerUserId: initData?.startParam || "",
+            initDataRaw,
         }))
     }, [initData])
 }
