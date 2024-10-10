@@ -12,6 +12,7 @@ export interface TransferFormikValues {
   recipientAddress: string;
   amount: number;
   tokenKey: string;
+  balance: number;
 }
 
 export const _useTransferFormik =
@@ -20,11 +21,13 @@ export const _useTransferFormik =
           amount: 0,
           recipientAddress: "",
           tokenKey: nativeTokenKey,
+          balance: 0,
       }
 
       const validationSchema = Yup.object({
           amount: Yup.number()
               .min(0, "Amount must be higher than 0")
+              .max(Yup.ref('balance'), "Insufficient balance")
               .required("Amount is required"),
       })
 

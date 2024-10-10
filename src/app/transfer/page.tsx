@@ -4,7 +4,7 @@ import { setConfirm, useAppDispatch, useAppSelector } from "@/redux"
 import { ArrowLeftIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Link, Spacer, Image, Button, Input } from "@nextui-org/react"
-import React from "react"
+import React, { useEffect } from "react"
 import {
     useBalance,
     useConfirmModalDisclosure,
@@ -40,6 +40,11 @@ const Page = () => {
     })
 
     const { data } = { ...balanceSwr }
+    useEffect(() => {
+        if (!data) return
+        formik.setFieldValue("balance", data)
+    }, [data])
+
     return (
         <Container hasPadding>
             <div className="flex flex-col gap-6 h-full">
@@ -80,7 +85,7 @@ const Page = () => {
                     <Spacer y={4} />
                     <Input
                         id="amount"
-                        label="Amount"
+                        label={`Amount (Max: ${data} ${symbol})`}
                         placeholder="Input transfer amount here"
                         labelPlacement="outside"
                         required
@@ -89,7 +94,6 @@ const Page = () => {
                         onBlur={formik.handleBlur}
                         isInvalid={!!(formik.touched.amount && formik.errors.amount)}
                         errorMessage={formik.touched.amount && formik.errors.amount}
-                        description={`Balance: ${data} ${symbol}`}
                         endContent={
                             <div className="text-sm text-foreground-400">{symbol}</div>
                         }
@@ -113,12 +117,6 @@ const Page = () => {
                         errorMessage={
                             formik.touched.recipientAddress &&
                 formik.errors.recipientAddress
-                        }
-                        startContent={
-                            <Image
-                                className="w-5 h-5"
-                                src={tokens[formik.values.tokenKey].imageUrl}
-                            />
                         }
                     />
                 </div>

@@ -67,7 +67,7 @@ export const TransferTab = () => {
             onSubmit={formik.handleSubmit}
             onReset={formik.handleReset}
         >
-            <div className="w-full h-full flex flex-col justify-between">
+            <div className="w-full min-h-full flex flex-col gap-6 justify-between">
                 <div>
                     <div>
                         <div>
