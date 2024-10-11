@@ -7,7 +7,7 @@ import React from "react"
 
 const Page = () => {
     const router = useRouter()
-
+    
     return (
         <Container centerContent hasPadding>
             <div className="w-full">

@@ -8,7 +8,8 @@ import {
     setPreferenceChainKey,
     setVaas,
     setChain,
-    setInitialized
+    setInitialized,
+    setCurrent
 } from "@/redux"
 import {
     foundEncryptedMnemonic,
@@ -65,6 +66,8 @@ export const useLoadFromLocalStorage = () => {
         } 
     }, [])
 
+    const current = useAppSelector(state => state.authReducer.current)
+
     useEffect(() => {
         if (!password) return
         try{
@@ -72,7 +75,18 @@ export const useLoadFromLocalStorage = () => {
             console.log(mnemonic)
             dispatch(setMnemonic(mnemonic))
 
-            router.push(constantConfig().path.home)
+            switch (current) {
+            case "cifarm": {
+                router.push(constantConfig().path.cifarm)
+                dispatch(setCurrent(""))
+                break
+            }
+            default: {
+                router.push(constantConfig().path.home)
+                break
+            }
+            }
+            
         } catch (ex) {
             console.error(ex)
             triggerErrorToast("Invalid password")

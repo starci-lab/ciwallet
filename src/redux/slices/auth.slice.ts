@@ -24,6 +24,7 @@ export interface AuthState {
   loaded: boolean;
   initialized: boolean;
   credentials: ChainCredentials;
+  current: string;
 }
 
 export interface CreateAccountParams {
@@ -159,6 +160,7 @@ const initialState: AuthState = {
     password: "",
     hasAuthBefore: false,
     initialized: false,
+    current: ""
 }
 
 export const authSlice = createSlice({
@@ -251,6 +253,9 @@ export const authSlice = createSlice({
         setInitialized: (state, { payload }: PayloadAction<boolean>) => {
             state.initialized = payload
         },
+        setCurrent: (state, { payload }: PayloadAction<string>) => {
+            state.current = payload
+        },
     },
 })
 
@@ -267,5 +272,6 @@ export const {
     setInitialized,
     triggerSaveAccountNumbers,
     setCredential,
+    setCurrent
 } = authSlice.actions
 export const authReducer = authSlice.reducer
