@@ -1,16 +1,27 @@
 "use client"
 
 import { useCifarmNakama } from "@/hooks"
+import { useAppSelector } from "@/redux"
+import { AuthenticatorApiService } from "@/services"
 import React, { PropsWithChildren, useEffect } from "react"
+import useSWR from "swr"
 
 const Layout = ({ children }: PropsWithChildren) => {
     const { authSwr, client } = useCifarmNakama()
-    useEffect(() => {
-        console.log("Data sent")
-    }, [])
 
+    const initDataRaw = useAppSelector(
+        (state) => state.authReducer.telegramInfo.initDataRaw
+    )
+
+    useSWR("REGISTER_TELEGRAM", async () => {
+        const authenticatorService = new AuthenticatorApiService()
+        await authenticatorService.registerTelegram({
+            initDataRaw,
+        })
+    })
+    
     useEffect(() => {
-        if (!client) return 
+        if (!client) return
         const handleEffect = async () => {
             await authSwr.trigger()
         }

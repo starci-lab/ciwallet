@@ -11,5 +11,5 @@ export const constantConfig = () => ({
         settings: "/settings",
         cifarm: "/cifarm",
         transfer: "/transfer",
-    } 
+    },
 })
