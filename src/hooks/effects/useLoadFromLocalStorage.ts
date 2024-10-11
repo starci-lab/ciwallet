@@ -72,7 +72,6 @@ export const useLoadFromLocalStorage = () => {
         if (!password) return
         try{
             const mnemonic = loadMnemonic(password)
-            console.log(mnemonic)
             dispatch(setMnemonic(mnemonic))
 
             switch (current) {

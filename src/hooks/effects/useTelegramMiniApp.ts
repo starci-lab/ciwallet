@@ -1,6 +1,6 @@
 //import { envConfig } from "@/config"
 import { setTelegramInfo, useAppDispatch } from "@/redux"
-import { retrieveLaunchParams } from "@telegram-apps/sdk"
+import { retrieveLaunchParams, postEvent } from "@telegram-apps/sdk"
 import { useEffect } from "react"
 
 export const useTelegramMiniApp = () => {
@@ -12,6 +12,7 @@ export const useTelegramMiniApp = () => {
     useEffect(() => {
         if (!initData) return
         if (!initDataRaw) return
+        postEvent("web_app_expand")
         dispatch(setTelegramInfo({
             id: initData?.user?.id || 0, 
             username: initData?.user?.username || "",

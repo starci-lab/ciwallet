@@ -5,7 +5,7 @@ import { useEffect } from "react"
 export const useCurrent = () => {
     const searchParams = useSearchParams()
     const current = searchParams.get("current")
-
+    
     const dispatch = useAppDispatch()
 
     useEffect(() => {

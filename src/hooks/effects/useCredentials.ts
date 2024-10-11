@@ -4,7 +4,7 @@ import { useEffect } from "react"
 
 export const useCredentials = () => {
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-    console.log(mnemonic)
+    
     const accountNumbers = useAppSelector(
         (state) => state.authReducer.accountNumbers
     )
