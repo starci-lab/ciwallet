@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react"
+import React, { PropsWithChildren, Suspense } from "react"
 import type { Metadata } from "next"
 import { Open_Sans } from "next/font/google"
 import "./globals.css"
@@ -13,11 +13,13 @@ export const metadata: Metadata = {
 
 const Layout = ({ children }: PropsWithChildren) => {
     return (
-        <html lang="en">
-            <body className={`${font.className} min-h-screen`}>
-                <WrappedLayout>{children}</WrappedLayout>
-            </body>
-        </html>
+        <Suspense>
+            <html lang="en">
+                <body className={`${font.className} min-h-screen`}>
+                    <WrappedLayout>{children}</WrappedLayout>
+                </body>
+            </html>
+        </Suspense>
     )
 }
 
