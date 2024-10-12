@@ -27,7 +27,7 @@ export const _useTransferFormik =
       const validationSchema = Yup.object({
           amount: Yup.number()
               .min(0, "Amount must be higher than 0")
-              .max(Yup.ref('balance'), "Insufficient balance")
+              .max(Yup.ref("balance"), "Insufficient balance")
               .required("Amount is required"),
       })
 

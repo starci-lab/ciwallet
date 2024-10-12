@@ -6,6 +6,8 @@ import {
     defaultChainKey,
     nativeTokenKey,
     defaultSecondaryChainKey,
+    SupportedBridgeProtocolKey,
+    wormholeBridgeProtocol,
 } from "@/config"
 import { useEffect } from "react"
 import {
@@ -24,6 +26,9 @@ export interface BridgeTransferFormikValues {
   targetAddress: "";
   amount: number;
   tokenKey: string;
+  balance: number;
+  bridgeProtocolKey: string;
+  nativeAmountPlusFee: number;
 }
 
 export const _useBridgeTransferFormik =
@@ -56,17 +61,23 @@ export const _useBridgeTransferFormik =
           formik.setFieldValue("targetAccountNumber", defaultTargetAccountNumber)
       }, [aptosAccountNumber, solanaAccountNumber])
 
+      const minimalFee = wormholeBridgeProtocol.minimalFee
+
       const initialValues: BridgeTransferFormikValues = {
           amount: 0,
           targetAccountNumber: 0,
           targetAddress: "",
           targetChainKey: defaultSecondaryChainKey,
           tokenKey: nativeTokenKey,
+          balance: 0,
+          bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
+          nativeAmountPlusFee: minimalFee
       }
 
       const validationSchema = Yup.object({
           amount: Yup.number()
               .min(0, "Amount must be higher than 0")
+              .max(Yup.ref("balance"), "Insufficient balance")
               .required("Amount is required"),
       })
 

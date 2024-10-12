@@ -8,7 +8,7 @@ export enum Network {
 export const blockchainConfig = (): ChainConfig => {
     return {
         chains: {
-            avalanche: {
+            [SupportedChainKey.Avalanche]: {
                 key: "avalanche",
                 imageUrl: "/icons/avalanche.svg",
                 wormholeChainId: 6,
@@ -69,7 +69,7 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
             },
-            aptos: {
+            [SupportedChainKey.Aptos]: {
                 key: "aptos",
                 imageUrl: "/icons/aptos.svg",
                 wormholeChainId: 22,
@@ -130,7 +130,7 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
             },
-            solana: {
+            [SupportedChainKey.Solana]: {
                 key: "solana",
                 imageUrl: "/icons/solana.svg",
                 wormholeChainId: 1,
@@ -202,7 +202,7 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
             },
-            bsc: {
+            [SupportedChainKey.Bsc]: {
                 key: "bsc",
                 imageUrl: "/icons/bsc.svg",
                 wormholeChainId: 4,
@@ -241,7 +241,7 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
             },
-            algorand: {
+            [SupportedChainKey.Algorand]: {
                 key: "algorand",
                 imageUrl: "/icons/algorand.svg",
                 wormholeChainId: 8,
@@ -280,7 +280,7 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
             },
-            sui: {
+            [SupportedChainKey.Sui]: {
                 key: "sui",
                 imageUrl: "/icons/sui.svg",
                 wormholeChainId: 22,
@@ -392,4 +392,13 @@ export interface NftInfo {
 
 export interface ChainConfig {
   chains: Record<string, ChainInfo>;
+}
+
+export enum SupportedChainKey {
+    Sui = "sui",
+    Aptos = "aptos",
+    Avalanche = "avalanche",
+    Solana = "solana",
+    Bsc = "bsc",
+    Algorand = "algorand",
 }

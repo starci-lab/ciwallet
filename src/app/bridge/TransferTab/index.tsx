@@ -1,5 +1,5 @@
 "use client"
-import { defaultChainKey } from "@/config"
+import { crosschainConfig, defaultBridgeProtocolKey, defaultChainKey } from "@/config"
 import {
     useBridgeTransferFormik,
     useBridgeSelectRecipientModalDisclosure,
@@ -17,7 +17,7 @@ import {
     SelectItem,
 } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
-import React from "react"
+import React, { useEffect } from "react"
 import {
     createAccount,
 } from "@/services"
@@ -60,7 +60,13 @@ export const TransferTab = () => {
     })
 
     const { data } = { ...balanceSwr }
-   
+    useEffect(() => {
+        if (!data) return
+        formik.setFieldValue("balance", data)
+    }, [data])
+
+    const protocols = crosschainConfig[preferenceChainKey][formik.values.targetChainKey]
+
     return (
         <form
             className="h-full"
@@ -89,7 +95,7 @@ export const TransferTab = () => {
                     <Spacer y={4} />
                     <Input
                         id="amount"
-                        label="Amount"
+                        label={`Amount (Max: ${data} ${symbol})`}
                         placeholder="Input transfer amount here"
                         labelPlacement="outside"
                         required
@@ -98,10 +104,6 @@ export const TransferTab = () => {
                         onBlur={formik.handleBlur}
                         isInvalid={!!(formik.touched.amount && formik.errors.amount)}
                         errorMessage={formik.touched.amount && formik.errors.amount}
-                        description={`Balance: ${data} ${symbol}`}
-                        endContent={
-                            <div className="text-sm text-foreground-400">{symbol}</div>
-                        }
                     />
                     <Spacer y={4} />
                     <Select
@@ -135,6 +137,42 @@ export const TransferTab = () => {
                             ))}
                     </Select>
                     <Spacer y={4} />
+                    <Select
+                        startContent={
+                            <Image
+                                removeWrapper
+                                className="w-5 h-5"
+                                src={protocols[formik.values.bridgeProtocolKey]?.imageUrl}
+                            />
+                        }
+                        label="Select Bridge Protocol"
+                        labelPlacement="outside"
+                        selectedKeys={[formik.values.bridgeProtocolKey]}
+                        onSelectionChange={(keys) => {
+                            const currentKey = keys.currentKey
+                            if (!currentKey) return
+                            const bridgeProtocolKey = currentKey ?? defaultBridgeProtocolKey
+                            formik.setFieldValue("bridgeProtocolKey", bridgeProtocolKey)
+                        }}
+                    >
+                        {Object.values(protocols)
+                            .map(({ key, name, imageUrl }) => (
+                                <SelectItem
+                                    startContent={<Image className="w-5 h-5" src={imageUrl} />}
+                                    key={key}
+                                    value={key}
+                                >
+                                    {name}
+                                </SelectItem>
+                            ))}
+                    </Select>
+                    <Spacer y={1.5} />
+                    <div className="text-xs text-warning text-justify">
+                        {
+                            protocols[formik.values.bridgeProtocolKey].warningMsg
+                        }
+                    </div>
+                    <Spacer y={4} />
                     <div>
                         <div className="text-sm">Select Recipient</div>
                         <Spacer y={1.5} />
@@ -148,6 +186,7 @@ export const TransferTab = () => {
                     </div>
                 </div>
                 <Button
+                    isDisabled={!formik.isValid}
                     color="primary"
                     type="submit"
                     isLoading={formik.isSubmitting}
@@ -163,6 +202,9 @@ export const TransferTab = () => {
                 >
           Transfer
                 </Button>
+                {
+
+                }
             </div>
         </form>
     )
