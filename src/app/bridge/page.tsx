@@ -21,7 +21,7 @@ const Page = () => {
     
     return (
         <Container hasPadding>
-            <div className="flex flex-col gap-6 h-full">
+            <div className="flex flex-col gap-6 ">
                 <div>
                     <div className="flex gap-2 items-center">
                         <Link as="button" onPress={() => router.back()} color="foreground">

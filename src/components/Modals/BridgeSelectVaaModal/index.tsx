@@ -24,9 +24,8 @@ export const BridgeSelectVaaModal = () => {
         (state) => state.vaaReducer.selectedKey
     )
 
-    const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas).filter(({ isUsed }) => !isUsed)
-    const reversedVaas = storedVaas.reverse()
-    
+    const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas)
+
     return (
         <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>
@@ -34,19 +33,20 @@ export const BridgeSelectVaaModal = () => {
                 <ModalBody className="p-4">
                     <Card>
                         <CardBody className="p-0">
-                            <ScrollShadow className="max-h-[400px]">
+                            <ScrollShadow hideScrollBar className="max-h-[400px]">
                                 <div>
-                                    {reversedVaas
-                                        .filter(({ isUsed }) => !isUsed)
-                                        .map((vaa, index) => (
-                                            <div key={vaa.key}>
-                                                <VAAProfile
-                                                    vaa={vaa}
-                                                    selectedKey={selectedKey}
-                                                />
-                                                {index !== storedVaas.length - 1 && <Divider />}
-                                            </div>
-                                        ))}
+                                    {Object.values(storedVaas).reverse()
+                                        .map((vaa, index) => {
+                                            return (
+                                                <div key={vaa.key}>
+                                                    <VAAProfile
+                                                        vaa={vaa}
+                                                        selectedKey={selectedKey}
+                                                    />
+                                                    {index !== Object.values(storedVaas).length - 1 && <Divider />}
+                                                </div>
+                                            )
+                                        })}
                                 </div>
                             </ScrollShadow>
                         </CardBody>

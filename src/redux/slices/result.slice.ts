@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { StoredVaa } from "./vaa.slice"
 
 export interface BridgeTransferResult {
-    vaa: Omit<StoredVaa, "isUsed" | "key" | "createdAt">,
+    vaa: StoredVaa,
     txHash: string
 }
 
@@ -12,7 +12,7 @@ export interface WrappedToken {
 }
 
 export interface BridgeRedeemResult {
-    vaa: Omit<StoredVaa, "isUsed" | "key" | "createdAt">,
+    vaa: StoredVaa,
     txHash: string
 }
 

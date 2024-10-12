@@ -1,4 +1,4 @@
-import { addStoredVaa, useAppDispatch, useAppSelector } from "@/redux"
+import { useAppSelector } from "@/redux"
 import { saveAccountNumbers, saveChains, saveVaas } from "@/services"
 import { useEffect } from "react"
 
@@ -7,12 +7,6 @@ export const useSaveToLocalStorage = () => {
         (state) => state.authReducer.accountNumbers
     )
 
-    const vaa = useAppSelector(
-        (state) => state.resultReducer.bridge.transfer?.vaa
-    )
-
-    const dispatch = useAppDispatch()
-    
     const saveAccountNumbersKey = useAppSelector((state) => state.authReducer.saveAccountNumbersKey)
     const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
     const saveStoredVaasKey = useAppSelector((state) => state.vaaReducer.saveStoredVaasKey)
@@ -26,12 +20,6 @@ export const useSaveToLocalStorage = () => {
             saveAccountNumbers(accountNumbers)
         }
     }, [saveAccountNumbersKey])
-
-    useEffect(() => {
-        if (vaa) {
-            dispatch(addStoredVaa(vaa))
-        }
-    }, [vaa])
 
     useEffect(() => {
         if (!saveStoredVaasKey) return

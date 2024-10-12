@@ -5,7 +5,7 @@ import {
     decryptMnemonic,
     encryptMnemonic,
 } from "../cryptography"
-import { AccountNumbers, StoredVaa } from "@/redux"
+import { AccountNumbers, StoredVaas } from "@/redux"
 import { deserialize, serialize } from "./serialization.storage"
 
 const ACCOUNT_NUMBERS = "ciwallet-account-numbers"
@@ -64,11 +64,11 @@ export const loadPreferenceChainKey = () => {
     return localStorage.getItem(PREFERENCE_CHAIN) ?? defaultChainKey
 }
 
-export const saveVaas = (vaas: Array<StoredVaa>) => {
+export const saveVaas = (vaas: StoredVaas) => {
     localStorage.setItem(VAAS, serialize(vaas))
 }
 
-export const loadVaas = (): Array<StoredVaa> | null => {
+export const loadVaas = (): StoredVaas | null => {
     const found = localStorage.getItem(VAAS)
     return found !== null ? deserialize(found) : null
 }

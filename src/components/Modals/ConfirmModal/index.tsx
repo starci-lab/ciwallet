@@ -11,13 +11,13 @@ import {
 } from "@nextui-org/react"
 import React from "react"
 import { useConfirmModalDisclosure, useErrorModalDisclosure } from "@/hooks"
-import { Type, useAppSelector } from "@/redux"
+import { TransactionType, useAppSelector } from "@/redux"
 import useSWRMutation from "swr/mutation"
 
 export const ConfirmModal = () => {
     const { isOpen, onClose } = useConfirmModalDisclosure()
     const confirm = useAppSelector((state) => state.miscellaneousReducer.confirm)
-    const _type = confirm.type || Type.Transfer
+    const _type = confirm.type || TransactionType.Transfer
     const { trigger, isMutating } = useSWRMutation(
         ["PROCESS", confirm.id],
         confirm.processFn
@@ -30,10 +30,7 @@ export const ConfirmModal = () => {
                 <ModalHeader className="p-4 pb-2 font-bold">Confirm</ModalHeader>
                 <ModalBody className="p-4">
                     <div>
-                        <div className="flex gap-2 items-center h-5">
-                            <div className="text-sm">Type:</div>
-                            <Chip variant="flat">{_type}</Chip>
-                        </div>
+                        <Chip variant="flat">{_type}</Chip>
                         <Spacer y={4} />
                         <div className="text-sm">{confirm.confirmMessage}</div>
                     </div>

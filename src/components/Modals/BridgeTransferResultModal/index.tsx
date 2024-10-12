@@ -49,6 +49,8 @@ export const BridgeTransferResultModal = () => {
                                 {vaa?.serializedVaa}
                             </Snippet>
                         </div>
+                        <Spacer y={1.5} />
+                        <div className="text-xs text-warning text-justify">You can share the serialized VAA to enable the recipient to redeem their token.</div>
                         <Spacer y={4} />
                         <div className="flex items-center justify-between">
                             <div className="text-sm">Tx Hash</div>

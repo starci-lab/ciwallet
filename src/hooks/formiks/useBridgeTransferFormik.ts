@@ -7,18 +7,20 @@ import {
     nativeTokenKey,
     defaultSecondaryChainKey,
     SupportedBridgeProtocolKey,
-    wormholeBridgeProtocol,
+    crosschainConfig,
 } from "@/config"
 import { useEffect } from "react"
 import {
+    addStoredVaa,
     setBridgeTransferResult,
     triggerSaveStoredVaas,
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
 import { createAccount, transfer, parseNetwork } from "@/services"
-import { useSigner } from "../miscellaneous"
+import { useBalance, useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
+import { v4 } from "uuid"
 
 export interface BridgeTransferFormikValues {
   targetChainKey: string;
@@ -61,7 +63,7 @@ export const _useBridgeTransferFormik =
           formik.setFieldValue("targetAccountNumber", defaultTargetAccountNumber)
       }, [aptosAccountNumber, solanaAccountNumber])
 
-      const minimalFee = wormholeBridgeProtocol.minimalFee
+      const minimalFee = Object.values(crosschainConfig()[preferenceChainKey][defaultSecondaryChainKey])[0].minimalFee
 
       const initialValues: BridgeTransferFormikValues = {
           amount: 0,
@@ -71,14 +73,30 @@ export const _useBridgeTransferFormik =
           tokenKey: nativeTokenKey,
           balance: 0,
           bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
-          nativeAmountPlusFee: minimalFee
+          nativeAmountPlusFee: minimalFee,
       }
+
+      const address = useAppSelector(
+          (state) => state.authReducer.credentials[preferenceChainKey].address
+      )
+      const { balanceSwr: nativeTokenBalanceSwr } = useBalance({
+          tokenKey: nativeTokenKey,
+          accountAddress: address,
+          chainKey: preferenceChainKey,
+      })
 
       const validationSchema = Yup.object({
           amount: Yup.number()
               .min(0, "Amount must be higher than 0")
-              .max(Yup.ref("balance"), "Insufficient balance")
+              .max(Yup.ref("balance"), "Insufficient balance.")
               .required("Amount is required"),
+          nativeAmountPlusFee: nativeTokenBalanceSwr.data
+              ? Yup.number().max(
+                  nativeTokenBalanceSwr.data,
+                  ({ value }) => 
+                      (Number(value) <= minimalFee) ?`Your native balance plus fee is insufficient (Required: ${minimalFee} SYMBOL)` : `Your native balance plus fee is insufficient (Required: AMOUNT + ${minimalFee} SYMBOL)`
+              )
+              : Yup.number(),
       })
 
       const network = useAppSelector((state) => state.blockchainReducer.network)
@@ -110,41 +128,45 @@ export const _useBridgeTransferFormik =
                   chainKey: targetChainKey,
               })
 
-              const address = targetAddress || createdAddress
+              const recipientAddress = targetAddress || createdAddress
               if (!signer) return
-              
+
               const { txHash, vaa } = await transfer({
                   signer,
                   transferAmount: computeRaw(amount, decimals || 8),
-                  sourceChainName:
-                  chains[preferenceChainKey].chain,
+                  sourceChainName: chains[preferenceChainKey].chain,
                   targetChainName: chains[targetChainKey].chain,
                   network: parseNetwork(network),
-                  recipientAddress: address,
-                  tokenAddress: _address
+                  recipientAddress: recipientAddress,
+                  tokenAddress: _address,
               })
               if (vaa === null) return
               const serializedVaa = Buffer.from(serialize(vaa)).toString("base64")
               dispatch(
                   setBridgeTransferResult({
                       vaa: {
+                          key: v4(),
+                          network,
+                          senderAddress: address,
                           serializedVaa,
-                          amount: Number(amount),
-                          targetChainKey,
-                          fromChainKey: preferenceChainKey,
-                          targetAddress: address,
-                          fromAddress: signer.address(),
-                          tokenKey,
+                          txHash,
+                          bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
+                          tokenInfo: tokens[tokenKey],
                       },
                       txHash,
                   })
               )
-              dispatch(
-                  triggerSaveStoredVaas()
-              )
-          }
-      } 
-      )
+              dispatch(addStoredVaa({
+                  network,
+                  senderAddress: address,
+                  serializedVaa,
+                  txHash,
+                  tokenInfo: tokens[tokenKey],
+                  bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
+              }))
+              dispatch(triggerSaveStoredVaas())
+          },
+      })
 
       useEffect(() => {
           formik.setFieldValue(
@@ -153,10 +175,7 @@ export const _useBridgeTransferFormik =
                   ? defaultChainKey
                   : defaultSecondaryChainKey
           )
-          formik.setFieldValue(
-              "tokenKey",
-              nativeTokenKey
-          )
+          formik.setFieldValue("tokenKey", nativeTokenKey)
       }, [preferenceChainKey])
 
       return formik

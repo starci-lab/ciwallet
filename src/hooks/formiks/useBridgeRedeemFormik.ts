@@ -9,7 +9,7 @@ import {
 } from "@/redux"
 import { parseNetwork, redeem } from "@/services"
 import { useGenericSigner } from "../miscellaneous"
-import { deserialize } from "@wormhole-foundation/sdk"
+import { deserialize, VAA } from "@wormhole-foundation/sdk"
 
 export interface BridgeRedeemFormikValues {
   dump: "";
@@ -33,8 +33,19 @@ export const _useBridgeRedeemFormik =
 
       const selectedKey = useAppSelector(state => state.vaaReducer.selectedKey)
       const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas)
-      const vaa = storedVaas.find(({ key }) => key === selectedKey)
-      const signer = useGenericSigner(vaa?.targetChainKey, vaa?.targetAddress)
+      const vaa = storedVaas[selectedKey]
+      
+      let deserializedVaa : VAA<"TokenBridge:Transfer"> | undefined
+      if (vaa) {
+          deserializedVaa = deserialize(
+              "TokenBridge:Transfer",
+              Uint8Array.from(Buffer.from(vaa.serializedVaa, "base64"))
+          )
+      }
+     
+
+      const targetChain = Object.values(chains).find(({ chain }) => chain === deserializedVaa?.payload.to.chain)
+      const signer = useGenericSigner(targetChain?.key, deserializedVaa?.payload.to.address.toString())
 
       const formik = useFormik({
           initialValues,
@@ -42,14 +53,16 @@ export const _useBridgeRedeemFormik =
           onSubmit: async () => {
               if (!vaa) return
               if (!signer) return
+              if (!deserializedVaa) return
+              
               const txHash = await redeem({
                   signer,
                   vaa: deserialize(
                       "TokenBridge:Transfer",
                       Uint8Array.from(Buffer.from(vaa.serializedVaa, "base64"))
                   ),
-                  senderChainName: chains[vaa.fromChainKey].chain,
-                  redeemChainName: chains[vaa.targetChainKey].chain,
+                  senderChainName: deserializedVaa.emitterChain,
+                  redeemChainName: deserializedVaa.payload.to.chain,
                   network: parseNetwork(network),
               })
 

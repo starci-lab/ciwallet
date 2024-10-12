@@ -1,27 +1,26 @@
+import { Network, TokenInfo } from "@/config"
 import { createSlice } from "@reduxjs/toolkit"
 import { v4 } from "uuid"
 
 export interface StoredVaa {
-  serializedVaa: string;
-  isUsed: boolean;
-  amount: number;
-  tokenKey: string;
-  fromChainKey: string;
-  targetChainKey: string;
-  fromAddress: string;
-  targetAddress: string;
-  key: string;
-  createdAt: string;
+    key: string
+    serializedVaa: string 
+    txHash?: string
+    network: Network
+    senderAddress?: string
+    tokenInfo?: TokenInfo
+    bridgeProtocolKey: string
 }
+export type StoredVaas = Record<string, StoredVaa>
 
 export interface VaaState {
-  storedVaas: Array<StoredVaa>;
+  storedVaas: StoredVaas;
   selectedKey: string;
   saveStoredVaasKey: number;
 }
 
 const initialState: VaaState = {
-    storedVaas: [],
+    storedVaas: {},
     selectedKey: "",
     saveStoredVaasKey: 0,
 }
@@ -30,36 +29,25 @@ export const vaaSlice = createSlice({
     name: "vaaReducer",
     initialState,
     reducers: {
-        setVaas: (state, { payload }: { payload: Array<StoredVaa> }) => {
+        setVaas: (state, { payload }: { payload: StoredVaas }) => {
             state.storedVaas = payload
-            state.selectedKey =
-        state.storedVaas.findLast(({ isUsed }) => !isUsed)?.key || ""
+            state.selectedKey = Object.keys(state.storedVaas).at(-1) || ""
         },
         addStoredVaa: (
             state,
-            { payload }: { payload: Omit<StoredVaa, "isUsed" | "key" | "createdAt"> }
+            { payload }: { payload: Omit<StoredVaa, "key"> }
         ) => {
-            state.storedVaas.push({
-                ...payload,
-                isUsed: false,
-                key: v4(),
-                createdAt: new Date().toISOString(),
-            })
-            state.selectedKey =
-        state.storedVaas.findLast(({ isUsed }) => !isUsed)?.key || ""
+            const key = v4()
+            const _payload: StoredVaa = { ...payload, key }
+            state.storedVaas[key] = _payload
+            state.selectedKey = key
         },
         triggerSaveStoredVaas: (state) => {
             state.saveStoredVaasKey++
         },
         useVaa: (state, { payload }: { payload: string }) => {
-            state.storedVaas = state.storedVaas.map((vaa) => {
-                if (vaa.serializedVaa === payload) {
-                    return { ...vaa, isUsed: true }
-                }
-                return vaa
-            })
-            state.selectedKey =
-        state.storedVaas.findLast(({ isUsed }) => !isUsed)?.key || ""
+            delete state.storedVaas[payload]
+            state.selectedKey = Object.keys(state.storedVaas).at(-1) || ""
         },
         selectVaa: (state, { payload }: { payload: string }) => {
             state.selectedKey = payload

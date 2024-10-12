@@ -36,3 +36,7 @@ export const truncateString = (
     if (end === 0) return `${address.slice(0, start)}...`
     return `${address.slice(0, start)}...${address.slice(-end)}`
 }
+
+export const replace = (str: string, search: string, replace: string): string => {
+    return str.split(search).join(replace)
+}
