@@ -1,11 +1,12 @@
 //import { envConfig } from "@/config"
+import { envConfig } from "@/config"
 import { setTelegramInfo, useAppDispatch } from "@/redux"
 import { retrieveLaunchParams, postEvent } from "@telegram-apps/sdk"
 import { useEffect } from "react"
 
 export const useTelegramMiniApp = () => {
     if (typeof window === "undefined") return
-    //if (envConfig().isDev) return
+    if (envConfig().isDev) return
     
     const { initData, initDataRaw } = retrieveLaunchParams()
     const dispatch = useAppDispatch()
