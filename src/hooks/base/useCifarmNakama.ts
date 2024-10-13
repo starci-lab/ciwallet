@@ -69,7 +69,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
         if (platform === Platform.Evm) {
             _publicKey = accountAddress
         }
-
+        
         const session = await client.authenticateCustom(
             "starci",
             false,

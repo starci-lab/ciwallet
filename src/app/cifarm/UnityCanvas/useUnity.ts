@@ -23,10 +23,10 @@ export const _useUnity = (): UseUnityReturn => {
     }
 
     const unity = useUnityContext({
-        loaderUrl:`${envConfig().externals.cifarm.packages.loaderUrl}_${VERSION}`,
-        dataUrl: `${envConfig().externals.cifarm.packages.dataUrl}_${VERSION}`,
-        frameworkUrl: `${envConfig().externals.cifarm.packages.frameworkUrl}_${VERSION}`,
-        codeUrl: `${envConfig().externals.cifarm.packages.wasmUrl}_${VERSION}`,
+        loaderUrl: `${envConfig().externals.cifarm.packages.loaderUrl}${!envConfig().isDev ? VERSION : ""}`,
+        dataUrl: `${envConfig().externals.cifarm.packages.dataUrl}${!envConfig().isDev ? VERSION : ""}`,
+        frameworkUrl: `${envConfig().externals.cifarm.packages.frameworkUrl}${!envConfig().isDev ? VERSION : ""}`,
+        codeUrl: `${envConfig().externals.cifarm.packages.wasmUrl}${!envConfig().isDev ? VERSION : ""}`,
         cacheControl: handleCacheControl
     })
 

@@ -3,6 +3,7 @@ import { Platform, chainKeyToPlatform } from "../common"
 import nacl from "tweetnacl"
 import { Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk"
 import algosdk from "algosdk"
+import bs58 from "bs58"
 
 export interface SignMessageParams {
     message: string,
@@ -19,7 +20,7 @@ export const solanaSignMessage = ({ message, privateKey }: SignMessageParams) =>
     return Buffer.from(
         nacl.sign.detached(
             Buffer.from(message, "base64"),
-            Buffer.from(privateKey, "hex"),
+            bs58.decode(privateKey),
         ),
     ).toString("base64")
 }
