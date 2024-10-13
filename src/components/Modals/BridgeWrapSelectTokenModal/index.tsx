@@ -16,6 +16,7 @@ import {
 } from "@nextui-org/react"
 import { useBridgeWrapFormik, useBridgeWrapSelectTokenModalDisclosure } from "@/hooks"
 import { useAppSelector } from "@/redux"
+import { valuesWithKey } from "@/utils"
 
 export const BridgeWrapSelectTokenModal = () => {
     const { isOpen, onClose } =
@@ -23,7 +24,7 @@ export const BridgeWrapSelectTokenModal = () => {
     const formik = useBridgeWrapFormik()
 
     const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
-    const tokens = Object.values(useAppSelector(state => state.blockchainReducer.chains[preferenceChainKey].tokens)) 
+    const tokens = valuesWithKey(useAppSelector(state => state.blockchainReducer.chains[preferenceChainKey].tokens)) 
     
     return (
         <Modal hideCloseButton isOpen={isOpen}>

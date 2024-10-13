@@ -19,6 +19,7 @@ import {
 import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
 import { getMnemonic } from "@/services"
+import { valuesWithKey } from "@/utils"
 
 const Page = () => {
     const dispatch = useAppDispatch()
@@ -34,7 +35,7 @@ const Page = () => {
 
     const router = useRouter()
 
-    const chains = Object.values(
+    const chains = valuesWithKey(
         useAppSelector((state) => state.blockchainReducer.chains)
     )
 

@@ -13,7 +13,7 @@ import {
 } from "@/hooks"
 import { useAppSelector } from "@/redux"
 import { explorerUrl, toWormholeNativeFromUniversal } from "@/services"
-import { computeDenomination, formatDay, truncateString } from "@/utils"
+import { computeDenomination, formatDay, truncateString, valuesWithKey } from "@/utils"
 import {
     Card,
     CardBody,
@@ -43,14 +43,15 @@ export const VAAProfile = () => {
     )
 
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
-    const fromChain = Object.values(chains).find(
+    const valuesWithKeyChains = valuesWithKey(chains)
+    const fromChain = valuesWithKeyChains.find(
         ({ chain }) => chain === emitterChain
     )
-    const targetChain = Object.values(chains).find(
+    const targetChain = valuesWithKeyChains.find(
         ({ chain }) => chain === payload.to.chain
     )
 
-    const protocol = Object.values(
+    const protocol = valuesWithKey(
         crosschainConfig()[fromChain?.key ?? defaultChainKey][
             targetChain?.key ?? defaultSecondaryChainKey
         ]

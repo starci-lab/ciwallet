@@ -6,9 +6,10 @@ import { useAppSelector } from "@/redux"
 import { createAccount } from "@/services"
 import React from "react"
 import { Avatar, Card, CardBody, Image } from "@nextui-org/react"
+import { WithKey } from "@/utils"
 
 export interface TokenProps {
-  token: TokenInfo;
+  token: WithKey<TokenInfo>;
 }
 
 export const Token = ({ token }: TokenProps) => {

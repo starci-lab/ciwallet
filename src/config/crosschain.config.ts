@@ -4,7 +4,6 @@ export enum SupportedBridgeProtocolKey {
   Wormhole = "wormhole",
 }
 export interface BridgeProtocol {
-  key: SupportedBridgeProtocolKey;
   name: string;
   imageUrl: string;
   warningMsg: string,
@@ -18,7 +17,6 @@ export interface CrosschainConfig {
 }
 
 export const wormholeBridgeProtocol: BridgeProtocol = {
-    key: SupportedBridgeProtocolKey.Wormhole,
     name: "Wormhole",
     imageUrl: "/icons/wormhole.svg",
     warningMsg: "To ensure a successful wormhole transfer, make sure your native token amount is greater than 0.1.",

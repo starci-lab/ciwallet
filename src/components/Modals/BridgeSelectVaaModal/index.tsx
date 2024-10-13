@@ -16,6 +16,7 @@ import {
 import { useBridgeSelectVaaModalDisclosure } from "@/hooks"
 import { useAppSelector } from "@/redux"
 import { VAAProfile } from "./VAAProfile"
+import { valuesWithKey } from "@/utils"
 
 export const BridgeSelectVaaModal = () => {
     const { isOpen, onClose } = useBridgeSelectVaaModalDisclosure()
@@ -35,7 +36,7 @@ export const BridgeSelectVaaModal = () => {
                         <CardBody className="p-0">
                             <ScrollShadow hideScrollBar className="max-h-[400px]">
                                 <div>
-                                    {Object.values(storedVaas).reverse()
+                                    {valuesWithKey(storedVaas).reverse()
                                         .map((vaa, index) => {
                                             return (
                                                 <div key={vaa.key}>

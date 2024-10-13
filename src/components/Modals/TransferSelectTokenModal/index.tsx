@@ -19,6 +19,7 @@ import {
     useTransferSelectTokenModalDisclosure
 } from "@/hooks"
 import { useAppSelector } from "@/redux"
+import { valuesWithKey } from "@/utils"
 
 export const TransferSelectTokenModal = () => {
     const { isOpen, onClose } = useTransferSelectTokenModalDisclosure()
@@ -38,7 +39,7 @@ export const TransferSelectTokenModal = () => {
                     <Card>
                         <CardBody className="p-0">
                             <div>
-                                {Object.values(tokens).map(
+                                {valuesWithKey(tokens).map(
                                     ({ imageUrl, key, name, symbol }, index) => {
                                         return (
                                             <div key={key}>

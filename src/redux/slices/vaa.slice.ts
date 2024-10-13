@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit"
 import { v4 } from "uuid"
 
 export interface StoredVaa {
-    key: string
     serializedVaa: string 
     txHash?: string
     network: Network
@@ -35,11 +34,10 @@ export const vaaSlice = createSlice({
         },
         addStoredVaa: (
             state,
-            { payload }: { payload: Omit<StoredVaa, "key"> }
+            { payload }: { payload: StoredVaa }
         ) => {
             const key = v4()
-            const _payload: StoredVaa = { ...payload, key }
-            state.storedVaas[key] = _payload
+            state.storedVaas[key] = payload
             state.selectedKey = key
         },
         triggerSaveStoredVaas: (state) => {

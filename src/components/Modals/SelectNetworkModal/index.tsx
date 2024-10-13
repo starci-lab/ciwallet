@@ -16,6 +16,7 @@ import {
 } from "@nextui-org/react"
 import { setPreferenceChainKey, useAppDispatch, useAppSelector } from "@/redux"
 import { useSelectNetworkModalDisclosure } from "@/hooks"
+import { valuesWithKey } from "@/utils"
 
 export const SelectNetworkModal = () => {
     const { isOpen, onClose } =
@@ -23,7 +24,7 @@ export const SelectNetworkModal = () => {
 
     const dispatch = useAppDispatch()
 
-    const chains = Object.values(useAppSelector(state => state.blockchainReducer.chains))
+    const chains = valuesWithKey(useAppSelector(state => state.blockchainReducer.chains))
     const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
 
     return (

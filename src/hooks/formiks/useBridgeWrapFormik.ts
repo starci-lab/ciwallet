@@ -6,6 +6,7 @@ import { nativeTokenKey } from "@/config"
 import { useEffect } from "react"
 import { createAttestation, parseNetwork, submitAttestation } from "@/services"
 import { useSigner } from "../miscellaneous"
+import { valuesWithKey } from "@/utils"
 
 export interface BridgeWrapFormikValues {
   tokenKey: string;
@@ -28,7 +29,7 @@ export const _useBridgeWrapFormik = (): FormikProps<BridgeWrapFormikValues> => {
     const wrappedTokens = useAppSelector(
         (state) => state.resultReducer.bridge.wrappedTokens
     )
-    const remainingChains = Object.values(chains)
+    const remainingChains = valuesWithKey(chains)
         .filter((chain) => chain.key !== preferenceChainKey)
         .filter(
             (chain) =>

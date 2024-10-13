@@ -20,7 +20,6 @@ import {
 import { createAccount, transfer, parseNetwork } from "@/services"
 import { useBalance, useSigner } from "../miscellaneous"
 import { computeRaw } from "@/utils"
-import { v4 } from "uuid"
 
 export interface BridgeTransferFormikValues {
   targetChainKey: string;
@@ -145,7 +144,6 @@ export const _useBridgeTransferFormik =
               dispatch(
                   setBridgeTransferResult({
                       vaa: {
-                          key: v4(),
                           network,
                           senderAddress: address,
                           serializedVaa,

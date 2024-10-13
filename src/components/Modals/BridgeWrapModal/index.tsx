@@ -19,12 +19,13 @@ import {
     useBridgeWrapFormik,
     useBridgeWrapModalDisclosure,
 } from "@/hooks"
+import { valuesWithKey } from "@/utils"
 
 export const BridgeWrapModal = () => {
     const { isOpen, onClose } = useBridgeWrapModalDisclosure()
     const formik = useBridgeWrapFormik()
 
-    const chains = Object.values(
+    const chains = valuesWithKey(
         useAppSelector((state) => state.blockchainReducer.chains)
     )
     const preferenceChainKey = useAppSelector(

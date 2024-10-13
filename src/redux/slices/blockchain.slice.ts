@@ -46,7 +46,7 @@ export const blockchainSlice = createSlice({
             { payload: { chainKey, tokenInfo } }: { payload: AddTokenParams }
         ) => {
             const key = v4()
-            state.chains[chainKey].tokens[key] = { ...tokenInfo, key }
+            state.chains[chainKey].tokens[key] = tokenInfo
         },
     },
 })

@@ -2,13 +2,14 @@
 import { useAppSelector } from "@/redux"
 import React from "react"
 import { Token } from "./Token"
+import { valuesWithKey } from "@/utils"
 
 export const Tokens = () => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
 
-    const tokens = Object.values(useAppSelector(
+    const tokens = valuesWithKey(useAppSelector(
         (state) => state.blockchainReducer.chains[preferenceChainKey].tokens
     )) 
 

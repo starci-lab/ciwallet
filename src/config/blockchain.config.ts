@@ -1,3 +1,4 @@
+import { valuesWithKey } from "@/utils"
 import { ChainId, Chain } from "@wormhole-foundation/sdk"
 
 export enum Network {
@@ -9,14 +10,12 @@ export const blockchainConfig = (): ChainConfig => {
     return {
         chains: {
             [SupportedChainKey.Avalanche]: {
-                key: "avalanche",
                 imageUrl: "/icons/avalanche.svg",
                 wormholeChainId: 6,
                 chain: "Avalanche",
                 name: "Avalanche",
                 tokens: {
                     native: {
-                        key: "native",
                         addresses: {
                             [Network.Mainnet]: "native",
                             [Network.Testnet]: "native",
@@ -27,7 +26,6 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 18,
                     },
                     $CARROT: {
-                        key: "$CARROT",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "0xA9E72Ae9FfEc2a10AA9b6d617d1faf4953A2dADD",
@@ -38,7 +36,6 @@ export const blockchainConfig = (): ChainConfig => {
                         symbol: "$CARROT"
                     },
                     $CAULI: {
-                        key: "$CAULI",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "0x93ED1074fa946946309CdBe0cc873c58d6a725F1",
@@ -53,10 +50,9 @@ export const blockchainConfig = (): ChainConfig => {
                     cifarm: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        key: "cifarm",
+
                         nfts: {
                             premiumTile: {
-                                key: "premiumTile",
                                 addresses: {
                                     [Network.Mainnet]: "",
                                     [Network.Testnet]: "0x410d3e15058e8544B14FD1a317E330f693444673",
@@ -70,14 +66,12 @@ export const blockchainConfig = (): ChainConfig => {
                 },
             },
             [SupportedChainKey.Aptos]: {
-                key: "aptos",
                 imageUrl: "/icons/aptos.svg",
                 wormholeChainId: 22,
                 chain: "Aptos",
                 name: "Aptos",
                 tokens: {
                     native: {
-                        key: "native",
                         addresses: {
                             [Network.Mainnet]: "native",
                             [Network.Testnet]: "native",
@@ -88,7 +82,6 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 8,
                     },
                     $CARROT: {
-                        key: "$CARROT",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "",
@@ -99,7 +92,6 @@ export const blockchainConfig = (): ChainConfig => {
                         symbol: "$CARROT"
                     },
                     $CAULI: {
-                        key: "$CAULI",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
@@ -114,10 +106,8 @@ export const blockchainConfig = (): ChainConfig => {
                     cifarm: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        key: "cifarm",
                         nfts: {
                             premiumTile: {
-                                key: "premiumTile",
                                 addresses: {
                                     [Network.Mainnet]: "",
                                     [Network.Testnet]: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
@@ -131,14 +121,12 @@ export const blockchainConfig = (): ChainConfig => {
                 },
             },
             [SupportedChainKey.Solana]: {
-                key: "solana",
                 imageUrl: "/icons/solana.svg",
                 wormholeChainId: 1,
                 chain: "Solana",
                 name: "Solana",
                 tokens: {
                     native: {
-                        key: "native",
                         addresses: {
                             [Network.Mainnet]: "native",
                             [Network.Testnet]: "native",
@@ -149,7 +137,6 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 9,
                     },
                     usdc: {
-                        key: "usdc",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
@@ -160,7 +147,6 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 6,
                     },
                     $CARROT: {
-                        key: "$CARROT",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "FnQEAh9NNPzE26Z8iBq9onU3gzynGeHbPVy8gdwHFYee",
@@ -171,7 +157,6 @@ export const blockchainConfig = (): ChainConfig => {
                         symbol: "$CARROT"
                     },
                     $CAULI: {
-                        key: "$CAULI",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "4XqC5una95jkts6EUcuiicVQr18ZVPhJCzKVj9hYTEC7",
@@ -186,10 +171,8 @@ export const blockchainConfig = (): ChainConfig => {
                     cifarm: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        key: "cifarm",
                         nfts: {
                             premiumTile: {
-                                key: "premiumTile",
                                 addresses: {
                                     [Network.Mainnet]: "",
                                     [Network.Testnet]: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
@@ -203,14 +186,12 @@ export const blockchainConfig = (): ChainConfig => {
                 },
             },
             [SupportedChainKey.Bsc]: {
-                key: "bsc",
                 imageUrl: "/icons/bsc.svg",
                 wormholeChainId: 4,
                 chain: "Bsc",
                 name: "Binance Smart Chain",
                 tokens: {
                     native: {
-                        key: "native",
                         imageUrl: "/icons/bsc.svg",
                         name: "Binance Coin",
                         symbol: "BNB",
@@ -221,7 +202,6 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 18,
                     },
                     usdt: {
-                        key: "usdt",
                         addresses: {
                             [Network.Mainnet]: "", // Replace with actual address if available
                             [Network.Testnet]: "0xDcbA7F0D49885D5C9e7CDF3e27897a5F3cdfbf62",
@@ -236,20 +216,17 @@ export const blockchainConfig = (): ChainConfig => {
                     cifarm: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        key: "cifarm",
                         nfts: {},
                     },
                 },
             },
             [SupportedChainKey.Algorand]: {
-                key: "algorand",
                 imageUrl: "/icons/algorand.svg",
                 wormholeChainId: 8,
                 chain: "Algorand",
                 name: "Algorand",
                 tokens: {
                     native: {
-                        key: "native",
                         imageUrl: "/icons/algorand.svg",
                         name: "Algorand",
                         symbol: "ALGO",
@@ -260,7 +237,6 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 6,
                     },
                     usdt: {
-                        key: "usdt",
                         addresses: {
                             [Network.Mainnet]: "", // Replace with actual address if available
                             [Network.Testnet]: "0xDcbA7F0D49885D5C9e7CDF3e27897a5F3cdfbf62",
@@ -275,20 +251,17 @@ export const blockchainConfig = (): ChainConfig => {
                     cifarm: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        key: "cifarm",
                         nfts: {},
                     },
                 },
             },
             [SupportedChainKey.Sui]: {
-                key: "sui",
                 imageUrl: "/icons/sui.svg",
                 wormholeChainId: 22,
                 chain: "Sui",
                 name: "Sui",
                 tokens: {
                     native: {
-                        key: "native",
                         addresses: {
                             [Network.Mainnet]: "native",
                             [Network.Testnet]: "native",
@@ -299,7 +272,6 @@ export const blockchainConfig = (): ChainConfig => {
                         decimals: 8,
                     },
                     $CARROT: {
-                        key: "$CARROT",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "",
@@ -310,7 +282,6 @@ export const blockchainConfig = (): ChainConfig => {
                         symbol: "$CARROT"
                     },
                     $CAULI: {
-                        key: "$CAULI",
                         addresses: {
                             [Network.Mainnet]: "",
                             [Network.Testnet]: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
@@ -325,10 +296,8 @@ export const blockchainConfig = (): ChainConfig => {
                     cifarm: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        key: "cifarm",
                         nfts: {
                             premiumTile: {
-                                key: "premiumTile",
                                 addresses: {
                                     [Network.Mainnet]: "",
                                     [Network.Testnet]: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
@@ -345,19 +314,17 @@ export const blockchainConfig = (): ChainConfig => {
     }
 }
 
-export const chains = Object.keys(blockchainConfig().chains)
-export const chainInfos = Object.values(blockchainConfig().chains)
+export const chains = valuesWithKey(blockchainConfig().chains)
+export const chainInfos = valuesWithKey(blockchainConfig().chains)
 
-export const defaultChainKey = blockchainConfig().chains[chains[0]].key
-export const defaultChain = blockchainConfig().chains[chains[0]].chain
-export const defaultSecondaryChainKey =
-  blockchainConfig().chains[chains[1]].key
-export const defaultSecondaryChain = blockchainConfig().chains[chains[1]].chain
+export const defaultChainKey = chains[0].key
+export const defaultChain = blockchainConfig().chains[defaultChainKey].chain
+export const defaultSecondaryChainKey = chains[1].key
+export const defaultSecondaryChain = blockchainConfig().chains[defaultSecondaryChainKey].chain
 
 export const nativeTokenKey = "native"
 
 export interface ChainInfo {
-  key: string;
   wormholeChainId: ChainId;
   imageUrl: string;
   chain: Chain;
@@ -367,7 +334,6 @@ export interface ChainInfo {
 }
 
 export interface TokenInfo {
-  key: string;
   addresses: Record<Network, string>;
   imageUrl: string;
   name: string;
@@ -376,14 +342,12 @@ export interface TokenInfo {
 }
 
 export interface NftGroupInfo {
-  key: string;
   imageUrl: string;
   name: string;
   nfts: Record<string, NftInfo>;
 }
 
 export interface NftInfo {
-  key: string;
   addresses: Record<Network, string>;
   imageUrl: string;
   name: string;

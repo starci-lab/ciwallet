@@ -17,7 +17,7 @@ import {
     parseNetwork,
     toWormholeNative,
 } from "@/services"
-import { truncateString } from "@/utils"
+import { truncateString, valuesWithKey } from "@/utils"
 import {
     Image,
     Button,
@@ -56,7 +56,7 @@ export const WrapTab = () => {
         async () => {
             const wrappedTokens: Record<string, WrappedToken> = {}
             const promises: Array<Promise<void>> = []
-            for (const chain of Object.values(chains)) {
+            for (const chain of valuesWithKey(chains)) {
                 const promise = async () => {
                     try {
                         if (chain.chain === sourceChainName) return
@@ -206,14 +206,14 @@ export const WrapTab = () => {
                                         removeWrapper
                                         className="w-5 h-5"
                                         src={
-                                            Object.values(chains).find(
+                                            valuesWithKey(chains).find(
                                                 (chain) => chain.chain === originalAssetSwr.data?.chain
                                             )?.imageUrl
                                         }
                                     />
                                     <div>
                                         {
-                                            Object.values(chains).find(
+                                            valuesWithKey(chains).find(
                                                 (chain) => chain.chain === originalAssetSwr.data?.chain
                                             )?.name
                                         }

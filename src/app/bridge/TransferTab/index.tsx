@@ -26,7 +26,7 @@ import {
 } from "@/redux"
 import React, { useEffect } from "react"
 import { createAccount, explorerUrl } from "@/services"
-import { replace, truncateString } from "@/utils"
+import { replace, truncateString, valuesWithKey } from "@/utils"
 import { v4 } from "uuid"
 
 export const TransferTab = () => {
@@ -72,7 +72,7 @@ export const TransferTab = () => {
     const protocols =
     crosschainConfig()[preferenceChainKey][formik.values.targetChainKey]
 
-    const defaultBridgeProtocol = Object.values(protocols)[0]
+    const defaultBridgeProtocol = valuesWithKey(protocols)[0]
 
     useEffect(() => {
         if (formik.values.tokenKey === nativeTokenKey) {
@@ -145,7 +145,7 @@ export const TransferTab = () => {
                         formik.setFieldValue("targetChainKey", selectedChainKey)
                     }}
                 >
-                    {Object.values(chains)
+                    {valuesWithKey(chains)
                         .filter(({ key }) => key !== preferenceChainKey)
                         .map(({ key, name, imageUrl }) => (
                             <SelectItem
@@ -176,7 +176,7 @@ export const TransferTab = () => {
                         formik.setFieldValue("bridgeProtocolKey", bridgeProtocolKey)
                     }}
                 >
-                    {Object.values(protocols).map(({ key, name, imageUrl }) => (
+                    {valuesWithKey(protocols).map(({ key, name, imageUrl }) => (
                         <SelectItem
                             startContent={<Image className="w-5 h-5" src={imageUrl} />}
                             key={key}

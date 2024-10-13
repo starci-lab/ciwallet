@@ -37,6 +37,18 @@ export const truncateString = (
     return `${address.slice(0, start)}...${address.slice(-end)}`
 }
 
-export const replace = (str: string, search: string, replace: string): string => {
+export const replace = (
+    str: string,
+    search: string,
+    replace: string
+): string => {
     return str.split(search).join(replace)
+}
+
+export type WithKey<T> = T & { key: string }
+
+export const valuesWithKey = <T extends object>(
+    object: Record<string, T>
+): Array<WithKey<T>> => {
+    return Object.entries(object).map(([key, value]) => ({ ...value, key }))
 }

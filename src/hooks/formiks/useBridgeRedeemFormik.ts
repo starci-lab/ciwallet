@@ -10,6 +10,7 @@ import {
 import { parseNetwork, redeem } from "@/services"
 import { useGenericSigner } from "../miscellaneous"
 import { deserialize, VAA } from "@wormhole-foundation/sdk"
+import { valuesWithKey } from "@/utils"
 
 export interface BridgeRedeemFormikValues {
   dump: "";
@@ -44,7 +45,7 @@ export const _useBridgeRedeemFormik =
       }
      
 
-      const targetChain = Object.values(chains).find(({ chain }) => chain === deserializedVaa?.payload.to.chain)
+      const targetChain = valuesWithKey(chains).find(({ chain }) => chain === deserializedVaa?.payload.to.chain)
       const signer = useGenericSigner(targetChain?.key, deserializedVaa?.payload.to.address.toString())
 
       const formik = useFormik({

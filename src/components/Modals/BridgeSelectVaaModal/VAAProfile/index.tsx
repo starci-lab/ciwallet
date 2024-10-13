@@ -3,13 +3,13 @@ import { crosschainConfig, defaultChainKey, defaultSecondaryChain, defaultSecond
 import { useWormholeDecimals } from "@/hooks"
 import { selectVaa, StoredVaa, useAppDispatch, useAppSelector } from "@/redux"
 import { explorerUrl, toWormholeNative } from "@/services"
-import { computeDenomination, formatDay, truncateString } from "@/utils"
+import { computeDenomination, formatDay, truncateString, valuesWithKey, WithKey } from "@/utils"
 import { Card, CardBody, Chip, Image, Link, Snippet, Spacer } from "@nextui-org/react"
 import { deserialize } from "@wormhole-foundation/sdk"
 import React from "react"
 
 export interface VAAProfileProps {
-  vaa: StoredVaa
+  vaa: WithKey<StoredVaa>
   selectedKey: string;
 }
 
@@ -30,14 +30,15 @@ export const VAAProfile = ({
         Uint8Array.from(Buffer.from(serializedVaa, "base64"))
     )
     
-    const fromChain = Object.values(chains).find(
+    const valuesWithKeyChains = valuesWithKey(chains)
+    const fromChain = valuesWithKeyChains.find(
         ({ chain }) => chain === emitterChain
     )
-    const targetChain = Object.values(chains).find(
+    const targetChain = valuesWithKeyChains.find(
         ({ chain }) => chain === payload.to.chain
     )
 
-    const protocol = Object.values(
+    const protocol = valuesWithKey(
         crosschainConfig()[fromChain?.key ?? defaultChainKey][
             targetChain?.key ?? defaultSecondaryChainKey
         ]
