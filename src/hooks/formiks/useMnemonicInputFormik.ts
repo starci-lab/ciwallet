@@ -34,7 +34,7 @@ export const _useMnemonicInputFormik = (): FormikProps<MnemonicInputFormikValues
         validationSchema,
         onSubmit: ({ mnemonic }) => {
             dispatch(setMnemonic(mnemonic))
-            router.push(constantConfig().path.home)
+            router.push(constantConfig().path.createPassword)
         },
     })
 
