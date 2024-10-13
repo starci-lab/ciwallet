@@ -20,10 +20,6 @@ export const MnemonicModal = () => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const baseAccounts = useAppSelector(
-        (state) => state.authReducer.baseAccounts
-    )
-    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
     const chain = useAppSelector(
         (state) => state.blockchainReducer.chains[preferenceChainKey]
     )
@@ -55,8 +51,6 @@ export const MnemonicModal = () => {
                             )}
                         </div>
                         <div>
-                            <div className="text-sm">Account Number: {activePrivateKey}</div>
-                            <Spacer y={1.5} />
                             <div className="text-xs text-warning text-justify">
                 You can import the mnemonic into CiWallet, along with the
                 Account Number above, to retrieve this wallet on {chain.name}.
