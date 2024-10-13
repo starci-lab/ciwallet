@@ -20,7 +20,7 @@ export const _useUnity = (): UseUnityReturn => {
         }
         return "no-store"
     }
-       
+
     const unity = useUnityContext({
         loaderUrl: envConfig().externals.cifarm.packages.loaderUrl,
         dataUrl: envConfig().externals.cifarm.packages.dataUrl,

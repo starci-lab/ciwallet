@@ -3,7 +3,7 @@ import { useUnity } from "./useUnity"
 import { Unity } from "react-unity-webgl"
 import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
-import { Spinner } from "@nextui-org/react"
+import { Avatar, Progress, Image } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
 import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
@@ -16,12 +16,12 @@ export const WrappedUnityCanvas = () => {
         unity: {
             unityProvider,
             isLoaded,
+            loadingProgression,
             sendMessage,
             addEventListener,
             removeEventListener,
         },
     } = useUnity()
-
     const [devicePixelRatio, setDevicePixelRatio] = useState(
         window.devicePixelRatio
     )
@@ -62,15 +62,40 @@ export const WrappedUnityCanvas = () => {
             )
         }, TIME_OUT)
     }, [isLoaded])
-    
+
+    const chains = useAppSelector((state) => state.blockchainReducer.chains)
+    const preferenceChainKey = useAppSelector(
+        (state) => state.blockchainReducer.preferenceChainKey
+    )
     return (
         <div className="w-full h-full relative">
             {!isLoaded ? (
                 <div className="absolute w-full h-full place-items-center grid">
-                    <Spinner label="Loading..." size="lg" />
+                    <div className="grid place-items-center gap-4 w-full relative">
+                        <div className="relative">
+                            <Avatar
+                                isBordered
+                                src={chains[preferenceChainKey]?.imageUrl}
+                                classNames={{
+                                    base: "absolute w-20 h-20 bottom-0 right-0 z-20 ring-0 bg-background",
+                                }}
+                            />
+                            <Image
+                                radius="full"
+                                removeWrapper
+                                src={"/icons/cifarm.png"}
+                                className="w-[160px] h-[160px]"
+                            />
+                        </div>
+                        <Progress
+                            label="Game loading..."
+                            className="w-[300px]"
+                            showValueLabel
+                            value={loadingProgression * 100}
+                        />
+                    </div>
                 </div>
             ) : null}
-
             <Unity
                 className="w-full h-full"
                 devicePixelRatio={devicePixelRatio}
