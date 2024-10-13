@@ -9,6 +9,7 @@ export interface UseUnityReturn {
   unity: UnityContextHook;
 }
 
+export const VERSION = "a.1.0"
 export const _useUnity = (): UseUnityReturn => {
 
     const handleCacheControl = (url: string): UnityCacheControlMode => {
@@ -22,10 +23,10 @@ export const _useUnity = (): UseUnityReturn => {
     }
 
     const unity = useUnityContext({
-        loaderUrl: envConfig().externals.cifarm.packages.loaderUrl,
-        dataUrl: envConfig().externals.cifarm.packages.dataUrl,
-        frameworkUrl: envConfig().externals.cifarm.packages.frameworkUrl,
-        codeUrl: envConfig().externals.cifarm.packages.wasmUrl,
+        loaderUrl:`${envConfig().externals.cifarm.packages.loaderUrl}_${VERSION}`,
+        dataUrl: `${envConfig().externals.cifarm.packages.dataUrl}_${VERSION}`,
+        frameworkUrl: `${envConfig().externals.cifarm.packages.frameworkUrl}_${VERSION}`,
+        codeUrl: `${envConfig().externals.cifarm.packages.wasmUrl}_${VERSION}`,
         cacheControl: handleCacheControl
     })
 
