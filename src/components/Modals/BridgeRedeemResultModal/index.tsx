@@ -25,7 +25,7 @@ export const BridgeRedeemResultModal = () => {
 
     let deserializedVaa: VAA<"TokenBridge:Transfer"> | undefined
     if (vaa) {
-        deserializedVaa = deserialize<"TokenBridge:Transfer">("TokenBridge:Transfer", vaa.serializedVaa)
+        deserializedVaa = deserialize<"TokenBridge:Transfer">("TokenBridge:Transfer", Uint8Array.from(Buffer.from(vaa.serializedVaa, "base64")))
     }
     const chains = useAppSelector(state => state.blockchainReducer.chains)
     const targetChain = valuesWithKey(chains).find(({ chain }) => chain === deserializedVaa?.payload.to.chain)

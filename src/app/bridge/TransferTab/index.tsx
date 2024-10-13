@@ -62,10 +62,9 @@ export const TransferTab = () => {
         tokenKey: formik.values.tokenKey,
         accountAddress: address,
     })
-
     const { data } = { ...balanceSwr }
     useEffect(() => {
-        if (data !== undefined) return
+        if (data === undefined) return
         formik.setFieldValue("balance", data)
     }, [data])
 

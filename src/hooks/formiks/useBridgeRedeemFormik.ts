@@ -33,10 +33,7 @@ export const _useBridgeRedeemFormik =
       const chains = useAppSelector((state) => state.blockchainReducer.chains)
 
       const targetChain = valuesWithKey(chains).find(({chain}) => chain === deserializedVaa?.payload.to.chain) 
-   
-      const preferenceChainKey = useAppSelector(
-          (state) => state.blockchainReducer.preferenceChainKey
-      )
+
       const minimalFee = Object.values(crosschainConfig()[targetChain?.key ?? defaultSecondaryChainKey][defaultChainKey])[0].minimalFee
       const initialValues: BridgeRedeemFormikValues = {
           nativeAmountPlusFee: minimalFee,
@@ -45,14 +42,15 @@ export const _useBridgeRedeemFormik =
       const dispatch = useAppDispatch()
 
       const address = useAppSelector(
-          (state) => state.authReducer.credentials[preferenceChainKey].address
+          (state) => state.authReducer.credentials[targetChain?.key ?? defaultSecondaryChainKey].address
       )
       const { balanceSwr: nativeTokenBalanceSwr } = useBalance({
           tokenKey: nativeTokenKey,
           accountAddress: address,
           chainKey: targetChain?.key ?? defaultSecondaryChainKey,
       })
-      
+      console.log(nativeTokenBalanceSwr)
+
       const validationSchema = Yup.object({
           nativeAmountPlusFee: nativeTokenBalanceSwr.data !== undefined
               ? Yup.number().max(
@@ -86,7 +84,7 @@ export const _useBridgeRedeemFormik =
               })
 
               dispatch(setBridgeRedeemResult({ txHash, vaa }))
-              dispatch(useVaa(vaa.serializedVaa))
+              dispatch(useVaa(selectedKey))
           },
       })
 

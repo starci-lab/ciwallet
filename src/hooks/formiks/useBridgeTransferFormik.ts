@@ -84,8 +84,8 @@ export const _useBridgeTransferFormik =
           accountAddress: address,
           chainKey: preferenceChainKey,
       })
-
-      console.log(nativeTokenBalanceSwr.data !== undefined)
+      
+      console.log(nativeTokenBalanceSwr.data)
       const validationSchema = Yup.object({
           amount: Yup.number()
               .min(0, "Amount must be higher than 0")
