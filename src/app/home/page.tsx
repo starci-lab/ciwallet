@@ -71,118 +71,120 @@ const Page = () => {
 
     return (
         <Container hasPadding>
-            <div className="w-full">
-                <div className="flex items-center justify-between">
-                    <Snippet
-                        hideSymbol
-                        classNames={{
-                            base: "p-0 bg-inhenrit",
-                            pre: "font-inherit",
-                        }}
-                        size="sm"
-                        codeString={address}
-                    >
-                        <Card disableRipple isPressable onPress={onOpen} shadow="none">
-                            <CardBody className="p-0">
-                                <User
-                                    avatarProps={{
-                                        src: imageUrl,
-                                    }}
-                                    name={
-                                        <div className="flex gap-1 text-sm items-center">
-                                            <div>{name}</div>
-                                            <div className="text-primary">{`[${activeAccountNumber}]`}</div>
-                                        </div>
-                                    }
-                                    description={truncateString(address)}
+            <div>
+                <div className="w-full">
+                    <div className="flex items-center justify-between">
+                        <Snippet
+                            hideSymbol
+                            classNames={{
+                                base: "p-0 bg-inhenrit",
+                                pre: "font-inherit",
+                            }}
+                            size="sm"
+                            codeString={address}
+                        >
+                            <Card disableRipple isPressable onPress={onOpen} shadow="none">
+                                <CardBody className="p-0">
+                                    <User
+                                        avatarProps={{
+                                            src: imageUrl,
+                                        }}
+                                        name={
+                                            <div className="flex gap-1 text-sm items-center">
+                                                <div>{name}</div>
+                                                <div className="text-primary">{`[${activeAccountNumber}]`}</div>
+                                            </div>
+                                        }
+                                        description={truncateString(address)}
+                                    />
+                                </CardBody>
+                            </Card>
+                        </Snippet>
+                        <div className="flex gap-2 items-center">
+                            <Link
+                                as="button"
+                                onPress={() => router.push(constantConfig().path.settings)}
+                                color="foreground"
+                            >
+                                <Cog6ToothIcon className="w-5 h-5" />
+                            </Link>
+                            <Link as="button" color="foreground">
+                                <BellIcon className="w-5 h-5" />
+                            </Link>
+                            <Button
+                                onPress={onSelectNetworkModalOpen}
+                                isIconOnly
+                                variant="flat"
+                            >
+                                <Image
+                                    className="w-5 h-5"
+                                    src={chains[preferenceChainKey].imageUrl}
                                 />
-                            </CardBody>
-                        </Card>
-                    </Snippet>
-                    <div className="flex gap-2 items-center">
-                        <Link
-                            as="button"
-                            onPress={() => router.push(constantConfig().path.settings)}
-                            color="foreground"
-                        >
-                            <Cog6ToothIcon className="w-5 h-5" />
-                        </Link>
-                        <Link as="button" color="foreground">
-                            <BellIcon className="w-5 h-5" />
-                        </Link>
-                        <Button
-                            onPress={onSelectNetworkModalOpen}
-                            isIconOnly
-                            variant="flat"
-                        >
-                            <Image
-                                className="w-5 h-5"
-                                src={chains[preferenceChainKey].imageUrl}
-                            />
-                        </Button>
+                            </Button>
+                        </div>
+                    </div>
+                    <Spacer y={6} />
+                    <BalanceSummaryInUSD />
+                    <Spacer y={6} />
+                    <div className="flex gap-2">
+                        <Tooltip content="Transfer">
+                            <Button
+                                onPress={() => router.push(constantConfig().path.transfer)}
+                                variant="flat"
+                                isIconOnly
+                            >
+                                <PaperAirplaneIcon className="w-5 h-5" />
+                            </Button>
+                        </Tooltip>
+                        <Tooltip content="Bridge">
+                            <Button
+                                onPress={() => router.push(constantConfig().path.bridge)}
+                                variant="flat"
+                                isIconOnly
+                            >
+                                <SendToBackIcon strokeWidth={1.5} className="w-5 h-5" />
+                            </Button>
+                        </Tooltip>
+                        <Tooltip content="Receive">
+                            <Button variant="flat" isIconOnly>
+                                <QrCodeIcon className="w-5 h-5" />
+                            </Button>
+                        </Tooltip>
                     </div>
                 </div>
                 <Spacer y={6} />
-                <BalanceSummaryInUSD />
+                <div>
+                    <Link
+                        onPress={() => router.push(constantConfig().path.cifarm)}
+                        as="button"
+                        className="flex"
+                    >
+                        <Image removeWrapper src="/icons/cifarm.png" className="w-16 h-16" />
+                    </Link>
+                </div>
                 <Spacer y={6} />
-                <div className="flex gap-2">
-                    <Tooltip content="Transfer">
-                        <Button
-                            onPress={() => router.push(constantConfig().path.transfer)}
-                            variant="flat"
-                            isIconOnly
-                        >
-                            <PaperAirplaneIcon className="w-5 h-5" />
-                        </Button>
-                    </Tooltip>
-                    <Tooltip content="Bridge">
-                        <Button
-                            onPress={() => router.push(constantConfig().path.bridge)}
-                            variant="flat"
-                            isIconOnly
-                        >
-                            <SendToBackIcon strokeWidth={1.5} className="w-5 h-5" />
-                        </Button>
-                    </Tooltip>
-                    <Tooltip content="Receive">
-                        <Button variant="flat" isIconOnly>
-                            <QrCodeIcon className="w-5 h-5" />
-                        </Button>
-                    </Tooltip>
+                <div className="flex items-center justify-between">
+                    <Tabs
+                        selectedKey={assetsTab}
+                        onSelectionChange={(key) =>
+                            dispatch(switchAssetsTab(key as AssetsTab))
+                        }
+                    >
+                        <Tab title="Tokens" key={AssetsTab.Tokens} />
+                        <Tab title="NFTs" key={AssetsTab.NFTs} />
+                    </Tabs>
+                    <div className="flex gap-2">
+                        <Link as="button" onPress={() => dispatch(triggerRefreshBalance())}>
+                            <RefreshCcwIcon strokeWidth={1.5} className="w-5 h-5" />
+                        </Link>
+                        <Link as="button">
+                            <PlusIcon className="w-5 h-5" />
+                        </Link>
+                    </div>
                 </div>
+                <Spacer y={4} />
+                {assetsTab === AssetsTab.Tokens ? <Tokens /> : <NFTs />}
             </div>
-            <Spacer y={6} />
-            <div>
-                <Link
-                    onPress={() => router.push(constantConfig().path.cifarm)}
-                    as="button"
-                    className="flex"
-                >
-                    <Image removeWrapper src="/icons/cifarm.png" className="w-16 h-16" />
-                </Link>
-            </div>
-            <Spacer y={6} />
-            <div className="flex items-center justify-between">
-                <Tabs
-                    selectedKey={assetsTab}
-                    onSelectionChange={(key) =>
-                        dispatch(switchAssetsTab(key as AssetsTab))
-                    }
-                >
-                    <Tab title="Tokens" key={AssetsTab.Tokens} />
-                    <Tab title="NFTs" key={AssetsTab.NFTs} />
-                </Tabs>
-                <div className="flex gap-2">
-                    <Link as="button" onPress={() => dispatch(triggerRefreshBalance())}>
-                        <RefreshCcwIcon strokeWidth={1.5} className="w-5 h-5" />
-                    </Link>
-                    <Link as="button">
-                        <PlusIcon className="w-5 h-5" />
-                    </Link>
-                </div>
-            </div>
-            <Spacer y={4} />
-            {assetsTab === AssetsTab.Tokens ? <Tokens /> : <NFTs />}
         </Container>
     )
 }
