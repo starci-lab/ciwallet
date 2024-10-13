@@ -9,6 +9,71 @@ export enum Network {
 export const blockchainConfig = (): ChainConfig => {
     return {
         chains: {
+            [SupportedChainKey.Solana]: {
+                imageUrl: "/icons/solana.svg",
+                wormholeChainId: 1,
+                chain: "Solana",
+                name: "Solana",
+                tokens: {
+                    native: {
+                        addresses: {
+                            [Network.Mainnet]: "native",
+                            [Network.Testnet]: "native",
+                        },
+                        imageUrl: "/icons/solana.svg",
+                        name: "Solana",
+                        symbol: "SOL",
+                        decimals: 9,
+                    },
+                    usdc: {
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                        },
+                        imageUrl: "/icons/usdc.svg",
+                        name: "USD Coin",
+                        symbol: "USDC",
+                        decimals: 6,
+                    },
+                    $CARROT: {
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "FnQEAh9NNPzE26Z8iBq9onU3gzynGeHbPVy8gdwHFYee",
+                        },
+                        name: "$CARROT Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CARROT.png",
+                        symbol: "$CARROT"
+                    },
+                    $CAULI: {
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "4XqC5una95jkts6EUcuiicVQr18ZVPhJCzKVj9hYTEC7",
+                        },
+                        name: "$CAULI Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CAULI.png",
+                        symbol: "$CAULI"
+                    }
+                },
+                nftGroups: {
+                    cifarm: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        nfts: {
+                            premiumTile: {
+                                addresses: {
+                                    [Network.Mainnet]: "",
+                                    [Network.Testnet]: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
+                                },
+                                imageUrl: "/icons/premium-tile.png",
+                                name: "CiFarm Premium Tile",
+                                symbol: "CPT",
+                            },
+                        },
+                    },
+                },
+            },
             [SupportedChainKey.Avalanche]: {
                 imageUrl: "/icons/avalanche.svg",
                 wormholeChainId: 6,
@@ -111,71 +176,6 @@ export const blockchainConfig = (): ChainConfig => {
                                 addresses: {
                                     [Network.Mainnet]: "",
                                     [Network.Testnet]: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
-                                },
-                                imageUrl: "/icons/premium-tile.png",
-                                name: "CiFarm Premium Tile",
-                                symbol: "CPT",
-                            },
-                        },
-                    },
-                },
-            },
-            [SupportedChainKey.Solana]: {
-                imageUrl: "/icons/solana.svg",
-                wormholeChainId: 1,
-                chain: "Solana",
-                name: "Solana",
-                tokens: {
-                    native: {
-                        addresses: {
-                            [Network.Mainnet]: "native",
-                            [Network.Testnet]: "native",
-                        },
-                        imageUrl: "/icons/solana.svg",
-                        name: "Solana",
-                        symbol: "SOL",
-                        decimals: 9,
-                    },
-                    usdc: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
-                        },
-                        imageUrl: "/icons/usdc.svg",
-                        name: "USD Coin",
-                        symbol: "USDC",
-                        decimals: 6,
-                    },
-                    $CARROT: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "FnQEAh9NNPzE26Z8iBq9onU3gzynGeHbPVy8gdwHFYee",
-                        },
-                        name: "$CARROT Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CARROT.png",
-                        symbol: "$CARROT"
-                    },
-                    $CAULI: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "4XqC5una95jkts6EUcuiicVQr18ZVPhJCzKVj9hYTEC7",
-                        },
-                        name: "$CAULI Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CAULI.png",
-                        symbol: "$CAULI"
-                    }
-                },
-                nftGroups: {
-                    cifarm: {
-                        name: "CiFarm",
-                        imageUrl: "/icons/cifarm.png",
-                        nfts: {
-                            premiumTile: {
-                                addresses: {
-                                    [Network.Mainnet]: "",
-                                    [Network.Testnet]: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
                                 },
                                 imageUrl: "/icons/premium-tile.png",
                                 name: "CiFarm Premium Tile",
