@@ -33,6 +33,11 @@ export const useNFTs = ({
             nftAddress,
             network,
         })
+        const emptyResult: GetNftsByOwnerAddressResult = {
+            records: [],
+            count: 0,
+        }
+        if (!accountAddress) return emptyResult
         return await nftService.getNftsByOwnerAddress({
             accountAddress,
             skip,

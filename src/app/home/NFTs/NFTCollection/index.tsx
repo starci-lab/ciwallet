@@ -15,10 +15,16 @@ export const NFTCollection = ({ nft }: NFTCollectionProps) => {
         (state) => state.blockchainReducer.preferenceChainKey
     )
     const network = useAppSelector((state) => state.blockchainReducer.network)
-    const credentials = useAppSelector((state) => state.authReducer.credentials)
+    
+    const baseAccounts = useAppSelector(
+        (state) => state.authReducer.baseAccounts
+    )
+    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+
+    const { accountAddress } = { ...baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]}
     
     const { nftsSwr } = useNFTs({
-        accountAddress: credentials[preferenceChainKey].address,
+        accountAddress,
         chainKey: preferenceChainKey,
         nftAddress: nft.addresses[network],
         skip: 0,

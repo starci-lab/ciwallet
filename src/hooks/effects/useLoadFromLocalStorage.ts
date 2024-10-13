@@ -12,6 +12,7 @@ import {
     setCurrent
 } from "@/redux"
 import {
+    foundEncryptedBaseAccounts,
     foundEncryptedMnemonic,
     loadBaseAccounts,
     loadChains,
@@ -33,12 +34,16 @@ export const useLoadFromLocalStorage = () => {
     const router = useRouter()
 
     useEffect(() => {
-        const found = foundEncryptedMnemonic()
+        const foundMnemonic = foundEncryptedMnemonic()
+        const foundBaseAccounts = foundEncryptedBaseAccounts()
+        const found = foundMnemonic && foundBaseAccounts
+
         if (found) {
             router.push(constantConfig().path.password)
         } else {
             router.push(constantConfig().path.auth)
         }
+        
         dispatch(setHasAuthBefore(found))
         dispatch(setInitialized(true))
     }, [])

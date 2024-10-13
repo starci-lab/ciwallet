@@ -91,6 +91,10 @@ export const foundEncryptedMnemonic = () => {
     return !!localStorage.getItem(ENCRYPTED_MNEMONIC)
 }
 
+export const foundEncryptedBaseAccounts = () => {
+    return !!localStorage.getItem(ENCRYPTED_BASE_ACCOUNTS)
+}
+
 export const savePreferenceChainKey = (preferenceChainKey: string) => {
     localStorage.setItem(PREFERENCE_CHAIN, preferenceChainKey)
 }
