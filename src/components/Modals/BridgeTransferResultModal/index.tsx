@@ -10,12 +10,10 @@ import {
     Button,
     Snippet,
     Spacer,
-    Link,
 } from "@nextui-org/react"
 import { useBridgeTransferResultModalDiscloresure } from "@/hooks"
 import { useAppSelector } from "@/redux"
-import { truncateString } from "@/utils"
-import { explorerUrl } from "@/services"
+import { TxHash } from "@/components"
 
 export const BridgeTransferResultModal = () => {
     const { isOpen, onClose } = useBridgeTransferResultModalDiscloresure()
@@ -23,9 +21,6 @@ export const BridgeTransferResultModal = () => {
     const result = useAppSelector((state) => state.resultReducer.bridge.transfer)
     const { vaa, txHash } = { ...result }
 
-    const network = useAppSelector(
-        (state) => state.blockchainReducer.network
-    )
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
@@ -54,19 +49,7 @@ export const BridgeTransferResultModal = () => {
                         <Spacer y={4} />
                         <div className="flex items-center justify-between">
                             <div className="text-sm">Tx Hash</div>
-                            <Link
-                                showAnchorIcon
-                                isExternal
-                                size="sm"
-                                href={explorerUrl({
-                                    chainKey: preferenceChainKey,
-                                    value: txHash ?? "",
-                                    type: "tx",
-                                    network,
-                                })}
-                            >
-                                {txHash ? truncateString(txHash) : null}
-                            </Link>
+                            <TxHash bridgeProtocolKey={vaa?.bridgeProtocolKey ?? ""} chainKey={preferenceChainKey} txHash={txHash ?? ""} />
                         </div>
                     </div>
                 </ModalBody>

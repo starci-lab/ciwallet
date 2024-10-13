@@ -65,7 +65,7 @@ export const TransferTab = () => {
 
     const { data } = { ...balanceSwr }
     useEffect(() => {
-        if (!data) return
+        if (data !== undefined) return
         formik.setFieldValue("balance", data)
     }, [data])
 

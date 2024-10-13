@@ -8,21 +8,20 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    Link,
 } from "@nextui-org/react"
 import { useBridgeRedeemResultModalDiscloresure } from "@/hooks"
 import { useAppSelector } from "@/redux"
-import { explorerUrl } from "@/services"
-import { truncateString, valuesWithKey } from "@/utils"
-import { defaultChainKey } from "@/config"
+import { valuesWithKey } from "@/utils"
+import { defaultSecondaryChainKey } from "@/config"
 import { deserialize, VAA } from "@wormhole-foundation/sdk"
+import { TxHash } from "@/components/TxHash"
+
 export const BridgeRedeemResultModal = () => {
     const { isOpen, onClose } =
     useBridgeRedeemResultModalDiscloresure()
     
     const result = useAppSelector(state => state.resultReducer.bridge.redeem)
     const { vaa, txHash } = { ...result }
-    const network = useAppSelector(state => state.blockchainReducer.network)
 
     let deserializedVaa: VAA<"TokenBridge:Transfer"> | undefined
     if (vaa) {
@@ -30,7 +29,7 @@ export const BridgeRedeemResultModal = () => {
     }
     const chains = useAppSelector(state => state.blockchainReducer.chains)
     const targetChain = valuesWithKey(chains).find(({ chain }) => chain === deserializedVaa?.payload.to.chain)
-
+    
     return (
         <Modal hideCloseButton isOpen={isOpen}>
             <ModalContent>
@@ -39,19 +38,7 @@ export const BridgeRedeemResultModal = () => {
                     <div className="grid gap-4">
                         <div className="flex items-center justify-between">
                             <div className="text-sm">Tx Hash</div>
-                            <Link
-                                showAnchorIcon
-                                isExternal
-                                size="sm"
-                                href={explorerUrl({
-                                    chainKey: targetChain?.key ?? defaultChainKey,
-                                    value: txHash ?? "",
-                                    type: "tx",
-                                    network,
-                                })}
-                            >
-                                {txHash ? truncateString(txHash) : null}
-                            </Link>
+                            <TxHash bridgeProtocolKey={vaa?.bridgeProtocolKey ?? ""} chainKey={targetChain?.key ?? defaultSecondaryChainKey} txHash={txHash ?? ""} />
                         </div>
                     </div>
                 </ModalBody>

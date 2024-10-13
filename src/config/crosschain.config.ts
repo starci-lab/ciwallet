@@ -23,6 +23,10 @@ export const wormholeBridgeProtocol: BridgeProtocol = {
     minimalFee: 0.1
 }
 
+export const bridgeProtocols: Record<string, BridgeProtocol> = {
+    [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol
+}
+
 export const crosschainConfig = () : CrosschainConfig => ({
     [SupportedChainKey.Algorand]: {
         [SupportedChainKey.Aptos]: {

@@ -9,7 +9,6 @@ import {
 } from "@/config"
 import {
     useBridgeSelectVaaModalDisclosure,
-    useWormholeDecimals,
 } from "@/hooks"
 import { useAppSelector } from "@/redux"
 import { explorerUrl, toWormholeNativeFromUniversal } from "@/services"
@@ -36,6 +35,7 @@ export const VAAProfile = () => {
         serializedVaa,
         network,
         bridgeProtocolKey,
+        decimals
     } = storedVaas[selectedKey]
     const { emitterChain, payload, timestamp } = deserialize(
         "TokenBridge:Transfer",
@@ -69,14 +69,6 @@ export const VAAProfile = () => {
             </Chip>
         ),
     }
-
-    const { decimalsSwr } = useWormholeDecimals({
-        chainKey: targetChain?.key ?? defaultChainKey,
-        tokenAddress: toWormholeNativeFromUniversal(
-            targetChain?.chain ?? defaultSecondaryChain,
-            payload.token.address
-        ),
-    })
     
     return (
         <Card onPress={onOpen} fullWidth isPressable disableRipple>
@@ -169,14 +161,14 @@ export const VAAProfile = () => {
                         <div className="flex gap-1 items-center">
                             <div className="w-[80px] text-sm">Amount</div>
                             <div className="text-sm">
-                                {computeDenomination(payload.token.amount, decimalsSwr.data)}
+                                {computeDenomination(payload.token.amount, decimals)}
                             </div>
                         </div>
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">
                             <div className="w-[80px] text-sm">Fee</div>
                             <div className="text-sm">
-                                {computeDenomination(payload.fee, decimalsSwr.data)}
+                                {computeDenomination(payload.fee, decimals)}
                             </div>
                         </div>
                         <Spacer y={2} />

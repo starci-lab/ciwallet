@@ -62,13 +62,14 @@ export const _useBridgeTransferFormik =
           formik.setFieldValue("targetAccountNumber", defaultTargetAccountNumber)
       }, [aptosAccountNumber, solanaAccountNumber])
 
-      const minimalFee = Object.values(crosschainConfig()[preferenceChainKey][defaultSecondaryChainKey])[0].minimalFee
+      const _defaultSecondaryChainKey = preferenceChainKey === defaultChainKey ? defaultSecondaryChainKey : defaultChainKey
+      const minimalFee = Object.values(crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey])[0].minimalFee
 
       const initialValues: BridgeTransferFormikValues = {
           amount: 0,
           targetAccountNumber: 0,
           targetAddress: "",
-          targetChainKey: defaultSecondaryChainKey,
+          targetChainKey: _defaultSecondaryChainKey,
           tokenKey: nativeTokenKey,
           balance: 0,
           bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
@@ -84,12 +85,13 @@ export const _useBridgeTransferFormik =
           chainKey: preferenceChainKey,
       })
 
+      console.log(nativeTokenBalanceSwr.data !== undefined)
       const validationSchema = Yup.object({
           amount: Yup.number()
               .min(0, "Amount must be higher than 0")
               .max(Yup.ref("balance"), "Insufficient balance.")
               .required("Amount is required"),
-          nativeAmountPlusFee: nativeTokenBalanceSwr.data
+          nativeAmountPlusFee: nativeTokenBalanceSwr.data !== undefined
               ? Yup.number().max(
                   nativeTokenBalanceSwr.data,
                   ({ value }) => 
@@ -150,6 +152,7 @@ export const _useBridgeTransferFormik =
                           txHash,
                           bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
                           tokenInfo: tokens[tokenKey],
+                          decimals: tokens[tokenKey].decimals,
                       },
                       txHash,
                   })
@@ -161,6 +164,7 @@ export const _useBridgeTransferFormik =
                   txHash,
                   tokenInfo: tokens[tokenKey],
                   bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
+                  decimals: tokens[tokenKey].decimals,
               }))
               dispatch(triggerSaveStoredVaas())
           },

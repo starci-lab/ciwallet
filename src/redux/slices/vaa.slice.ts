@@ -9,6 +9,7 @@ export interface StoredVaa {
     senderAddress?: string
     tokenInfo?: TokenInfo
     bridgeProtocolKey: string
+    decimals: number
 }
 export type StoredVaas = Record<string, StoredVaa>
 
