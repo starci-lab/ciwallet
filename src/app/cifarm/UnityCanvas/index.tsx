@@ -3,7 +3,7 @@ import { useUnity } from "./useUnity"
 import { Unity } from "react-unity-webgl"
 import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
-import { Avatar, Progress, Image } from "@nextui-org/react"
+import { Avatar, Progress, Image, Spacer } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
 import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
@@ -87,12 +87,16 @@ export const WrappedUnityCanvas = () => {
                                 className="w-[160px] h-[160px]"
                             />
                         </div>
-                        <Progress
-                            label="Game loading..."
-                            className="w-[300px]"
-                            showValueLabel
-                            value={loadingProgression * 100}
-                        />
+                        <div>
+                            <Progress
+                                label="Game loading..."
+                                className="w-[300px]"
+                                showValueLabel
+                                value={loadingProgression * 100}
+                            />
+                            <Spacer y={1.5}/>
+                            <div className="text-xs text-warning">Please be patient, the first load may take a little longer. </div>
+                        </div>
                     </div>
                 </div>
             ) : null}

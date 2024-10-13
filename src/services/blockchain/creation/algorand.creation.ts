@@ -1,7 +1,7 @@
-import { mnemonicToSecretKey, mnemonicFromSeed } from "algosdk"
+import { mnemonicToSecretKey, mnemonicFromSeed, secretKeyToMnemonic } from "algosdk"
 import { ChainAccount } from "../common"
 import { getSeed } from "../../cryptography"
-import { CreateAccountParams } from "./types.creation"
+import { CreateAccountParams, ImportAccountParams } from "./types.creation"
 
 export const createAlgorandAccount = ({
     mnemonic,
@@ -12,6 +12,18 @@ export const createAlgorandAccount = ({
         accountNumber,
     })
     const algorandMnemonic = mnemonicFromSeed(seed.subarray(0, 32))
+    const account = mnemonicToSecretKey(algorandMnemonic)
+    return {
+        address: account.addr.toString(),
+        privateKey: Buffer.from(account.sk).toString("hex"),
+        publicKey: account.addr.toString(),
+    }
+}
+
+export const importAlgorandAccount = ({
+    privateKey,
+}: Omit<ImportAccountParams, "chainKey">): ChainAccount => {
+    const algorandMnemonic = secretKeyToMnemonic(Uint8Array.from(Buffer.from(privateKey, "hex")))
     const account = mnemonicToSecretKey(algorandMnemonic)
     return {
         address: account.addr.toString(),

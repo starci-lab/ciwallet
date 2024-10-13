@@ -43,9 +43,10 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const { privateKey, publicKey, address } = useAppSelector(
-        (state) => state.authReducer.credentials[preferenceChainKey]
-    )
+    const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
+    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+    const { accountAddress, publicKey } = {...baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]}
+
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const dispatch = useAppDispatch()
 
@@ -53,17 +54,20 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
         const {
             data: { message },
         } = await requestMessage()
-        if (privateKey === "") return
+        if (!activePrivateKey) return
+        if (!publicKey) return
+        if (!accountAddress) return
+
         const signature = await signMessage({
             chainKey: preferenceChainKey,
             message,
-            privateKey,
+            privateKey: activePrivateKey,
         })
         if (!client) return
         let _publicKey = publicKey
         const platform = chainKeyToPlatform(preferenceChainKey)
         if (platform === Platform.Evm) {
-            _publicKey = address
+            _publicKey = accountAddress
         }
 
         const session = await client.authenticateCustom(

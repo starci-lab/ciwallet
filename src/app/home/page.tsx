@@ -47,21 +47,12 @@ const Page = () => {
     )
     const router = useRouter()
 
-    const address = useAppSelector(
-        (state) => state.authReducer.credentials[preferenceChainKey].address
-    )
+    const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
+    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+    const account = baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]
+    const { name, imageUrl, accountAddress } = { ...account }
 
     const assetsTab = useAppSelector((state) => state.tabReducer.assetsTab)
-
-    const accounts = useAppSelector(
-        (state) => state.authReducer.accountNumbers[preferenceChainKey].accounts
-    )
-    const activeAccountNumber = useAppSelector(
-        (state) =>
-            state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
-    )
-
-    const { name, imageUrl } = accounts[activeAccountNumber]
 
     const { onOpen: onSelectNetworkModalOpen } =
     useSelectNetworkModalDisclosure()
@@ -81,7 +72,7 @@ const Page = () => {
                                 pre: "font-inherit",
                             }}
                             size="sm"
-                            codeString={address}
+                            codeString={accountAddress}
                         >
                             <Card disableRipple isPressable onPress={onOpen} shadow="none">
                                 <CardBody className="p-0">
@@ -92,10 +83,9 @@ const Page = () => {
                                         name={
                                             <div className="flex gap-1 text-sm items-center">
                                                 <div>{name}</div>
-                                                <div className="text-primary">{`[${activeAccountNumber}]`}</div>
                                             </div>
                                         }
-                                        description={truncateString(address)}
+                                        description={truncateString(accountAddress ?? "")}
                                     />
                                 </CardBody>
                             </Card>

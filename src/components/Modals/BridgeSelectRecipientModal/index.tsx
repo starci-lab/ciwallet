@@ -17,15 +17,16 @@ import {
     useBridgeSelectRecipientModalDisclosure,
 } from "@/hooks"
 import { useAppSelector } from "@/redux"
-import { BridgeAccountUser } from "../../BridgeAccountUser"
+import { BridgeAccountUser } from "./BridgeAccountUser"
+import { valuesWithKey } from "@/utils"
 
 export const BridgeSelectRecipientModal = () => {
     const { isOpen, onClose } = useBridgeSelectRecipientModalDisclosure()
     const formik = useBridgeTransferFormik()
 
-    const accounts =
-    useAppSelector(state => state.authReducer.accountNumbers[formik.values.targetChainKey].accounts)
-    const entries = Object.entries(accounts)
+    const baseAccounts = useAppSelector(state => state.authReducer.baseAccounts)
+    const accounts = baseAccounts[formik.values.targetChainKey]?.accounts
+    const _accounts = valuesWithKey(accounts ?? {})
 
     return (
         <Modal isOpen={isOpen} hideCloseButton>
@@ -35,15 +36,14 @@ export const BridgeSelectRecipientModal = () => {
                     <Card>
                         <CardBody className="p-0">
                             <div>
-                                {entries.map(([ accountNumber, account ], index) => (
-                                    <div key={accountNumber}>
+                                {_accounts.map((account, index) => (
+                                    <div key={account.name}>
                                         <BridgeAccountUser
-                                            accountNumber={Number.parseInt(accountNumber)}
                                             account={account}
-                                            key={accountNumber}
+                                            activePrivateKey={formik.values.targetPrivateKey}
                                             targetChainKey={formik.values.targetChainKey}
                                         />
-                                        {index !== entries.length - 1 && <Divider />}
+                                        {index !== _accounts.length - 1 && <Divider />}
                                     </div>
                                 ))}
                             </div>

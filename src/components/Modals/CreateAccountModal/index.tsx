@@ -6,48 +6,44 @@ import {
     ModalContent,
     ModalHeader,
     ModalBody,
-    ModalFooter,
-    Button,
-    Input,
+    Tabs,
+    Tab,
 } from "@nextui-org/react"
-import { useCreateAccountFormik, useCreateAccountModalDisclosure } from "@/hooks"
+import { useCreateAccountModalDisclosure } from "@/hooks"
+import { CreateAccountTab, switchCreateAccountTab, useAppDispatch, useAppSelector } from "@/redux"
+import { GenerateTab } from "./GenerateTab"
+import { ImportTab } from "./ImportTab"
 
 export const CreateAccountModal = () => {
-    const { isOpen, onClose } = useCreateAccountModalDisclosure()
-    const formik = useCreateAccountFormik()
+    const { isOpen } = useCreateAccountModalDisclosure()
+   
+    const createAccountTab = useAppSelector((state) => state.tabReducer.createAccountTab)
+    const dispatch = useAppDispatch()
 
     return (
         <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>
                 <ModalHeader className="p-4 pb-2 font-bold">Create Account</ModalHeader>
                 <ModalBody className="p-4">
-                    <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
-                        <Input
-                            id="accountNumber"
-                            label="Account Number"
-                            size="lg"
-                            placeholder="Input account number here"
-                            description="Left account number blank to generate a new account number"
-                            labelPlacement="outside"
-                            value={formik.values.accountNumber}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            isInvalid={!!(formik.touched.accountNumber && formik.errors.accountNumber)}
-                            errorMessage={formik.touched.accountNumber && formik.errors.accountNumber}
-                        />
-                    </form>
+                    <Tabs
+                        aria-label="Bridge"
+                        selectedKey={createAccountTab}
+                        onSelectionChange={(tab) => {
+                            dispatch(switchCreateAccountTab(tab as CreateAccountTab))
+                        }}
+                        classNames={{
+                            panel: "p-0 flex-1",
+                            tabList: "w-full",
+                        }}
+                    >
+                        <Tab key={CreateAccountTab.Generate} title="Generate">
+                            <GenerateTab />
+                        </Tab>
+                        <Tab key={CreateAccountTab.Import} title="Import">
+                            <ImportTab />
+                        </Tab>
+                    </Tabs>
                 </ModalBody>
-                <ModalFooter className="p-4 pt-2">
-                    <Button color="primary" variant="bordered" onPress={onClose}>
-            Close
-                    </Button>
-                    <Button color="primary" onPress={() => {
-                        formik.handleSubmit()
-                        onClose()  
-                    }}>
-            Create
-                    </Button>
-                </ModalFooter>
             </ModalContent>
         </Modal>
     )

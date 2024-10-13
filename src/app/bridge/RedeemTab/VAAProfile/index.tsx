@@ -11,7 +11,7 @@ import {
     useBridgeSelectVaaModalDisclosure,
 } from "@/hooks"
 import { useAppSelector } from "@/redux"
-import { explorerUrl, toWormholeNativeFromUniversal } from "@/services"
+import { toWormholeNativeFromUniversal } from "@/services"
 import { computeDenomination, formatDay, truncateString, valuesWithKey } from "@/utils"
 import {
     Card,
@@ -20,7 +20,6 @@ import {
     Image,
     Snippet,
     Chip,
-    Link,
 } from "@nextui-org/react"
 import { deserialize } from "@wormhole-foundation/sdk"
 import React from "react"
@@ -135,27 +134,13 @@ export const VAAProfile = () => {
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">
                             <div className="w-[80px] text-sm">Token</div>
-                            <Link
-                                size="sm"
-                                isExternal
-                                showAnchorIcon
-                                href={explorerUrl({
-                                    chainKey: fromChain?.key ?? defaultChainKey,
-                                    value: toWormholeNativeFromUniversal(
-                                        fromChain?.chain ?? defaultChain,
-                                        payload.token.address
-                                    ),
-                                    type: "address",
-                                    network,
-                                })}
-                            >
-                                {truncateString(
+                            <div className="text-sm">{
+                                truncateString(
                                     toWormholeNativeFromUniversal(
                                         fromChain?.chain ?? defaultChain,
                                         payload.token.address
                                     ),
-                                )}
-                            </Link>
+                                )}</div>
                         </div>
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">
@@ -174,27 +159,14 @@ export const VAAProfile = () => {
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">
                             <div className="w-[80px] text-sm">To</div>
-                            <Link
-                                size="sm"
-                                isExternal
-                                showAnchorIcon
-                                href={explorerUrl({
-                                    chainKey: targetChain?.key ?? defaultSecondaryChainKey,
-                                    value: toWormholeNativeFromUniversal(
-                                        targetChain?.chain ?? defaultSecondaryChain,
-                                        payload.to.address
-                                    ),
-                                    type: "address",
-                                    network,
-                                })}
-                            >
+                            <div className="text-sm">
                                 {truncateString(
                                     toWormholeNativeFromUniversal(
                                         targetChain?.chain ?? defaultSecondaryChain,
                                         payload.to.address
                                     ),
                                 )}
-                            </Link>
+                            </div>
                         </div>
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">

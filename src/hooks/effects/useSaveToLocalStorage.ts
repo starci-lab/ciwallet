@@ -1,25 +1,29 @@
 import { useAppSelector } from "@/redux"
-import { saveAccountNumbers, saveChains, saveVaas } from "@/services"
+import { saveEncryptedBaseAccounts, saveChains, saveVaas } from "@/services"
 import { useEffect } from "react"
 
 export const useSaveToLocalStorage = () => {
-    const accountNumbers = useAppSelector(
-        (state) => state.authReducer.accountNumbers
+    const baseAccounts = useAppSelector(
+        (state) => state.authReducer.baseAccounts
     )
 
-    const saveAccountNumbersKey = useAppSelector((state) => state.authReducer.saveAccountNumbersKey)
+    const saveBaseAccountsKey = useAppSelector((state) => state.authReducer.saveBaseAccountsKey)
     const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
     const saveStoredVaasKey = useAppSelector((state) => state.vaaReducer.saveStoredVaasKey)
+    const password = useAppSelector((state) => state.authReducer.password)
 
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const saveChainsKey = useAppSelector((state) => state.blockchainReducer.saveChainsKey)
     
     useEffect(() => {
-        if (saveAccountNumbersKey) {
-            console.log(`Saving account numbers: ${Object.keys(accountNumbers).length}`)
-            saveAccountNumbers(accountNumbers)
+        if (saveBaseAccountsKey) {
+            console.log(`Saving base accounts: ${Object.keys(baseAccounts).length}`)
+            saveEncryptedBaseAccounts({
+                baseAccounts,
+                password
+            })
         }
-    }, [saveAccountNumbersKey])
+    }, [saveBaseAccountsKey])
 
     useEffect(() => {
         if (!saveStoredVaasKey) return

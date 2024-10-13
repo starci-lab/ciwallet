@@ -18,9 +18,11 @@ export const PrivateKeyModal = () => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const privateKey = useAppSelector(
-        (state) => state.authReducer.credentials[preferenceChainKey].privateKey
+    const baseAccounts = useAppSelector(
+        (state) => state.authReducer.baseAccounts
     )
+    const privateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+    
     return (
         <Modal isOpen={isOpen} hideCloseButton>
             <ModalContent>

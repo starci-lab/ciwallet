@@ -1,6 +1,6 @@
 import { ethers } from "ethers"
 import { ChainAccount } from "../common"
-import { CreateAccountParams } from "./types.creation"
+import { CreateAccountParams, ImportAccountParams } from "./types.creation"
 
 export const createEvmAccount = ({
     accountNumber,
@@ -13,5 +13,16 @@ export const createEvmAccount = ({
         address: account.address,
         privateKey: account.privateKey,
         publicKey: account.publicKey,
+    }
+}
+
+export const importEvmAccount = ({
+    privateKey,
+}: Omit<ImportAccountParams, "chainKey">): ChainAccount => {
+    const account = new ethers.Wallet(privateKey)
+    return {
+        address: account.address,
+        privateKey: account.privateKey,
+        publicKey: account.address,
     }
 }

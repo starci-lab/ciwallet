@@ -7,11 +7,21 @@ import {
     useAppSelector,
     useVaa,
 } from "@/redux"
-import { parseNetwork, redeem } from "@/services"
+import {
+    parseNetwork,
+    redeem,
+    toWormholeNativeFromUniversal,
+} from "@/services"
 import { useBalance, useGenericSigner } from "../miscellaneous"
 import { deserialize, VAA } from "@wormhole-foundation/sdk"
 import { valuesWithKey } from "@/utils"
-import { crosschainConfig, defaultChainKey, defaultSecondaryChainKey, nativeTokenKey } from "@/config"
+import {
+    crosschainConfig,
+    defaultChainKey,
+    defaultSecondaryChain,
+    defaultSecondaryChainKey,
+    nativeTokenKey,
+} from "@/config"
 
 export interface BridgeRedeemFormikValues {
   nativeAmountPlusFee: number;
@@ -19,11 +29,11 @@ export interface BridgeRedeemFormikValues {
 
 export const _useBridgeRedeemFormik =
   (): FormikProps<BridgeRedeemFormikValues> => {
-      const selectedKey = useAppSelector(state => state.vaaReducer.selectedKey)
-      const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas)
+      const selectedKey = useAppSelector((state) => state.vaaReducer.selectedKey)
+      const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
       const vaa = storedVaas[selectedKey]
-    
-      let deserializedVaa : VAA<"TokenBridge:Transfer"> | undefined
+
+      let deserializedVaa: VAA<"TokenBridge:Transfer"> | undefined
       if (vaa) {
           deserializedVaa = deserialize(
               "TokenBridge:Transfer",
@@ -32,38 +42,60 @@ export const _useBridgeRedeemFormik =
       }
       const chains = useAppSelector((state) => state.blockchainReducer.chains)
 
-      const targetChain = valuesWithKey(chains).find(({chain}) => chain === deserializedVaa?.payload.to.chain) 
+      const senderChain = valuesWithKey(chains).find(
+          ({ chain }) => chain === deserializedVaa?.emitterChain
+      )
+      const targetChain = valuesWithKey(chains).find(
+          ({ chain }) => chain === deserializedVaa?.payload.to.chain
+      )
 
-      const minimalFee = Object.values(crosschainConfig()[targetChain?.key ?? defaultSecondaryChainKey][defaultChainKey])[0].minimalFee
+      const senderChainKey = senderChain?.key ?? defaultChainKey
+      const targetChainKey = targetChain?.key ?? defaultSecondaryChainKey
+
+      const minimalFee = Object.values(
+          crosschainConfig()[senderChainKey][targetChainKey]
+      )[0].minimalFee
       const initialValues: BridgeRedeemFormikValues = {
           nativeAmountPlusFee: minimalFee,
       }
 
       const dispatch = useAppDispatch()
 
-      const address = useAppSelector(
-          (state) => state.authReducer.credentials[targetChain?.key ?? defaultSecondaryChainKey].address
+      const baseAccounts = useAppSelector(
+          (state) => state.authReducer.baseAccounts
       )
+      const activePrivateKey = baseAccounts[targetChainKey]?.activePrivateKey
+      const accountAddress =
+      baseAccounts[targetChainKey]?.accounts[activePrivateKey].accountAddress
+
       const { balanceSwr: nativeTokenBalanceSwr } = useBalance({
           tokenKey: nativeTokenKey,
-          accountAddress: address,
+          accountAddress,
           chainKey: targetChain?.key ?? defaultSecondaryChainKey,
       })
-      console.log(nativeTokenBalanceSwr)
 
       const validationSchema = Yup.object({
-          nativeAmountPlusFee: nativeTokenBalanceSwr.data !== undefined
-              ? Yup.number().max(
-                  nativeTokenBalanceSwr.data,
-                  `Your native balance is insufficient (Required: ${minimalFee} SYMBOL)`
-              )
-              : Yup.number(),
+          nativeAmountPlusFee:
+        nativeTokenBalanceSwr.data !== undefined
+            ? Yup.number().max(
+                nativeTokenBalanceSwr.data,
+                `Your native balance is insufficient (Required: ${minimalFee} SYMBOL)`
+            )
+            : Yup.number(),
       })
 
       const network = useAppSelector((state) => state.blockchainReducer.network)
 
-      const signer = useGenericSigner(targetChain?.key, deserializedVaa?.payload.to.address.toString())
-
+      const signer = useGenericSigner(
+          targetChain?.key,
+          deserializedVaa?.payload.to.address
+              ? toWormholeNativeFromUniversal(
+                  targetChain?.chain ?? defaultSecondaryChain,
+                  deserializedVaa.payload.to.address
+              )
+              : ""
+      )
+    
       const formik = useFormik({
           initialValues,
           validationSchema,
@@ -71,7 +103,7 @@ export const _useBridgeRedeemFormik =
               if (!vaa) return
               if (!signer) return
               if (!deserializedVaa) return
-              
+
               const txHash = await redeem({
                   signer,
                   vaa: deserialize(

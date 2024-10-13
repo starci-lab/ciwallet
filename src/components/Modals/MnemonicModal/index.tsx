@@ -20,10 +20,10 @@ export const MnemonicModal = () => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const activeAccountNumber = useAppSelector(
-        (state) =>
-            state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
+    const baseAccounts = useAppSelector(
+        (state) => state.authReducer.baseAccounts
     )
+    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
     const chain = useAppSelector(
         (state) => state.blockchainReducer.chains[preferenceChainKey]
     )
@@ -44,28 +44,25 @@ export const MnemonicModal = () => {
                                 fullWidth
                             >
                                 {mnemonic}
-                            </Snippet>  
-                            { preferenceChainKey === "algorand" && (
+                            </Snippet>
+                            {preferenceChainKey === "algorand" && (
                                 <>
                                     <Spacer y={1.5} />
-                                    <div className="text-xs text-foreground-400">Algorand uses a 25-word mnemonic.</div>
+                                    <div className="text-xs text-foreground-400">
+                    Algorand uses a 25-word mnemonic.
+                                    </div>
                                 </>
                             )}
-                        </div>     
-                        {
-                            preferenceChainKey !== "algorand" && (
-                                <div>
-                                    <div className="text-sm">
-                  Account Number: {activeAccountNumber}
-                                    </div>
-                                    <Spacer y={1.5} />
-                                    <div className="text-xs text-warning text-justify">
-                You can import the mnemonic into CiWallet, along with the Account Number above, to
-                retrieve this wallet on {chain.name}. Make sure to remember the Account Number.
-                                    </div>                      
-                                </div>
-                            )
-                        }
+                        </div>
+                        <div>
+                            <div className="text-sm">Account Number: {activePrivateKey}</div>
+                            <Spacer y={1.5} />
+                            <div className="text-xs text-warning text-justify">
+                You can import the mnemonic into CiWallet, along with the
+                Account Number above, to retrieve this wallet on {chain.name}.
+                Make sure to remember the Account Number.
+                            </div>
+                        </div>
                     </div>
                 </ModalBody>
                 <ModalFooter className="p-4 pt-2">

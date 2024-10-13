@@ -48,7 +48,9 @@ const Page = () => {
                     <div>
                         <div className="w-full flex justify-between">
                             <div className="flex gap-2 items-center">
-                                <AvatarGroup>
+                                <AvatarGroup classNames={{
+                                    count: "w-5 h-5",
+                                }}>
                                     {chains.map((chain) => (
                                         <Avatar
                                             key={chain.key}

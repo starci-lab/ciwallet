@@ -1,47 +1,33 @@
-import { ChainAccount } from "@/services"
+import { BaseAccounts, ChainAccount, StoredAccount } from "@/services"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-
-export interface StoredAccount {
-  imageUrl: string;
-  name: string;
-}
-
-export interface ChainAccountNumber {
-  accounts: Record<number, StoredAccount>;
-  activeAccountNumber: number;
-}
-
-export type AccountNumbers = Record<string, ChainAccountNumber>;
 
 export interface AuthState {
   mnemonic: string;
   telegramInfo: TelegramInfo;
-  accountNumbers: AccountNumbers;
-  saveAlgorandMnemonicsKey: number;
-  saveAccountNumbersKey: number;
+  baseAccounts: BaseAccounts;
+  saveBaseAccountsKey: number;
   password: string;
   hasAuthBefore: boolean;
   loaded: boolean;
   initialized: boolean;
-  credentials: ChainCredentials;
   current: string;
 }
 
-export interface CreateAccountParams {
-  accountNumber: number;
+export interface AddAccountParams {
+  privateKey: string;
   chainKey: string;
   account: StoredAccount;
 }
 
-export interface SetActiveAccountNumber {
-  preferenceChainKey: string;
-  accountNumber: number;
+export interface ImportAccountParams {
+  chainKey: string;
+  privateKey: string;
+  account: Omit<StoredAccount, "accountNumber">;
 }
 
-export interface ChainCredential {
-  address: string;
+export interface SetActivePrivateKey {
+  chainKey: string;
   privateKey: string;
-  publicKey: string;
 }
 
 export interface SetCredentialParams {
@@ -49,13 +35,11 @@ export interface SetCredentialParams {
   chainKey: string;
 }
 
-export type ChainCredentials = Record<string, ChainCredential>;
-
 export interface TelegramInfo {
-    id: number
-    username: string
-    referrerUserId: string
-    initDataRaw: string
+  id: number;
+  username: string;
+  referrerUserId: string;
+  initDataRaw: string;
 }
 
 const initialState: AuthState = {
@@ -64,103 +48,15 @@ const initialState: AuthState = {
         id: 0,
         username: "",
         referrerUserId: "",
-        initDataRaw: ""
+        initDataRaw: "",
     },
-    saveAccountNumbersKey: 0,
-    saveAlgorandMnemonicsKey: 0,
-    accountNumbers: {
-        aptos: {
-            activeAccountNumber: 0,
-            accounts: {
-                0: {
-                    imageUrl: "",
-                    name: "Account 0",
-                },
-            },
-        },
-        solana: {
-            activeAccountNumber: 0,
-            accounts: {
-                0: {
-                    imageUrl: "",
-                    name: "Account 0",
-                },
-            },
-        },
-        bsc: {
-            activeAccountNumber: 0,
-            accounts: {
-                0: {
-                    imageUrl: "",
-                    name: "Account 0",
-                },
-            },
-        },
-        avalanche: {
-            activeAccountNumber: 0,
-            accounts: {
-                0: {
-                    imageUrl: "",
-                    name: "Account 0",
-                },
-            },
-        },
-        algorand: {
-            activeAccountNumber: 0,
-            accounts: {
-                0: {
-                    imageUrl: "",
-                    name: "Account 0",
-                },
-            },
-        },
-        sui: {
-            activeAccountNumber: 0,
-            accounts: {
-                0: {
-                    imageUrl: "",
-                    name: "Account 0",
-                },
-            },
-        },
-    },
-    credentials: {
-        aptos: {
-            address: "",
-            privateKey: "",
-            publicKey: "",
-        },
-        solana: {
-            address: "",
-            privateKey: "",
-            publicKey: "",
-        },
-        bsc: {
-            address: "",
-            privateKey: "",
-            publicKey: "",
-        },
-        avalanche: {
-            address: "",
-            privateKey: "",
-            publicKey: "",
-        },
-        algorand: {
-            address: "",
-            privateKey: "",
-            publicKey: "",
-        },
-        sui: {
-            address: "",
-            privateKey: "",
-            publicKey: "",
-        },
-    },
+    saveBaseAccountsKey: 0,
+    baseAccounts: {},
     loaded: false,
     password: "",
     hasAuthBefore: false,
     initialized: false,
-    current: ""
+    current: "",
 }
 
 export const authSlice = createSlice({
@@ -173,76 +69,36 @@ export const authSlice = createSlice({
         setTelegramInfo: (state, { payload }: PayloadAction<TelegramInfo>) => {
             state.telegramInfo = payload
         },
-        setAccountNumbers: (
-            state,
-            {
-                payload: { aptos, solana, bsc, algorand, avalanche, sui },
-            }: PayloadAction<Partial<AccountNumbers>>
-        ) => {
-            if (avalanche) {
-                state.accountNumbers.avalanche = avalanche
-            }
-            if (aptos) {
-                state.accountNumbers.aptos = aptos
-            }
-            if (solana) {
-                state.accountNumbers.solana = solana
-            }
-            if (bsc) {
-                state.accountNumbers.bsc = bsc
-            }
-            if (algorand) {
-                state.accountNumbers.algorand = algorand
-            }
-            if (sui) {
-                state.accountNumbers.sui = sui
-            }
+        setBaseAccounts: (state, { payload }: PayloadAction<BaseAccounts>) => {
+            state.baseAccounts = payload
         },
-        triggerSaveAccountNumbers: (state) => {
-            state.saveAccountNumbersKey++
+        triggerSaveBaseAccounts: (state) => {
+            state.saveBaseAccountsKey++
         },
-        triggerSaveAlgorandMnemonics: (state) => {
-            state.saveAlgorandMnemonicsKey++
-        },
-        setCredential: (
-            state,
-            {
-                payload: {
-                    account: { address, privateKey, publicKey },
-                    chainKey,
-                },
-            }: PayloadAction<SetCredentialParams>
-        ) => {
-            if (address) {
-                state.credentials[chainKey].address = address
-            }
-            if (privateKey) {
-                state.credentials[chainKey].privateKey = privateKey
-            }
-            if (publicKey) {
-                state.credentials[chainKey].publicKey = publicKey
-            }
-        },
-        loadAccountNumbers: (state) => {
+        loadBaseAccounts: (state) => {
             state.loaded = true
         },
-        createAccount: (
+        addAccount: (
             state,
             {
-                payload: { chainKey, account, accountNumber },
-            }: PayloadAction<CreateAccountParams>
+                payload: { chainKey, account, privateKey },
+            }: PayloadAction<AddAccountParams>
         ) => {
-            state.accountNumbers[chainKey].accounts[accountNumber] = account
-            state.accountNumbers[chainKey].activeAccountNumber = accountNumber
+            // if the chain doesn't exist, create it
+            if (!state.baseAccounts[chainKey]) {
+                state.baseAccounts[chainKey] = {
+                    accounts: {},
+                    activePrivateKey: "",
+                }
+            }
+            state.baseAccounts[chainKey].accounts[privateKey] = account
+            state.baseAccounts[chainKey].activePrivateKey = privateKey
         },
-        setActiveAccountNumber: (
+        setActivePrivateKey: (
             state,
-            {
-                payload: { preferenceChainKey, accountNumber },
-            }: PayloadAction<SetActiveAccountNumber>
+            { payload: { chainKey, privateKey } }: PayloadAction<SetActivePrivateKey>
         ) => {
-            state.accountNumbers[preferenceChainKey].activeAccountNumber =
-        accountNumber
+            state.baseAccounts[chainKey].activePrivateKey = privateKey
         },
         setPassword: (state, { payload }: PayloadAction<string>) => {
             state.password = payload
@@ -261,17 +117,15 @@ export const authSlice = createSlice({
 
 export const {
     setMnemonic,
-    setAccountNumbers,
+    setBaseAccounts,
     setPassword,
     setHasAuthBefore,
-    createAccount,
-    triggerSaveAlgorandMnemonics,
-    setActiveAccountNumber,
-    loadAccountNumbers,
+    addAccount,
+    setActivePrivateKey,
+    loadBaseAccounts,
     setTelegramInfo,
     setInitialized,
-    triggerSaveAccountNumbers,
-    setCredential,
-    setCurrent
+    triggerSaveBaseAccounts,
+    setCurrent,
 } = authSlice.actions
 export const authReducer = authSlice.reducer

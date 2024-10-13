@@ -1,5 +1,5 @@
 "use client"
-import { crosschainConfig, defaultChainKey, nativeTokenKey } from "@/config"
+import { crosschainConfig, defaultChainKey, defaultSecondaryChainKey, nativeTokenKey } from "@/config"
 import {
     useBridgeTransferFormik,
     useBridgeSelectRecipientModalDisclosure,
@@ -25,7 +25,7 @@ import {
     useAppSelector,
 } from "@/redux"
 import React, { useEffect } from "react"
-import { createAccount, explorerUrl } from "@/services"
+import { explorerUrl } from "@/services"
 import { replace, truncateString, valuesWithKey } from "@/utils"
 import { v4 } from "uuid"
 
@@ -49,18 +49,18 @@ export const TransferTab = () => {
 
     const { imageUrl, name, symbol } = { ...token }
 
-    const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-
-    const { address } = createAccount({
-        accountNumber: formik.values.targetAccountNumber,
-        mnemonic,
-        chainKey: formik.values.targetChainKey,
-    })
+    const baseAccounts = useAppSelector(
+        (state) => state.authReducer.baseAccounts
+    )
+    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+    const { accountAddress } = {
+        ...baseAccounts[preferenceChainKey]?.accounts[activePrivateKey],
+    }
 
     const { balanceSwr } = useBalance({
         chainKey: preferenceChainKey,
         tokenKey: formik.values.tokenKey,
-        accountAddress: address,
+        accountAddress,
     })
     const { data } = { ...balanceSwr }
     useEffect(() => {
@@ -68,21 +68,25 @@ export const TransferTab = () => {
         formik.setFieldValue("balance", data)
     }, [data])
 
-    const protocols =
-    crosschainConfig()[preferenceChainKey][formik.values.targetChainKey]
+    const _differenceChainKey = preferenceChainKey === defaultChainKey ? defaultSecondaryChainKey : defaultChainKey
+    useEffect(() => {
+        if (preferenceChainKey === formik.values.targetChainKey) {
+            formik.setFieldValue("targetChainKey", _differenceChainKey)
+        }
+    }, [preferenceChainKey])
 
-    const defaultBridgeProtocol = valuesWithKey(protocols)[0]
+    const bridgeProtocols = crosschainConfig()[preferenceChainKey][formik.values.targetChainKey] ?? {} 
 
     useEffect(() => {
         if (formik.values.tokenKey === nativeTokenKey) {
             formik.setFieldValue(
                 "nativeAmountPlusFee",
-                Number(formik.values.amount) + defaultBridgeProtocol.minimalFee
+                Number(formik.values.amount) + (bridgeProtocols[formik.values.bridgeProtocolKey]?.minimalFee ?? 0)
             )
         } else {
             formik.setFieldValue(
                 "nativeAmountPlusFee",
-                defaultBridgeProtocol.minimalFee
+                bridgeProtocols[0].minimalFee
             )
         }
     }, [formik.values.tokenKey, formik.values.amount])
@@ -91,6 +95,16 @@ export const TransferTab = () => {
 
     const dispatch = useAppDispatch()
     const network = useAppSelector((state) => state.blockchainReducer.network)
+
+    useEffect(() => {
+    //havent load
+        if (!baseAccounts[formik.values.targetChainKey]) return
+        formik.setFieldValue(
+            "targetAddress",
+            valuesWithKey(baseAccounts[formik.values.targetChainKey].accounts)[0]
+                .accountAddress
+        )
+    }, [baseAccounts])
 
     return (
         <div className="w-full min-h-full flex flex-col gap-6 justify-between">
@@ -162,7 +176,7 @@ export const TransferTab = () => {
                         <Image
                             removeWrapper
                             className="w-5 h-5"
-                            src={protocols[formik.values.bridgeProtocolKey]?.imageUrl}
+                            src={bridgeProtocols[formik.values.bridgeProtocolKey]?.imageUrl}
                         />
                     }
                     label="Select Bridge Protocol"
@@ -171,11 +185,11 @@ export const TransferTab = () => {
                     onSelectionChange={(keys) => {
                         const currentKey = keys.currentKey
                         if (!currentKey) return
-                        const bridgeProtocolKey = currentKey ?? defaultBridgeProtocol.key
+                        const bridgeProtocolKey = currentKey
                         formik.setFieldValue("bridgeProtocolKey", bridgeProtocolKey)
                     }}
                 >
-                    {valuesWithKey(protocols).map(({ key, name, imageUrl }) => (
+                    {valuesWithKey(bridgeProtocols).map(({ key, name, imageUrl }) => (
                         <SelectItem
                             startContent={<Image className="w-5 h-5" src={imageUrl} />}
                             key={key}
@@ -187,7 +201,7 @@ export const TransferTab = () => {
                 </Select>
                 <Spacer y={1.5} />
                 <div className="text-xs text-warning text-justify">
-                    {protocols[formik.values.bridgeProtocolKey].warningMsg}
+                    {bridgeProtocols[formik.values.bridgeProtocolKey]?.warningMsg}
                 </div>
                 <Spacer y={4} />
                 <div>
@@ -198,7 +212,9 @@ export const TransferTab = () => {
                         fullWidth
                         onPress={onBridgeSelectRecipientModalDisclosureOpen}
                     >
-                        {address ? truncateString(address) : ""}
+                        {formik.values.targetAddress
+                            ? truncateString(formik.values.targetAddress)
+                            : ""}
                     </Button>
                 </div>
             </div>
@@ -217,7 +233,11 @@ export const TransferTab = () => {
                                             <div className="w-[80px]">Transfer</div>
                                             <div className="flex gap-1 items-center">
                                                 <div>{formik.values.amount}</div>
-                                                <Image removeWrapper className="w-5 h-5" src={imageUrl} />
+                                                <Image
+                                                    removeWrapper
+                                                    className="w-5 h-5"
+                                                    src={imageUrl}
+                                                />
                                                 <div className="text-sm">{symbol}</div>
                                             </div>
                                         </div>
@@ -251,10 +271,12 @@ export const TransferTab = () => {
                                                 <Image
                                                     removeWrapper
                                                     className="w-5 h-5"
-                                                    src={protocols[formik.values.bridgeProtocolKey].imageUrl}
+                                                    src={
+                                                        bridgeProtocols[formik.values.bridgeProtocolKey].imageUrl
+                                                    }
                                                 />
                                                 <div className="text-sm">
-                                                    {protocols[formik.values.bridgeProtocolKey].name}
+                                                    {bridgeProtocols[formik.values.bridgeProtocolKey].name}
                                                 </div>
                                             </div>
                                         </div>
@@ -265,14 +287,14 @@ export const TransferTab = () => {
                                                 isExternal
                                                 href={explorerUrl({
                                                     chainKey: preferenceChainKey,
-                                                    value: address,
+                                                    value: accountAddress ?? "",
                                                     network,
                                                     type: "address",
                                                 })}
                                                 color="primary"
                                                 size="sm"
                                             >
-                                                {truncateString(address)}
+                                                {accountAddress ? truncateString(accountAddress) : ""}
                                             </Link>
                                         </div>
                                     </div>

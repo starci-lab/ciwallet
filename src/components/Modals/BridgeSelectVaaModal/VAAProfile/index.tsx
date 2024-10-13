@@ -1,9 +1,9 @@
 "use client"
-import { crosschainConfig, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, Network } from "@/config"
+import { crosschainConfig, defaultChain, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, Network } from "@/config"
 import { selectVaa, StoredVaa, useAppDispatch, useAppSelector } from "@/redux"
-import { explorerUrl, toWormholeNative } from "@/services"
+import { toWormholeNativeFromUniversal } from "@/services"
 import { computeDenomination, formatDay, truncateString, valuesWithKey, WithKey } from "@/utils"
-import { Card, CardBody, Chip, Image, Link, Snippet, Spacer } from "@nextui-org/react"
+import { Card, CardBody, Chip, Image, Snippet, Spacer } from "@nextui-org/react"
 import { deserialize } from "@wormhole-foundation/sdk"
 import React from "react"
 
@@ -131,31 +131,14 @@ export const VAAProfile = ({
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">
                             <div className="w-[80px] text-sm">Token</div>
-                            <Link
-                                size="sm"
-                                isExternal
-                                showAnchorIcon
-                                href={explorerUrl({
-                                    chainKey: targetChain?.key ?? defaultSecondaryChainKey,
-                                    value: toWormholeNative(
-                                        targetChain?.chain ?? defaultSecondaryChain,
-                                        payload.token.address.toNative(
-                                            targetChain?.chain ?? defaultSecondaryChain
-                                        )
-                                    ),
-                                    type: "address",
-                                    network,
-                                })}
-                            >
+                            <div className="text-sm">
                                 {truncateString(
-                                    toWormholeNative(
-                                        targetChain?.chain ?? defaultSecondaryChain,
-                                        payload.token.address.toNative(
-                                            targetChain?.chain ?? defaultSecondaryChain
-                                        )
+                                    toWormholeNativeFromUniversal(
+                                        fromChain?.chain ?? defaultChain,
+                                        payload.token.address
                                     )
                                 )}
-                            </Link>
+                            </div>
                         </div>
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">
@@ -174,31 +157,14 @@ export const VAAProfile = ({
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">
                             <div className="w-[80px] text-sm">To</div>
-                            <Link
-                                size="sm"
-                                isExternal
-                                showAnchorIcon
-                                href={explorerUrl({
-                                    chainKey: targetChain?.key ?? defaultSecondaryChainKey,
-                                    value: toWormholeNative(
-                                        targetChain?.chain ?? defaultSecondaryChain,
-                                        payload.to.address.toNative(
-                                            targetChain?.chain ?? defaultSecondaryChain
-                                        )
-                                    ),
-                                    type: "address",
-                                    network,
-                                })}
-                            >
+                            <div className="text-sm">
                                 {truncateString(
-                                    toWormholeNative(
+                                    toWormholeNativeFromUniversal(
                                         targetChain?.chain ?? defaultSecondaryChain,
-                                        payload.to.address.toNative(
-                                            targetChain?.chain ?? defaultSecondaryChain
-                                        )
+                                        payload.to.address
                                     )
                                 )}
-                            </Link>
+                            </div>
                         </div>
                         <Spacer y={2} />
                         <div className="flex gap-1 items-center">

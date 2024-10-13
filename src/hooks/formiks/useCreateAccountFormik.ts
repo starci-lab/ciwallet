@@ -1,10 +1,20 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
 import { useFormiks } from "."
-import { createAccount, triggerSaveAccountNumbers, useAppDispatch, useAppSelector } from "@/redux"
+import {
+    addAccount,
+    triggerSaveBaseAccounts,
+    useAppDispatch,
+    useAppSelector,
+} from "@/redux"
+import { createAccount } from "@/services"
+import { v4 } from "uuid"
+import { valuesWithKey } from "@/utils"
 
 export interface CreateAccountFormikValues {
-  accountNumber: string;
+  accountNumber?: number;
+  name: string;
+  imageUrl: string;
 }
 
 export const _useCreateAccountFormik =
@@ -12,75 +22,79 @@ export const _useCreateAccountFormik =
       const preferenceChainKey = useAppSelector(
           (state) => state.blockchainReducer.preferenceChainKey
       )
-      const accountNumbers = useAppSelector(
-          (state) => state.authReducer.accountNumbers
+      const baseAccounts = useAppSelector(
+          (state) => state.authReducer.baseAccounts
       )
+      const names = valuesWithKey(
+          baseAccounts[preferenceChainKey]?.accounts ?? {}
+      ).map(({ name }) => name)
       const dispatch = useAppDispatch()
 
       const initialValues: CreateAccountFormikValues = {
-          accountNumber: "",
+          imageUrl: "",
+          name: "",
       }
+      const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
 
       const validationSchema = Yup.object({
-      //
+          accountNumber: Yup.number()
+              .nullable()
+              .min(0, "Account number must be greater than or equal to 0"),
+          name: Yup.string()
+              .required("Name is required")
+              .test("unique-name", "Name already exists", (name) => {
+                  if (!name) return false
+                  return !names.includes(name)
+              }),
+          //optional image url
+          imageUrl: Yup.string().nullable().url("Invalid URL"),
       })
 
       const formik = useFormik({
           initialValues,
           validationSchema,
-          onSubmit: ({ accountNumber }) => {
-              //algorand
-              if (preferenceChainKey === "algorand") {                  
-                  let _accountNumber: number
-                  if (!accountNumber) {
-      
-                      const maxAccountNumber = Math.max(
-                          ...Object.keys(accountNumbers[preferenceChainKey].accounts).map((key) =>
-                              Number.parseInt(key)
-                          )
-                      )
-
-                      _accountNumber = maxAccountNumber + 1
-                  } else {
-                      _accountNumber = Number.parseInt(accountNumber)
-                  }
-                  
-                  dispatch(createAccount({
-                      accountNumber: _accountNumber,
-                      account: {
-                          imageUrl: "",
-                          name: `Account ${_accountNumber}`,
-                      },
-                      chainKey: preferenceChainKey,
-                  }))
-                  dispatch(triggerSaveAccountNumbers())
-                  return
+          onSubmit: ({ accountNumber, imageUrl, name }) => {
+              if (!name) {
+                  name = v4()
               }
+              if (!mnemonic) return
               let _accountNumber: number
-              if (!accountNumber) {
-    
+              console.log("accountNumber", accountNumber)
+              if (accountNumber === undefined) {
                   const maxAccountNumber = Math.max(
-                      ...Object.keys(accountNumbers[preferenceChainKey].accounts).map((key) =>
-                          Number.parseInt(key)
+                      ...valuesWithKey(baseAccounts[preferenceChainKey].accounts).map(
+                          ({ accountNumber }) => accountNumber ?? 0
                       )
                   )
 
                   _accountNumber = maxAccountNumber + 1
               } else {
-                  _accountNumber = Number.parseInt(accountNumber)
+                  _accountNumber = accountNumber
               }
+
+              console.log(mnemonic, _accountNumber, preferenceChainKey)
+              const { address, privateKey, publicKey } = createAccount({
+                  mnemonic,
+                  accountNumber: _accountNumber,
+                  chainKey: preferenceChainKey,
+              })
+
               dispatch(
-                  createAccount({
+                  addAccount({
                       chainKey: preferenceChainKey,
-                      accountNumber: _accountNumber,
+                      privateKey,
                       account: {
-                          imageUrl: "",
-                          name: `Account ${_accountNumber}`,
+                          accountAddress: address,
+                          accountNumber: _accountNumber,
+                          imageUrl,
+                          name,
+                          publicKey,
                       },
                   })
               )
-              dispatch(triggerSaveAccountNumbers())
-          }
+              console.log("triggerSaveBaseAccounts")
+              dispatch(triggerSaveBaseAccounts())
+          },
       })
 
       return formik

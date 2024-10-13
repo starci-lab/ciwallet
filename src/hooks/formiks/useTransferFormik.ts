@@ -34,7 +34,9 @@ export const _useTransferFormik =
       const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
       const tokens = useAppSelector(state => state.blockchainReducer.chains[preferenceChainKey].tokens)
       const network = useAppSelector(state => state.blockchainReducer.network)
-      const credentials = useAppSelector(state => state.authReducer.credentials[preferenceChainKey])
+      const baseAccounts = useAppSelector(state => state.authReducer.baseAccounts)
+      const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+      const accountAddress = baseAccounts[preferenceChainKey]?.accounts[activePrivateKey].accountAddress
 
       const formik = useFormik({
           initialValues,
@@ -43,7 +45,10 @@ export const _useTransferFormik =
               recipientAddress,
               amount,
               tokenKey,
-          }) => {       
+          }) => {     
+              if (!activePrivateKey) return
+              if (!accountAddress) return
+              
               const tokenAddress = tokens[tokenKey].addresses[network]
               const tokenService = new BlockchainTokenService({
                   tokenAddress,
@@ -52,9 +57,9 @@ export const _useTransferFormik =
               })
               const { txHash } = await tokenService.transferToken({
                   amount,
-                  privateKey: credentials.privateKey,
+                  privateKey: activePrivateKey,
                   recipientAddress,
-                  fromAddress: credentials.address,
+                  fromAddress: accountAddress,
               })
               triggerTransactionToast({
                   chainKey: preferenceChainKey,

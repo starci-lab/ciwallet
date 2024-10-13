@@ -30,13 +30,14 @@ const Page = () => {
     const tokens = chains[preferenceChainKey].tokens
     const { name, imageUrl, symbol } = tokens[formik.values.tokenKey]
 
-    const address = useAppSelector(
-        (state) => state.authReducer.credentials[preferenceChainKey].address
-    )
+    const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
+    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+    const { accountAddress } = { ...baseAccounts[preferenceChainKey]?.accounts[activePrivateKey] }
+
     const { balanceSwr } = useBalance({
         chainKey: preferenceChainKey,
         tokenKey: formik.values.tokenKey,
-        accountAddress: address,
+        accountAddress,
     })
 
     const { data } = { ...balanceSwr }

@@ -1,6 +1,6 @@
 import { constantConfig } from "@/config"
 import {
-    setAccountNumbers,
+    setBaseAccounts,
     setMnemonic,
     setHasAuthBefore,
     useAppDispatch,
@@ -13,14 +13,13 @@ import {
 } from "@/redux"
 import {
     foundEncryptedMnemonic,
-    loadAccountNumbers,
+    loadBaseAccounts,
     loadChains,
     loadMnemonic,
     loadPreferenceChainKey,
     loadVaas,
     savePreferenceChainKey,
 } from "@/services"
-import { loadAccountNumbers as reduxLoadAccountNumbers } from "@/redux"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { triggerErrorToast } from "@/toasts"
@@ -30,7 +29,7 @@ export const useLoadFromLocalStorage = () => {
 
     const password = useAppSelector((state) => state.authReducer.password)
     const preferenceChainKey = useAppSelector((state) => state.blockchainReducer.preferenceChainKey)
-    
+
     const router = useRouter()
 
     useEffect(() => {
@@ -42,14 +41,6 @@ export const useLoadFromLocalStorage = () => {
         }
         dispatch(setHasAuthBefore(found))
         dispatch(setInitialized(true))
-    }, [])
-
-    useEffect(() => {
-        const accountNumbers = loadAccountNumbers()
-        if (accountNumbers !== null) {
-            dispatch(setAccountNumbers(accountNumbers))
-        }   
-        dispatch(reduxLoadAccountNumbers())
     }, [])
 
     useEffect(() => {
@@ -71,8 +62,14 @@ export const useLoadFromLocalStorage = () => {
     useEffect(() => {
         if (!password) return
         try{
+            // load mnemonic
             const mnemonic = loadMnemonic(password)
             dispatch(setMnemonic(mnemonic))
+            // load base accounts
+            const baseAccounts = loadBaseAccounts(password)
+            // sure that baseAccounts is not null
+            if (baseAccounts === null) return
+            dispatch(setBaseAccounts(baseAccounts))
 
             switch (current) {
             case "cifarm": {

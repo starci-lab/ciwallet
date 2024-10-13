@@ -24,7 +24,6 @@ export const BridgeSelectVaaModal = () => {
     const selectedKey = useAppSelector(
         (state) => state.vaaReducer.selectedKey
     )
-
     const storedVaas = useAppSelector(state => state.vaaReducer.storedVaas)
 
     return (

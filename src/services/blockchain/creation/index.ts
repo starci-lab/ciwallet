@@ -1,10 +1,10 @@
 import { ChainAccount, Platform, chainKeyToPlatform } from "../common"
-import { createAlgorandAccount } from "./algorand.creation"
-import { createAptosAccount } from "./aptos.creation"
-import { createEvmAccount } from "./evm.creation"
-import { createSolanaAccount } from "./solana.creation"
-import { createSuiAccount } from "./sui.creation"
-import { CreateAccountParams } from "./types.creation"
+import { createAlgorandAccount, importAlgorandAccount } from "./algorand.creation"
+import { createAptosAccount, importAptosAccount } from "./aptos.creation"
+import { createEvmAccount, importEvmAccount } from "./evm.creation"
+import { createSolanaAccount, importSolanaAccount } from "./solana.creation"
+import { createSuiAccount, importSuiAccount } from "./sui.creation"
+import { CreateAccountParams, ImportAccountParams } from "./types.creation"
 
 export const createAccount = ({
     accountNumber,
@@ -47,3 +47,42 @@ export const createAccount = ({
         })
     }
 }
+
+export const importAccount = ({
+    privateKey,
+    chainKey,
+    accountAddress,
+}: ImportAccountParams): ChainAccount => {
+    if (privateKey === "")
+        return {
+            address: "",
+            privateKey: "",
+            publicKey: "",
+        }
+
+    const platform = chainKeyToPlatform(chainKey)
+    switch (platform) {
+    case Platform.Evm:
+        return importEvmAccount({
+            privateKey,
+        })
+    case Platform.Aptos:
+        return importAptosAccount({
+            privateKey,
+            accountAddress
+        })
+    case Platform.Solana:
+        return importSolanaAccount({
+            privateKey
+        })
+    case Platform.Algorand:
+        return importAlgorandAccount({
+            privateKey
+        })
+    case Platform.Sui:
+        return importSuiAccount({
+            privateKey
+        })
+    }
+}
+

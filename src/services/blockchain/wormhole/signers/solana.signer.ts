@@ -7,6 +7,7 @@ import { SignerParams } from "../base.wormhole"
 import { solanaClient as _solanaClient } from "../../rpcs"
 import { Connection, Keypair } from "@solana/web3.js"
 import { parseWormholeNetwork } from "../../common"
+import bs58 from "bs58"
 
 export const solanaSigner = ({
     privateKey,
@@ -15,7 +16,7 @@ export const solanaSigner = ({
     debug,
 }: SignerParams<WormholeNetwork, SolanaChains>) => {
     const keypair = Keypair.fromSecretKey(
-        new Uint8Array(Buffer.from(privateKey, "hex"))
+        bs58.decode(privateKey)
     )
     let solanaClient: Connection
     switch (network) {

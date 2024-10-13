@@ -13,17 +13,18 @@ import { useEffect } from "react"
 import {
     addStoredVaa,
     setBridgeTransferResult,
+    StoredVaa,
     triggerSaveStoredVaas,
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
-import { createAccount, transfer, parseNetwork } from "@/services"
+import { transfer, parseNetwork } from "@/services"
 import { useBalance, useSigner } from "../miscellaneous"
-import { computeRaw } from "@/utils"
+import { computeRaw, valuesWithKey } from "@/utils"
 
 export interface BridgeTransferFormikValues {
   targetChainKey: string;
-  targetAccountNumber: 0;
+  targetPrivateKey: string;
   targetAddress: "";
   amount: number;
   tokenKey: string;
@@ -37,55 +38,36 @@ export const _useBridgeTransferFormik =
       const preferenceChainKey = useAppSelector(
           (state) => state.blockchainReducer.preferenceChainKey
       )
-      const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-      const aptosAccountNumber = useAppSelector(
-          (state) => state.authReducer.accountNumbers.aptos.activeAccountNumber
-      )
-      const solanaAccountNumber = useAppSelector(
-          (state) => state.authReducer.accountNumbers.solana.activeAccountNumber
-      )
+      const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
 
-      useEffect(() => {
-          let defaultTargetAccountNumber = 0
-          switch (formik.values.targetChainKey) {
-          case "aptos": {
-              defaultTargetAccountNumber = aptosAccountNumber
-              break
-          }
-          case "solana": {
-              defaultTargetAccountNumber = solanaAccountNumber
-              break
-          }
-          default:
-              break
-          }
-          formik.setFieldValue("targetAccountNumber", defaultTargetAccountNumber)
-      }, [aptosAccountNumber, solanaAccountNumber])
+      const defaultPrivateKey = baseAccounts[defaultChainKey]?.activePrivateKey
+      const defaultSecondaryPrivateKey = baseAccounts[defaultSecondaryChainKey]?.activePrivateKey
 
+      const _defaultTargetPrivateKey = preferenceChainKey === defaultChainKey ? defaultSecondaryPrivateKey : defaultPrivateKey
       const _defaultSecondaryChainKey = preferenceChainKey === defaultChainKey ? defaultSecondaryChainKey : defaultChainKey
+      const _defaultBridgeProtocolKey = valuesWithKey(crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey])[0].key 
       const minimalFee = Object.values(crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey])[0].minimalFee
 
       const initialValues: BridgeTransferFormikValues = {
           amount: 0,
-          targetAccountNumber: 0,
+          targetPrivateKey: _defaultTargetPrivateKey,
           targetAddress: "",
           targetChainKey: _defaultSecondaryChainKey,
           tokenKey: nativeTokenKey,
           balance: 0,
-          bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
+          bridgeProtocolKey: _defaultBridgeProtocolKey,
           nativeAmountPlusFee: minimalFee,
       }
 
-      const address = useAppSelector(
-          (state) => state.authReducer.credentials[preferenceChainKey].address
-      )
+      const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+      const accountAddress = baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]?.accountAddress
+
       const { balanceSwr: nativeTokenBalanceSwr } = useBalance({
           tokenKey: nativeTokenKey,
-          accountAddress: address,
+          accountAddress,
           chainKey: preferenceChainKey,
       })
       
-      console.log(nativeTokenBalanceSwr.data)
       const validationSchema = Yup.object({
           amount: Yup.number()
               .min(0, "Amount must be higher than 0")
@@ -113,7 +95,7 @@ export const _useBridgeTransferFormik =
           initialValues,
           validationSchema,
           onSubmit: async ({
-              targetAccountNumber,
+              targetPrivateKey,
               targetAddress,
               targetChainKey,
               amount,
@@ -123,13 +105,7 @@ export const _useBridgeTransferFormik =
               const _address = addresses[network]
               if (!_address) return
 
-              const { address: createdAddress } = createAccount({
-                  accountNumber: targetAccountNumber,
-                  mnemonic,
-                  chainKey: targetChainKey,
-              })
-
-              const recipientAddress = targetAddress || createdAddress
+              const recipientAddress = targetAddress || baseAccounts[targetChainKey].accounts[targetPrivateKey].accountAddress
               if (!signer) return
 
               const { txHash, vaa } = await transfer({
@@ -143,29 +119,22 @@ export const _useBridgeTransferFormik =
               })
               if (vaa === null) return
               const serializedVaa = Buffer.from(serialize(vaa)).toString("base64")
+              const _vaa : StoredVaa = {
+                  network,
+                  senderAddress: accountAddress,
+                  serializedVaa,
+                  txHash,
+                  bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
+                  tokenInfo: tokens[tokenKey],
+                  decimals: tokens[tokenKey].decimals,
+              }
               dispatch(
                   setBridgeTransferResult({
-                      vaa: {
-                          network,
-                          senderAddress: address,
-                          serializedVaa,
-                          txHash,
-                          bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
-                          tokenInfo: tokens[tokenKey],
-                          decimals: tokens[tokenKey].decimals,
-                      },
+                      vaa: _vaa,
                       txHash,
                   })
               )
-              dispatch(addStoredVaa({
-                  network,
-                  senderAddress: address,
-                  serializedVaa,
-                  txHash,
-                  tokenInfo: tokens[tokenKey],
-                  bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
-                  decimals: tokens[tokenKey].decimals,
-              }))
+              dispatch(addStoredVaa(_vaa))
               dispatch(triggerSaveStoredVaas())
           },
       })

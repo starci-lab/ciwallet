@@ -4,7 +4,7 @@ import { useFormiks } from "."
 import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
 import { setPassword, useAppDispatch, useAppSelector } from "@/redux"
-import { saveEncryptedMnemonic } from "@/services"
+import { BaseAccounts, createAccount, saveEncryptedBaseAccounts, saveEncryptedMnemonic } from "@/services"
 
 export interface CreatePasswordFormikValues {
     password: string;
@@ -27,6 +27,9 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
             .required("Password is required"),
     })
 
+    const chains = useAppSelector((state) => state.blockchainReducer.chains)
+    const chainKeys = Object.keys(chains)
+
     const formik = useFormik({
         initialValues,
         validationSchema,
@@ -35,7 +38,33 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
                 mnemonic,
                 password
             })
-            console.log(password)
+            const baseAccounts : BaseAccounts = {}
+            //create session here
+            for (const chainKey of chainKeys) {
+                //create account
+                const { address, privateKey, publicKey} = createAccount({
+                    mnemonic,
+                    accountNumber: 0,
+                    chainKey
+                })
+
+                baseAccounts[chainKey] = {
+                    accounts: {
+                        [privateKey]: {
+                            name: "User",
+                            imageUrl: "",
+                            accountAddress: address,
+                            publicKey: publicKey,
+                            accountNumber: 0,
+                        }
+                    },
+                    activePrivateKey: privateKey,
+                }
+            }
+            saveEncryptedBaseAccounts({
+                baseAccounts,
+                password
+            })
             dispatch(setPassword(password))
             router.push(constantConfig().path.home)
         },

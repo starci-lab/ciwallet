@@ -3,7 +3,6 @@
 import { TokenInfo, blockchainConfig } from "@/config"
 import { useBalance } from "@/hooks"
 import { useAppSelector } from "@/redux"
-import { createAccount } from "@/services"
 import React from "react"
 import { Avatar, Card, CardBody, Image } from "@nextui-org/react"
 import { WithKey } from "@/utils"
@@ -13,24 +12,17 @@ export interface TokenProps {
 }
 
 export const Token = ({ token }: TokenProps) => {
-    const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const activeAccountNumber = useAppSelector(
-        (state) =>
-            state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
-    )
+    const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
+    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+    const account = baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]
+    const { accountAddress, } = { ...account }
     const network = useAppSelector((state) => state.blockchainReducer.network)
 
-    const account = createAccount({
-        accountNumber: activeAccountNumber,
-        chainKey: preferenceChainKey,
-        mnemonic,
-    })
-
     const { balanceSwr } = useBalance({
-        accountAddress: account?.address,
+        accountAddress: accountAddress,
         chainKey: preferenceChainKey,
         tokenKey: token.key,
     })

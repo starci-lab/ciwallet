@@ -21,6 +21,7 @@ import {
 import { useAppSelector } from "@/redux"
 import { AccountUser } from "../../AccountUser"
 import { PlusIcon } from "@heroicons/react/24/outline"
+import { valuesWithKey } from "@/utils"
 
 export const AccountsModal = () => {
     const { isOpen, onClose } = useAccountsModalDisclosure()
@@ -30,19 +31,12 @@ export const AccountsModal = () => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const activeAccountNumber = useAppSelector(
-        (state) =>
-            state.authReducer.accountNumbers[preferenceChainKey].activeAccountNumber
-    )
-    const accounts = useAppSelector(
-        (state) => state.authReducer.accountNumbers[preferenceChainKey].accounts
-    )
-    const accountNumbers = useAppSelector(
-        (state) => state.authReducer.accountNumbers
-    )
-    console.log(accountNumbers)
-    const entries = Object.entries(accounts)
+    const baseAccounts = useAppSelector(state => state.authReducer.baseAccounts)
 
+    const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
+    const accounts = baseAccounts[preferenceChainKey]?.accounts
+
+    const _accounts = valuesWithKey(accounts ?? {})
     const formik = useCreateAccountFormik()
 
     return (
@@ -53,14 +47,13 @@ export const AccountsModal = () => {
                     <Card>
                         <CardBody className="p-0">
                             <div>
-                                {entries.map(([accountNumber, account], index) => (
-                                    <div key={accountNumber}>
+                                {_accounts.map((account, index) => (
+                                    <div key={account.name}>
                                         <AccountUser
-                                            accountNumber={Number.parseInt(accountNumber)}
                                             account={account}
-                                            activeAccountNumber={activeAccountNumber}
+                                            activePrivateKey={activePrivateKey}
                                         />
-                                        {index !== entries.length - 1 && <Divider />}
+                                        {index !== _accounts.length - 1 && <Divider />}
                                     </div>
                                 ))}
                             </div>

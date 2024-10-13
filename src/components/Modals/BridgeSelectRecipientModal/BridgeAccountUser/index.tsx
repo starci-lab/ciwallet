@@ -1,27 +1,18 @@
 "use client"
 
 import { useBridgeTransferFormik } from "@/hooks"
-import { StoredAccount, useAppSelector } from "@/redux"
-import { createAccount } from "@/services"
+import { StoredAccount } from "@/services"
 import { truncateString } from "@/utils"
 import { Card, CardBody, User, CheckboxIcon } from "@nextui-org/react"
 import React from "react"
 
 interface BridgeAccountUserProps {
     account: StoredAccount
-    accountNumber: number
     targetChainKey: string
+    activePrivateKey: string
 }
 
-export const BridgeAccountUser = ({account: { imageUrl, name }, accountNumber, targetChainKey}: BridgeAccountUserProps) => {
-    const mnemonic = useAppSelector(state => state.authReducer.mnemonic)
-
-    const { address } = createAccount({
-        accountNumber,
-        mnemonic,
-        chainKey: targetChainKey
-    })
-    
+export const BridgeAccountUser = ({account: { imageUrl, name, accountNumber, accountAddress }, activePrivateKey }: BridgeAccountUserProps) => {
     const formik = useBridgeTransferFormik()
 
     return (
@@ -41,9 +32,9 @@ export const BridgeAccountUser = ({account: { imageUrl, name }, accountNumber, t
                             </div>
                         }
                         description={
-                            truncateString(address)
+                            truncateString(accountAddress)
                         }/>
-                    <CheckboxIcon isSelected={formik.values.targetAccountNumber === accountNumber} className="w-3"/>
+                    <CheckboxIcon isSelected={formik.values.targetPrivateKey === activePrivateKey} className="w-3"/>
                 </div>   
             </CardBody>
         </Card>
