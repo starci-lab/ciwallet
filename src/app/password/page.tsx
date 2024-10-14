@@ -1,16 +1,15 @@
 "use client"
 import { Container } from "@/components"
-import { usePasswordFormik } from "@/hooks"
+import { usePasswordFormik, useRouterWithSearchParams } from "@/hooks"
 import { Button, Input, Link, Spacer } from "@nextui-org/react"
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"
 import React, { useState } from "react"
-import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
 
 const Page = () => {
     const formik = usePasswordFormik()
     const [isVisible, setIsVisible] = useState(false)
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
     return (
         <Container centerContent hasPadding>
             <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} className="w-full">

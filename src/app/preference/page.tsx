@@ -4,14 +4,14 @@ import { Container } from "@/components"
 import { Button, Image, Select, SelectItem, Spacer } from "@nextui-org/react"
 import { blockchainConfig, chainInfos, constantConfig, defaultChainKey } from "@/config"
 import { setPreferenceChainKey, useAppDispatch, useAppSelector } from "@/redux"
-import { useRouter } from "next/navigation"
+import { useRouterWithSearchParams } from "@/hooks"
 
 const Page = () => {
     const dispatch = useAppDispatch()
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
 
     return (
         <Container centerContent hasPadding>

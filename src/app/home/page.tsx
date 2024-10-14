@@ -18,6 +18,7 @@ import {
 import {
     useSelectNetworkModalDisclosure,
     useAccountsModalDisclosure,
+    useRouterWithSearchParams,
 } from "@/hooks"
 import { constantConfig } from "@/config"
 import {
@@ -34,7 +35,6 @@ import {
     PlusIcon,
     QrCodeIcon,
 } from "@heroicons/react/24/outline"
-import { useRouter } from "next/navigation"
 import { RefreshCcwIcon, SendToBackIcon } from "lucide-react"
 import { truncateString } from "@/utils"
 import { Tokens } from "./Tokens"
@@ -45,7 +45,7 @@ const Page = () => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
 
     const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
     const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey

@@ -1,10 +1,10 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
 import { useFormiks } from "."
-import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
 import { setMnemonic, useAppDispatch } from "@/redux"
 import { validateMnemonic } from "@/services"
+import { useRouterWithSearchParams } from "../miscellaneous"
 
 export interface MnemonicInputFormikValues {
     mnemonic: string;
@@ -12,7 +12,7 @@ export interface MnemonicInputFormikValues {
 
 export const _useMnemonicInputFormik = (): FormikProps<MnemonicInputFormikValues> => {
 
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
 
     const dispatch = useAppDispatch()
 

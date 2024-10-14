@@ -9,15 +9,15 @@ import {
 import React from "react"
 import { TransferTab } from "./TransferTab"
 import { RedeemTab } from "./RedeemTab"
-import { useRouter } from "next/navigation"
 import { ArrowLeftIcon } from "@heroicons/react/24/outline"
 import { Container } from "@/components"
 import { WrapTab } from "./WrapTab"
+import { useRouterWithSearchParams } from "@/hooks"
 
 const Page = () => {
     const bridgeTab = useAppSelector((state) => state.tabReducer.bridgeTab)
     const dispatch = useAppDispatch()
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
     
     return (
         <Container hasPadding>

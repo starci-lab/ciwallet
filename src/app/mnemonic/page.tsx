@@ -16,10 +16,10 @@ import {
     Tab,
     Tabs,
 } from "@nextui-org/react"
-import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
 import { getMnemonic } from "@/services"
 import { valuesWithKey } from "@/utils"
+import { useRouterWithSearchParams } from "@/hooks"
 
 const Page = () => {
     const dispatch = useAppDispatch()
@@ -33,7 +33,7 @@ const Page = () => {
         dispatch(setMnemonic(mnemonic))
     }, [use24Words])
 
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
 
     const chains = valuesWithKey(
         useAppSelector((state) => state.blockchainReducer.chains)

@@ -1,12 +1,12 @@
 "use client"
 import { Container } from "@/components"
 import { constantConfig } from "@/config"
+import { useRouterWithSearchParams } from "@/hooks"
 import { Button, Image, Spacer } from "@nextui-org/react"
-import { useRouter } from "next/navigation"
 import React from "react"
 
 const Page = () => {
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
     
     return (
         <Container centerContent hasPadding>

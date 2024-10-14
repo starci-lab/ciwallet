@@ -1,10 +1,10 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
 import { useFormiks } from "."
-import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
 import { setPassword, useAppDispatch, useAppSelector } from "@/redux"
 import { BaseAccounts, createAccount, saveEncryptedBaseAccounts, saveEncryptedMnemonic } from "@/services"
+import { useRouterWithSearchParams } from "../miscellaneous"
 
 export interface CreatePasswordFormikValues {
     password: string;
@@ -12,7 +12,7 @@ export interface CreatePasswordFormikValues {
 
 export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValues> => {
 
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
 
     const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
     const dispatch = useAppDispatch()

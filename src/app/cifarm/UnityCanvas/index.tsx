@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react"
 import { HooksProvider } from "./provider.hooks"
 import { Avatar, Progress, Image, Spacer } from "@nextui-org/react"
 import { useAppSelector } from "@/redux"
-import { useRouter } from "next/navigation"
 import { constantConfig } from "@/config"
+import { useRouterWithSearchParams } from "@/hooks"
 
 const TIME_OUT = 1000
 const QUIT_EVENT_NAME = "Quit"
@@ -26,7 +26,7 @@ export const WrappedUnityCanvas = () => {
         window.devicePixelRatio
     )
 
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
     const handleQuit = () => router.push(constantConfig().path.home)
 
     useEffect(() => {

@@ -1,10 +1,9 @@
 "use client"
 import { Container } from "@/components"
-import { useMnemonicModalDisclosure, usePrivateKeyModalDisclosure, useWarningModalDisclosure } from "@/hooks"
+import { useMnemonicModalDisclosure, usePrivateKeyModalDisclosure, useRouterWithSearchParams, useWarningModalDisclosure } from "@/hooks"
 import { KeyIcon } from "@heroicons/react/24/outline"
 import { Spacer, Link, Card, CardBody, CardHeader, Button, Snippet } from "@nextui-org/react"
 import { ArrowLeftIcon, SproutIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
 import React from "react"
 import { DarkModeSwitch } from "./DarkModeSwitch"
 import { constantConfig } from "@/config"
@@ -12,7 +11,7 @@ import { setWarning, useAppDispatch, useAppSelector } from "@/redux"
 import { clearStorage } from "@/services"
 
 const Page = () => {
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
     const { onOpen: onMnemonicModalOpen }  = useMnemonicModalDisclosure()
     const { onOpen: onPrivateKeyModalOpen }  = usePrivateKeyModalDisclosure()
     const { onOpen: onWarningModalOpen }  = useWarningModalDisclosure()

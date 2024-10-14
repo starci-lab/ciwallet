@@ -1,14 +1,14 @@
 "use client"
 import { Container } from "@/components"
 import { constantConfig } from "@/config"
+import { useRouterWithSearchParams } from "@/hooks"
 import { useMnemonicInputFormik } from "@/hooks/formiks/useMnemonicInputFormik"
 import { Button, Spacer, Textarea, Link } from "@nextui-org/react"
-import { useRouter } from "next/navigation"
 import React from "react"
 
 const Page = () => {
     const formik = useMnemonicInputFormik()
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
 
     return (
         <Container centerContent hasPadding>

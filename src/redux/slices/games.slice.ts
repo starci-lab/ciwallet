@@ -1,4 +1,3 @@
-import { BotType } from "@/services"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface Credentials {
@@ -8,7 +7,6 @@ export interface Credentials {
   chainKey: string;
   network: string;
   telegramInitDataRaw: string;
-  botType: BotType;
 }
 
 export interface GameState {
@@ -26,7 +24,7 @@ const initialState: GameState = {
             publicKey: "",
             signature: "",
             telegramInitDataRaw: "",
-            botType: BotType.Ciwallet
+
         } 
     },
 }

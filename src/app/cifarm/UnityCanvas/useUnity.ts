@@ -35,7 +35,6 @@ export const _useUnity = (): UseUnityReturn => {
         codeUrl: gameUrl(envConfig().externals.cifarm.packages.wasmName),
         cacheControl: handleCacheControl
     }
-    console.log(context)
 
     const unity = useUnityContext(context)
 

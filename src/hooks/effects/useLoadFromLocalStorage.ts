@@ -9,7 +9,7 @@ import {
     setVaas,
     setChain,
     setInitialized,
-    setBotTypeInit
+    setBotTypeInit,
 } from "@/redux"
 import {
     BotType,
@@ -22,9 +22,9 @@ import {
     loadVaas,
     savePreferenceChainKey,
 } from "@/services"
-import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { triggerErrorToast } from "@/toasts"
+import { useRouterWithSearchParams } from "../miscellaneous"
 
 export const useLoadFromLocalStorage = () => {
     const dispatch = useAppDispatch()
@@ -32,8 +32,8 @@ export const useLoadFromLocalStorage = () => {
     const password = useAppSelector((state) => state.authReducer.password)
     const preferenceChainKey = useAppSelector((state) => state.blockchainReducer.preferenceChainKey)
 
-    const router = useRouter()
-
+    const router = useRouterWithSearchParams()
+    const botTypeInit = useAppSelector((state) => state.authReducer.botTypeInit)
     useEffect(() => {
         const foundMnemonic = foundEncryptedMnemonic()
         const foundBaseAccounts = foundEncryptedBaseAccounts()
@@ -62,8 +62,6 @@ export const useLoadFromLocalStorage = () => {
             dispatch(setChain(chains))
         } 
     }, [])
-
-    const botTypeInit = useAppSelector(state => state.authReducer.botTypeInit)
 
     useEffect(() => {
         if (!password) return

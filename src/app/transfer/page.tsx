@@ -2,12 +2,12 @@
 import { Container } from "@/components"
 import { setConfirm, useAppDispatch, useAppSelector } from "@/redux"
 import { ArrowLeftIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { Link, Spacer, Image, Button, Input } from "@nextui-org/react"
 import React, { useEffect } from "react"
 import {
     useBalance,
     useConfirmModalDisclosure,
+    useRouterWithSearchParams,
     useTransferFormik,
     useTransferSelectTokenModalDisclosure,
 } from "@/hooks"
@@ -16,7 +16,7 @@ import { explorerUrl } from "@/services"
 import { v4 } from "uuid"
 
 const Page = () => {
-    const router = useRouter()
+    const router = useRouterWithSearchParams()
     const formik = useTransferFormik()
     const { onOpen } = useTransferSelectTokenModalDisclosure()
     const { onOpen: onConfirmModalDisclosureOpen } = useConfirmModalDisclosure()
