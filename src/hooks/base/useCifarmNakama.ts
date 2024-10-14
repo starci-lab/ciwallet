@@ -49,9 +49,9 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
 
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const dispatch = useAppDispatch()
-    
     const botType = useAppSelector((state) => state.authReducer.botType)
-
+    console.log(botType)
+    
     const authSwr = useSWRMutation("CIFARM_AUTH_SWR", async () => {
         const {
             data: { message },

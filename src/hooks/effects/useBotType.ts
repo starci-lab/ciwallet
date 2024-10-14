@@ -5,13 +5,14 @@ import { useEffect } from "react"
 
 export const useBotType = () => {
     const searchParams = useSearchParams()
+    console.log(searchParams)
+    
     const botType = searchParams.get("botType") as BotType
     
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (!botType) return 
         dispatch(setBotType(botType))
         dispatch(setBotTypeInit(botType))
-    }, [botType])
+    }, [])
 }
