@@ -12,7 +12,7 @@ export const formatNumber = (
     pattern: NumberPattern = NumberPattern.First
 ) => {
     return numeral(value).format(pattern)
-}
+} 
 
 export const DAY_PATTERN_1 = "HH:mm:ss DD/MM/YYYY"
 

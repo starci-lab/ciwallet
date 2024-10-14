@@ -10,6 +10,7 @@ export interface UseUnityReturn {
 }
 
 export const VERSION = "v.1.1.a"
+
 const gameUrl = (name: string) => {
     const isDev = envConfig().isDev
     return `${envConfig().externals.cifarm.packages.baseUrl}${!isDev ? `${VERSION}/"` : "" }${name}`    
@@ -27,13 +28,16 @@ export const _useUnity = (): UseUnityReturn => {
         return "no-store"
     }
 
-    const unity = useUnityContext({
+    const context = {
         loaderUrl: gameUrl(envConfig().externals.cifarm.packages.loaderName),
         dataUrl: gameUrl(envConfig().externals.cifarm.packages.dataName),
         frameworkUrl: gameUrl(envConfig().externals.cifarm.packages.frameworkName),
         codeUrl: gameUrl(envConfig().externals.cifarm.packages.wasmName),
         cacheControl: handleCacheControl
-    })
+    }
+    console.log(context)
+
+    const unity = useUnityContext(context)
 
     return {
         unity,
