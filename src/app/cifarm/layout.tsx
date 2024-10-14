@@ -12,11 +12,15 @@ const Layout = ({ children }: PropsWithChildren) => {
     const initDataRaw = useAppSelector(
         (state) => state.authReducer.telegramInfo.initDataRaw
     )
+    const botType = useAppSelector(
+        (state) => state.authReducer.botType
+    )
 
     useSWR("REGISTER_TELEGRAM", async () => {
         const authenticatorService = new AuthenticatorApiService()
         await authenticatorService.registerTelegram({
             initDataRaw,
+            botType
         })
     })
     

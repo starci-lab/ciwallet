@@ -8,11 +8,12 @@ export class AuthenticatorApiService {
         this.url = `${envConfig().externals.cifarm.periphery.api}/authenticator`
     }
 
-    public async registerTelegram({ initDataRaw }: RegisterTelegramParams) {
+    public async registerTelegram({ initDataRaw, botType }: RegisterTelegramParams) {
         const url = `${this.url}/register-telegram`
         const { data } = await baseAxios.post(url, undefined, {
             headers: {
-                "Authorization": `tma ${initDataRaw}`
+                "Authorization": `tma ${initDataRaw}`,
+                "Bot-Type": botType
             }
         }) 
         return data
@@ -20,5 +21,11 @@ export class AuthenticatorApiService {
 }
 
 export interface RegisterTelegramParams {
-    initDataRaw: string
+    initDataRaw: string,
+    botType: BotType
+}
+
+export enum BotType {
+    Ciwallet = "ciwallet",
+    Cifarm = "cifarm"
 }

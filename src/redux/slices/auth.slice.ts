@@ -1,4 +1,4 @@
-import { BaseAccounts, ChainAccount, StoredAccount } from "@/services"
+import { BaseAccounts, BotType, ChainAccount, StoredAccount } from "@/services"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface AuthState {
@@ -10,7 +10,8 @@ export interface AuthState {
   hasAuthBefore: boolean;
   loaded: boolean;
   initialized: boolean;
-  current: string;
+  botType: BotType;
+  botTypeInit: BotType;
 }
 
 export interface AddAccountParams {
@@ -56,7 +57,8 @@ const initialState: AuthState = {
     password: "",
     hasAuthBefore: false,
     initialized: false,
-    current: "",
+    botType: BotType.Ciwallet,
+    botTypeInit: BotType.Ciwallet,
 }
 
 export const authSlice = createSlice({
@@ -109,8 +111,12 @@ export const authSlice = createSlice({
         setInitialized: (state, { payload }: PayloadAction<boolean>) => {
             state.initialized = payload
         },
-        setCurrent: (state, { payload }: PayloadAction<string>) => {
-            state.current = payload
+        setBotType: (state, { payload }: PayloadAction<BotType>) => {
+            state.botType = payload
+        },
+        setBotTypeInit: (state, { payload }: PayloadAction<BotType | undefined>) => {
+            payload = payload || BotType.Ciwallet
+            state.botTypeInit = payload
         },
     },
 })
@@ -126,6 +132,7 @@ export const {
     setTelegramInfo,
     setInitialized,
     triggerSaveBaseAccounts,
-    setCurrent,
+    setBotTypeInit,
+    setBotType,
 } = authSlice.actions
 export const authReducer = authSlice.reducer

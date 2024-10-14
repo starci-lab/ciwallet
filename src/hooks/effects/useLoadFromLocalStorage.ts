@@ -9,9 +9,10 @@ import {
     setVaas,
     setChain,
     setInitialized,
-    setCurrent
+    setBotTypeInit
 } from "@/redux"
 import {
+    BotType,
     foundEncryptedBaseAccounts,
     foundEncryptedMnemonic,
     loadBaseAccounts,
@@ -62,7 +63,7 @@ export const useLoadFromLocalStorage = () => {
         } 
     }, [])
 
-    const current = useAppSelector(state => state.authReducer.current)
+    const botTypeInit = useAppSelector(state => state.authReducer.botTypeInit)
 
     useEffect(() => {
         if (!password) return
@@ -76,10 +77,10 @@ export const useLoadFromLocalStorage = () => {
             if (baseAccounts === null) return
             dispatch(setBaseAccounts(baseAccounts))
 
-            switch (current) {
-            case "cifarm": {
+            switch (botTypeInit) {
+            case BotType.Cifarm: {
                 router.push(constantConfig().path.cifarm)
-                dispatch(setCurrent(""))
+                dispatch(setBotTypeInit())
                 break
             }
             default: {
