@@ -14,7 +14,7 @@ export const VERSION = "v.1.2.a"
 const gameUrl = (name: string) => {
     const isDev = envConfig().isDev
     return `${envConfig().externals.cifarm.packages.baseUrl}${!isDev ? `${VERSION}/` : "" }${name}`    
-}
+} 
 
 export const _useUnity = (): UseUnityReturn => {
 
