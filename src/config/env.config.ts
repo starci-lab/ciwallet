@@ -13,10 +13,11 @@ export const envConfig = () => ({
                 graphql: process.env.NEXT_PUBLIC_CIFARM_PERIPHERY_GRAPHQL_URL,
             },
             packages: {
-                loaderUrl: process.env.NEXT_PUBLIC_CIFARM_LOADER_URL ?? "",
-                dataUrl: process.env.NEXT_PUBLIC_CIFARM_DATA_URL ?? "",
-                frameworkUrl: process.env.NEXT_PUBLIC_CIFARM_FRAMEWORK_URL ?? "",
-                wasmUrl: process.env.NEXT_PUBLIC_CIFARM_WASM_URL ?? ""
+                baseUrl: process.env.NEXT_PUBLIC_CIFARM_BASE_URL,
+                loaderName: process.env.NEXT_PUBLIC_CIFARM_LOADER_NAME ?? "",
+                dataName: process.env.NEXT_PUBLIC_CIFARM_DATA_NAME ?? "",
+                frameworkName: process.env.NEXT_PUBLIC_CIFARM_FRAMEWORK_NAME ?? "",
+                wasmName: process.env.NEXT_PUBLIC_CIFARM_WASM_NAME ?? ""
             }
         },
     },

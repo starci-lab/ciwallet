@@ -9,7 +9,12 @@ export interface UseUnityReturn {
   unity: UnityContextHook;
 }
 
-export const VERSION = "a.1.0"
+export const VERSION = "v.1.1.a"
+const gameUrl = (name: string) => {
+    const isDev = envConfig().isDev
+    return `${envConfig().externals.cifarm.packages.baseUrl}${!isDev ? `${VERSION}/"` : "" }${name}`    
+}
+
 export const _useUnity = (): UseUnityReturn => {
 
     const handleCacheControl = (url: string): UnityCacheControlMode => {
@@ -23,10 +28,10 @@ export const _useUnity = (): UseUnityReturn => {
     }
 
     const unity = useUnityContext({
-        loaderUrl: `${envConfig().externals.cifarm.packages.loaderUrl}${!envConfig().isDev ? `_${VERSION}` : ""}`,
-        dataUrl: `${envConfig().externals.cifarm.packages.dataUrl}${!envConfig().isDev ? `_${VERSION}` : ""}`,
-        frameworkUrl: `${envConfig().externals.cifarm.packages.frameworkUrl}${!envConfig().isDev ? `_${VERSION}` : ""}`,
-        codeUrl: `${envConfig().externals.cifarm.packages.wasmUrl}${!envConfig().isDev ? `_${VERSION}` : ""}`,
+        loaderUrl: gameUrl(envConfig().externals.cifarm.packages.loaderName),
+        dataUrl: gameUrl(envConfig().externals.cifarm.packages.dataName),
+        frameworkUrl: gameUrl(envConfig().externals.cifarm.packages.frameworkName),
+        codeUrl: gameUrl(envConfig().externals.cifarm.packages.wasmName),
         cacheControl: handleCacheControl
     })
 
