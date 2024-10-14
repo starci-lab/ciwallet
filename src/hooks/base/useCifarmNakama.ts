@@ -49,6 +49,8 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
 
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const dispatch = useAppDispatch()
+    
+    const botType = useAppSelector((state) => state.authReducer.botType)
 
     const authSwr = useSWRMutation("CIFARM_AUTH_SWR", async () => {
         const {
@@ -82,6 +84,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
                 network,
                 referrerUserId,
                 telegramInitDataRaw,
+                botType
             }
         )
 
@@ -94,6 +97,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
                 publicKey: _publicKey,
                 signature,
                 telegramInitDataRaw,
+                botType
             })
         )
     })

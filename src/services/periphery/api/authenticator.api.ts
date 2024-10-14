@@ -29,3 +29,5 @@ export enum BotType {
     Ciwallet = "ciwallet",
     Cifarm = "cifarm"
 }
+
+export const defaultBotType = BotType.Ciwallet
