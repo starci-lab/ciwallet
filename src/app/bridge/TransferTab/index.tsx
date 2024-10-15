@@ -20,13 +20,14 @@ import {
 } from "@nextui-org/react"
 import {
     setConfirm,
+    setError,
     TransactionType,
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
 import React, { useEffect } from "react"
 import { explorerUrl } from "@/services"
-import { replace, truncateString, valuesWithKey } from "@/utils"
+import { BaseErrorName, replace, truncateString, valuesWithKey } from "@/utils"
 import { v4 } from "uuid"
 
 export const TransferTab = () => {
@@ -304,8 +305,12 @@ export const TransferTab = () => {
                                         await formik.submitForm()
                                         onBridgeTransferResultModalDiscloresureOpen()
                                     } catch (ex) {
-                                        console.error(ex)
-                                        onErrorModalDisclosureOpen()
+                                        const _ex = ex as Error
+                                        console.error(_ex.name)
+                                        if (_ex.name === BaseErrorName.AtaNotFound) {
+                                            dispatch(setError({ errorMessage: _ex.message }))    
+                                            onErrorModalDisclosureOpen()   
+                                        }
                                     }
                                 },
                                 id: v4(),

@@ -9,6 +9,7 @@ import {
     signSendWait,
     toNative,
 } from "@wormhole-foundation/sdk"
+import { nativeTokenKey } from "@/config"
 
 export interface CreateAttestationParams<
   N extends Network,
@@ -39,6 +40,11 @@ export const createAttestation = async <
 
     const tokenBridge = await chain.getTokenBridge()
     
+    if (tokenAddress === nativeTokenKey) {
+        tokenAddress = (
+            await tokenBridge.getWrappedNative()
+        ).toString()
+    }
     const txGenerator = tokenBridge.createAttestation(
         toNative(chainName, tokenAddress),
         toNative(chainName, signer.address())

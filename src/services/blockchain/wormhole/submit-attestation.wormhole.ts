@@ -28,7 +28,7 @@ export const submitAttestation = async <
 }: SubmitAttestationParams<N, ChainName>) => {
     const wormhole = await getWormhole(network)
     const targetChain = wormhole.getChain(targetChainName)
-
+    
     const targetTokenBridge = await targetChain.getTokenBridge()
     const txGenerator = targetTokenBridge.submitAttestation(
         vaa,

@@ -11,7 +11,7 @@ import {
     useTransferFormik,
     useTransferSelectTokenModalDisclosure,
 } from "@/hooks"
-import { truncateString } from "@/utils"
+import { BaseErrorName, truncateString } from "@/utils"
 import { explorerUrl } from "@/services"
 import { v4 } from "uuid"
 
@@ -158,7 +158,14 @@ const Page = () => {
                                     </div>
                                 ),
                                 processFn: async () => {
-                                    await formik.submitForm()
+                                    try {
+                                        await formik.submitForm()
+                                    } catch (ex: unknown) {
+                                        const _ex = ex as Error
+                                        if (_ex.name === BaseErrorName.AtaNotFound) {
+                                            console.error(_ex.message)
+                                        }
+                                    }
                                 },
                                 id: v4(),
                             })

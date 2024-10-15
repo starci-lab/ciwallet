@@ -110,6 +110,7 @@ export const _useBridgeRedeemFormik =
                       "TokenBridge:Transfer",
                       Uint8Array.from(Buffer.from(vaa.serializedVaa, "base64"))
                   ),
+                  redeemAddress: signer.address(),
                   senderChainName: deserializedVaa.emitterChain,
                   redeemChainName: deserializedVaa.payload.to.chain,
                   network: parseNetwork(network),
