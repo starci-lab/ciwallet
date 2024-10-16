@@ -59,7 +59,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
         if (!activePrivateKey) return
         if (!publicKey) return
         if (!accountAddress) return
-
+ 
         const signature = await signMessage({
             chainKey: preferenceChainKey,
             message,
