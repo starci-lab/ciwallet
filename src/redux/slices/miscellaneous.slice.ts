@@ -4,11 +4,16 @@ import { ReactNode } from "react"
 export interface MiscellaneousState {
   warning: Warning
   confirm: Confirm
+  error: ErrorState
 }
 
 export interface Warning {
     warningMessage: string,
     processFn: (() => void) | (() => Promise<void>)
+}
+
+export interface ErrorState {
+    errorMessage: string,
 }
 
 export enum TransactionType {
@@ -39,7 +44,10 @@ const initialState: MiscellaneousState = {
         },
         id: "",
         type: TransactionType.Transfer,
-    }
+    },
+    error: {
+        errorMessage: "An unexpected error occurred. Please try again.",
+    },
 }
 
 export const miscellaneousSlice = createSlice({
@@ -51,9 +59,12 @@ export const miscellaneousSlice = createSlice({
         },
         setConfirm: (state, { payload }: PayloadAction<Confirm>) => {
             state.confirm = payload
+        },
+        setError: (state, { payload }: PayloadAction<ErrorState>) => {
+            state.error = payload
         }
     }
 })
 
-export const { setWarning, setConfirm } = miscellaneousSlice.actions
+export const { setWarning, setConfirm, setError } = miscellaneousSlice.actions
 export const miscellaneousReducer = miscellaneousSlice.reducer

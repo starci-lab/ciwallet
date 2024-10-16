@@ -17,6 +17,7 @@ export interface RedeemParams<
     vaa: VAA<"TokenBridge:Transfer">
     senderChainName: SenderChainName
     redeemChainName: RedeemChainName
+    redeemAddress: string
     signer: SignAndSendSigner<N, RedeemChainName>
 }
 
@@ -29,14 +30,15 @@ export const redeem = async <
     vaa,
     redeemChainName,
     signer,
+    redeemAddress
 }: RedeemParams<N, RedeemChainName, SenderChainName>) => {
     const wormhole = await getWormhole(network)
     const redeemChain = wormhole.getChain(redeemChainName)
  
     const claimTokenBridge = await redeemChain.getTokenBridge() 
-
+    
     const txGenerator = claimTokenBridge.redeem(
-        toNative(redeemChainName, signer.address()),
+        toNative(redeemChainName, redeemAddress),
         vaa
     )
 

@@ -18,9 +18,9 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
-import { transfer, parseNetwork } from "@/services"
+import { transfer, parseNetwork, readAssociatedTokenAccount, chainKeyToPlatform, Platform, getWrappedAsset } from "@/services"
 import { useBalance, useSigner } from "../miscellaneous"
-import { computeRaw, valuesWithKey } from "@/utils"
+import { BaseError, BaseErrorName, computeRaw, valuesWithKey } from "@/utils"
 
 export interface BridgeTransferFormikValues {
   targetChainKey: string;
@@ -105,14 +105,40 @@ export const _useBridgeTransferFormik =
               const _address = addresses[network]
               if (!_address) return
 
-              const recipientAddress = targetAddress || baseAccounts[targetChainKey].accounts[targetPrivateKey].accountAddress
+              let recipientAddress = targetAddress || baseAccounts[targetChainKey].accounts[targetPrivateKey].accountAddress
               if (!signer) return
+
+              const sourceChain = chains[preferenceChainKey].chain
+              const targetChain = chains[targetChainKey].chain
+              //except for case solana, which use ata instead
+              const platform = chainKeyToPlatform(targetChainKey)
+              if (platform === Platform.Solana) {
+                  const wrapped = await getWrappedAsset({
+                      sourceChainName: sourceChain,
+                      sourceTokenAddress: _address,
+                      foreignChainName: targetChain,
+                      network: parseNetwork(network),
+                  })
+                  console.log(wrapped)
+
+                  const ataPublicKey = await readAssociatedTokenAccount({
+                      accountAddress: recipientAddress,
+                      mintAddress: wrapped.toString(),
+                      chainKey: targetChainKey,
+                      network,
+                  })
+                  if (ataPublicKey === null) {
+                      throw new BaseError(BaseErrorName.AtaNotFound, "Recipient's associated token account does not exist.")
+                  }
+
+                  recipientAddress = ataPublicKey
+              }
 
               const { txHash, vaa } = await transfer({
                   signer,
                   transferAmount: computeRaw(amount, decimals || 8),
-                  sourceChainName: chains[preferenceChainKey].chain,
-                  targetChainName: chains[targetChainKey].chain,
+                  sourceChainName: sourceChain,
+                  targetChainName: targetChain,
                   network: parseNetwork(network),
                   recipientAddress: recipientAddress,
                   tokenAddress: _address,

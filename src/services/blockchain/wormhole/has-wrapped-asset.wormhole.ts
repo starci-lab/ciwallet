@@ -1,7 +1,7 @@
 import { getWormhole } from "./base.wormhole"
 import { Chain, Network } from "@wormhole-foundation/sdk-base"
 import { UniversalAddress } from "@wormhole-foundation/sdk"
-import { getUniversalAddress } from "./get-address.wormhole"
+import { toWormholeUniversal } from "./to.wormhole"
 
 
 export interface HasWrappedAssetParams<
@@ -38,7 +38,7 @@ export const hasWrappedAsset = async <
         const native = await sourceTokenBridge.getWrappedNative()
         universalAddress = native.toUniversalAddress()
     } else {
-        universalAddress = getUniversalAddress(sourceChainName, sourceTokenAddress)
+        universalAddress = toWormholeUniversal(sourceChainName, sourceTokenAddress)
     }
 
     return await foreignTokenBridge.hasWrappedAsset({

@@ -10,7 +10,7 @@ import {
     Chip,
 } from "@nextui-org/react"
 import React from "react"
-import { useConfirmModalDisclosure, useErrorModalDisclosure } from "@/hooks"
+import { useConfirmModalDisclosure } from "@/hooks"
 import { TransactionType, useAppSelector } from "@/redux"
 import useSWRMutation from "swr/mutation"
 
@@ -22,7 +22,6 @@ export const ConfirmModal = () => {
         ["PROCESS", confirm.id],
         confirm.processFn
     )
-    const { onOpen: onErrorModalDisclosureOpen } = useErrorModalDisclosure()
 
     return (
         <Modal isOpen={isOpen} hideCloseButton>
@@ -43,14 +42,7 @@ export const ConfirmModal = () => {
                         color="primary"
                         isLoading={isMutating}
                         onPress={async () => {
-                            try {
-                                await trigger()
-                            } catch (ex) {
-                                console.error(ex)
-                                onErrorModalDisclosureOpen()
-                            } finally {
-                                onClose()
-                            }
+                            await trigger()
                         }}
                     >
             Process
