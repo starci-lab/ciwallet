@@ -9,7 +9,7 @@ export interface UseUnityReturn {
   unity: UnityContextHook;
 }
 
-export const VERSION = "v.1.2.a"
+export const VERSION = "v.1.3.a"
 
 const gameUrl = (name: string) => {
     const isDev = envConfig().isDev
