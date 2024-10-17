@@ -306,7 +306,7 @@ export const TransferTab = () => {
                                         onBridgeTransferResultModalDiscloresureOpen()
                                     } catch (ex) {
                                         const _ex = ex as Error
-                                        console.error(_ex.name)
+                                        console.error(_ex.message)
                                         if (_ex.name === BaseErrorName.AtaNotFound) {
                                             dispatch(setError({ errorMessage: _ex.message }))    
                                             onErrorModalDisclosureOpen()   
