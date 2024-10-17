@@ -2,12 +2,12 @@
 import {
     SignAndSendSigner,
     VAA,
-    toNative
 } from "@wormhole-foundation/sdk-definitions"
 import { getWormhole } from "./base.wormhole"
 import { Chain, Network } from "@wormhole-foundation/sdk-base"
 import { WormholeMessageId, signSendWait } from "@wormhole-foundation/sdk"
 import { sleep } from "@/utils"
+import { toWormholeUniversal } from "./to.wormhole"
 
 export interface TransferParams<
     N extends Network,
@@ -46,12 +46,12 @@ export const transfer = async <
     const sourceTokenBridge = await sourceChain.getTokenBridge()
     
     const txGenerator = sourceTokenBridge.transfer(
-        toNative(sourceChainName, signer.address()),
+        toWormholeUniversal(sourceChainName, signer.address()),
         {
             chain: targetChainName,
-            address: toNative(targetChainName, recipientAddress),
+            address: toWormholeUniversal(targetChainName, recipientAddress),
         },
-        tokenAddress !== "native" ? toNative(sourceChainName, tokenAddress) : "native",
+        tokenAddress !== "native" ? toWormholeUniversal(sourceChainName, tokenAddress) : "native",
         transferAmount
     )
 

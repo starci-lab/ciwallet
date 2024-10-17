@@ -32,7 +32,6 @@ export const algorandSigner = ({
         throw new Error("Devnet not supported")
     }
     }
-    console.log(mnemonic)
     return new AlgorandSigner(
         chain,
     _algorandClient as never,
