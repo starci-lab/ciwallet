@@ -7,7 +7,6 @@ import {
     ModalFooter,
     Button,
     Snippet,
-    Spacer,
 } from "@nextui-org/react"
 import React from "react"
 import { useMnemonicModalDisclosure } from "@/hooks"
@@ -41,14 +40,6 @@ export const MnemonicModal = () => {
                             >
                                 {mnemonic}
                             </Snippet>
-                            {preferenceChainKey === "algorand" && (
-                                <>
-                                    <Spacer y={1.5} />
-                                    <div className="text-xs text-foreground-400">
-                    Algorand uses a 25-word mnemonic.
-                                    </div>
-                                </>
-                            )}
                         </div>
                         <div>
                             <div className="text-xs text-warning text-justify">

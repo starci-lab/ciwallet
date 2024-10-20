@@ -6,9 +6,9 @@ import algosdk from "algosdk"
 import bs58 from "bs58"
 
 export interface SignMessageParams {
-    message: string,
-    privateKey: string,
-    chainKey: string
+  message: string;
+  privateKey: string;
+  chainKey: string;
 }
 
 export const evmSignMessage = ({ message, privateKey }: SignMessageParams) => {
@@ -16,26 +16,36 @@ export const evmSignMessage = ({ message, privateKey }: SignMessageParams) => {
     return wallet.signMessage(message)
 }
 
-export const solanaSignMessage = ({ message, privateKey }: SignMessageParams) => {
+export const solanaSignMessage = ({
+    message,
+    privateKey,
+}: SignMessageParams) => {
     return Buffer.from(
-        nacl.sign.detached(
-            Buffer.from(message, "base64"),
-            bs58.decode(privateKey),
-        ),
+        nacl.sign.detached(Buffer.from(message, "base64"), bs58.decode(privateKey))
     ).toString("base64")
 }
 
-export const aptosSignMessage = ({ message, privateKey }: SignMessageParams) => {
+export const aptosSignMessage = ({
+    message,
+    privateKey,
+}: SignMessageParams) => {
     const ed25519PrivateKey = Account.fromPrivateKey({
-        privateKey: new Ed25519PrivateKey(privateKey)
+        privateKey: new Ed25519PrivateKey(privateKey),
     })
     return ed25519PrivateKey.sign(message).toString()
 }
 
-export const algorandSignMessage = ({ message, privateKey }: SignMessageParams) => {
-    return algosdk.signBytes(Buffer.from(message, "base64"), Buffer.from(privateKey, "hex")).toString()
+export const algorandSignMessage = ({
+    message,
+    privateKey,
+}: SignMessageParams) => {
+    return Buffer.from(
+        algosdk.signBytes(
+            Buffer.from(message, "base64"),
+            Buffer.from(privateKey, "hex")
+        )
+    ).toString("base64")
 }
-
 
 export const signMessage = (params: SignMessageParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
@@ -53,6 +63,7 @@ export const signMessage = (params: SignMessageParams) => {
     case Platform.Algorand: {
         return algorandSignMessage(params)
     }
-    default: throw new Error(`Platform not supported: ${platform}`)
+    default:
+        throw new Error(`Platform not supported: ${platform}`)
     }
 }

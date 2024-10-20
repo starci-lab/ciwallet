@@ -17,7 +17,7 @@ export const algorandSigner = ({
     network,
     debug,
 }: SignerParams<WormholeNetwork, AlgorandChains>) => {
-    const mnemonic = secretKeyToMnemonic(Buffer.from(privateKey, "hex"))
+    const mnemonic = secretKeyToMnemonic(Buffer.from(privateKey, "base64"))
     let _algorandClient: Algodv2
     switch (network) {
     case "Testnet": {

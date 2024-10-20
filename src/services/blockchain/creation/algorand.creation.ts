@@ -15,7 +15,7 @@ export const createAlgorandAccount = ({
     const account = mnemonicToSecretKey(algorandMnemonic)
     return {
         address: account.addr.toString(),
-        privateKey: Buffer.from(account.sk).toString("hex"),
+        privateKey: Buffer.from(account.sk).toString("base64"),
         publicKey: account.addr.toString(),
     }
 }
@@ -23,11 +23,11 @@ export const createAlgorandAccount = ({
 export const importAlgorandAccount = ({
     privateKey,
 }: Omit<ImportAccountParams, "chainKey">): ChainAccount => {
-    const algorandMnemonic = secretKeyToMnemonic(Uint8Array.from(Buffer.from(privateKey, "hex")))
-    const account = mnemonicToSecretKey(algorandMnemonic)
+    const mnemonic = secretKeyToMnemonic(Uint8Array.from(Buffer.from(privateKey, "base64")))
+    const account = mnemonicToSecretKey(mnemonic)
     return {
         address: account.addr.toString(),
-        privateKey: Buffer.from(account.sk).toString("hex"),
+        privateKey: Buffer.from(account.sk).toString("base64"),
         publicKey: account.addr.toString(),
     }
 }
