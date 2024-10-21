@@ -1,14 +1,15 @@
 
 import { Contract, JsonRpcProvider } from "ethers"
-import { aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl } from "../rpcs"
+import { algorandAlgodClient, aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl } from "../rpcs"
 import { erc721Abi } from "../abis"
 import { Network } from "@/config"
 import { Platform, chainKeyToPlatform } from "../common"
 import { MulticallProvider } from "@ethers-ext/provider-multicall"
-import { NftData } from "./common"
+import { AlgorandMetadata, NftData } from "./common"
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { fetchAllDigitalAssetByOwner } from "@metaplex-foundation/mpl-token-metadata"
 import { isSome, publicKey } from "@metaplex-foundation/umi"
+import { CIDService } from "../../ipfs"
 
 export interface GetNftsByOwnerAddressParams {
     accountAddress: string,
@@ -17,6 +18,10 @@ export interface GetNftsByOwnerAddressParams {
     network?: Network
     skip: number
     take: number
+}
+
+export interface GetNftsByOwnerAddressServices {
+    cidService?: CIDService
 }
 
 export interface GetNftsByOwnerAddressResult {
@@ -39,8 +44,6 @@ export const _getEvmNftsByOwnerAddress = async ({
     const balance = Number(
         await contract.getFunction("balanceOf").staticCall(accountAddress),
     )
-    console.log(balance)
-
     const multicaller = new MulticallProvider(provider)
     const multicallerContract = new Contract(nftAddress, erc721Abi, multicaller)
 
@@ -157,7 +160,46 @@ export const _getAptosNftsByOwnerAddress = async ({
     }
 }
 
-export const _getNftsByOwnerAddress = (params: GetNftsByOwnerAddressParams) => {
+export const _getAlgorandNftsByOwnerAddress = async ({
+    nftAddress,
+    network,
+    accountAddress,
+    skip,
+    take,
+}: GetNftsByOwnerAddressParams, { cidService } : GetNftsByOwnerAddressServices): Promise<GetNftsByOwnerAddressResult> => {
+    network = network || Network.Testnet
+    const client = algorandAlgodClient(network)
+    const accountInfo = await client.accountInformation(accountAddress).do()
+    const nfts: Array<NftData> = []
+    
+    const promises: Array<Promise<void>> = []
+    for (const asset of accountInfo.assets || []) {
+        const promise = async () => {
+            if (!cidService) throw new Error("CID Service not found")
+            const { params } = await client.getAssetByID(asset.assetId).do()
+            if (params.reserve) {
+                const cid = cidService.algorandReserveAddressToCid(params.reserve)
+                const data = await cidService.getCidContent(cid) as AlgorandMetadata
+                if (data !== null && data.collection.id === nftAddress) {
+                    nfts.push({
+                        ownerAddress: accountAddress,
+                        tokenId: asset.assetId.toString(),
+                        tokenURI: data.image,
+                    })
+                }
+            }          
+        }
+        promises.push(promise())
+    } 
+    await Promise.all(promises)
+    const records = nfts.slice(skip ? skip : undefined, take ? take : undefined)
+
+    return {
+        records,
+        count: nfts.length,
+    }
+}
+export const _getNftsByOwnerAddress = (params: GetNftsByOwnerAddressParams, services: GetNftsByOwnerAddressServices) => {
     const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
     case Platform.Evm: {
@@ -168,6 +210,9 @@ export const _getNftsByOwnerAddress = (params: GetNftsByOwnerAddressParams) => {
     }
     case Platform.Aptos: {
         return _getAptosNftsByOwnerAddress(params)
+    }
+    case Platform.Algorand: {
+        return _getAlgorandNftsByOwnerAddress(params, services)
     }
     default:
         throw new Error("Platform not found")

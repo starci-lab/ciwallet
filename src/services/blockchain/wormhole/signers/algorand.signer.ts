@@ -3,7 +3,7 @@ import { SignerParams } from "../base.wormhole"
 import { Network } from "@/config"
 import { AlgorandSigner, AlgorandChains } from "@wormhole-foundation/sdk-algorand"
 import { Algodv2, secretKeyToMnemonic } from "algosdk"
-import { algorandClient } from "../../rpcs"
+import { algorandAlgodClient } from "../../rpcs"
 import { parseWormholeNetwork } from "../../common"
 
 export const aptosNodes: Record<Network, string> = {
@@ -21,11 +21,11 @@ export const algorandSigner = ({
     let _algorandClient: Algodv2
     switch (network) {
     case "Testnet": {
-        _algorandClient = algorandClient(parseWormholeNetwork(network))
+        _algorandClient = algorandAlgodClient(parseWormholeNetwork(network))
         break
     }
     case "Mainnet": {
-        _algorandClient = algorandClient(parseWormholeNetwork(network))
+        _algorandClient = algorandAlgodClient(parseWormholeNetwork(network))
         break
     }
     default: {

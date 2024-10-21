@@ -2,7 +2,7 @@ import { Wallet } from "ethers"
 import { Platform, chainKeyToPlatform } from "../common"
 import nacl from "tweetnacl"
 import { Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk"
-import algosdk from "algosdk"
+import algosdk, { mnemonicToSecretKey } from "algosdk"
 import bs58 from "bs58"
 
 export interface SignMessageParams {
@@ -42,7 +42,7 @@ export const algorandSignMessage = ({
     return Buffer.from(
         algosdk.signBytes(
             Buffer.from(message, "base64"),
-            Buffer.from(privateKey, "hex")
+            mnemonicToSecretKey(privateKey).sk
         )
     ).toString("base64")
 }

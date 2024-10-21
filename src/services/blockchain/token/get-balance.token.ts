@@ -1,6 +1,6 @@
 import { Network, blockchainConfig } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
-import { algorandClient, aptosClient, evmHttpRpcUrl, solanaClient, SUI_COIN_TYPE, suiClient } from "../rpcs"
+import { algorandAlgodClient, aptosClient, evmHttpRpcUrl, solanaClient, SUI_COIN_TYPE, suiClient } from "../rpcs"
 import { erc20Abi } from "../abis"
 import { computeDenomination } from "@/utils"
 import { PublicKey } from "@solana/web3.js"
@@ -109,7 +109,7 @@ export const _getAlgorandBalance = async ({
     if (!decimals) throw new Error("decimals must not undefined")
     network = network || Network.Testnet
     
-    const accountInfo = await algorandClient(network).accountInformation(accountAddress).do()
+    const accountInfo = await algorandAlgodClient(network).accountInformation(accountAddress).do()
     if (tokenAddress === "native") {
         return computeDenomination(accountInfo.amount, decimals)
     }

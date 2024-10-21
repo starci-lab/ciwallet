@@ -12,6 +12,7 @@ import React from "react"
 import { usePrivateKeyModalDisclosure } from "@/hooks"
 import { useAppSelector } from "@/redux"
 import { downloadTextFile } from "@/services"
+import { SupportedChainKey } from "@/config"
 
 export const PrivateKeyModal = () => {
     const { isOpen, onClose } = usePrivateKeyModalDisclosure()
@@ -32,7 +33,10 @@ export const PrivateKeyModal = () => {
                         <Snippet
                             hideSymbol
                             classNames={{
-                                pre: "text-justify !break-all !whitespace-pre-line !line-clamp-5",
+                                pre: 
+                                preferenceChainKey === SupportedChainKey.Algorand ?
+                                    "text-justify !whitespace-pre-line !line-clamp-5" :
+                                    "text-justify !break-all !whitespace-pre-line !line-clamp-5",
                             }}
                             codeString={privateKey}
                             fullWidth

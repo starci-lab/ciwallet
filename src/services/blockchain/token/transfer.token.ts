@@ -1,6 +1,6 @@
 import { blockchainConfig, Network } from "@/config"
 import {
-    algorandClient,
+    algorandAlgodClient,
     aptosClient,
     evmHttpRpcUrl,
     solanaHttpRpcUrl,
@@ -26,7 +26,6 @@ import { Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk"
 import { APTOS_COIN } from "aptos"
 import {
     makePaymentTxnWithSuggestedParamsFromObject,
-    secretKeyToMnemonic,
     mnemonicToSecretKey,
     waitForConfirmation,
     makeAssetTransferTxnWithSuggestedParamsFromObject,
@@ -215,9 +214,8 @@ export const _transferAlgorand = async ({
         throw new Error("Cannot find balance without token address")
     network = network || Network.Testnet
 
-    const client = algorandClient(network)
-    const mnemonic = secretKeyToMnemonic(Buffer.from(privateKey, "hex"))
-    const account = mnemonicToSecretKey(mnemonic)
+    const client = algorandAlgodClient(network)
+    const account = mnemonicToSecretKey(privateKey)
 
     if (tokenAddress === "native") {
         const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]

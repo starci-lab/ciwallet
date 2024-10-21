@@ -39,6 +39,7 @@
     "framer-motion": "11.3.24",
     "lodash": "4.17.21",
     "lucide-react": "0.428.0",
+    "multiformats": "^13.3.0",
     "next": "14.2.5",
     "next-themes": "0.3.0",
     "ngrok": "5.0.0-beta.2",

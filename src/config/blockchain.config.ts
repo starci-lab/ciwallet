@@ -236,22 +236,42 @@ export const blockchainConfig = (): ChainConfig => {
                         },
                         decimals: 6,
                     },
-                    usdt: {
+                    $CARROT: {
                         addresses: {
-                            [Network.Mainnet]: "", // Replace with actual address if available
-                            [Network.Testnet]: "0xDcbA7F0D49885D5C9e7CDF3e27897a5F3cdfbf62",
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "",
                         },
-                        imageUrl: "/icons/usdt.svg",
-                        name: "USD Tether",
-                        symbol: "USDT",
-                        decimals: 6,
+                        name: "$CARROT Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CARROT.png",
+                        symbol: "$CARROT"
                     },
+                    $CAULI: {
+                        addresses: {
+                            [Network.Mainnet]: "",
+                            [Network.Testnet]: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
+                        },
+                        name: "$CAULI Token",
+                        decimals: 18,
+                        imageUrl: "/icons/$CAULI.png",
+                        symbol: "$CAULI"
+                    }
                 },
                 nftGroups: {
                     cifarm: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        nfts: {},
+                        nfts: {
+                            premiumTile: {
+                                addresses: {
+                                    [Network.Mainnet]: "",
+                                    [Network.Testnet]: "premiumTile1",
+                                },
+                                imageUrl: "/icons/premium-tile.png",
+                                name: "CiFarm Premium Tile",
+                                symbol: "CPT",
+                            },
+                        },
                     },
                 },
             },

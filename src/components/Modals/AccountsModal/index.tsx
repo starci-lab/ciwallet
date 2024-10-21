@@ -15,7 +15,6 @@ import {
 } from "@nextui-org/react"
 import {
     useAccountsModalDisclosure,
-    useCreateAccountFormik,
     useCreateAccountModalDisclosure,
 } from "@/hooks"
 import { useAppSelector } from "@/redux"
@@ -37,7 +36,6 @@ export const AccountsModal = () => {
     const accounts = baseAccounts[preferenceChainKey]?.accounts
 
     const _accounts = valuesWithKey(accounts ?? {})
-    const formik = useCreateAccountFormik()
 
     return (
         <Modal isOpen={isOpen} hideCloseButton>
@@ -62,10 +60,6 @@ export const AccountsModal = () => {
                     <Link
                         as="button"
                         onPress={async () => {
-                            if (preferenceChainKey === "algorand") {
-                                await formik.submitForm()
-                                return
-                            }
                             onCreateAccountModalOpen()
                         }}
                         size="sm"

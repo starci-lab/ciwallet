@@ -1,6 +1,6 @@
 import { Network, blockchainConfig } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
-import { algorandClient, aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl, suiClient } from "../rpcs"
+import { algorandAlgodClient, aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl, suiClient } from "../rpcs"
 import { erc20Abi } from "../abis"
 import { Platform, chainKeyToPlatform } from "../common"
 import { fetchDigitalAsset, mplTokenMetadata } from "@metaplex-foundation/mpl-token-metadata"
@@ -121,7 +121,7 @@ export const _getAlgorandTokenMetadata = async ({
     }
     network = network || Network.Testnet
     const assetId = BigInt(tokenAddress)
-    const account = await algorandClient(network).getAssetByID(assetId).do()
+    const account = await algorandAlgodClient(network).getAssetByID(assetId).do()
     return {
         name: account.params.name || "",
         decimals: account.params.decimals || 0,
