@@ -145,7 +145,7 @@ const Page = () => {
                 <Spacer y={6} />
                 <div>
                     <Link
-                        onPress={() => router.push(constantConfig().path.cifarm)}
+                        onPress={() => router.push(constantConfig().path["cifarm-pre"])}
                         as="button"
                         className="flex"
                     >

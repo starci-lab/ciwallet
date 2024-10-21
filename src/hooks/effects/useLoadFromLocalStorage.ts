@@ -77,7 +77,7 @@ export const useLoadFromLocalStorage = () => {
 
             switch (botTypeInit) {
             case BotType.Cifarm: {
-                router.push(constantConfig().path.cifarm)
+                router.push(constantConfig().path["cifarm-pre"])
                 dispatch(setBotTypeInit())
                 break
             }
