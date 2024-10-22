@@ -8,12 +8,12 @@ export const algorandExplorerUrl = (
     case Network.Testnet:
         return {
             address: `https://explorer.solana.com/address/${value}?cluster=devnet`,
-            tx: `https://explorer.solana.com/tx/${value}?cluster=devnet`,
+            tx: `https://testnet.explorer.perawallet.app/tx/${value}`,
         }
     case Network.Mainnet:
         return {
             address: `https://explorer.solana.com/address/${value}`,
-            tx: `https://explorer.solana.com/tx/${value}`,
+            tx: `https://explorer.perawallet.app/tx/${value}`,
         }
     }
 }
