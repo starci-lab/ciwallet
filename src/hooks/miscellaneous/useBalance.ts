@@ -35,7 +35,7 @@ export const useBalance = ({
             const tokenService = new BlockchainTokenService({
                 chainKey,
                 tokenAddress:
-          chains[chainKey].tokens[tokenKey].addresses[network],
+          chains[chainKey].tokens[tokenKey][network].address,
                 network,
             })
             return await tokenService.getBalance({ accountAddress })

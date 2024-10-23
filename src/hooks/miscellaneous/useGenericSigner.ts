@@ -15,7 +15,10 @@ export const useGenericSigner = <N extends Network, C extends Chain>(
     const baseAccounts = useAppSelector(
         (state) => state.authReducer.baseAccounts
     )
+    const chains = useAppSelector(state => state.blockchainReducer.chains)
     if (!chainKey) return
+    if (!chains[chainKey].wormhole) return    
+    
     if (!address) return
     const account = valuesWithKey(baseAccounts[chainKey]?.accounts ?? {}).find(({ accountAddress }) => accountAddress === address)
     if (!account) return 

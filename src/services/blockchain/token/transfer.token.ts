@@ -1,4 +1,4 @@
-import { blockchainConfig, Network } from "@/config"
+import { blockchainConfig, nativeTokenKey, Network } from "@/config"
 import {
     algorandAlgodClient,
     aptosClient,
@@ -67,8 +67,8 @@ export const _transferEvm = async ({
     const provider = new JsonRpcProvider(rpcUrl)
     const wallet = new Wallet(privateKey, provider)
 
-    if (tokenAddress === "native") {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
+    if (tokenAddress === nativeTokenKey) {
+        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
         const { hash } = await wallet.sendTransaction({
             to: recipientAddress,
@@ -170,8 +170,8 @@ export const _transferAptos = async ({
         address: fromAddress,
     })
 
-    if (tokenAddress === "native") {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
+    if (tokenAddress === nativeTokenKey) {
+        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
         const transaction = await client.transferCoinTransaction({
             sender: account.accountAddress.toString(),
@@ -217,8 +217,8 @@ export const _transferAlgorand = async ({
     const client = algorandAlgodClient(network)
     const account = mnemonicToSecretKey(privateKey)
 
-    if (tokenAddress === "native") {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
+    if (tokenAddress === nativeTokenKey) {
+        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
 
         const suggestedParams = await client.getTransactionParams().do()
@@ -233,7 +233,8 @@ export const _transferAlgorand = async ({
         await waitForConfirmation(client, txid, 3)
         return { txHash: txid }
     } else {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
+        //subtitue with actual decimals
+        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
 
         const suggestedParams = await client.getTransactionParams().do()
@@ -270,8 +271,8 @@ export const _transferSui = async ({
         signer: Ed25519Keypair.fromSecretKey(privateKey)
     })
 
-    if (tokenAddress === "native") {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens["native"]
+    if (tokenAddress === nativeTokenKey) {
+        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
         const tx = new Transaction()
         const [coin] = tx.splitCoins(SUI_COIN_TYPE, [computeRaw(amount, decimals)])
@@ -306,5 +307,7 @@ export const transferToken = async (
         return _transferAlgorand(params)
     case Platform.Sui:
         return _transferSui(params)
+    case Platform.Polkadot:
+        return _transferAlgorand(params)
     }
 }

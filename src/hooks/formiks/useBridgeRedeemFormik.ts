@@ -30,7 +30,13 @@ export interface BridgeRedeemFormikValues {
 //wormhole only
 export const _useBridgeRedeemFormik =
   (): FormikProps<BridgeRedeemFormikValues> => {
+      const preferenceChainKey = useAppSelector(
+          (state) => state.blockchainReducer.preferenceChainKey
+      )
       const chains = useAppSelector((state) => state.blockchainReducer.chains)
+      //wormhole only
+      const supportWormhole = !!chains[preferenceChainKey].wormhole
+
       const selectedKey = useAppSelector((state) => state.vaaReducer.selectedKey)
       const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
       const vaa = storedVaas[selectedKey]
@@ -54,10 +60,10 @@ export const _useBridgeRedeemFormik =
       const targetChainKey = targetChain?.key ?? defaultSecondaryChainKey
 
       //wormhole only
-      const minimalFee = Object.values(
+      const minimalFee = supportWormhole ? Object.values(
           crosschainConfig()[senderChainKey][targetChainKey]
-      )[0].minimalFee
-
+      )[0].minimalFee : 0
+ 
       const initialValues: BridgeRedeemFormikValues = {
           nativeAmountPlusFee: minimalFee,
       }
@@ -73,7 +79,7 @@ export const _useBridgeRedeemFormik =
 
       const { balanceSwr: nativeTokenBalanceSwr } = useBalance({
           tokenKey: nativeTokenKey,
-          accountAddress,
+          accountAddress: supportWormhole ? accountAddress : "",
           chainKey: targetChain?.key ?? defaultSecondaryChainKey,
       })
 

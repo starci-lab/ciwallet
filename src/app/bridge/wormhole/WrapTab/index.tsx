@@ -35,12 +35,15 @@ import useSWR from "swr"
 
 export const WrapTab = () => {
     const formik = useBridgeWrapFormik()
-
     const { onOpen } = useBridgeWrapSelectTokenModalDisclosure()
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
+    
+    //wormhole only
+    const supportWormhole = !!chains[preferenceChainKey].wormhole
+
     const sourceChainName = chains[preferenceChainKey].wormhole?.chain ?? defaultChain
 
     const network = useAppSelector((state) => state.blockchainReducer.network)
@@ -54,7 +57,7 @@ export const WrapTab = () => {
     )
 
     const { isValidating } = useSWR(
-        ["FETCH_WRAPPED_TOKENS", formik.values.tokenKey, preferenceChainKey],
+        supportWormhole ? ["FETCH_WRAPPED_TOKENS", formik.values.tokenKey, preferenceChainKey] : null,
         async () => {
             const wrappedTokens: Record<string, WrappedToken> = {}
             const promises: Array<Promise<void>> = []
@@ -98,7 +101,7 @@ export const WrapTab = () => {
     )
 
     const originalAssetSwr = useSWR(
-        ["ORIGINAL_ASSET", formik.values.tokenKey],
+        supportWormhole ? ["ORIGINAL_ASSET", formik.values.tokenKey] : null,
         async () => {
             const token = chains[preferenceChainKey].tokens[formik.values.tokenKey]
             return await getOriginalAsset({

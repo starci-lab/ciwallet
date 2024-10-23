@@ -48,6 +48,9 @@ export const _useBridgeTransferFormik =
           (state) => state.blockchainReducer.preferenceChainKey
       )
 
+      //wormhole only
+      const supportWormhole = !!chains[preferenceChainKey].wormhole
+
       const baseAccounts = useAppSelector(
           (state) => state.authReducer.baseAccounts
       )
@@ -65,9 +68,9 @@ export const _useBridgeTransferFormik =
           ? defaultSecondaryChainKey
           : defaultChainKey
 
-      const minimalFee = Object.values(
+      const minimalFee = supportWormhole ? Object.values(
           crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey]
-      )[0].minimalFee
+      )[0].minimalFee : 0
 
       const initialValues: BridgeTransferFormikValues = {
           amount: 0,
@@ -86,7 +89,8 @@ export const _useBridgeTransferFormik =
 
       const { balanceSwr: nativeTokenBalanceSwr } = useBalance({
           tokenKey: nativeTokenKey,
-          accountAddress,
+          //fetch only if wormhole is supported
+          accountAddress: supportWormhole ? accountAddress : "",
           chainKey: preferenceChainKey,
       })
 

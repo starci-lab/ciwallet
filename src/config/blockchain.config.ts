@@ -18,45 +18,69 @@ export const blockchainConfig = (): ChainConfig => {
                 name: "Solana",
                 tokens: {
                     native: {
-                        addresses: {
-                            [Network.Mainnet]: "native",
-                            [Network.Testnet]: "native",
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/solana.svg",
+                            name: "Solana",
+                            symbol: "SOL",
+                            decimals: 9,
                         },
-                        imageUrl: "/icons/solana.svg",
-                        name: "Solana",
-                        symbol: "SOL",
-                        decimals: 9,
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/solana.svg",
+                            name: "Solana",
+                            symbol: "SOL",
+                            decimals: 9,
+                        },
                     },
                     usdc: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                        [Network.Mainnet]: {
+                            address: "",
+                            imageUrl: "/icons/usdc.svg",
+                            name: "USD Coin",
+                            symbol: "USDC",
+                            decimals: 6,
                         },
-                        imageUrl: "/icons/usdc.svg",
-                        name: "USD Coin",
-                        symbol: "USDC",
-                        decimals: 6,
+                        [Network.Testnet]: {
+                            address: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+                            imageUrl: "/icons/usdc.svg",
+                            name: "USD Coin",
+                            symbol: "USDC",
+                            decimals: 6,
+                        },
                     },
                     $CARROT: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "FnQEAh9NNPzE26Z8iBq9onU3gzynGeHbPVy8gdwHFYee",
+                        [Network.Mainnet]: {
+                            address: "",
+                            imageUrl: "/icons/usdc.svg",
+                            name: "USD Coin",
+                            symbol: "USDC",
+                            decimals: 6,
                         },
-                        name: "$CARROT Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CARROT.png",
-                        symbol: "$CARROT"
+                        [Network.Testnet]: {
+                            address: "FnQEAh9NNPzE26Z8iBq9onU3gzynGeHbPVy8gdwHFYee",
+                            imageUrl: "/icons/usdc.svg",
+                            name: "USD Coin",
+                            symbol: "USDC",
+                            decimals: 6,
+                        },
                     },
                     $CAULI: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "4XqC5una95jkts6EUcuiicVQr18ZVPhJCzKVj9hYTEC7",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
                         },
-                        name: "$CAULI Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CAULI.png",
-                        symbol: "$CAULI"
-                    }
+                        [Network.Testnet]: {
+                            address: "4XqC5una95jkts6EUcuiicVQr18ZVPhJCzKVj9hYTEC7",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },
+                    },
                 },
                 nftGroups: {
                     cifarm: {
@@ -66,7 +90,8 @@ export const blockchainConfig = (): ChainConfig => {
                             premiumTile: {
                                 addresses: {
                                     [Network.Mainnet]: "",
-                                    [Network.Testnet]: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
+                                    [Network.Testnet]:
+                    "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
                                 },
                                 imageUrl: "/icons/premium-tile.png",
                                 name: "CiFarm Premium Tile",
@@ -85,35 +110,53 @@ export const blockchainConfig = (): ChainConfig => {
                 name: "Avalanche",
                 tokens: {
                     native: {
-                        addresses: {
-                            [Network.Mainnet]: "native",
-                            [Network.Testnet]: "native",
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/avalanche.svg",
+                            name: "Avalanche",
+                            symbol: "AVAX",
+                            decimals: 18,
                         },
-                        imageUrl: "/icons/avalanche.svg",
-                        name: "Avalanche",
-                        symbol: "AVAX",
-                        decimals: 18,
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/avalanche.svg",
+                            name: "Avalanche",
+                            symbol: "AVAX",
+                            decimals: 18,
+                        },
                     },
                     $CARROT: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "0xA9E72Ae9FfEc2a10AA9b6d617d1faf4953A2dADD",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
                         },
-                        name: "$CARROT Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CARROT.png",
-                        symbol: "$CARROT"
+                        [Network.Testnet]: {
+                            address: "0xA9E72Ae9FfEc2a10AA9b6d617d1faf4953A2dADD",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
+                        },
                     },
                     $CAULI: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "0x93ED1074fa946946309CdBe0cc873c58d6a725F1",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
                         },
-                        name: "$CAULI Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CAULI.png",
-                        symbol: "$CAULI"
-                    }
+                        [Network.Testnet]: {
+                            address: "0x93ED1074fa946946309CdBe0cc873c58d6a725F1",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },
+                    },
                 },
                 nftGroups: {
                     cifarm: {
@@ -124,7 +167,8 @@ export const blockchainConfig = (): ChainConfig => {
                             premiumTile: {
                                 addresses: {
                                     [Network.Mainnet]: "",
-                                    [Network.Testnet]: "0x410d3e15058e8544B14FD1a317E330f693444673",
+                                    [Network.Testnet]:
+                    "0x410d3e15058e8544B14FD1a317E330f693444673",
                                 },
                                 imageUrl: "/icons/premium-tile.png",
                                 name: "CiFarm Premium Tile",
@@ -143,35 +187,53 @@ export const blockchainConfig = (): ChainConfig => {
                 name: "Aptos",
                 tokens: {
                     native: {
-                        addresses: {
-                            [Network.Mainnet]: "native",
-                            [Network.Testnet]: "native",
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/aptos.svg",
+                            name: "Aptos",
+                            symbol: "APT",
+                            decimals: 8,
                         },
-                        imageUrl: "/icons/aptos.svg",
-                        name: "Aptos",
-                        symbol: "APT",
-                        decimals: 8,
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/aptos.svg",
+                            name: "Aptos",
+                            symbol: "APT",
+                            decimals: 8,
+                        },
                     },
                     $CARROT: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
                         },
-                        name: "$CARROT Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CARROT.png",
-                        symbol: "$CARROT"
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
+                        },
                     },
                     $CAULI: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
                         },
-                        name: "$CAULI Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CAULI.png",
-                        symbol: "$CAULI"
-                    }
+                        [Network.Testnet]: {
+                            address: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },
+                    },
                 },
                 nftGroups: {
                     cifarm: {
@@ -181,7 +243,8 @@ export const blockchainConfig = (): ChainConfig => {
                             premiumTile: {
                                 addresses: {
                                     [Network.Mainnet]: "",
-                                    [Network.Testnet]: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
+                                    [Network.Testnet]:
+                    "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
                                 },
                                 imageUrl: "/icons/premium-tile.png",
                                 name: "CiFarm Premium Tile",
@@ -200,24 +263,36 @@ export const blockchainConfig = (): ChainConfig => {
                 name: "Binance Smart Chain",
                 tokens: {
                     native: {
-                        imageUrl: "/icons/bsc.svg",
-                        name: "Binance Coin",
-                        symbol: "BNB",
-                        addresses: {
-                            [Network.Mainnet]: "native", // Replace with actual address if available
-                            [Network.Testnet]: "native", // Replace with actual address if available
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/bsc.svg",
+                            name: "Binance Coin",
+                            symbol: "tBNB",
+                            decimals: 18,
                         },
-                        decimals: 18,
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/bsc.svg",
+                            name: "Binance Coin",
+                            symbol: "BNB",
+                            decimals: 18,
+                        },  
                     },
                     usdt: {
-                        addresses: {
-                            [Network.Mainnet]: "", // Replace with actual address if available
-                            [Network.Testnet]: "0xDcbA7F0D49885D5C9e7CDF3e27897a5F3cdfbf62",
+                        [Network.Mainnet]: {
+                            address: "",
+                            imageUrl: "/icons/usdt.svg",
+                            name: "USD Tether",
+                            symbol: "USDT",
+                            decimals: 18,
                         },
-                        imageUrl: "/icons/usdt.svg",
-                        name: "USD Tether",
-                        symbol: "USDT",
-                        decimals: 18,
+                        [Network.Testnet]: {
+                            address: "0xDcbA7F0D49885D5C9e7CDF3e27897a5F3cdfbf62",
+                            imageUrl: "/icons/usdt.svg",
+                            name: "USD Tether",
+                            symbol: "USDT",
+                            decimals: 18,
+                        },                    
                     },
                 },
                 nftGroups: {
@@ -237,35 +312,53 @@ export const blockchainConfig = (): ChainConfig => {
                 name: "Algorand",
                 tokens: {
                     native: {
-                        imageUrl: "/icons/algorand.svg",
-                        name: "Algorand",
-                        symbol: "ALGO",
-                        addresses: {
-                            [Network.Mainnet]: "native", // Replace with actual address if available
-                            [Network.Testnet]: "native", // Replace with actual address if available
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/algorand.svg",
+                            name: "Algorand",
+                            symbol: "ALGO",
+                            decimals: 6,
                         },
-                        decimals: 6,
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/algorand.svg",
+                            name: "Algorand",
+                            symbol: "ALGO",
+                            decimals: 6,
+                        },          
                     },
                     $CARROT: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
                         },
-                        name: "$CARROT Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CARROT.png",
-                        symbol: "$CARROT"
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
+                        },    
                     },
                     $CAULI: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
                         },
-                        name: "$CAULI Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CAULI.png",
-                        symbol: "$CAULI"
-                    }
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },                       
+                    },
                 },
                 nftGroups: {
                     cifarm: {
@@ -294,35 +387,53 @@ export const blockchainConfig = (): ChainConfig => {
                 name: "Sui",
                 tokens: {
                     native: {
-                        addresses: {
-                            [Network.Mainnet]: "native",
-                            [Network.Testnet]: "native",
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/sui.svg",
+                            name: "Sui",
+                            symbol: "SUI",
+                            decimals: 6,
                         },
-                        imageUrl: "/icons/sui.svg",
-                        name: "Sui",
-                        symbol: "SUI",
-                        decimals: 8,
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/sui.svg",
+                            name: "Sui",
+                            symbol: "SUI",
+                            decimals: 6,
+                        },       
                     },
                     $CARROT: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
                         },
-                        name: "$CARROT Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CARROT.png",
-                        symbol: "$CARROT"
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
+                        },       
                     },
                     $CAULI: {
-                        addresses: {
-                            [Network.Mainnet]: "",
-                            [Network.Testnet]: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
                         },
-                        name: "$CAULI Token",
-                        decimals: 18,
-                        imageUrl: "/icons/$CAULI.png",
-                        symbol: "$CAULI"
-                    }
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },        
+                    },
                 },
                 nftGroups: {
                     cifarm: {
@@ -332,7 +443,8 @@ export const blockchainConfig = (): ChainConfig => {
                             premiumTile: {
                                 addresses: {
                                     [Network.Mainnet]: "",
-                                    [Network.Testnet]: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
+                                    [Network.Testnet]:
+                    "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
                                 },
                                 imageUrl: "/icons/premium-tile.png",
                                 name: "CiFarm Premium Tile",
@@ -348,11 +460,27 @@ export const blockchainConfig = (): ChainConfig => {
                 // to bifost
                 name: "Polkadot",
                 imageUrl: "/icons/polkadot.svg",
-                nftGroups: {
-                },
+                nftGroups: {},
+                //polkadot is special network, mainnet is DOT, where testnet is PAS
                 tokens: {
+                    native: {
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/polkadot.svg",
+                            name: "Polkadot",
+                            symbol: "DOT",
+                            decimals: 10,
+                        },
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/paseo.webp",
+                            name: "Paseo",
+                            symbol: "PAS",
+                            decimals: 10,
+                        },
+                    },
                 },
-            }
+            },
         },
     }
 }
@@ -361,9 +489,12 @@ export const chains = valuesWithKey(blockchainConfig().chains)
 export const chainInfos = valuesWithKey(blockchainConfig().chains)
 
 export const defaultChainKey = chains[0].key
-export const defaultChain = blockchainConfig().chains[defaultChainKey].wormhole?.chain ?? "Solana"
+export const defaultChain =
+  blockchainConfig().chains[defaultChainKey].wormhole?.chain ?? "Solana"
 export const defaultSecondaryChainKey = chains[1].key
-export const defaultSecondaryChain = blockchainConfig().chains[defaultSecondaryChainKey].wormhole?.chain ?? "Aptos"
+export const defaultSecondaryChain =
+  blockchainConfig().chains[defaultSecondaryChainKey].wormhole?.chain ??
+  "Aptos"
 
 export const nativeTokenKey = "native"
 
@@ -372,15 +503,15 @@ export interface ChainInfo {
   wormhole?: {
     chainId: ChainId;
     chain: Chain;
-  },
+  };
   imageUrl: string;
   name: string;
-  tokens: Record<string, TokenInfo>;
+  tokens: Record<string, Record<Network, TokenInfo>>;
   nftGroups: Record<string, NftGroupInfo>;
 }
 
 export interface TokenInfo {
-  addresses: Record<Network, string>;
+  address: string;
   imageUrl: string;
   name: string;
   symbol: string;
@@ -405,11 +536,11 @@ export interface ChainConfig {
 }
 
 export enum SupportedChainKey {
-    Sui = "sui",
-    Aptos = "aptos",
-    Avalanche = "avalanche",
-    Solana = "solana",
-    Bsc = "bsc",
-    Algorand = "algorand",
-    Polkadot = "polkadot",
+  Sui = "sui",
+  Aptos = "aptos",
+  Avalanche = "avalanche",
+  Solana = "solana",
+  Bsc = "bsc",
+  Algorand = "algorand",
+  Polkadot = "polkadot",
 }

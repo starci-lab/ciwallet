@@ -1,4 +1,4 @@
-import { Network, blockchainConfig } from "@/config"
+import { Network, blockchainConfig, nativeTokenKey } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
 import { algorandAlgodClient, aptosClient, evmHttpRpcUrl, solanaHttpRpcUrl, suiClient } from "../rpcs"
 import { erc20Abi } from "../abis"
@@ -25,16 +25,16 @@ export const _getEvmTokenMetadata = async ({
     tokenAddress
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
     if (!tokenAddress) throw new Error("Token address not found")
+    network = network || Network.Testnet
     if (tokenAddress === "native") {
         const { decimals, symbol, name } =
-    blockchainConfig().chains[chainKey].tokens["native"]
+    blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         return {
             decimals,
             name,
             symbol,
         }
     }
-    network = network || Network.Testnet
 
     const rpcUrl = evmHttpRpcUrl(chainKey, network)
     const provider = new JsonRpcProvider(rpcUrl)
@@ -58,9 +58,11 @@ export const _getAptosTokenMetadata = async ({
     tokenAddress
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
     if (!tokenAddress) throw new Error("Token address not found")
-    if (tokenAddress === "native") {
+    network = network || Network.Testnet
+
+    if (tokenAddress === nativeTokenKey) {
         const { decimals, symbol, name } =
-        blockchainConfig().chains[chainKey].tokens["native"]
+        blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         return {
             decimals,
             name,
@@ -85,16 +87,17 @@ export const _getSolanaTokenMetadata = async ({
     chainKey,
     network
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
-    if (tokenAddress === "native") {
+    network = network || Network.Testnet
+    if (tokenAddress === nativeTokenKey) {
         const { decimals, symbol, name } =
-    blockchainConfig().chains[chainKey].tokens["native"]
+    blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         return {
             decimals,
             name,
             symbol,
         }
     }
-    network = network || Network.Testnet
+
     const umi = createUmi(solanaHttpRpcUrl(chainKey, network)).use(mplTokenMetadata())
     const asset = await fetchDigitalAsset(umi, publicKey(tokenAddress))
 
@@ -110,16 +113,18 @@ export const _getAlgorandTokenMetadata = async ({
     chainKey,
     network
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
-    if (tokenAddress === "native") {
+    if (!tokenAddress) throw new Error("Token address not found")
+    network = network || Network.Testnet
+    if (tokenAddress === nativeTokenKey) {
         const { decimals, symbol, name } =
-    blockchainConfig().chains[chainKey].tokens["native"]
+    blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         return {
             decimals,
             name,
             symbol,
         }
     }
-    network = network || Network.Testnet
+
     const assetId = BigInt(tokenAddress)
     const account = await algorandAlgodClient(network).getAssetByID(assetId).do()
     return {
@@ -135,9 +140,11 @@ export const _getSuiTokenMetadata = async ({
     tokenAddress
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
     if (!tokenAddress) throw new Error("Token address not found")
-    if (tokenAddress === "native") {
+    network = network || Network.Testnet
+
+    if (tokenAddress === nativeTokenKey) {
         const { decimals, symbol, name } =
-        blockchainConfig().chains[chainKey].tokens["native"]
+        blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         return {
             decimals,
             name,
@@ -145,7 +152,6 @@ export const _getSuiTokenMetadata = async ({
         }
     }
 
-    network = network || Network.Testnet
     const metadata = await suiClient(
         network
     ).getCoinMetadata({ coinType: tokenAddress })
@@ -156,6 +162,31 @@ export const _getSuiTokenMetadata = async ({
         name,
         decimals,
         symbol,
+    }
+}
+
+export const _getPolkadotTokenMetadata = async ({
+    chainKey,
+    network,
+    tokenAddress
+}: GetTokenMetadataParams): Promise<TokenMetadata> => {
+    if (!tokenAddress) throw new Error("Token address not found")
+    network = network || Network.Testnet
+
+    if (tokenAddress === nativeTokenKey) {
+        const { decimals, symbol, name } =
+        blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+        return {
+            decimals,
+            name,
+            symbol,
+        }
+    }
+
+    return {
+        decimals: 0,
+        name: "",
+        symbol: "",
     }
 }
 
@@ -172,5 +203,7 @@ export const _getTokenMetadata = async (params: GetTokenMetadataParams) => {
         return _getAlgorandTokenMetadata(params)
     case Platform.Sui:
         return _getSuiTokenMetadata(params)
+    case Platform.Polkadot:
+        return _getPolkadotTokenMetadata(params)
     }
 }

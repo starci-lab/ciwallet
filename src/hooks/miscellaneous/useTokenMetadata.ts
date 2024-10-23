@@ -23,7 +23,7 @@ export const useTokenMetadata = ({
         async () => {
             const tokenService = new BlockchainTokenService({
                 chainKey,
-                tokenAddress: chains[preferenceChainKey].tokens[tokenKey].addresses[network],
+                tokenAddress: chains[preferenceChainKey].tokens[tokenKey][network].address,
                 network,
             })
 

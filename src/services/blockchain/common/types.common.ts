@@ -61,23 +61,24 @@ export interface ChainAccount {
 
 export const chainKeyToChain = (chainKey: string) : Chain => {
     switch (chainKey) {
-    case "aptos": return "Aptos"
-    case "solana": return "Solana"
-    case "avalanche": return "Avalanche"
-    case "bsc": return "Bsc"
-    case "algorand": return "Algorand"
-    case "sui": return "Sui"
+    case SupportedChainKey.Aptos: return "Aptos"
+    case SupportedChainKey.Solana: return "Solana"
+    case SupportedChainKey.Avalanche: return "Avalanche"
+    case SupportedChainKey.Bsc: return "Bsc"
+    case SupportedChainKey.Algorand: return "Algorand"
+    case SupportedChainKey.Sui: return "Sui"
     default: throw new Error(`Chain not found : ${chainKey}`)
     }
 }
 
 export const chainToChainKey = (chainKey: Chain) : string => {
     switch (chainKey) {
-    case "Aptos": return "aptos"
-    case "Solana": return "solana"
-    case "Avalanche": return "avalanche"
-    case "Bsc": return "bsc"
-    case "Sui": return "sui"
+    case "Aptos": return SupportedChainKey.Aptos
+    case "Solana": return SupportedChainKey.Solana
+    case "Avalanche": return SupportedChainKey.Avalanche
+    case "Algorand": return SupportedChainKey.Algorand
+    case "Bsc": return SupportedChainKey.Bsc
+    case "Sui": return SupportedChainKey.Sui
     default: throw new Error(`Chain not found : ${chainKey}`)
     }
 }
