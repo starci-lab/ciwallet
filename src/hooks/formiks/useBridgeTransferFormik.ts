@@ -7,7 +7,6 @@ import {
     nativeTokenKey,
     defaultSecondaryChainKey,
     SupportedBridgeProtocolKey,
-    crosschainConfig,
     defaultChain,
     defaultSecondaryChain,
 } from "@/config"
@@ -68,8 +67,9 @@ export const _useBridgeTransferFormik =
           ? defaultSecondaryChainKey
           : defaultChainKey
 
+      const crosschain = useAppSelector((state) => state.blockchainReducer.crosschain)
       const minimalFee = supportWormhole ? Object.values(
-          crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey]
+          crosschain[preferenceChainKey][_defaultSecondaryChainKey]
       )[0].minimalFee : 0
 
       const initialValues: BridgeTransferFormikValues = {

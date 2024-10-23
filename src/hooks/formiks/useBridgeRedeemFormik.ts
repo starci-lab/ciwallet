@@ -16,7 +16,6 @@ import { useBalance, useGenericSigner } from "../miscellaneous"
 import { deserialize, VAA } from "@wormhole-foundation/sdk"
 import { valuesWithKey } from "@/utils"
 import {
-    crosschainConfig,
     defaultChainKey,
     defaultSecondaryChain,
     defaultSecondaryChainKey,
@@ -60,8 +59,8 @@ export const _useBridgeRedeemFormik =
       const targetChainKey = targetChain?.key ?? defaultSecondaryChainKey
 
       //wormhole only
-      const minimalFee = supportWormhole ? Object.values(
-          crosschainConfig()[senderChainKey][targetChainKey]
+      const crosschain = useAppSelector((state) => state.blockchainReducer.crosschain)
+      const minimalFee = supportWormhole ? Object.values(crosschain[senderChainKey][targetChainKey]
       )[0].minimalFee : 0
  
       const initialValues: BridgeRedeemFormikValues = {

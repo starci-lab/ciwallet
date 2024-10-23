@@ -18,6 +18,7 @@ import { _useBridgeSelectTokenModalDisclosure } from "./useBridgeSelectTokenModa
 import { _useBridgeWrapModalDisclosure } from "./useBridgeWrapSelectChain"
 import { _useTransferSelectTokenModalDisclosure } from "./useTransferSelectTokenDiscloresure"
 import { _useWarningModalDisclosure } from "./useWarningModalDiscloresure"
+import { _usePolkadotTokenDetailsModalDiscloresure  } from "./usePolkadotTokenDetailsModalDiscloresure"
 
 export interface UseModalReturn {
     inviteModalDisclosure: UseDisclosureReturn
@@ -38,6 +39,7 @@ export interface UseModalReturn {
     transferSelectTokenModalDiscloresure: UseDisclosureReturn
     confirmModalDiscloresure: UseDisclosureReturn
     transactionModalDiscloresure: UseDisclosureReturn
+    polkadotChainsModalDiscloresure: UseDisclosureReturn
 }
 
 export const _useModals = () : UseModalReturn => {
@@ -59,6 +61,7 @@ export const _useModals = () : UseModalReturn => {
     const transferSelectTokenModalDiscloresure = _useTransferSelectTokenModalDisclosure()
     const confirmModalDiscloresure = _useConfirmModalDisclosure()
     const transactionModalDiscloresure = _useConfirmModalDisclosure()
+    const polkadotChainsModalDiscloresure = _usePolkadotTokenDetailsModalDiscloresure()
 
     return {
         inviteModalDisclosure,
@@ -78,7 +81,8 @@ export const _useModals = () : UseModalReturn => {
         bridgeWrapModalDisclosure,
         transferSelectTokenModalDiscloresure,
         confirmModalDiscloresure,
-        transactionModalDiscloresure
+        transactionModalDiscloresure,
+        polkadotChainsModalDiscloresure
     }
 }
 
@@ -109,3 +113,4 @@ export * from "./useBridgeWrapSelectChain"
 export * from "./useTransferSelectTokenDiscloresure"
 export * from "./useWarningModalDiscloresure"
 export * from "./useTransactionModalDiscloresure"
+export * from "./usePolkadotTokenDetailsModalDiscloresure"

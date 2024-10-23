@@ -1,5 +1,5 @@
 "use client"
-import { crosschainConfig, defaultChain, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, Network } from "@/config"
+import { defaultChain, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, Network } from "@/config"
 import { selectVaa, StoredVaa, useAppDispatch, useAppSelector } from "@/redux"
 import { toWormholeNativeFromUniversal } from "@/services"
 import { computeDenomination, formatDay, truncateString, valuesWithKey, WithKey } from "@/utils"
@@ -36,8 +36,9 @@ export const VAAProfile = ({
         ({ wormhole }) => wormhole?.chain === payload.to.chain
     )
 
+    const crosschain = useAppSelector(state => state.blockchainReducer.crosschain)
     const protocol = valuesWithKey(
-        crosschainConfig()[fromChain?.key ?? defaultChainKey][
+        crosschain[fromChain?.key ?? defaultChainKey][
             targetChain?.key ?? defaultSecondaryChainKey
         ]
     ).find(({ key }) => key === bridgeProtocolKey)

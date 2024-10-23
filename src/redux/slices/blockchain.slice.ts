@@ -1,9 +1,13 @@
 import {
     ChainInfo,
+    CrosschainConfig,
     Network,
+    PolkadotParachainsConfig,
     TokenInfo,
     blockchainConfig,
+    crosschainConfig,
     defaultChainKey,
+    polkadotParachainsConfig,
 } from "@/config"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
@@ -11,6 +15,8 @@ export interface ChainState {
   network: Network;
   preferenceChainKey: string;
   chains: Record<string, ChainInfo>;
+  polkadotParachains: PolkadotParachainsConfig;
+  crosschain: CrosschainConfig;
   saveChainsKey: number;
 }
 
@@ -19,6 +25,8 @@ const initialState: ChainState = {
     preferenceChainKey: defaultChainKey,
     network: Network.Testnet,
     chains: blockchainConfig().chains,
+    polkadotParachains: polkadotParachainsConfig(),
+    crosschain: crosschainConfig(),
     saveChainsKey: 0,
 }
 

@@ -1,5 +1,5 @@
 "use client"
-import { crosschainConfig, defaultChainKey, defaultSecondaryChainKey, nativeTokenKey, SupportedBridgeProtocolKey } from "@/config"
+import { defaultChainKey, defaultSecondaryChainKey, nativeTokenKey, SupportedBridgeProtocolKey } from "@/config"
 import {
     useBridgeTransferFormik,
     useBridgeSelectRecipientModalDisclosure,
@@ -78,7 +78,8 @@ export const TransferTab = () => {
         }
     }, [preferenceChainKey])
 
-    const bridgeProtocols = crosschainConfig()[preferenceChainKey][formik.values.targetChainKey] ?? {} 
+    const crosschain = useAppSelector(state => state.blockchainReducer.crosschain)
+    const bridgeProtocols = crosschain[preferenceChainKey][formik.values.targetChainKey] ?? {} 
 
     useEffect(() => {
         if (formik.values.tokenKey === nativeTokenKey) {

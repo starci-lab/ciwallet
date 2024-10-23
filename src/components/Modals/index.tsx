@@ -17,6 +17,7 @@ import { BridgeWrapModal } from "./BridgeWrapModal"
 import { TransferSelectTokenModal } from "./TransferSelectTokenModal"
 import { ConfirmModal } from "./ConfirmModal"
 import { TransactionModal } from "./TransactionModal"
+import { PolkadotTokenDetailsModal } from "./PolkadotTokenDetailsModal"
 
 export const Modals = () => {
     return (
@@ -39,6 +40,7 @@ export const Modals = () => {
             <TransferSelectTokenModal />
             <ConfirmModal />
             <TransactionModal />
+            <PolkadotTokenDetailsModal />
         </div>
     )
 }

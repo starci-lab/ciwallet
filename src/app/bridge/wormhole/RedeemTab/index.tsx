@@ -12,7 +12,7 @@ import { VAAProfile } from "./VAAProfile"
 import { setConfirm, TransactionType, useAppDispatch, useAppSelector } from "@/redux"
 import { v4 } from "uuid"
 import { deserialize } from "@wormhole-foundation/sdk"
-import { bridgeProtocols, crosschainConfig, defaultChain, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, nativeTokenKey } from "@/config"
+import { bridgeProtocols, defaultChain, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, nativeTokenKey } from "@/config"
 import { computeDenomination, replace, truncateString, valuesWithKey } from "@/utils"
 import { explorerUrl, toWormholeNativeFromUniversal } from "@/services"
 
@@ -61,7 +61,9 @@ export const RedeemTab = () => {
     const { symbol } = { ...token[network] }
 
     const _defaultChainKey = targetChain?.key === defaultSecondaryChainKey ? defaultChainKey : defaultSecondaryChainKey
-    const minimalFee = Object.values(crosschainConfig()[targetChain?.key ?? defaultSecondaryChainKey][_defaultChainKey])[0].minimalFee
+    const crosschain = useAppSelector((state) => state.blockchainReducer.crosschain)
+
+    const minimalFee = Object.values(crosschain[targetChain?.key ?? defaultSecondaryChainKey][_defaultChainKey])[0].minimalFee
     useEffect(() => {
         formik.setFieldValue("nativeAmountPlusFee", minimalFee)
     }, [])
