@@ -30,10 +30,10 @@ export const VAAProfile = ({
     
     const valuesWithKeyChains = valuesWithKey(chains)
     const fromChain = valuesWithKeyChains.find(
-        ({ chain }) => chain === emitterChain
+        ({ wormhole }) => wormhole?.chain === emitterChain
     )
     const targetChain = valuesWithKeyChains.find(
-        ({ chain }) => chain === payload.to.chain
+        ({ wormhole }) => wormhole?.chain === payload.to.chain
     )
 
     const protocol = valuesWithKey(
@@ -134,7 +134,7 @@ export const VAAProfile = ({
                             <div className="text-sm">
                                 {truncateString(
                                     toWormholeNativeFromUniversal(
-                                        fromChain?.chain ?? defaultChain,
+                                        fromChain?.wormhole?.chain ?? defaultChain,
                                         payload.token.address
                                     )
                                 )}
@@ -160,7 +160,7 @@ export const VAAProfile = ({
                             <div className="text-sm">
                                 {truncateString(
                                     toWormholeNativeFromUniversal(
-                                        targetChain?.chain ?? defaultSecondaryChain,
+                                        targetChain?.wormhole?.chain ?? defaultSecondaryChain,
                                         payload.to.address
                                     )
                                 )}

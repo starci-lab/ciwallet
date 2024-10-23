@@ -14,7 +14,7 @@ interface BridgeAccountUserProps {
 
 export const BridgeAccountUser = ({account: { imageUrl, name, accountNumber, accountAddress }, activePrivateKey }: BridgeAccountUserProps) => {
     const formik = useBridgeTransferFormik()
-
+    if (!formik) return null
     return (
         <Card classNames={{
             base: "!bg-transparent"

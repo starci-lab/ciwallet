@@ -22,6 +22,7 @@ export const BridgeWrapSelectTokenModal = () => {
     const { isOpen, onClose } =
     useBridgeWrapSelectTokenModalDisclosure()
     const formik = useBridgeWrapFormik()
+    if (!formik) return null
 
     const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
     const tokens = valuesWithKey(useAppSelector(state => state.blockchainReducer.chains[preferenceChainKey].tokens)) 

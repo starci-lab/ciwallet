@@ -1,4 +1,4 @@
-import { nativeTokenKey } from "@/config"
+import { defaultChain, nativeTokenKey } from "@/config"
 import { useAppSelector } from "@/redux"
 import { getDecimals, parseNetwork } from "@/services"
 import useSWR, { SWRResponse } from "swr"
@@ -24,7 +24,7 @@ export const useWormholeDecimals = ({
         async () => {
             if (!tokenAddress) return chains[chainKey].tokens[nativeTokenKey].decimals
             return await getDecimals({
-                chainName: chains[chainKey].chain,
+                chainName: chains[chainKey].wormhole?.chain ?? defaultChain,
                 network: parseNetwork(network),
                 tokenAddress,
             })
