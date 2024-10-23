@@ -26,6 +26,7 @@ const initialState: ChainState = {
 export interface AddTokenParams {
   chainKey: string;
   tokenInfo: Omit<TokenInfo, "key">;
+  network: Network;
 }
 
 export const blockchainSlice = createSlice({
@@ -41,19 +42,11 @@ export const blockchainSlice = createSlice({
         triggerSaveChains: (state) => {
             state.saveChainsKey++
         },
-        addToken: (
-            state,
-            { payload: { chainKey, tokenInfo } }: { payload: AddTokenParams }
-        ) => {
-            const key = v4()
-            state.chains[chainKey].tokens[key] = tokenInfo
-        },
     },
 })
 
 export const {
     setPreferenceChainKey,
-    addToken,
     setChain,
     triggerSaveChains,
 } = blockchainSlice.actions
