@@ -127,8 +127,7 @@ export const _useBridgeTransferFormik =
               amount,
               tokenKey,
           }) => {
-              const { decimals, addresses } = tokens[tokenKey]
-              const _address = addresses[network]
+              const { decimals, address: _address } = tokens[tokenKey][network]
               if (!_address) return
 
               let recipientAddress =
@@ -185,8 +184,8 @@ export const _useBridgeTransferFormik =
                   serializedVaa,
                   txHash,
                   bridgeProtocolKey: SupportedBridgeProtocolKey.Wormhole,
-                  tokenInfo: tokens[tokenKey],
-                  decimals: tokens[tokenKey].decimals,
+                  tokenInfo: tokens[tokenKey][network],
+                  decimals: tokens[tokenKey][network].decimals,
               }
               dispatch(
                   setBridgeTransferResult({
