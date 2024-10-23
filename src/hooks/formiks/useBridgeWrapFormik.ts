@@ -58,7 +58,7 @@ export const _useBridgeWrapFormik =
           chains[preferenceChainKey].wormhole?.chain ?? defaultChain
               const targetChainName =
           chains[targetChainKey].wormhole?.chain ?? defaultSecondaryChain
-              const tokenAddress = tokens[tokenKey].addresses[network]
+              const tokenAddress = tokens[tokenKey][network].address
 
               if (!signer) return
               if (!targetSigner) return

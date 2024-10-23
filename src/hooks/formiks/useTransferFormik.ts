@@ -49,7 +49,7 @@ export const _useTransferFormik =
               if (!activePrivateKey) return
               if (!accountAddress) return
               
-              const tokenAddress = tokens[tokenKey].addresses[network]
+              const tokenAddress = tokens[tokenKey][network].address
               const tokenService = new BlockchainTokenService({
                   tokenAddress,
                   chainKey: preferenceChainKey,
