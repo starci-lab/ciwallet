@@ -6,7 +6,6 @@ import {
     defaultChainKey,
 } from "@/config"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { v4 } from "uuid"
 
 export interface ChainState {
   network: Network;
