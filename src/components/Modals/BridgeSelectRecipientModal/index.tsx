@@ -23,7 +23,6 @@ import { valuesWithKey } from "@/utils"
 export const BridgeSelectRecipientModal = () => {
     const { isOpen, onClose } = useBridgeSelectRecipientModalDisclosure()
     const formik = useBridgeTransferFormik()
-    if (!formik) return null
 
     const baseAccounts = useAppSelector(state => state.authReducer.baseAccounts)
     const accounts = baseAccounts[formik.values.targetChainKey]?.accounts

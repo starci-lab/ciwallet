@@ -20,7 +20,14 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "@/redux"
-import { transfer, parseNetwork, readAssociatedTokenAccount, chainKeyToPlatform, Platform, getWrappedAsset } from "@/services"
+import {
+    transfer,
+    parseNetwork,
+    readAssociatedTokenAccount,
+    chainKeyToPlatform,
+    Platform,
+    getWrappedAsset,
+} from "@/services"
 import { useBalance, useSigner } from "../miscellaneous"
 import { BaseError, BaseErrorName, computeRaw } from "@/utils"
 
@@ -33,24 +40,34 @@ export interface BridgeTransferFormikValues {
   balance: number;
   nativeAmountPlusFee: number;
 }
-
+//wormhole only
 export const _useBridgeTransferFormik =
-  (): FormikProps<BridgeTransferFormikValues> | null => {
-      //wormhole only
+  (): FormikProps<BridgeTransferFormikValues> => {
       const chains = useAppSelector((state) => state.blockchainReducer.chains)
       const preferenceChainKey = useAppSelector(
           (state) => state.blockchainReducer.preferenceChainKey
       )
-      if (!chains[preferenceChainKey].wormhole) return null
 
-      const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
+      const baseAccounts = useAppSelector(
+          (state) => state.authReducer.baseAccounts
+      )
 
       const defaultPrivateKey = baseAccounts[defaultChainKey]?.activePrivateKey
-      const defaultSecondaryPrivateKey = baseAccounts[defaultSecondaryChainKey]?.activePrivateKey
+      const defaultSecondaryPrivateKey =
+      baseAccounts[defaultSecondaryChainKey]?.activePrivateKey
 
-      const _defaultTargetPrivateKey = preferenceChainKey === defaultChainKey ? defaultSecondaryPrivateKey : defaultPrivateKey
-      const _defaultSecondaryChainKey = preferenceChainKey === defaultChainKey ? defaultSecondaryChainKey : defaultChainKey
-      const minimalFee = Object.values(crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey])[0].minimalFee
+      const _defaultTargetPrivateKey =
+      preferenceChainKey === defaultChainKey
+          ? defaultSecondaryPrivateKey
+          : defaultPrivateKey
+      const _defaultSecondaryChainKey =
+      preferenceChainKey === defaultChainKey
+          ? defaultSecondaryChainKey
+          : defaultChainKey
+
+      const minimalFee = Object.values(
+          crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey]
+      )[0].minimalFee
 
       const initialValues: BridgeTransferFormikValues = {
           amount: 0,
@@ -63,26 +80,29 @@ export const _useBridgeTransferFormik =
       }
 
       const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
-      const accountAddress = baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]?.accountAddress
+      const accountAddress =
+      baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]
+          ?.accountAddress
 
       const { balanceSwr: nativeTokenBalanceSwr } = useBalance({
           tokenKey: nativeTokenKey,
           accountAddress,
           chainKey: preferenceChainKey,
       })
-      
+
       const validationSchema = Yup.object({
           amount: Yup.number()
               .min(0, "Amount must be higher than 0")
               .max(Yup.ref("balance"), "Insufficient balance.")
               .required("Amount is required"),
-          nativeAmountPlusFee: nativeTokenBalanceSwr.data !== undefined
-              ? Yup.number().max(
-                  nativeTokenBalanceSwr.data,
-                  ({ value }) => 
-                      (Number(value) <= minimalFee) ?`Your native balance plus fee is insufficient (Required: ${minimalFee} SYMBOL)` : `Your native balance plus fee is insufficient (Required: AMOUNT + ${minimalFee} SYMBOL)`
-              )
-              : Yup.number(),
+          nativeAmountPlusFee:
+        nativeTokenBalanceSwr.data !== undefined
+            ? Yup.number().max(nativeTokenBalanceSwr.data, ({ value }) =>
+                Number(value) <= minimalFee
+                    ? `Your native balance plus fee is insufficient (Required: ${minimalFee} SYMBOL)`
+                    : `Your native balance plus fee is insufficient (Required: AMOUNT + ${minimalFee} SYMBOL)`
+            )
+            : Yup.number(),
       })
 
       const network = useAppSelector((state) => state.blockchainReducer.network)
@@ -107,11 +127,16 @@ export const _useBridgeTransferFormik =
               const _address = addresses[network]
               if (!_address) return
 
-              let recipientAddress = targetAddress || baseAccounts[targetChainKey].accounts[targetPrivateKey].accountAddress
+              let recipientAddress =
+          targetAddress ||
+          baseAccounts[targetChainKey].accounts[targetPrivateKey]
+              .accountAddress
               if (!signer) return
 
-              const sourceChain = chains[preferenceChainKey].wormhole?.chain || defaultChain
-              const targetChain = chains[targetChainKey].wormhole?.chain || defaultSecondaryChain
+              const sourceChain =
+          chains[preferenceChainKey].wormhole?.chain || defaultChain
+              const targetChain =
+          chains[targetChainKey].wormhole?.chain || defaultSecondaryChain
               //except for case solana, which use ata instead
               const platform = chainKeyToPlatform(targetChainKey)
               if (platform === Platform.Solana) {
@@ -130,7 +155,10 @@ export const _useBridgeTransferFormik =
                       network,
                   })
                   if (ataPublicKey === null) {
-                      throw new BaseError(BaseErrorName.AtaNotFound, "Recipient's associated token account does not exist.")
+                      throw new BaseError(
+                          BaseErrorName.AtaNotFound,
+                          "Recipient's associated token account does not exist."
+                      )
                   }
 
                   recipientAddress = ataPublicKey
@@ -147,7 +175,7 @@ export const _useBridgeTransferFormik =
               })
               if (vaa === null) return
               const serializedVaa = Buffer.from(serialize(vaa)).toString("base64")
-              const _vaa : StoredVaa = {
+              const _vaa: StoredVaa = {
                   network,
                   senderAddress: accountAddress,
                   serializedVaa,

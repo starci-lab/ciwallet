@@ -24,7 +24,6 @@ import { valuesWithKey } from "@/utils"
 export const BridgeSelectTokenModal = () => {
     const { isOpen, onClose } = useBridgeSelectTokenModalDisclosure()
     const formik = useBridgeTransferFormik()
-    if (!formik) return null
 
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey

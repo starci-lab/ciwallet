@@ -13,78 +13,80 @@ export interface BridgeWrapFormikValues {
   targetChainKey: string;
 }
 
-export const _useBridgeWrapFormik = (): FormikProps<BridgeWrapFormikValues> | null => {
-    //wormhole only
-    const chains = useAppSelector((state) => state.blockchainReducer.chains)
-    const preferenceChainKey = useAppSelector(
-        (state) => state.blockchainReducer.preferenceChainKey
-    )
-    if (!chains[preferenceChainKey].wormhole) return null
+//wormhole only
+export const _useBridgeWrapFormik =
+  (): FormikProps<BridgeWrapFormikValues> => {
+      const chains = useAppSelector((state) => state.blockchainReducer.chains)
+      const preferenceChainKey = useAppSelector(
+          (state) => state.blockchainReducer.preferenceChainKey
+      )
 
-    const initialValues: BridgeWrapFormikValues = {
-        tokenKey: nativeTokenKey,
-        targetChainKey: "",
-    }
+      const initialValues: BridgeWrapFormikValues = {
+          tokenKey: nativeTokenKey,
+          targetChainKey: "",
+      }
 
-    const network = useAppSelector((state) => state.blockchainReducer.network)
-    const tokens = chains[preferenceChainKey].tokens
+      const network = useAppSelector((state) => state.blockchainReducer.network)
+      const tokens = chains[preferenceChainKey].tokens
 
-    const wrappedTokens = useAppSelector(
-        (state) => state.resultReducer.bridge.wrappedTokens
-    )
-    const remainingChains = valuesWithKey(chains)
-        .filter((chain) => chain.key !== preferenceChainKey)
-        .filter(
-            (chain) =>
-                !Object.values(wrappedTokens)
-                    .map((wrappedToken) => wrappedToken.key)
-                    .includes(chain.key)
-        )
+      const wrappedTokens = useAppSelector(
+          (state) => state.resultReducer.bridge.wrappedTokens
+      )
+      const remainingChains = valuesWithKey(chains)
+          .filter((chain) => chain.key !== preferenceChainKey)
+          .filter(
+              (chain) =>
+                  !Object.values(wrappedTokens)
+                      .map((wrappedToken) => wrappedToken.key)
+                      .includes(chain.key)
+          )
 
-    useEffect(() => {
-        if (!remainingChains.length) return
-        formik.setFieldValue("targetChainKey", remainingChains[0].key)
-    }, [])
+      useEffect(() => {
+          if (!remainingChains.length) return
+          formik.setFieldValue("targetChainKey", remainingChains[0].key)
+      }, [])
 
-    const validationSchema = Yup.object({
-    //
-    })
+      const validationSchema = Yup.object({
+      //
+      })
 
-    const formik = useFormik({
-        initialValues,
-        validationSchema,
-        onSubmit: async ({ tokenKey, targetChainKey }) => {
-            const sourceChainName = chains[preferenceChainKey].wormhole?.chain ?? defaultChain
-            const targetChainName = chains[targetChainKey].wormhole?.chain  ?? defaultSecondaryChain
-            const tokenAddress = tokens[tokenKey].addresses[network]
+      const formik = useFormik({
+          initialValues,
+          validationSchema,
+          onSubmit: async ({ tokenKey, targetChainKey }) => {
+              const sourceChainName =
+          chains[preferenceChainKey].wormhole?.chain ?? defaultChain
+              const targetChainName =
+          chains[targetChainKey].wormhole?.chain ?? defaultSecondaryChain
+              const tokenAddress = tokens[tokenKey].addresses[network]
 
-            if (!signer) return
-            if (!targetSigner) return
+              if (!signer) return
+              if (!targetSigner) return
 
-            const { txHash, vaa } = await createAttestation({
-                network: parseNetwork(network),
-                chainName: sourceChainName,
-                tokenAddress,
-                signer,
-            })
-            console.log(`Created attestation successfully.Tx hash: ${txHash}`)
-            if (!vaa) return
+              const { txHash, vaa } = await createAttestation({
+                  network: parseNetwork(network),
+                  chainName: sourceChainName,
+                  tokenAddress,
+                  signer,
+              })
+              console.log(`Created attestation successfully.Tx hash: ${txHash}`)
+              if (!vaa) return
 
-            const submitTxHash = await submitAttestation({
-                vaa,
-                network: parseNetwork(network),
-                signer: targetSigner,
-                targetChainName,
-            })
-            console.log(`Submit attestation successfully.Tx hash: ${submitTxHash}`)
-        },
-    })
+              const submitTxHash = await submitAttestation({
+                  vaa,
+                  network: parseNetwork(network),
+                  signer: targetSigner,
+                  targetChainName,
+              })
+              console.log(`Submit attestation successfully.Tx hash: ${submitTxHash}`)
+          },
+      })
 
-    const signer = useSigner(preferenceChainKey)
-    const targetSigner = useSigner(formik.values.targetChainKey)
+      const signer = useSigner(preferenceChainKey)
+      const targetSigner = useSigner(formik.values.targetChainKey)
 
-    return formik
-}
+      return formik
+  }
 
 export const useBridgeWrapFormik = () => {
     const { bridgeWrapFormik } = useFormiks()

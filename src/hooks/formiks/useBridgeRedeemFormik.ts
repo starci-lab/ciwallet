@@ -27,15 +27,10 @@ export interface BridgeRedeemFormikValues {
   nativeAmountPlusFee: number;
 }
 
+//wormhole only
 export const _useBridgeRedeemFormik =
-  (): FormikProps<BridgeRedeemFormikValues> | null => {
-      //wormhole only
+  (): FormikProps<BridgeRedeemFormikValues> => {
       const chains = useAppSelector((state) => state.blockchainReducer.chains)
-      const preferenceChainKey = useAppSelector(
-          (state) => state.blockchainReducer.preferenceChainKey
-      )
-      if (!chains[preferenceChainKey].wormhole) return null
-
       const selectedKey = useAppSelector((state) => state.vaaReducer.selectedKey)
       const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
       const vaa = storedVaas[selectedKey]

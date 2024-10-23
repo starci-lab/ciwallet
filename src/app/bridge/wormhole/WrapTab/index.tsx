@@ -35,7 +35,6 @@ import useSWR from "swr"
 
 export const WrapTab = () => {
     const formik = useBridgeWrapFormik()
-    if (!formik) return null
 
     const { onOpen } = useBridgeWrapSelectTokenModalDisclosure()
     const preferenceChainKey = useAppSelector(

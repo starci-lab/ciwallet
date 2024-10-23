@@ -32,7 +32,6 @@ export const RedeemTab = () => {
     )
     
     const formik = useBridgeRedeemFormik()
-    if (!formik) return null
 
     const { onOpen: onBridgeRedeemResultModalOpen } =
     useBridgeRedeemResultModalDiscloresure()

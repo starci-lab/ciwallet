@@ -32,11 +32,11 @@ import {
 export interface UseFormiksReturn {
   passwordFormik: FormikProps<PasswordFormikValues>;
   createPasswordFormik: FormikProps<PasswordFormikValues>;
-  bridgeTransferFormik: FormikProps<BridgeTransferFormikValues> | null;
-  bridgeRedeemFormik: FormikProps<BridgeRedeemFormikValues> | null;
+  bridgeTransferFormik: FormikProps<BridgeTransferFormikValues>;
+  bridgeRedeemFormik: FormikProps<BridgeRedeemFormikValues>;
   createAccountFormik: FormikProps<CreateAccountFormikValues>;
   mnemonicInputFormik: FormikProps<MnemonicInputFormikValues>;
-  bridgeWrapFormik: FormikProps<BridgeWrapFormikValues> | null;
+  bridgeWrapFormik: FormikProps<BridgeWrapFormikValues>;
   transferFormik: FormikProps<TransferFormikValues>;
   importAccountFromPrivateKeyFormik: FormikProps<ImportAccountFromPrivateKeyFormikValues>;
 }
