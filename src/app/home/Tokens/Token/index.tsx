@@ -1,7 +1,16 @@
 "use client"
 
-import { nativeTokenKey, SupportedChainKey, TokenInfo } from "@/config"
-import { useBalance, usePolkadotBalances, usePolkadotTokenDetailsModalDiscloresure } from "@/hooks"
+import {
+    nativeTokenKey,
+    PolkadotParachainKey,
+    SupportedChainKey,
+    TokenInfo,
+} from "@/config"
+import {
+    useBalance,
+    usePolkadotBalances,
+    usePolkadotTokenDetailsModalDiscloresure,
+} from "@/hooks"
 import { useAppSelector } from "@/redux"
 import React from "react"
 import { Avatar, Card, CardBody, Image } from "@nextui-org/react"
@@ -16,18 +25,25 @@ export const Token = ({ token }: TokenProps) => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
+    const baseAccounts = useAppSelector(
+        (state) => state.authReducer.baseAccounts
+    )
     const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
     const account = baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]
-    const { accountAddress, } = { ...account }
-    
+    const { accountAddress } = { ...account }
+
     const { balanceSwr } = useBalance({
-        accountAddress: preferenceChainKey !== SupportedChainKey.Polkadot ? accountAddress : "",
+        accountAddress:
+      preferenceChainKey !== SupportedChainKey.Polkadot ? accountAddress : "",
         chainKey: preferenceChainKey,
         tokenKey: token.key,
     })
 
-    const { total } = usePolkadotBalances({ address: preferenceChainKey === SupportedChainKey.Polkadot ? accountAddress : "", tokenKey: token.key })
+    const { total } = usePolkadotBalances({
+        address:
+      preferenceChainKey === SupportedChainKey.Polkadot ? accountAddress : "",
+        tokenKey: token.key,
+    })
 
     const { data } = { ...balanceSwr }
 
@@ -35,36 +51,55 @@ export const Token = ({ token }: TokenProps) => {
     const chain = chains[preferenceChainKey]
     const isNative = token.address === nativeTokenKey
     const { onOpen } = usePolkadotTokenDetailsModalDiscloresure()
+    const polkadotParachains = useAppSelector(
+        (state) => state.blockchainReducer.polkadotParachains
+    )
+    const network = useAppSelector((state) => state.blockchainReducer.network)
 
+    const renderImage = () => {
+        if (preferenceChainKey === SupportedChainKey.Polkadot) {
+            return polkadotParachains[
+                PolkadotParachainKey.Bifrost
+            ][network].imageUrl
+        }
+        return chain?.imageUrl
+    }
+    
     const render = () => {
         if (preferenceChainKey === SupportedChainKey.Polkadot) {
-            return <Card onPress={onOpen} isPressable shadow="none" fullWidth>
-                <CardBody className="p-3 bg-content2">
-                    <div className="justify-between flex items-center">
-                        <div className="flex gap-2 items-center">
-                            <div className="relative">
-                                {!isNative ? (
-                                    <Avatar
-                                        isBordered
-                                        src={chain?.imageUrl}
-                                        classNames={{
-                                            base: "absolute w-5 h-5 bottom-0 right-0 z-20 ring-0 bg-background",
-                                        }}
+            return (
+                <Card onPress={onOpen} isPressable shadow="none" fullWidth>
+                    <CardBody className="p-3 bg-content2">
+                        <div className="justify-between flex items-center">
+                            <div className="flex gap-2 items-center">
+                                <div className="relative">
+                                    {!isNative ? (
+                                        <Avatar
+                                            isBordered
+                                            src={renderImage()}
+                                            classNames={{
+                                                base: "absolute w-5 h-5 bottom-0 right-0 z-20 ring-0 bg-background",
+                                            }}
+                                        />
+                                    ) : null}
+                                    <Image
+                                        removeWrapper
+                                        src={token?.imageUrl}
+                                        className="w-10 h-10"
                                     />
-                                ) : null}
-                                <Image removeWrapper src={token?.imageUrl} className="w-10 h-10" />
-                            </div>
-                            <div>
-                                <div>{token?.name}</div>
-                                <div className="text-sm text-foreground-400">
-                                    {total()} {token?.symbol}
+                                </div>
+                                <div>
+                                    <div>{token?.name}</div>
+                                    <div className="text-sm text-foreground-400">
+                                        {total()} {token?.symbol}
+                                    </div>
                                 </div>
                             </div>
+                            <ChevronRight className="w-5 h-5 text-foreground-400" />
                         </div>
-                        <ChevronRight className="w-5 h-5 text-foreground-400" />
-                    </div>           
-                </CardBody>
-            </Card>
+                    </CardBody>
+                </Card>
+            )
         }
         return (
             <Card shadow="none" fullWidth>
@@ -80,7 +115,11 @@ export const Token = ({ token }: TokenProps) => {
                                     }}
                                 />
                             ) : null}
-                            <Image removeWrapper src={token?.imageUrl} className="w-10 h-10" />
+                            <Image
+                                removeWrapper
+                                src={token?.imageUrl}
+                                className="w-10 h-10"
+                            />
                         </div>
 
                         <div>

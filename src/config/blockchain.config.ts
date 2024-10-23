@@ -495,6 +495,38 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 10,
                         },
                     },
+                    $CARROT: {
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
+                        },
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
+                        },       
+                    },
+                    $CAULI: {
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },        
+                    },
                 },
             },
         },

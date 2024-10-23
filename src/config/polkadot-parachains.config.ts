@@ -8,8 +8,13 @@ export interface ParachainConfig {
 
 export type PolkadotParachainsConfig = Record<string, Record<Network, ParachainConfig>>
 
+export enum PolkadotParachainKey {
+    Bifrost = "bifrost",
+    UniqueNetwork = "uniqueNetwork"
+}
+
 export const polkadotParachainsConfig: () => PolkadotParachainsConfig = () => ({
-    bifrost: {
+    [PolkadotParachainKey.Bifrost]: {
         [Network.Mainnet]: {
             name: "Bifrost",
             imageUrl: "/icons/bifrost.png",
@@ -21,7 +26,7 @@ export const polkadotParachainsConfig: () => PolkadotParachainsConfig = () => ({
             rpcUrl: "wss://bifrost-rpc.paseo.liebi.com/ws",
         },
     },
-    uniqueNetwork: {
+    [PolkadotParachainKey.UniqueNetwork]: {
         [Network.Mainnet]: {
             name: "Unique Network",
             imageUrl: "/icons/unique-network.svg",
