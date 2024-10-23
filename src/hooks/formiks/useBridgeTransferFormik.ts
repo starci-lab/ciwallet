@@ -22,7 +22,7 @@ import {
 } from "@/redux"
 import { transfer, parseNetwork, readAssociatedTokenAccount, chainKeyToPlatform, Platform, getWrappedAsset } from "@/services"
 import { useBalance, useSigner } from "../miscellaneous"
-import { BaseError, BaseErrorName, computeRaw, valuesWithKey } from "@/utils"
+import { BaseError, BaseErrorName, computeRaw } from "@/utils"
 
 export interface BridgeTransferFormikValues {
   targetChainKey: string;
@@ -31,7 +31,6 @@ export interface BridgeTransferFormikValues {
   amount: number;
   tokenKey: string;
   balance: number;
-  bridgeProtocolKey: string;
   nativeAmountPlusFee: number;
 }
 
@@ -51,7 +50,6 @@ export const _useBridgeTransferFormik =
 
       const _defaultTargetPrivateKey = preferenceChainKey === defaultChainKey ? defaultSecondaryPrivateKey : defaultPrivateKey
       const _defaultSecondaryChainKey = preferenceChainKey === defaultChainKey ? defaultSecondaryChainKey : defaultChainKey
-      const _defaultBridgeProtocolKey = valuesWithKey(crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey])[0].key 
       const minimalFee = Object.values(crosschainConfig()[preferenceChainKey][_defaultSecondaryChainKey])[0].minimalFee
 
       const initialValues: BridgeTransferFormikValues = {
@@ -61,7 +59,6 @@ export const _useBridgeTransferFormik =
           targetChainKey: _defaultSecondaryChainKey,
           tokenKey: nativeTokenKey,
           balance: 0,
-          bridgeProtocolKey: _defaultBridgeProtocolKey,
           nativeAmountPlusFee: minimalFee,
       }
 

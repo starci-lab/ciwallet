@@ -19,12 +19,14 @@ export interface CreateAccountFormikValues {
 
 export const _useCreateAccountFormik =
   (): FormikProps<CreateAccountFormikValues> => {
+      const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
       const preferenceChainKey = useAppSelector(
           (state) => state.blockchainReducer.preferenceChainKey
       )
       const baseAccounts = useAppSelector(
           (state) => state.authReducer.baseAccounts
       )
+      
       const names = valuesWithKey(
           baseAccounts[preferenceChainKey]?.accounts ?? {}
       ).map(({ name }) => name)
@@ -34,8 +36,7 @@ export const _useCreateAccountFormik =
           imageUrl: "",
           name: "",
       }
-      const mnemonic = useAppSelector((state) => state.authReducer.mnemonic)
-
+      
       const validationSchema = Yup.object({
           accountNumber: Yup.number()
               .nullable()
@@ -59,7 +60,6 @@ export const _useCreateAccountFormik =
               }
               if (!mnemonic) return
               let _accountNumber: number
-              console.log("accountNumber", accountNumber)
               if (accountNumber === undefined) {
                   const maxAccountNumber = Math.max(
                       ...valuesWithKey(baseAccounts[preferenceChainKey].accounts).map(
@@ -72,7 +72,6 @@ export const _useCreateAccountFormik =
                   _accountNumber = accountNumber
               }
 
-              console.log(mnemonic, _accountNumber, preferenceChainKey)
               const { address, privateKey, publicKey } = createAccount({
                   mnemonic,
                   accountNumber: _accountNumber,

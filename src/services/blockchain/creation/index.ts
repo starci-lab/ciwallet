@@ -2,6 +2,7 @@ import { ChainAccount, Platform, chainKeyToPlatform } from "../common"
 import { createAlgorandAccount, importAlgorandAccount } from "./algorand.creation"
 import { createAptosAccount, importAptosAccount } from "./aptos.creation"
 import { createEvmAccount, importEvmAccount } from "./evm.creation"
+import { createPolkadotAccount, importPolkadotAccount } from "./polkadot.creation"
 import { createSolanaAccount, importSolanaAccount } from "./solana.creation"
 import { createSuiAccount, importSuiAccount } from "./sui.creation"
 import { CreateAccountParams, ImportAccountParams } from "./types.creation"
@@ -45,6 +46,11 @@ export const createAccount = ({
             accountNumber,
             mnemonic,
         })
+    case Platform.Polkadot:
+        return createPolkadotAccount({
+            accountNumber,
+            mnemonic,
+        })
     }
 }
 
@@ -83,6 +89,11 @@ export const importAccount = ({
         return importSuiAccount({
             privateKey
         })
+    case Platform.Polkadot:
+        return importPolkadotAccount({
+            privateKey
+        })
     }
 }
+// Compare this snippet from src/services/blockchain/creation/sui.creation.ts:
 

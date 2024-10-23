@@ -1,5 +1,5 @@
 "use client"
-import { crosschainConfig, defaultChainKey, defaultSecondaryChainKey, nativeTokenKey } from "@/config"
+import { crosschainConfig, defaultChainKey, defaultSecondaryChainKey, nativeTokenKey, SupportedBridgeProtocolKey } from "@/config"
 import {
     useBridgeTransferFormik,
     useBridgeSelectRecipientModalDisclosure,
@@ -84,7 +84,7 @@ export const TransferTab = () => {
         if (formik.values.tokenKey === nativeTokenKey) {
             formik.setFieldValue(
                 "nativeAmountPlusFee",
-                Number(formik.values.amount) + (bridgeProtocols[formik.values.bridgeProtocolKey]?.minimalFee ?? 0)
+                Number(formik.values.amount) + (bridgeProtocols[SupportedBridgeProtocolKey.Wormhole]?.minimalFee ?? 0)
             )
         } else {
             formik.setFieldValue(
@@ -174,39 +174,6 @@ export const TransferTab = () => {
                         ))}
                 </Select>
                 <Spacer y={4} />
-                <Select
-                    startContent={
-                        <Image
-                            removeWrapper
-                            className="w-5 h-5"
-                            src={bridgeProtocols[formik.values.bridgeProtocolKey]?.imageUrl}
-                        />
-                    }
-                    label="Select Bridge Protocol"
-                    labelPlacement="outside"
-                    selectedKeys={[formik.values.bridgeProtocolKey]}
-                    onSelectionChange={(keys) => {
-                        const currentKey = keys.currentKey
-                        if (!currentKey) return
-                        const bridgeProtocolKey = currentKey
-                        formik.setFieldValue("bridgeProtocolKey", bridgeProtocolKey)
-                    }}
-                >
-                    {valuesWithKey(bridgeProtocols).map(({ key, name, imageUrl }) => (
-                        <SelectItem
-                            startContent={<Image className="w-5 h-5" src={imageUrl} />}
-                            key={key}
-                            value={key}
-                        >
-                            {name}
-                        </SelectItem>
-                    ))}
-                </Select>
-                <Spacer y={1.5} />
-                <div className="text-xs text-warning text-justify">
-                    {bridgeProtocols[formik.values.bridgeProtocolKey]?.warningMsg}
-                </div>
-                <Spacer y={4} />
                 <div>
                     <div className="text-sm">Select Recipient</div>
                     <Spacer y={1.5} />
@@ -275,11 +242,11 @@ export const TransferTab = () => {
                                                     removeWrapper
                                                     className="w-5 h-5"
                                                     src={
-                                                        bridgeProtocols[formik.values.bridgeProtocolKey].imageUrl
+                                                        bridgeProtocols[SupportedBridgeProtocolKey.Wormhole].imageUrl
                                                     }
                                                 />
                                                 <div className="text-sm">
-                                                    {bridgeProtocols[formik.values.bridgeProtocolKey].name}
+                                                    {bridgeProtocols[SupportedBridgeProtocolKey.Wormhole].name}
                                                 </div>
                                             </div>
                                         </div>

@@ -1,4 +1,4 @@
-import { Network } from "@/config"
+import { Network, SupportedChainKey } from "@/config"
 import { Chain, Network as WormholeNetwork } from "@wormhole-foundation/sdk"
 
 export enum Platform {
@@ -6,23 +6,26 @@ export enum Platform {
   Aptos = "aptops",
   Solana = "solana",
   Algorand = "algorand",
-  Sui = "sui"
+  Sui = "sui",
+  Polkadot = "polkadot"
 }
 
 export const chainKeyToPlatform = (chainKey: string): Platform => {
     switch (chainKey) {
-    case "avalanche":
+    case SupportedChainKey.Avalanche:
         return Platform.Evm
-    case "bsc":
+    case SupportedChainKey.Bsc:
         return Platform.Evm
-    case "solana":
+    case SupportedChainKey.Solana:
         return Platform.Solana
-    case "aptos":
+    case SupportedChainKey.Aptos:
         return Platform.Aptos
-    case "algorand":
+    case SupportedChainKey.Algorand:
         return Platform.Algorand
-    case "sui":
+    case SupportedChainKey.Sui:
         return Platform.Sui
+    case SupportedChainKey.Polkadot:
+        return Platform.Polkadot
     default:
         throw new Error(`Chain not supported: ${chainKey}`)
     }
