@@ -7,6 +7,7 @@ import { polkadotRelayClient } from "@/services"
 
 export interface UsePolkadotBalancesParams {
     address: string
+    tokenKey: string
 }
 
 export interface UsePolkadotBalancesReturn {
@@ -21,7 +22,7 @@ export interface UsePolkadotBalancesReturn {
     total : () => number
 }
 
-export const usePolkadotBalances = ({ address }: UsePolkadotBalancesParams) : UsePolkadotBalancesReturn => {
+export const usePolkadotBalances = ({ address, tokenKey }: UsePolkadotBalancesParams) : UsePolkadotBalancesReturn => {
     const preferenceChainKey = useAppSelector((state) => state.blockchainReducer.preferenceChainKey)
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const network = useAppSelector((state) => state.blockchainReducer.network)
@@ -29,14 +30,19 @@ export const usePolkadotBalances = ({ address }: UsePolkadotBalancesParams) : Us
     const decimals = chains[preferenceChainKey].tokens[nativeTokenKey][network].decimals
     const relayChainSwr = useSWR(address ? ["POLKADOT_RELAY_CHAIN"] : null, async () => {
         const relayClient = await polkadotRelayClient(network)
-        const { data: { free: relayChainBalance }}  = await relayClient.query.system.account(address)
-        return computeDenomination(relayChainBalance.toBigInt(), decimals) 
+        if (tokenKey === nativeTokenKey) {
+            const { data: { free: relayChainBalance }}  = await relayClient.query.system.account(address)
+            return computeDenomination(relayChainBalance.toBigInt(), decimals) 
+        }
+        return 0
     })
+
+    const total = () => {
+        return relayChainSwr.data || 0
+    }
 
     return {
         relayChainSwr,
-        total: () => {
-            return relayChainSwr.data || 0
-        }
+        total,
     }
 }

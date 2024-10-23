@@ -12,12 +12,12 @@ export const polkadotParachainsConfig: () => PolkadotParachainsConfig = () => ({
     bifrost: {
         [Network.Mainnet]: {
             name: "Bifrost",
-            imageUrl: "/icons/bifrost.jpeg",
+            imageUrl: "/icons/bifrost.png",
             rpcUrl: "",
         },
         [Network.Testnet]: {
             name: "Bifrost Testnet",
-            imageUrl: "/icons/bifrost.jpeg",
+            imageUrl: "/icons/bifrost.png",
             rpcUrl: "wss://bifrost-rpc.paseo.liebi.com/ws",
         },
     },

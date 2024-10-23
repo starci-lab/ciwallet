@@ -479,6 +479,22 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 10,
                         },
                     },
+                    bifrost: {
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/bifrost.png",
+                            name: "Bifrost",
+                            symbol: "BNC",
+                            decimals: 10,
+                        },
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/bifrost.png",
+                            name: "Bifrost",
+                            symbol: "BNC",
+                            decimals: 10,
+                        },
+                    },
                 },
             },
         },

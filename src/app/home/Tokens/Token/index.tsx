@@ -1,7 +1,7 @@
 "use client"
 
-import { SupportedChainKey, TokenInfo, blockchainConfig } from "@/config"
-import { useBalance, usePolkadotTokenDetailsModalDiscloresure } from "@/hooks"
+import { nativeTokenKey, SupportedChainKey, TokenInfo } from "@/config"
+import { useBalance, usePolkadotBalances, usePolkadotTokenDetailsModalDiscloresure } from "@/hooks"
 import { useAppSelector } from "@/redux"
 import React from "react"
 import { Avatar, Card, CardBody, Image } from "@nextui-org/react"
@@ -22,15 +22,18 @@ export const Token = ({ token }: TokenProps) => {
     const { accountAddress, } = { ...account }
     
     const { balanceSwr } = useBalance({
-        accountAddress: accountAddress,
+        accountAddress: preferenceChainKey !== SupportedChainKey.Polkadot ? accountAddress : "",
         chainKey: preferenceChainKey,
         tokenKey: token.key,
     })
 
+    const { total } = usePolkadotBalances({ address: preferenceChainKey === SupportedChainKey.Polkadot ? accountAddress : "", tokenKey: token.key })
+
     const { data } = { ...balanceSwr }
 
-    const chain = blockchainConfig().chains[preferenceChainKey]
-    const isNative = token.address === "native"
+    const chains = useAppSelector((state) => state.blockchainReducer.chains)
+    const chain = chains[preferenceChainKey]
+    const isNative = token.address === nativeTokenKey
     const { onOpen } = usePolkadotTokenDetailsModalDiscloresure()
 
     const render = () => {
@@ -54,7 +57,7 @@ export const Token = ({ token }: TokenProps) => {
                             <div>
                                 <div>{token?.name}</div>
                                 <div className="text-sm text-foreground-400">
-                                    {data || 0} {token?.symbol}
+                                    {total()} {token?.symbol}
                                 </div>
                             </div>
                         </div>
