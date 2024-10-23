@@ -28,7 +28,14 @@ export interface BridgeRedeemFormikValues {
 }
 
 export const _useBridgeRedeemFormik =
-  (): FormikProps<BridgeRedeemFormikValues> => {
+  (): FormikProps<BridgeRedeemFormikValues> | null => {
+      //wormhole only
+      const chains = useAppSelector((state) => state.blockchainReducer.chains)
+      const preferenceChainKey = useAppSelector(
+          (state) => state.blockchainReducer.preferenceChainKey
+      )
+      if (!chains[preferenceChainKey].wormhole) return null
+
       const selectedKey = useAppSelector((state) => state.vaaReducer.selectedKey)
       const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
       const vaa = storedVaas[selectedKey]
@@ -40,21 +47,22 @@ export const _useBridgeRedeemFormik =
               Uint8Array.from(Buffer.from(vaa.serializedVaa, "base64"))
           )
       }
-      const chains = useAppSelector((state) => state.blockchainReducer.chains)
 
       const senderChain = valuesWithKey(chains).find(
-          ({ chain }) => chain === deserializedVaa?.emitterChain
+          ({ wormhole }) =>  wormhole && (wormhole?.chain === deserializedVaa?.emitterChain)
       )
       const targetChain = valuesWithKey(chains).find(
-          ({ chain }) => chain === deserializedVaa?.payload.to.chain
+          ({ wormhole }) => wormhole && (wormhole?.chain === deserializedVaa?.payload.to.chain)
       )
 
       const senderChainKey = senderChain?.key ?? defaultChainKey
       const targetChainKey = targetChain?.key ?? defaultSecondaryChainKey
 
+      //wormhole only
       const minimalFee = Object.values(
           crosschainConfig()[senderChainKey][targetChainKey]
       )[0].minimalFee
+
       const initialValues: BridgeRedeemFormikValues = {
           nativeAmountPlusFee: minimalFee,
       }
@@ -90,7 +98,7 @@ export const _useBridgeRedeemFormik =
           targetChain?.key,
           deserializedVaa?.payload.to.address
               ? toWormholeNativeFromUniversal(
-                  targetChain?.chain ?? defaultSecondaryChain,
+                  targetChain?.wormhole?.chain ?? defaultSecondaryChain,
                   deserializedVaa.payload.to.address
               )
               : ""

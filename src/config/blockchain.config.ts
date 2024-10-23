@@ -11,8 +11,10 @@ export const blockchainConfig = (): ChainConfig => {
         chains: {
             [SupportedChainKey.Solana]: {
                 imageUrl: "/icons/solana.svg",
-                wormholeChainId: 1,
-                chain: "Solana",
+                wormhole: {
+                    chainId: 1,
+                    chain: "Solana",
+                },
                 name: "Solana",
                 tokens: {
                     native: {
@@ -76,8 +78,10 @@ export const blockchainConfig = (): ChainConfig => {
             },
             [SupportedChainKey.Avalanche]: {
                 imageUrl: "/icons/avalanche.svg",
-                wormholeChainId: 6,
-                chain: "Avalanche",
+                wormhole: {
+                    chainId: 6,
+                    chain: "Avalanche",
+                },
                 name: "Avalanche",
                 tokens: {
                     native: {
@@ -132,8 +136,10 @@ export const blockchainConfig = (): ChainConfig => {
             },
             [SupportedChainKey.Aptos]: {
                 imageUrl: "/icons/aptos.svg",
-                wormholeChainId: 22,
-                chain: "Aptos",
+                wormhole: {
+                    chainId: 22,
+                    chain: "Aptos",
+                },
                 name: "Aptos",
                 tokens: {
                     native: {
@@ -187,8 +193,10 @@ export const blockchainConfig = (): ChainConfig => {
             },
             [SupportedChainKey.Bsc]: {
                 imageUrl: "/icons/bsc.svg",
-                wormholeChainId: 4,
-                chain: "Bsc",
+                wormhole: {
+                    chainId: 4,
+                    chain: "Bsc",
+                },
                 name: "Binance Smart Chain",
                 tokens: {
                     native: {
@@ -222,8 +230,10 @@ export const blockchainConfig = (): ChainConfig => {
             },
             [SupportedChainKey.Algorand]: {
                 imageUrl: "/icons/algorand.svg",
-                wormholeChainId: 8,
-                chain: "Algorand",
+                wormhole: {
+                    chainId: 8,
+                    chain: "Algorand",
+                },
                 name: "Algorand",
                 tokens: {
                     native: {
@@ -277,8 +287,10 @@ export const blockchainConfig = (): ChainConfig => {
             },
             [SupportedChainKey.Sui]: {
                 imageUrl: "/icons/sui.svg",
-                wormholeChainId: 22,
-                chain: "Sui",
+                wormhole: {
+                    chainId: 22,
+                    chain: "Sui",
+                },
                 name: "Sui",
                 tokens: {
                     native: {
@@ -330,6 +342,17 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
             },
+            [SupportedChainKey.Polkadot]: {
+                //polkadot is special, we use nfts in unique network
+                // and tokens in moonbeam then transfer
+                // to bifost
+                name: "Polkadot",
+                imageUrl: "/icons/polkadot.svg",
+                nftGroups: {
+                },
+                tokens: {
+                },
+            }
         },
     }
 }
@@ -338,16 +361,19 @@ export const chains = valuesWithKey(blockchainConfig().chains)
 export const chainInfos = valuesWithKey(blockchainConfig().chains)
 
 export const defaultChainKey = chains[0].key
-export const defaultChain = blockchainConfig().chains[defaultChainKey].chain
+export const defaultChain = blockchainConfig().chains[defaultChainKey].wormhole?.chain ?? "Solana"
 export const defaultSecondaryChainKey = chains[1].key
-export const defaultSecondaryChain = blockchainConfig().chains[defaultSecondaryChainKey].chain
+export const defaultSecondaryChain = blockchainConfig().chains[defaultSecondaryChainKey].wormhole?.chain ?? "Aptos"
 
 export const nativeTokenKey = "native"
 
 export interface ChainInfo {
-  wormholeChainId: ChainId;
+  //if wormhole is supported
+  wormhole?: {
+    chainId: ChainId;
+    chain: Chain;
+  },
   imageUrl: string;
-  chain: Chain;
   name: string;
   tokens: Record<string, TokenInfo>;
   nftGroups: Record<string, NftGroupInfo>;
@@ -385,4 +411,5 @@ export enum SupportedChainKey {
     Solana = "solana",
     Bsc = "bsc",
     Algorand = "algorand",
+    Polkadot = "polkadot",
 }

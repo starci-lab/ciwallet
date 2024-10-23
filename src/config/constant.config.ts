@@ -12,5 +12,6 @@ export const constantConfig = () => ({
         "cifarm-pre": "/cifarm-pre",
         cifarm: "/cifarm",
         transfer: "/transfer",
+        bridgeWormhole: "/bridge/wormhole",
     },
 })

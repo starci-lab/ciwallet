@@ -32,6 +32,8 @@ export const RedeemTab = () => {
     )
     
     const formik = useBridgeRedeemFormik()
+    if (!formik) return null
+
     const { onOpen: onBridgeRedeemResultModalOpen } =
     useBridgeRedeemResultModalDiscloresure()
 
@@ -50,10 +52,10 @@ export const RedeemTab = () => {
     const valuesWithKeyChains = valuesWithKey(chains)
     
     const fromChain = valuesWithKeyChains.find(
-        ({ chain }) => chain === emitterChain
+        ({ wormhole }) => wormhole?.chain === emitterChain
     )
     const targetChain = valuesWithKeyChains.find(
-        ({ chain }) => chain === payload.to.chain
+        ({ wormhole }) => wormhole?.chain === payload.to.chain
     )
 
     const token = chains[targetChain?.key ?? defaultSecondaryChainKey].tokens[nativeTokenKey]
@@ -127,7 +129,7 @@ export const RedeemTab = () => {
                                                 href={explorerUrl({
                                                     chainKey: fromChain?.key ?? defaultChainKey,
                                                     value: toWormholeNativeFromUniversal(
-                                                        fromChain?.chain ?? defaultChain,
+                                                        fromChain?.wormhole?.chain ?? defaultChain,
                                                         payload.token.address
                                                     ),
                                                     type: "address",
@@ -136,7 +138,7 @@ export const RedeemTab = () => {
                                             >
                                                 {truncateString(
                                                     toWormholeNativeFromUniversal(
-                                                        fromChain?.chain ?? defaultChain,
+                                                        fromChain?.wormhole?.chain ?? defaultChain,
                                                         payload.token.address
                                                     ),
                                                 )}
@@ -157,7 +159,7 @@ export const RedeemTab = () => {
                                                 href={explorerUrl({
                                                     chainKey: targetChain?.key ?? defaultSecondaryChainKey,
                                                     value: toWormholeNativeFromUniversal(
-                                                        targetChain?.chain ?? defaultSecondaryChain,
+                                                        targetChain?.wormhole?.chain ?? defaultSecondaryChain,
                                                         payload.to.address
                                                     ),
                                                     type: "address",
@@ -166,7 +168,7 @@ export const RedeemTab = () => {
                                             >
                                                 {truncateString(
                                                     toWormholeNativeFromUniversal(
-                                                        targetChain?.chain ?? defaultSecondaryChain,
+                                                        targetChain?.wormhole?.chain ?? defaultSecondaryChain,
                                                         payload.to.address
                                                     ),
                                                 )}

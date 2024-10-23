@@ -32,6 +32,8 @@ import { v4 } from "uuid"
 
 export const TransferTab = () => {
     const formik = useBridgeTransferFormik()
+    if (!formik) return null
+    
     const { onOpen } = useBridgeSelectTokenModalDisclosure()
     const { onOpen: onBridgeSelectRecipientModalDisclosureOpen } =
     useBridgeSelectRecipientModalDisclosure()

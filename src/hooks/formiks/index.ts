@@ -24,16 +24,19 @@ import {
     BridgeWrapFormikValues,
 } from "./useBridgeWrapFormik"
 import { _useTransferFormik, TransferFormikValues } from "./useTransferFormik"
-import { _useImportAccountFromPrivateKeyFormik, ImportAccountFromPrivateKeyFormikValues } from "./useImportAccountFromPrivateKeyFormik"
+import {
+    _useImportAccountFromPrivateKeyFormik,
+    ImportAccountFromPrivateKeyFormikValues,
+} from "./useImportAccountFromPrivateKeyFormik"
 
 export interface UseFormiksReturn {
   passwordFormik: FormikProps<PasswordFormikValues>;
   createPasswordFormik: FormikProps<PasswordFormikValues>;
-  bridgeTransferFormik: FormikProps<BridgeTransferFormikValues>;
-  bridgeRedeemFormik: FormikProps<BridgeRedeemFormikValues>;
+  bridgeTransferFormik: FormikProps<BridgeTransferFormikValues> | null;
+  bridgeRedeemFormik: FormikProps<BridgeRedeemFormikValues> | null;
   createAccountFormik: FormikProps<CreateAccountFormikValues>;
   mnemonicInputFormik: FormikProps<MnemonicInputFormikValues>;
-  bridgeWrapFormik: FormikProps<BridgeWrapFormikValues>;
+  bridgeWrapFormik: FormikProps<BridgeWrapFormikValues> | null;
   transferFormik: FormikProps<TransferFormikValues>;
   importAccountFromPrivateKeyFormik: FormikProps<ImportAccountFromPrivateKeyFormikValues>;
 }
@@ -47,7 +50,8 @@ export const _useFormiks = (): UseFormiksReturn => {
     const mnemonicInputFormik = _useMnemonicInputFormik()
     const bridgeWrapFormik = _useBridgeWrapFormik()
     const transferFormik = _useTransferFormik()
-    const importAccountFromPrivateKeyFormik = _useImportAccountFromPrivateKeyFormik()
+    const importAccountFromPrivateKeyFormik =
+    _useImportAccountFromPrivateKeyFormik()
 
     return {
         passwordFormik,
@@ -58,7 +62,7 @@ export const _useFormiks = (): UseFormiksReturn => {
         mnemonicInputFormik,
         bridgeWrapFormik,
         transferFormik,
-        importAccountFromPrivateKeyFormik
+        importAccountFromPrivateKeyFormik,
     }
 }
 

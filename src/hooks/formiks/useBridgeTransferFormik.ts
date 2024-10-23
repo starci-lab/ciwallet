@@ -8,6 +8,8 @@ import {
     defaultSecondaryChainKey,
     SupportedBridgeProtocolKey,
     crosschainConfig,
+    defaultChain,
+    defaultSecondaryChain,
 } from "@/config"
 import { useEffect } from "react"
 import {
@@ -34,10 +36,14 @@ export interface BridgeTransferFormikValues {
 }
 
 export const _useBridgeTransferFormik =
-  (): FormikProps<BridgeTransferFormikValues> => {
+  (): FormikProps<BridgeTransferFormikValues> | null => {
+      //wormhole only
+      const chains = useAppSelector((state) => state.blockchainReducer.chains)
       const preferenceChainKey = useAppSelector(
           (state) => state.blockchainReducer.preferenceChainKey
       )
+      if (!chains[preferenceChainKey].wormhole) return null
+
       const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
 
       const defaultPrivateKey = baseAccounts[defaultChainKey]?.activePrivateKey
@@ -86,7 +92,6 @@ export const _useBridgeTransferFormik =
 
       const dispatch = useAppDispatch()
 
-      const chains = useAppSelector((state) => state.blockchainReducer.chains)
       const tokens = chains[preferenceChainKey].tokens
 
       const signer = useSigner(preferenceChainKey)
@@ -108,8 +113,8 @@ export const _useBridgeTransferFormik =
               let recipientAddress = targetAddress || baseAccounts[targetChainKey].accounts[targetPrivateKey].accountAddress
               if (!signer) return
 
-              const sourceChain = chains[preferenceChainKey].chain
-              const targetChain = chains[targetChainKey].chain
+              const sourceChain = chains[preferenceChainKey].wormhole?.chain || defaultChain
+              const targetChain = chains[targetChainKey].wormhole?.chain || defaultSecondaryChain
               //except for case solana, which use ata instead
               const platform = chainKeyToPlatform(targetChainKey)
               if (platform === Platform.Solana) {

@@ -2,7 +2,7 @@ import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup"
 import { useFormiks } from "."
 import { useAppSelector } from "@/redux"
-import { nativeTokenKey } from "@/config"
+import { defaultChain, defaultSecondaryChain, nativeTokenKey } from "@/config"
 import { useEffect } from "react"
 import { createAttestation, parseNetwork, submitAttestation } from "@/services"
 import { useSigner } from "../miscellaneous"
@@ -13,16 +13,19 @@ export interface BridgeWrapFormikValues {
   targetChainKey: string;
 }
 
-export const _useBridgeWrapFormik = (): FormikProps<BridgeWrapFormikValues> => {
+export const _useBridgeWrapFormik = (): FormikProps<BridgeWrapFormikValues> | null => {
+    //wormhole only
+    const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
+    if (!chains[preferenceChainKey].wormhole) return null
 
     const initialValues: BridgeWrapFormikValues = {
         tokenKey: nativeTokenKey,
         targetChainKey: "",
     }
-    const chains = useAppSelector((state) => state.blockchainReducer.chains)
+
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const tokens = chains[preferenceChainKey].tokens
 
@@ -51,8 +54,8 @@ export const _useBridgeWrapFormik = (): FormikProps<BridgeWrapFormikValues> => {
         initialValues,
         validationSchema,
         onSubmit: async ({ tokenKey, targetChainKey }) => {
-            const sourceChainName = chains[preferenceChainKey].chain
-            const targetChainName = chains[targetChainKey].chain
+            const sourceChainName = chains[preferenceChainKey].wormhole?.chain ?? defaultChain
+            const targetChainName = chains[targetChainKey].wormhole?.chain  ?? defaultSecondaryChain
             const tokenAddress = tokens[tokenKey].addresses[network]
 
             if (!signer) return

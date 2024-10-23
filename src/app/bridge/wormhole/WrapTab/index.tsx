@@ -1,4 +1,5 @@
 "use client"
+import { defaultChain, defaultSecondaryChain } from "@/config"
 import {
     useBridgeWrapFormik,
     useBridgeWrapModalDisclosure,
@@ -34,12 +35,14 @@ import useSWR from "swr"
 
 export const WrapTab = () => {
     const formik = useBridgeWrapFormik()
+    if (!formik) return null
+
     const { onOpen } = useBridgeWrapSelectTokenModalDisclosure()
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
-    const sourceChainName = chains[preferenceChainKey].chain
+    const sourceChainName = chains[preferenceChainKey].wormhole?.chain ?? defaultChain
 
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const tokens = chains[preferenceChainKey].tokens
@@ -56,27 +59,27 @@ export const WrapTab = () => {
         async () => {
             const wrappedTokens: Record<string, WrappedToken> = {}
             const promises: Array<Promise<void>> = []
-            for (const chain of valuesWithKey(chains)) {
+            for (const chain of valuesWithKey(chains).filter(chain => !!chain.wormhole)) {
                 const promise = async () => {
                     try {
-                        if (chain.chain === sourceChainName) return
+                        if (chain.wormhole?.chain === sourceChainName) return
                         const has = await hasWrappedAsset({
                             network: parseNetwork(network),
                             sourceChainName,
-                            foreignChainName: chain.chain,
+                            foreignChainName: chain.wormhole?.chain ?? defaultSecondaryChain,
                             sourceTokenAddress: token.addresses[network],
                         })    
                         if (has) {
                             const tokenAddress = await getWrappedAsset({
                                 network: parseNetwork(network),
                                 sourceChainName,
-                                foreignChainName: chain.chain,
+                                foreignChainName: chain.wormhole?.chain ?? defaultSecondaryChain,
                                 sourceTokenAddress: token.addresses[network],
                             })
                             if (tokenAddress) {
-                                wrappedTokens[chain.chain] = {
+                                wrappedTokens[chain.wormhole?.chain ?? defaultChain] = {
                                     key: chain.key,
-                                    tokenAddress: toWormholeNative(chain.chain, tokenAddress),
+                                    tokenAddress: toWormholeNative(chain.wormhole?.chain ?? defaultChain, tokenAddress),
                                 }
                             }
                         }
@@ -100,7 +103,7 @@ export const WrapTab = () => {
         async () => {
             const token = chains[preferenceChainKey].tokens[formik.values.tokenKey]
             return await getOriginalAsset({
-                chainName: chains[preferenceChainKey].chain,
+                chainName: chains[preferenceChainKey].wormhole?.chain ?? defaultChain,
                 network: parseNetwork(network),
                 tokenAddress: token.addresses[network],
             })
@@ -111,7 +114,7 @@ export const WrapTab = () => {
 
     const isOriginal =
     !originalAssetSwr.data ||
-    originalAssetSwr.data?.chain === chains[preferenceChainKey].chain
+    originalAssetSwr.data?.chain === chains[preferenceChainKey].wormhole?.chain
     return (
         <div className="w-full h-full flex flex-col justify-between">
             <div>
@@ -207,14 +210,14 @@ export const WrapTab = () => {
                                         className="w-5 h-5"
                                         src={
                                             valuesWithKey(chains).find(
-                                                (chain) => chain.chain === originalAssetSwr.data?.chain
+                                                (chain) => chain.wormhole?.chain === originalAssetSwr.data?.chain
                                             )?.imageUrl
                                         }
                                     />
                                     <div>
                                         {
                                             valuesWithKey(chains).find(
-                                                (chain) => chain.chain === originalAssetSwr.data?.chain
+                                                (chain) => chain.wormhole?.chain === originalAssetSwr.data?.chain
                                             )?.name
                                         }
                                     </div>
