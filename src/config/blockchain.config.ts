@@ -52,16 +52,16 @@ export const blockchainConfig = (): ChainConfig => {
                     $CARROT: {
                         [Network.Mainnet]: {
                             address: "",
-                            imageUrl: "/icons/usdc.svg",
-                            name: "USD Coin",
-                            symbol: "USDC",
+                            imageUrl: "/icons/$CARROT.svg",
+                            name: "$CARROT Token",
+                            symbol: "$CARROT",
                             decimals: 6,
                         },
                         [Network.Testnet]: {
                             address: "FnQEAh9NNPzE26Z8iBq9onU3gzynGeHbPVy8gdwHFYee",
-                            imageUrl: "/icons/usdc.svg",
-                            name: "USD Coin",
-                            symbol: "USDC",
+                            imageUrl: "/icons/$CARROT.png",
+                            name: "$CARROT Token",
+                            symbol: "$CARROT",
                             decimals: 6,
                         },
                     },

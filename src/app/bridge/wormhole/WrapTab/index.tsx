@@ -49,7 +49,7 @@ export const WrapTab = () => {
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const tokens = chains[preferenceChainKey].tokens
     const token = tokens[formik.values.tokenKey]
-    const { imageUrl, name, symbol } = { ...token }
+    const { imageUrl, name, symbol } = { ...token[network] }
 
     const dispatch = useAppDispatch()
     const wrappedTokens = useAppSelector(
@@ -69,14 +69,14 @@ export const WrapTab = () => {
                             network: parseNetwork(network),
                             sourceChainName,
                             foreignChainName: chain.wormhole?.chain ?? defaultSecondaryChain,
-                            sourceTokenAddress: token.addresses[network],
+                            sourceTokenAddress: token[network].address,
                         })    
                         if (has) {
                             const tokenAddress = await getWrappedAsset({
                                 network: parseNetwork(network),
                                 sourceChainName,
                                 foreignChainName: chain.wormhole?.chain ?? defaultSecondaryChain,
-                                sourceTokenAddress: token.addresses[network],
+                                sourceTokenAddress: token[network].address,
                             })
                             if (tokenAddress) {
                                 wrappedTokens[chain.wormhole?.chain ?? defaultChain] = {
@@ -107,7 +107,7 @@ export const WrapTab = () => {
             return await getOriginalAsset({
                 chainName: chains[preferenceChainKey].wormhole?.chain ?? defaultChain,
                 network: parseNetwork(network),
-                tokenAddress: token.addresses[network],
+                tokenAddress: token[network].address,
             })
         }
     )
@@ -167,7 +167,7 @@ export const WrapTab = () => {
                                                             />
                                                             <Image
                                                                 removeWrapper
-                                                                src={token?.imageUrl}
+                                                                src={token[network]?.imageUrl}
                                                                 className="w-10 h-10"
                                                             />
                                                         </div>

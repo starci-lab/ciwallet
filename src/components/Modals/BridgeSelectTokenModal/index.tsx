@@ -31,6 +31,7 @@ export const BridgeSelectTokenModal = () => {
     const tokens = useAppSelector(
         (state) => state.blockchainReducer.chains[preferenceChainKey].tokens
     )
+    const network = useAppSelector((state) => state.blockchainReducer.network)
     return (
         <Modal hideCloseButton isOpen={isOpen}>
             <ModalContent>
@@ -40,29 +41,29 @@ export const BridgeSelectTokenModal = () => {
                         <CardBody className="p-0">
                             <div>
                                 {valuesWithKey(tokens).map(
-                                    ({ imageUrl, key, name, symbol }, index) => {
+                                    (token, index) => {
                                         return (
-                                            <div key={key}>
+                                            <div key={token.key}>
                                                 <Card
                                                     disableRipple
                                                     radius="none"
                                                     shadow="none"
                                                     fullWidth
                                                     isPressable
-                                                    onPress={() => formik.setFieldValue("tokenKey", key)}
+                                                    onPress={() => formik.setFieldValue("tokenKey", token.key)}
                                                 >
                                                     <CardBody className="px-3 py-2">
                                                         <div className="flex items-center justify-between">
                                                             <div className="flex gap-2 items-center">
-                                                                <Image className="w-5 h-5" src={imageUrl} />
+                                                                <Image className="w-5 h-5" src={token[network].imageUrl} />
                                                                 <div className="flex gap-1 items-center">
-                                                                    <div>{name}</div>
+                                                                    <div>{token[network].name}</div>
                                                                     <div className="text-foreground-400">
-                                                                        {symbol}
+                                                                        {token[network].symbol}
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            {formik.values.tokenKey === key && (
+                                                            {formik.values.tokenKey === token.key && (
                                                                 <CheckboxIcon isSelected className="w-3" />
                                                             )}
                                                         </div>

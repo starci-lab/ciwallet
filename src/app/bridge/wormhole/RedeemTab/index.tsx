@@ -58,7 +58,7 @@ export const RedeemTab = () => {
     )
 
     const token = chains[targetChain?.key ?? defaultSecondaryChainKey].tokens[nativeTokenKey]
-    const { symbol } = { ...token }
+    const { symbol } = { ...token[network] }
 
     const _defaultChainKey = targetChain?.key === defaultSecondaryChainKey ? defaultChainKey : defaultSecondaryChainKey
     const minimalFee = Object.values(crosschainConfig()[targetChain?.key ?? defaultSecondaryChainKey][_defaultChainKey])[0].minimalFee

@@ -28,7 +28,7 @@ const Page = () => {
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const tokens = chains[preferenceChainKey].tokens
-    const { name, imageUrl, symbol } = tokens[formik.values.tokenKey]
+    const { name, imageUrl, symbol } = tokens[formik.values.tokenKey][network]
 
     const baseAccounts = useAppSelector((state) => state.authReducer.baseAccounts)
     const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey

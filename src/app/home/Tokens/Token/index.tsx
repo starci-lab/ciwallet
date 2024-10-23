@@ -19,8 +19,7 @@ export const Token = ({ token }: TokenProps) => {
     const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
     const account = baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]
     const { accountAddress, } = { ...account }
-    const network = useAppSelector((state) => state.blockchainReducer.network)
-
+    
     const { balanceSwr } = useBalance({
         accountAddress: accountAddress,
         chainKey: preferenceChainKey,
@@ -30,7 +29,7 @@ export const Token = ({ token }: TokenProps) => {
     const { data } = { ...balanceSwr }
 
     const chain = blockchainConfig().chains[preferenceChainKey]
-    const isNative = token.addresses[network] === "native"
+    const isNative = token.address === "native"
 
     return (
         <Card shadow="none" fullWidth>

@@ -9,18 +9,23 @@ export const Tokens = () => {
         (state) => state.blockchainReducer.preferenceChainKey
     )
 
-    const tokens = valuesWithKey(useAppSelector(
-        (state) => state.blockchainReducer.chains[preferenceChainKey].tokens
-    )) 
+    const network = useAppSelector((state) => state.blockchainReducer.network)
+    const tokens = valuesWithKey(
+        useAppSelector(
+            (state) => state.blockchainReducer.chains[preferenceChainKey].tokens
+        )
+    )
 
     return (
         <div>
             <div className="grid gap-2">
                 {tokens.map((token) => (
-                    <Token key={token.key} token={token} />
+                    <Token
+                        key={token.key}
+                        token={{ key: token.key, ...token[network] }}
+                    />
                 ))}
             </div>
         </div>
-        
     )
 }

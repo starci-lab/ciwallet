@@ -48,8 +48,9 @@ export const TransferTab = () => {
 
     const tokens = chains[preferenceChainKey].tokens
     const token = tokens[formik.values.tokenKey]
+    const network = useAppSelector((state) => state.blockchainReducer.network)
 
-    const { imageUrl, name, symbol } = { ...token }
+    const { imageUrl, name, symbol } = { ...token[network] }
 
     const baseAccounts = useAppSelector(
         (state) => state.authReducer.baseAccounts
@@ -96,7 +97,6 @@ export const TransferTab = () => {
     const { onOpen: onConfirmModalDisclosureOpen } = useConfirmModalDisclosure()
 
     const dispatch = useAppDispatch()
-    const network = useAppSelector((state) => state.blockchainReducer.network)
 
     useEffect(() => {
     //havent load
