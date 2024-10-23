@@ -22,7 +22,7 @@ export const useWormholeDecimals = ({
     const decimalsSwr = useSWR(
         ["WORMHOLE_DECIMALS_SWR", tokenAddress, chainKey],
         async () => {
-            if (!tokenAddress) return chains[chainKey].tokens[nativeTokenKey].decimals
+            if (!tokenAddress) return chains[chainKey].tokens[nativeTokenKey][network].decimals
             return await getDecimals({
                 chainName: chains[chainKey].wormhole?.chain ?? defaultChain,
                 network: parseNetwork(network),
