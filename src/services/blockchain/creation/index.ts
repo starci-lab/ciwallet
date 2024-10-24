@@ -7,11 +7,11 @@ import { createSolanaAccount, importSolanaAccount } from "./solana.creation"
 import { createSuiAccount, importSuiAccount } from "./sui.creation"
 import { CreateAccountParams, ImportAccountParams } from "./types.creation"
 
-export const createAccount = ({
+export const createAccount = async ({
     accountNumber,
     chainKey,
     mnemonic,
-}: CreateAccountParams): ChainAccount => {
+}: CreateAccountParams): Promise<ChainAccount> => {
     if (mnemonic === "")
         return {
             address: "",
@@ -47,7 +47,7 @@ export const createAccount = ({
             mnemonic,
         })
     case Platform.Polkadot:
-        return createPolkadotAccount({
+        return await createPolkadotAccount({
             accountNumber,
             mnemonic,
         })

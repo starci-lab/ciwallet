@@ -33,7 +33,7 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
     const formik = useFormik({
         initialValues,
         validationSchema,
-        onSubmit: ({ password }) => {
+        onSubmit: async ({ password }) => {
             saveEncryptedMnemonic({
                 mnemonic,
                 password
@@ -42,7 +42,7 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
             //create session here
             for (const chainKey of chainKeys) {
                 //create account
-                const { address, privateKey, publicKey} = createAccount({
+                const { address, privateKey, publicKey} = await createAccount({
                     mnemonic,
                     accountNumber: 0,
                     chainKey

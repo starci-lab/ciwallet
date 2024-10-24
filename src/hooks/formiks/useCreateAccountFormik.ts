@@ -54,7 +54,7 @@ export const _useCreateAccountFormik =
       const formik = useFormik({
           initialValues,
           validationSchema,
-          onSubmit: ({ accountNumber, imageUrl, name }) => {
+          onSubmit: async ({ accountNumber, imageUrl, name }) => {
               if (!name) {
                   name = v4()
               }
@@ -72,7 +72,7 @@ export const _useCreateAccountFormik =
                   _accountNumber = accountNumber
               }
 
-              const { address, privateKey, publicKey } = createAccount({
+              const { address, privateKey, publicKey } = await createAccount({
                   mnemonic,
                   accountNumber: _accountNumber,
                   chainKey: preferenceChainKey,
