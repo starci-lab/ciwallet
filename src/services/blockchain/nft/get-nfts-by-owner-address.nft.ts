@@ -279,6 +279,7 @@ export const _getPolkadotUniqueNetworkNftsByOwnerAddress = async ({
 
     const searchNfts = await indexerClient.nfts({
         collectionIdIn: [nftCollectionId],
+        ownerIn: [accountAddress],
     })
     const nfts: Array<NftData> = []
 
