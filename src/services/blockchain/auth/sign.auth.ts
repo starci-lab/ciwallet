@@ -11,7 +11,7 @@ export interface SignMessageParams {
   message: string;
   privateKey: string;
   chainKey: string;
-  publicKey?: string;
+  publicKey: string;
 }
 
 export const evmSignMessage = ({ message, privateKey }: SignMessageParams) => {
@@ -50,10 +50,7 @@ export const algorandSignMessage = ({
     ).toString("base64")
 }
 
-export const polkadotSignMessage = ({ message, privateKey, publicKey}: SignMessageParams) => {
-    if (!publicKey) {
-        throw new Error("Public key is required for Polkadot sign message")
-    }
+export const polkadotSignMessage = ({ message, privateKey, publicKey }: SignMessageParams) => {
     return Buffer.from(
         sr25519Sign(Buffer.from(message, "base64"), {
             secretKey: hexToU8a(privateKey),
