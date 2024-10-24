@@ -4,11 +4,14 @@ import nacl from "tweetnacl"
 import { Account, Ed25519PrivateKey } from "@aptos-labs/ts-sdk"
 import algosdk, { mnemonicToSecretKey } from "algosdk"
 import bs58 from "bs58"
+import { sr25519Sign } from "@polkadot/util-crypto"
+import { hexToU8a } from "@polkadot/util"
 
 export interface SignMessageParams {
   message: string;
   privateKey: string;
   chainKey: string;
+  publicKey?: string;
 }
 
 export const evmSignMessage = ({ message, privateKey }: SignMessageParams) => {
@@ -47,6 +50,18 @@ export const algorandSignMessage = ({
     ).toString("base64")
 }
 
+export const polkadotSignMessage = ({ message, privateKey, publicKey}: SignMessageParams) => {
+    if (!publicKey) {
+        throw new Error("Public key is required for Polkadot sign message")
+    }
+    return Buffer.from(
+        sr25519Sign(Buffer.from(message, "base64"), {
+            secretKey: hexToU8a(privateKey),
+            publicKey: hexToU8a(publicKey),
+        }),
+    ).toString("base64")
+}
+
 export const signMessage = (params: SignMessageParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
 
@@ -63,7 +78,11 @@ export const signMessage = (params: SignMessageParams) => {
     case Platform.Algorand: {
         return algorandSignMessage(params)
     }
+    case Platform.Polkadot: {
+        return polkadotSignMessage(params)
+    }
     default:
         throw new Error(`Platform not supported: ${platform}`)
     }
 }
+

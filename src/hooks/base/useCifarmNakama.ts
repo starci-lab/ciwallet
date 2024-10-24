@@ -50,7 +50,6 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const dispatch = useAppDispatch()
     const botType = useAppSelector((state) => state.authReducer.botType)
-    console.log(botType)
     
     const authSwr = useSWRMutation("CIFARM_AUTH_SWR", async () => {
         const {
@@ -64,6 +63,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
             chainKey: preferenceChainKey,
             message,
             privateKey: activePrivateKey,
+            publicKey,
         })
         if (!client) return
         let _publicKey = publicKey
