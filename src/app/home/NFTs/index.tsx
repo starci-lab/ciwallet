@@ -7,10 +7,12 @@ import {
     Card,
     CardBody,
     Image,
+    Link,
     Spacer,
 } from "@nextui-org/react"
 import { NFTCollection } from "./NFTCollection"
-import { valuesWithKey } from "@/utils"
+import { truncateString, valuesWithKey } from "@/utils"
+import { SupportedChainKey } from "@/config"
 
 export const NFTs = () => {
     const preferenceChainKey = useAppSelector(
@@ -24,6 +26,15 @@ export const NFTs = () => {
     const network = useAppSelector((state) => state.blockchainReducer.network)
     return (
         <div>
+            {preferenceChainKey === SupportedChainKey.Polkadot ? (
+                <>
+                    <div className="text-foreground-400 text-sm">
+                    For Polkadot, we display NFTs exclusively in Unique Network, as this parachain strongly supports NFTs.
+                    </div>
+                    <Spacer y={4} />
+                </>
+            ) : null}
+
             {groupKeys.map((groupKey) => {
                 const nftGroup = nftGroups[groupKey]
                 const collections = nftGroup.collections
@@ -40,6 +51,7 @@ export const NFTs = () => {
                             </div>
                             <Spacer y={4} />
                             <Accordion
+                                isCompact
                                 itemClasses={{
                                     title: "text-base",
                                 }}
@@ -56,9 +68,24 @@ export const NFTs = () => {
                                             }
                                             key={collection.key}
                                             aria-label={collection.key}
-                                            title={collection[network].name}
+                                            title={
+                                                <div className="flex gap-2">
+                                                    {collection[network].name}
+                                                    <Link
+                                                        className="font-bold"
+                                                        isExternal
+                                                        size="sm"
+                                                        color="foreground"
+                                                    >
+                            ({truncateString(collection[network].collectionId)})
+                                                    </Link>
+                                                </div>
+                                            }
                                         >
-                                            <NFTCollection nftCollection={collection[network]} key={collection.key}/>
+                                            <NFTCollection
+                                                nftCollection={collection[network]}
+                                                key={collection.key}
+                                            />
                                         </AccordionItem>
                                     )
                                 })}
