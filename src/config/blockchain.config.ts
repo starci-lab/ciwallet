@@ -87,15 +87,15 @@ export const blockchainConfig = (): ChainConfig => {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
                         collections: {
-                            [NftCollectionKey.Fertile]: {
+                            [NftCollectionKey.FertileTile]: {
                                 [Network.Mainnet]: {
-                                    name: "Fertile",
-                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile Tiles",
+                                    imageUrl: "/icons/fertile-tile.png",
                                     collectionId: "",
                                 },
                                 [Network.Testnet]: {
-                                    name: "Fertile",
-                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile Tiles",
+                                    imageUrl: "/icons/fertile-tile.png",
                                     collectionId: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
                                 },
                             },
@@ -166,15 +166,15 @@ export const blockchainConfig = (): ChainConfig => {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
                         collections: {
-                            [NftCollectionKey.Fertile]: {
+                            [NftCollectionKey.FertileTile]: {
                                 [Network.Mainnet]: {
-                                    imageUrl: "/icons/fertile.png",
-                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile-tile.png",
+                                    name: "Fertile Tiles",
                                     collectionId: "",
                                 },
                                 [Network.Testnet]: {
-                                    imageUrl: "/icons/fertile.png",
-                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile-tile.png",
+                                    name: "Fertile Tiles",
                                     collectionId: "0x410d3e15058e8544B14FD1a317E330f693444673",
                                 },
                             },
@@ -244,15 +244,15 @@ export const blockchainConfig = (): ChainConfig => {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
                         collections: {
-                            [NftCollectionKey.Fertile]: {
+                            [NftCollectionKey.FertileTile]: {
                                 [Network.Mainnet]: {
-                                    imageUrl: "/icons/fertile.png",
-                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile-tile.png",
+                                    name: "Fertile Tiles",
                                     collectionId: ""
                                 },
                                 [Network.Testnet]: {
-                                    imageUrl: "/icons/fertile.png",
-                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile-tile.png",
+                                    name: "Fertile Tiles",
                                     collectionId: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34"
                                 }
                             },
@@ -365,15 +365,15 @@ export const blockchainConfig = (): ChainConfig => {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
                         collections: {
-                            [NftCollectionKey.Fertile]: {
+                            [NftCollectionKey.FertileTile]: {
                                 [Network.Mainnet]: {
-                                    imageUrl: "/icons/fertile.png",
-                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile-tile.png",
+                                    name: "Fertile Tiles",
                                     collectionId: ""
                                 },
                                 [Network.Testnet]: {
-                                    imageUrl: "/icons/fertile.png",
-                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile-tile.png",
+                                    name: "Fertile Tiles",
                                     collectionId: "premiumTile1"
                                 }
                             },
@@ -519,15 +519,15 @@ export const blockchainConfig = (): ChainConfig => {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
                         collections: {
-                            [NftCollectionKey.Fertile]: {
+                            [NftCollectionKey.FertileTile]: {
                                 [Network.Mainnet]: {
-                                    name: "Fertile",
-                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile Tiles",
+                                    imageUrl: "/icons/fertile-tile.png",
                                     collectionId: ""
                                 },
                                 [Network.Testnet]: {
-                                    name: "Fertile",
-                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile Tiles",
+                                    imageUrl: "/icons/fertile-tile.png",
                                     collectionId: "4191"
                                 }
                             },
@@ -592,7 +592,7 @@ export enum NftGroupKey {
 
 export enum NftCollectionKey {
     //đất phù sa
-    Fertile = "fertile",
+    FertileTile = "fertileTile",
     //bò
     Cow = "cow",
 }
