@@ -1,8 +1,7 @@
 import {
     mnemonicToMiniSecret,
-    ed25519PairFromSeed,
     encodeAddress,
-    ed25519PairFromSecret,
+    sr25519PairFromSeed,
 } from "@polkadot/util-crypto"
 import { hexToU8a, u8aToHex } from "@polkadot/util"
 import { ChainAccount } from "../common"
@@ -13,7 +12,7 @@ export const createPolkadotAccount = ({
     mnemonic,
 }: Omit<CreateAccountParams, "chainKey">): ChainAccount => {
     const seed = mnemonicToMiniSecret(mnemonic, accountNumber.toString())
-    const { publicKey, secretKey} = ed25519PairFromSeed(seed)
+    const { publicKey, secretKey} = sr25519PairFromSeed(seed)
     return {
         address: encodeAddress(publicKey),
         privateKey: u8aToHex(secretKey),
@@ -24,7 +23,7 @@ export const createPolkadotAccount = ({
 export const importPolkadotAccount = ({
     privateKey,
 }: Omit<ImportAccountParams, "chainKey">): ChainAccount => {
-    const { publicKey, secretKey} = ed25519PairFromSecret((hexToU8a(privateKey)))
+    const { publicKey, secretKey} = sr25519PairFromSeed((hexToU8a(privateKey)))
     return {
         address: encodeAddress(publicKey),
         privateKey: u8aToHex(secretKey),

@@ -51,7 +51,6 @@ const Page = () => {
     const activePrivateKey = baseAccounts[preferenceChainKey]?.activePrivateKey
     const account = baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]
     const { name, imageUrl, accountAddress } = { ...account }
-
     const assetsTab = useAppSelector((state) => state.tabReducer.assetsTab)
 
     const { onOpen: onSelectNetworkModalOpen } =
