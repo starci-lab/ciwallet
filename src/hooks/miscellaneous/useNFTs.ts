@@ -7,7 +7,7 @@ import useSWR, { SWRResponse } from "swr"
 
 export interface UseNFTsParams {
   accountAddress: string;
-  nftAddress: string;
+  nftCollectionId: string;
   chainKey: string;
   skip?: number;
   take?: number;
@@ -19,18 +19,18 @@ export interface UseNFTsReturn {
 
 export const useNFTs = ({
     accountAddress,
-    nftAddress,
+    nftCollectionId,
     chainKey,
     skip,
     take,
 }: UseNFTsParams): UseNFTsReturn => {
     const network = useAppSelector((state) => state.blockchainReducer.network)
-    const nftsSwr = useSWR(["NFTS_SWR", nftAddress, accountAddress, skip, take], async () => {
+    const nftsSwr = useSWR(["NFTS_SWR", nftCollectionId, accountAddress, skip, take], async () => {
         skip = skip || 0
         take = take || 5
         const nftService = new BlockchainNftService({
             chainKey,
-            nftAddress,
+            nftCollectionId,
             network,
         })
         const emptyResult: GetNftsByOwnerAddressResult = {

@@ -3,7 +3,14 @@ import { Atomic } from "@/utils"
 export interface NftData {
     ownerAddress: string,
     tokenId: string,
-    tokenURI: string
+    metadata: NftMetadata
+}
+
+export interface NftMetadata {
+    image: string,
+    //properties: Record<string, Atomic>
+    //serialized
+    properties: string
 }
 
 //algorand

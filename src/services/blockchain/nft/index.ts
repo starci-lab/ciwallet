@@ -3,20 +3,19 @@ import {
     GetNftsByOwnerAddressParams,
     _getNftsByOwnerAddress,
 } from "./get-nfts-by-owner-address.nft"
-import { CIDService } from "@/services/ipfs"
+import { IpfsService } from "./ipfs.nft"
 
 export interface BlockchainNftServiceConstructorParams {
-  nftAddress: string;
+  nftCollectionId: string;
   chainKey: string;
   network?: Network;
 }
 
 export class BlockchainNftService {
-    private cidService: CIDService
-    constructor(
-        private readonly params: BlockchainNftServiceConstructorParams) {
+    private ipfsService: IpfsService
+    constructor(private readonly params: BlockchainNftServiceConstructorParams) {
         params.network = params.network || Network.Testnet
-        this.cidService = new CIDService()
+        this.ipfsService = new IpfsService()
     }
 
     public getNftsByOwnerAddress({
@@ -24,16 +23,19 @@ export class BlockchainNftService {
         skip,
         take,
     }: Pick<GetNftsByOwnerAddressParams, "accountAddress" | "skip" | "take">) {
-        return _getNftsByOwnerAddress({
-            accountAddress,
-            skip,
-            take,
-            chainKey: this.params.chainKey,
-            network: this.params.network,
-            nftAddress: this.params.nftAddress,
-        }, {
-            cidService: this.cidService,
-        })
+        return _getNftsByOwnerAddress(
+            {
+                accountAddress,
+                skip,
+                take,
+                chainKey: this.params.chainKey,
+                network: this.params.network,
+                nftCollectionId: this.params.nftCollectionId,
+            },
+            {
+                ipfsService: this.ipfsService,
+            }
+        )
     }
 }
 

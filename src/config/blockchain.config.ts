@@ -83,23 +83,26 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
                 nftGroups: {
-                    cifarm: {
+                    [NftGroupKey.CiFarm]: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        nfts: {
-                            premiumTile: {
-                                addresses: {
-                                    [Network.Mainnet]: "",
-                                    [Network.Testnet]:
-                    "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
+                        collections: {
+                            [NftCollectionKey.Fertile]: {
+                                [Network.Mainnet]: {
+                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile.png",
+                                    collectionId: "",
                                 },
-                                imageUrl: "/icons/premium-tile.png",
-                                name: "CiFarm Premium Tile",
-                                symbol: "CPT",
+                                [Network.Testnet]: {
+                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile.png",
+                                    collectionId: "E31eadBc4uLfcHRSCLVVDPVngPavmZDVjzdGdjyCkbWZ",
+                                },
                             },
                         },
-                    },
-                },
+                    }
+                }
+                
             },
             [SupportedChainKey.Avalanche]: {
                 imageUrl: "/icons/avalanche.svg",
@@ -159,23 +162,24 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
                 nftGroups: {
-                    cifarm: {
+                    [NftGroupKey.CiFarm]: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-
-                        nfts: {
-                            premiumTile: {
-                                addresses: {
-                                    [Network.Mainnet]: "",
-                                    [Network.Testnet]:
-                    "0x410d3e15058e8544B14FD1a317E330f693444673",
+                        collections: {
+                            [NftCollectionKey.Fertile]: {
+                                [Network.Mainnet]: {
+                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile",
+                                    collectionId: "",
                                 },
-                                imageUrl: "/icons/premium-tile.png",
-                                name: "CiFarm Premium Tile",
-                                symbol: "CPT",
+                                [Network.Testnet]: {
+                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile",
+                                    collectionId: "0x410d3e15058e8544B14FD1a317E330f693444673",
+                                },
                             },
                         },
-                    },
+                    }
                 },
             },
             [SupportedChainKey.Aptos]: {
@@ -236,23 +240,25 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
                 nftGroups: {
-                    cifarm: {
+                    [NftGroupKey.CiFarm]: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        nfts: {
-                            premiumTile: {
-                                addresses: {
-                                    [Network.Mainnet]: "",
-                                    [Network.Testnet]:
-                    "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
+                        collections: {
+                            [NftCollectionKey.Fertile]: {
+                                [Network.Mainnet]: {
+                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile",
+                                    collectionId: ""
                                 },
-                                imageUrl: "/icons/premium-tile.png",
-                                name: "CiFarm Premium Tile",
-                                symbol: "CPT",
+                                [Network.Testnet]: {
+                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile",
+                                    collectionId: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34"
+                                }
                             },
                         },
-                    },
-                },
+                    }
+                }
             },
             [SupportedChainKey.Bsc]: {
                 imageUrl: "/icons/bsc.svg",
@@ -295,13 +301,7 @@ export const blockchainConfig = (): ChainConfig => {
                         },                    
                     },
                 },
-                nftGroups: {
-                    cifarm: {
-                        name: "CiFarm",
-                        imageUrl: "/icons/cifarm.png",
-                        nfts: {},
-                    },
-                },
+                nftGroups: {}
             },
             [SupportedChainKey.Algorand]: {
                 imageUrl: "/icons/algorand.svg",
@@ -361,21 +361,24 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
                 nftGroups: {
-                    cifarm: {
+                    [NftGroupKey.CiFarm]: {
                         name: "CiFarm",
                         imageUrl: "/icons/cifarm.png",
-                        nfts: {
-                            premiumTile: {
-                                addresses: {
-                                    [Network.Mainnet]: "",
-                                    [Network.Testnet]: "premiumTile1",
+                        collections: {
+                            [NftCollectionKey.Fertile]: {
+                                [Network.Mainnet]: {
+                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile",
+                                    collectionId: ""
                                 },
-                                imageUrl: "/icons/premium-tile.png",
-                                name: "CiFarm Premium Tile",
-                                symbol: "CPT",
+                                [Network.Testnet]: {
+                                    imageUrl: "/icons/fertile.png",
+                                    name: "Fertile",
+                                    collectionId: "premiumTile1"
+                                }
                             },
                         },
-                    },
+                    }      
                 },
             },
             [SupportedChainKey.Sui]: {
@@ -436,22 +439,6 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                 },
                 nftGroups: {
-                    cifarm: {
-                        name: "CiFarm",
-                        imageUrl: "/icons/cifarm.png",
-                        nfts: {
-                            premiumTile: {
-                                addresses: {
-                                    [Network.Mainnet]: "",
-                                    [Network.Testnet]:
-                    "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
-                                },
-                                imageUrl: "/icons/premium-tile.png",
-                                name: "CiFarm Premium Tile",
-                                symbol: "CPT",
-                            },
-                        },
-                    },
                 },
             },
             [SupportedChainKey.Polkadot]: {
@@ -460,7 +447,6 @@ export const blockchainConfig = (): ChainConfig => {
                 // to bifost
                 name: "Polkadot",
                 imageUrl: "/icons/polkadot.svg",
-                nftGroups: {},
                 //polkadot is special network, mainnet is DOT, where testnet is PAS
                 tokens: {
                     native: {
@@ -528,6 +514,26 @@ export const blockchainConfig = (): ChainConfig => {
                         },        
                     },
                 },
+                nftGroups: {
+                    [NftGroupKey.CiFarm]: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        collections: {
+                            [NftCollectionKey.Fertile]: {
+                                [Network.Mainnet]: {
+                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile.png",
+                                    collectionId: ""
+                                },
+                                [Network.Testnet]: {
+                                    name: "Fertile",
+                                    imageUrl: "/icons/fertile.png",
+                                    collectionId: "4191"
+                                }
+                            },
+                        },
+                    }
+                }                 
             },
         },
     }
@@ -555,7 +561,7 @@ export interface ChainInfo {
   imageUrl: string;
   name: string;
   tokens: Record<string, Record<Network, TokenInfo>>;
-  nftGroups: Record<string, NftGroupInfo>;
+  nftGroups: NftGroups
 }
 
 export interface TokenInfo {
@@ -566,17 +572,29 @@ export interface TokenInfo {
   decimals: number;
 }
 
-export interface NftGroupInfo {
-  imageUrl: string;
-  name: string;
-  nfts: Record<string, NftInfo>;
+export interface NftCollectionInfo {
+    collectionId: string
+    name: string
+    imageUrl: string
 }
 
-export interface NftInfo {
-  addresses: Record<Network, string>;
-  imageUrl: string;
-  name: string;
-  symbol: string;
+export interface NftGroupInfo {
+    name: string 
+    imageUrl: string
+    collections: Record<string, Record<Network, NftCollectionInfo>>
+}
+
+export type NftGroups = Record<string, NftGroupInfo> 
+
+export enum NftGroupKey {
+    CiFarm = "cifarm",
+}
+
+export enum NftCollectionKey {
+    //đất phù sa
+    Fertile = "fertile",
+    //bò
+    Cow = "cow",
 }
 
 export interface ChainConfig {

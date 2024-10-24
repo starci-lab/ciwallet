@@ -10,6 +10,7 @@ import {
     Spacer,
 } from "@nextui-org/react"
 import { NFTCollection } from "./NFTCollection"
+import { valuesWithKey } from "@/utils"
 
 export const NFTs = () => {
     const preferenceChainKey = useAppSelector(
@@ -20,12 +21,12 @@ export const NFTs = () => {
         (state) => state.blockchainReducer.chains[preferenceChainKey].nftGroups
     )
     const groupKeys = Object.keys(nftGroups)
+    const network = useAppSelector((state) => state.blockchainReducer.network)
     return (
         <div>
             {groupKeys.map((groupKey) => {
                 const nftGroup = nftGroups[groupKey]
-                const nfts = nftGroup.nfts
-                const keys = Object.keys(nfts)
+                const collections = nftGroup.collections
                 return (
                     <Card key={groupKey}>
                         <CardBody className="p-3">
@@ -43,21 +44,21 @@ export const NFTs = () => {
                                     title: "text-base",
                                 }}
                             >
-                                {keys.map((key) => {
+                                {valuesWithKey(collections).map((collection) => {
                                     return (
                                         <AccordionItem
                                             startContent={
                                                 <Image
                                                     className="w-6"
                                                     removeWrapper
-                                                    src={nfts[key].imageUrl}
+                                                    src={collection[network].imageUrl}
                                                 />
                                             }
-                                            key={key}
-                                            aria-label={key}
-                                            title={nfts[key].name}
+                                            key={collection.key}
+                                            aria-label={collection.key}
+                                            title={collection[network].name}
                                         >
-                                            <NFTCollection nft={nfts[key]} key={key}/>
+                                            <NFTCollection nftCollection={collection[network]} key={collection.key}/>
                                         </AccordionItem>
                                     )
                                 })}
