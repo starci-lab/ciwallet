@@ -1,4 +1,4 @@
-import { Network } from "./blockchain.config"
+import { Network, PolkadotChainKey } from "./blockchain.config"
 
 export interface PolkadotChain {
     name: string;
@@ -7,12 +7,6 @@ export interface PolkadotChain {
 
 export type PolkadotChainsConfig = Record<string, Record<Network, PolkadotChain>>
 
-export enum PolkadotChainKey {
-    Relay = "relay",
-    Bifrost = "bifrost",
-    UniqueNetwork = "uniqueNetwork",
-    Moonbeam = "moonbeam",
-}
 
 export const polkadotChainsConfig: () => PolkadotChainsConfig = () => ({
     [PolkadotChainKey.Relay]: {

@@ -6,9 +6,12 @@ export enum Network {
   Mainnet = "mainnet",
 }
 
-export const bifrostNativeTokenKey = "bifrost-native"
-export const uniqueNetworkNativeTokenKey = "unique-network-native"
-export const moonbeamNativeTokenKey = "moonbeam-native"
+export enum PolkadotChainKey {
+    Relay = "native",
+    Bifrost = "bifrost-native",
+    UniqueNetwork = "unique-network-native",
+    Moonbeam = "moonbeam-native"
+}
 
 export const blockchainConfig = (): ChainConfig => {
     return {
@@ -452,7 +455,7 @@ export const blockchainConfig = (): ChainConfig => {
                 imageUrl: "/icons/polkadot.svg",
                 //polkadot is special network, mainnet is DOT, where testnet is PAS
                 tokens: {
-                    native: {
+                    [PolkadotChainKey.Relay]: {
                         [Network.Mainnet]: {
                             address: "native",
                             imageUrl: "/icons/polkadot.svg",
@@ -468,48 +471,48 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 10,
                         },
                     },
-                    bifrost: {
+                    [PolkadotChainKey.Bifrost]: {
                         [Network.Mainnet]: {
-                            address: bifrostNativeTokenKey,
+                            address: "native",
                             imageUrl: "/icons/bifrost.png",
                             name: "Bifrost",
                             symbol: "BNC",
                             decimals: 10,
                         },
                         [Network.Testnet]: {
-                            address: bifrostNativeTokenKey,
+                            address: "native",
                             imageUrl: "/icons/bifrost.png",
                             name: "Bifrost",
                             symbol: "BNC",
                             decimals: 10,
                         },
                     },
-                    moonbeam: {
+                    [PolkadotChainKey.Moonbeam]: {
                         [Network.Mainnet]: {
-                            address: moonbeamNativeTokenKey,
+                            address: "native",
                             imageUrl: "/icons/moonbeam.webp",
                             name: "Moonbeam",
                             symbol: "GLMR",
                             decimals: 18,
                         },
                         [Network.Testnet]: {
-                            address: moonbeamNativeTokenKey,
+                            address: "native",
                             imageUrl: "/icons/moonbeam.webp",
                             name: "Moonbeam Alpha",
                             symbol: "DEV",
                             decimals: 18,
                         },
                     },
-                    uniqueNetwork: {
+                    [PolkadotChainKey.UniqueNetwork]: {
                         [Network.Mainnet]: {
-                            address: uniqueNetworkNativeTokenKey,
+                            address: "native",
                             imageUrl: "/icons/unique-network.svg",
                             name: "Unique Network",
                             symbol: "UNQ",
                             decimals: 18,
                         },
                         [Network.Testnet]: {
-                            address: uniqueNetworkNativeTokenKey,
+                            address: "native",
                             imageUrl: "/icons/opal-testnet.svg",
                             name: "Opal",
                             symbol: "OPL",
@@ -525,7 +528,7 @@ export const blockchainConfig = (): ChainConfig => {
                             symbol: "$CARROT",
                         },
                         [Network.Testnet]: {
-                            address: "",
+                            address: "0xf4f23A2d538A05eDaF3fDce776d7e429C7f77832",
                             name: "$CARROT Token",
                             decimals: 18,
                             imageUrl: "/icons/$CARROT.png",
@@ -541,7 +544,7 @@ export const blockchainConfig = (): ChainConfig => {
                             symbol: "$CAULI",
                         },
                         [Network.Testnet]: {
-                            address: "",
+                            address: "0x002F3bE02F42c84d6583f9C849C7Af9Acb1bF863",
                             name: "$CAULI Token",
                             decimals: 18,
                             imageUrl: "/icons/$CAULI.png",

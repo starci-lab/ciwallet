@@ -37,6 +37,7 @@ export const Token = ({ token }: TokenProps) => {
         tokenKey: token.key,
     })
 
+    
     const { total } = usePolkadotBalances({
         address:
       preferenceChainKey === SupportedChainKey.Polkadot ? accountAddress : "",

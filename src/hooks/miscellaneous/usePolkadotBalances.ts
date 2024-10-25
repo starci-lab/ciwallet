@@ -2,11 +2,9 @@ import useSWR, { SWRResponse } from "swr"
 import "@polkadot/api-augment"
 import { useAppSelector } from "@/redux"
 import {
-    moonbeamNativeTokenKey,
     nativeTokenKey,
     PolkadotChainKey,
     SupportedChainKey,
-    uniqueNetworkNativeTokenKey,
 } from "@/config"
 import {
     polkadotRelayChainClient,
@@ -68,7 +66,7 @@ export const usePolkadotRelayChainBalance = ({
             ]
             : null,
         async () => {
-            if (tokenKey === nativeTokenKey) {
+            if (tokenKey === PolkadotChainKey.Relay) {
                 const relayChainClient = await polkadotRelayChainClient()
                 const account = await relayChainClient.query.system.account(address)
                 return computeDenomination(account.data.free.toBigInt(), decimals)
@@ -87,27 +85,26 @@ export const usePolkadotUniqueNetworkBalance = ({
     const refreshBalanceKey = useAppSelector(
         (state) => state.refreshReducer.refreshBalanceKey
     )
-    const polkadotSelectedToken = useAppSelector(
-        (state) => state.miscellaneousReducer.polkadotSelectedToken
-    )
     const { isOpen } = usePolkadotTokenDetailsModalDiscloresure()
 
     return useSWR(
         address
             ? [
-                "POLKADOT_UNIQUE_BALANCE",
+                "POLKADOT_UNIQUE_NETWORK_BALANCE",
                 address,
+                tokenKey,
                 refreshBalanceKey,
-                polkadotSelectedToken,
                 forceReloadWhenOpenModal ? isOpen : null,
             ]
             : null,
         async () => {
-            if (tokenKey === uniqueNetworkNativeTokenKey) {
+            console.log(tokenKey)
+            if (tokenKey === PolkadotChainKey.UniqueNetwork) {
                 const uniqueNetworkSdkClient = polkadotUniqueNetworkSdkClient(network)
                 const { total, decimals } = await uniqueNetworkSdkClient.balance.get({
                     address,
                 })
+                console.log(total, address, decimals)
                 return computeDenomination(BigInt(total), decimals)
             }
             return 0
@@ -143,7 +140,7 @@ export const usePolkadotMoonbeamBalance = ({
             const decimals =
         chains[SupportedChainKey.Polkadot].tokens[tokenKey][network].decimals
 
-            if (tokenKey === moonbeamNativeTokenKey) {
+            if (tokenKey === PolkadotChainKey.Moonbeam) {
                 const balance = await moonbeamProvider.getBalance(_address)
                 return computeDenomination(balance, decimals)
             } else {
