@@ -35,7 +35,8 @@ export const PolkadotTokenDetailsModal = () => {
     baseAccounts[preferenceChainKey]?.accounts[activePrivateKey]
         ?.accountAddress
 
-    const { relayChainSwr } = usePolkadotBalances({ address: accountAddress, tokenKey: nativeTokenKey })
+    const { balancesSwr } = usePolkadotBalances({ address: accountAddress, tokenKey: nativeTokenKey })
+    const { bifrost, moonbeam, relay, uniqueNetwork } = { ...balancesSwr.data }
 
     const network = useAppSelector((state) => state.blockchainReducer.network)
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
@@ -66,7 +67,7 @@ export const PolkadotTokenDetailsModal = () => {
                                             <div>
                                                 <div>{token?.name}</div>
                                                 <div className="text-sm text-foreground-400">
-                                                    {relayChainSwr.data || 0} {token?.symbol}
+                                                    {relay || 0} {token?.symbol}
                                                 </div>
                                             </div>
                                         </div>

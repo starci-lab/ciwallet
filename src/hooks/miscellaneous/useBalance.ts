@@ -1,3 +1,4 @@
+import { SupportedChainKey } from "@/config"
 import { useAppSelector } from "@/redux"
 import { BlockchainTokenService } from "@/services"
 import useSWR, { SWRResponse } from "swr"
@@ -17,6 +18,10 @@ export const useBalance = ({
     tokenKey,
     chainKey,
 }: UseBalanceParams): UseBalanceReturn => {
+    const preferenceChainKey = useAppSelector(
+        (state) => state.blockchainReducer.preferenceChainKey
+    )
+
     const refreshBalanceKey = useAppSelector(
         (state) => state.refreshReducer.refreshBalanceKey
     )
@@ -31,6 +36,9 @@ export const useBalance = ({
             chainKey
         ],
         async () => {
+            //dont fetch balance for polkadot
+            if (preferenceChainKey === SupportedChainKey.Polkadot) return
+
             if (!accountAddress) return 
             const tokenService = new BlockchainTokenService({
                 chainKey,

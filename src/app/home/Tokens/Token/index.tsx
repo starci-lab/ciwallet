@@ -1,8 +1,6 @@
 "use client"
 
 import {
-    nativeTokenKey,
-    PolkadotParachainKey,
     SupportedChainKey,
     TokenInfo,
 } from "@/config"
@@ -39,32 +37,19 @@ export const Token = ({ token }: TokenProps) => {
         tokenKey: token.key,
     })
 
-    const { total } = usePolkadotBalances({
+    const { balancesSwr } = usePolkadotBalances({
         address:
       preferenceChainKey === SupportedChainKey.Polkadot ? accountAddress : "",
         tokenKey: token.key,
     })
-
     const { data } = { ...balanceSwr }
+    const { relay, bifrost, moonbeam, uniqueNetwork } = { ...balancesSwr.data }
+    const total = (relay || 0) + (bifrost || 0)  + (moonbeam || 0)  + (uniqueNetwork || 0)
 
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const chain = chains[preferenceChainKey]
-    const isNative = token.address === nativeTokenKey
     const { onOpen } = usePolkadotTokenDetailsModalDiscloresure()
-    const polkadotParachains = useAppSelector(
-        (state) => state.blockchainReducer.polkadotParachains
-    )
-    const network = useAppSelector((state) => state.blockchainReducer.network)
 
-    const renderImage = () => {
-        if (preferenceChainKey === SupportedChainKey.Polkadot) {
-            return polkadotParachains[
-                PolkadotParachainKey.Bifrost
-            ][network].imageUrl
-        }
-        return chain?.imageUrl
-    }
-    
     const render = () => {
         if (preferenceChainKey === SupportedChainKey.Polkadot) {
             return (
@@ -73,15 +58,13 @@ export const Token = ({ token }: TokenProps) => {
                         <div className="justify-between flex items-center">
                             <div className="flex gap-2 items-center">
                                 <div className="relative">
-                                    {!isNative ? (
-                                        <Avatar
-                                            isBordered
-                                            src={renderImage()}
-                                            classNames={{
-                                                base: "absolute w-5 h-5 bottom-0 right-0 z-20 ring-0 bg-background",
-                                            }}
-                                        />
-                                    ) : null}
+                                    <Avatar
+                                        isBordered
+                                        src={chain?.imageUrl}
+                                        classNames={{
+                                            base: "absolute w-5 h-5 bottom-0 right-0 z-20 ring-0 bg-background",
+                                        }}
+                                    />
                                     <Image
                                         removeWrapper
                                         src={token?.imageUrl}
@@ -91,7 +74,7 @@ export const Token = ({ token }: TokenProps) => {
                                 <div>
                                     <div>{token?.name}</div>
                                     <div className="text-sm text-foreground-400">
-                                        {total()} {token?.symbol}
+                                        {total} {token?.symbol}
                                     </div>
                                 </div>
                             </div>
@@ -106,15 +89,13 @@ export const Token = ({ token }: TokenProps) => {
                 <CardBody className="p-3 bg-content2">
                     <div className="flex gap-2 items-center">
                         <div className="relative">
-                            {!isNative ? (
-                                <Avatar
-                                    isBordered
-                                    src={chain?.imageUrl}
-                                    classNames={{
-                                        base: "absolute w-5 h-5 bottom-0 right-0 z-20 ring-0 bg-background",
-                                    }}
-                                />
-                            ) : null}
+                            <Avatar
+                                isBordered
+                                src={chain?.imageUrl}
+                                classNames={{
+                                    base: "absolute w-5 h-5 bottom-0 right-0 z-20 ring-0 bg-background",
+                                }}
+                            />
                             <Image
                                 removeWrapper
                                 src={token?.imageUrl}

@@ -6,7 +6,9 @@ const rpcUrlMap: Record<Network, string> = {
     [Network.Testnet]: "wss://paseo.dotters.network",
 }
 
-export const polkadotRelayClient = async (network: Network = Network.Testnet) => {
+export const polkadotRelayChainClient = async (
+    network: Network = Network.Testnet
+) => {
     const rpcUrl = rpcUrlMap[network]
     const wsProvider = new WsProvider(rpcUrl)
     return await ApiPromise.create({ provider: wsProvider })

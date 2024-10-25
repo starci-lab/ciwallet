@@ -150,24 +150,6 @@ export const _getSuiBalance = async ({
     }
 }
 
-export const _getPolkadotBalance = async ({
-    chainKey,
-    tokenAddress,
-    network,
-    //accountAddress,
-}: GetBalanceParams): Promise<number> => {
-    if (!tokenAddress) throw new Error("Cannot find balance without token address")
-    network = network || Network.Testnet
-
-    const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
-    if (!decimals) throw new Error("decimals must not undefined")
-    
-    if (tokenAddress === nativeTokenKey) { 
-        return 0
-    } else {
-        return 0
-    }
-}
 
 export const _getBalance = (params: GetBalanceParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
@@ -177,6 +159,6 @@ export const _getBalance = (params: GetBalanceParams) => {
     case Platform.Solana: return _getSolanaBalance(params)
     case Platform.Algorand: return _getAlgorandBalance(params)
     case Platform.Sui: return _getSuiBalance(params)
-    case Platform.Polkadot: return _getPolkadotBalance(params)
+    case Platform.Polkadot: throw new Error("Polkadot balance not supported")
     }
 }

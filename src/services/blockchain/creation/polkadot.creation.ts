@@ -3,7 +3,7 @@ import {
     encodeAddress,
     cryptoWaitReady,
     ed25519PairFromSecret,
-    ed25519PairFromSeed
+    sr25519PairFromSeed
 } from "@polkadot/util-crypto"
 import { hexToU8a, u8aToHex } from "@polkadot/util"
 import { ChainAccount } from "../common"
@@ -15,7 +15,7 @@ export const createPolkadotAccount = async ({
 }: Omit<CreateAccountParams, "chainKey">): Promise<ChainAccount> => {
     await cryptoWaitReady()
     const seed = mnemonicToMiniSecret(mnemonic, accountNumber.toString())
-    const { publicKey, secretKey} = ed25519PairFromSeed(seed)
+    const { publicKey, secretKey} = sr25519PairFromSeed(seed)
     return {
         address: encodeAddress(publicKey),
         privateKey: u8aToHex(secretKey),

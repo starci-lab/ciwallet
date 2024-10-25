@@ -6,6 +6,10 @@ export enum Network {
   Mainnet = "mainnet",
 }
 
+export const bifrostNativeTokenKey = "bifrost-native"
+export const uniqueNetworkNativeTokenKey = "unique-network-native"
+export const moonbeamNativeTokenKey = "moonbeam-native"
+
 export const blockchainConfig = (): ChainConfig => {
     return {
         chains: {
@@ -101,8 +105,7 @@ export const blockchainConfig = (): ChainConfig => {
                             },
                         },
                     }
-                }
-                
+                }             
             },
             [SupportedChainKey.Avalanche]: {
                 imageUrl: "/icons/avalanche.svg",
@@ -467,18 +470,50 @@ export const blockchainConfig = (): ChainConfig => {
                     },
                     bifrost: {
                         [Network.Mainnet]: {
-                            address: "native",
+                            address: bifrostNativeTokenKey,
                             imageUrl: "/icons/bifrost.png",
                             name: "Bifrost",
                             symbol: "BNC",
                             decimals: 10,
                         },
                         [Network.Testnet]: {
-                            address: "native",
+                            address: bifrostNativeTokenKey,
                             imageUrl: "/icons/bifrost.png",
                             name: "Bifrost",
                             symbol: "BNC",
                             decimals: 10,
+                        },
+                    },
+                    moonbeam: {
+                        [Network.Mainnet]: {
+                            address: moonbeamNativeTokenKey,
+                            imageUrl: "/icons/moonbeam.webp",
+                            name: "Moonbeam",
+                            symbol: "GLMR",
+                            decimals: 18,
+                        },
+                        [Network.Testnet]: {
+                            address: moonbeamNativeTokenKey,
+                            imageUrl: "/icons/moonbeam.webp",
+                            name: "Moonbeam Alpha",
+                            symbol: "DEV",
+                            decimals: 18,
+                        },
+                    },
+                    uniqueNetwork: {
+                        [Network.Mainnet]: {
+                            address: uniqueNetworkNativeTokenKey,
+                            imageUrl: "/icons/unique-network.svg",
+                            name: "Unique Network",
+                            symbol: "UNQ",
+                            decimals: 18,
+                        },
+                        [Network.Testnet]: {
+                            address: uniqueNetworkNativeTokenKey,
+                            imageUrl: "/icons/opal-testnet.svg",
+                            name: "Opal",
+                            symbol: "OPL",
+                            decimals: 18,
                         },
                     },
                     $CARROT: {
