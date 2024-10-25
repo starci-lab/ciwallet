@@ -498,7 +498,7 @@ export const blockchainConfig = (): ChainConfig => {
                         [Network.Testnet]: {
                             address: "native",
                             imageUrl: "/icons/moonbeam.webp",
-                            name: "Moonbeam Alpha",
+                            name: "Moonbase Alpha",
                             symbol: "DEV",
                             decimals: 18,
                         },
