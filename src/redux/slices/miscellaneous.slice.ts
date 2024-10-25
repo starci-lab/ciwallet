@@ -1,33 +1,35 @@
+import { TokenInfo } from "@/config"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { ReactNode } from "react"
 
 export interface MiscellaneousState {
-  warning: Warning
-  confirm: Confirm
-  error: ErrorState
+  warning: Warning;
+  confirm: Confirm;
+  error: ErrorState;
+  polkadotSelectedToken?: TokenInfo;
 }
 
 export interface Warning {
-    warningMessage: string,
-    processFn: (() => void) | (() => Promise<void>)
+  warningMessage: string;
+  processFn: (() => void) | (() => Promise<void>);
 }
 
 export interface ErrorState {
-    errorMessage: string,
+  errorMessage: string;
 }
 
 export enum TransactionType {
-    Transfer = "Transfer",
-    Approve = "Approve",
-    BridgeTransfer = "Bridge Transfer",
-    BridgeRedeem = "Bridge Redeem",
+  Transfer = "Transfer",
+  Approve = "Approve",
+  BridgeTransfer = "Bridge Transfer",
+  BridgeRedeem = "Bridge Redeem",
 }
 
 export interface Confirm {
-    confirmMessage: ReactNode,
-    processFn: (() => void) | (() => Promise<void>)
-    id: string,
-    type?: TransactionType,
+  confirmMessage: ReactNode;
+  processFn: (() => void) | (() => Promise<void>);
+  id: string;
+  type?: TransactionType;
 }
 
 const initialState: MiscellaneousState = {
@@ -62,9 +64,16 @@ export const miscellaneousSlice = createSlice({
         },
         setError: (state, { payload }: PayloadAction<ErrorState>) => {
             state.error = payload
-        }
-    }
+        },
+        setPolkadotSelectedToken: (
+            state,
+            { payload }: PayloadAction<TokenInfo>
+        ) => {
+            state.polkadotSelectedToken = payload
+        },
+    },
 })
 
-export const { setWarning, setConfirm, setError } = miscellaneousSlice.actions
+export const { setWarning, setConfirm, setError, setPolkadotSelectedToken } =
+  miscellaneousSlice.actions
 export const miscellaneousReducer = miscellaneousSlice.reducer

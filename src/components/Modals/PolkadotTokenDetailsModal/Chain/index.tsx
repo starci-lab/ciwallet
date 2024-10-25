@@ -1,41 +1,39 @@
-import { nativeTokenKey, Network, ParachainConfig } from "@/config"
+import { Network, PolkadotChain } from "@/config"
 import { useAppSelector } from "@/redux"
 import { WithKey } from "@/utils"
 import { Card, CardBody, Avatar, Image } from "@nextui-org/react"
 import React from "react"
 
-export interface ParachainProps {
-    parachain: WithKey<Record<Network, ParachainConfig>>
+export interface ChainProps {
+    chain: WithKey<Record<Network, PolkadotChain>>
+    balance: number
 }
 
-export const Parachain = ({ parachain }: ParachainProps) => {
+export const Chain = ({ chain, balance }: ChainProps) => {
     const network = useAppSelector((state) => state.blockchainReducer.network)
-    const preferenceChainKey = useAppSelector((state) => state.blockchainReducer.preferenceChainKey)
-    const chains = useAppSelector((state) => state.blockchainReducer.chains)
-    const token = chains[preferenceChainKey].tokens[nativeTokenKey][network]
-
+    const polkadotSelectedToken = useAppSelector((state) => state.miscellaneousReducer.polkadotSelectedToken)
     return (
-        <Card key={parachain.key} shadow="none" fullWidth>
+        <Card key={chain.key} shadow="none" fullWidth>
             <CardBody className="p-3 bg-content2">
                 <div className="flex gap-2 items-center">
                     <div className="relative">
                         <Avatar
                             isBordered
-                            src={parachain[network].imageUrl}
+                            src={chain[network].imageUrl}
                             classNames={{
                                 base: "absolute w-5 h-5 bottom-0 right-0 z-20 ring-0 bg-background",
                             }}
                         />
                         <Image
                             removeWrapper
-                            src={token.imageUrl}
+                            src={polkadotSelectedToken?.imageUrl}
                             className="w-10 h-10"
                         />
                     </div>
                     <div>
-                        <div>{`${token?.name} (${parachain[network].name})`}</div>
+                        <div>{`${polkadotSelectedToken?.name} (${chain[network].name})`}</div>
                         <div className="text-sm text-foreground-400">
-                            0 {token?.symbol}
+                            {balance} {polkadotSelectedToken?.symbol}
                         </div>
                     </div>
                 </div>

@@ -9,7 +9,7 @@ import {
     usePolkadotBalances,
     usePolkadotTokenDetailsModalDiscloresure,
 } from "@/hooks"
-import { useAppSelector } from "@/redux"
+import { setPolkadotSelectedToken, useAppDispatch, useAppSelector } from "@/redux"
 import React from "react"
 import { Avatar, Card, CardBody, Image } from "@nextui-org/react"
 import { WithKey } from "@/utils"
@@ -37,23 +37,25 @@ export const Token = ({ token }: TokenProps) => {
         tokenKey: token.key,
     })
 
-    const { balancesSwr } = usePolkadotBalances({
+    const { total } = usePolkadotBalances({
         address:
       preferenceChainKey === SupportedChainKey.Polkadot ? accountAddress : "",
         tokenKey: token.key,
     })
-    const { data } = { ...balanceSwr }
-    const { relay, bifrost, moonbeam, uniqueNetwork } = { ...balancesSwr.data }
-    const total = (relay || 0) + (bifrost || 0)  + (moonbeam || 0)  + (uniqueNetwork || 0)
 
+    const { data } = { ...balanceSwr }
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const chain = chains[preferenceChainKey]
     const { onOpen } = usePolkadotTokenDetailsModalDiscloresure()
-
+    const dispatch = useAppDispatch()
+    
     const render = () => {
         if (preferenceChainKey === SupportedChainKey.Polkadot) {
             return (
-                <Card onPress={onOpen} isPressable shadow="none" fullWidth>
+                <Card onPress={() => {
+                    onOpen()
+                    dispatch(setPolkadotSelectedToken(token))
+                }} isPressable shadow="none" fullWidth>
                     <CardBody className="p-3 bg-content2">
                         <div className="justify-between flex items-center">
                             <div className="flex gap-2 items-center">
