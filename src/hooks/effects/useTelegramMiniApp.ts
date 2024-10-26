@@ -5,7 +5,7 @@ import { useEffect } from "react"
 
 export const useTelegramMiniApp = () => {
     if (typeof window === "undefined") return
-    if (!envConfig().isDev) return
+    if (envConfig().isDev) return
     const { initData, initDataRaw } = retrieveLaunchParams()
 
     const dispatch = useAppDispatch()
