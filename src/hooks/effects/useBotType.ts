@@ -5,10 +5,8 @@ import { useEffect } from "react"
 
 export const useBotType = () => {
     const searchParams = useSearchParams()
-    console.log(searchParams)
-    
-    const botType = searchParams.get("botType") as BotType
-    
+    const botType = searchParams.get("botType") as BotType || BotType.Ciwallet
+
     const dispatch = useAppDispatch()
 
     useEffect(() => {
