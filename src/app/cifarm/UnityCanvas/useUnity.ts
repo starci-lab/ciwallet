@@ -1,20 +1,13 @@
 import { use } from "react"
-import { useUnityContext } from "react-unity-webgl"
+import { UnityConfig, useUnityContext } from "react-unity-webgl"
 import { UnityContextHook } from "react-unity-webgl/distribution/types/unity-context-hook"
 import { HooksContext } from "./provider.hooks"
-import { envConfig } from "@/config"
 import { UnityCacheControlMode } from "react-unity-webgl/distribution/types/unity-cache-control-mode"
+import { useCifarmDb } from "@/hooks"
 
 export interface UseUnityReturn {
   unity: UnityContextHook;
 }
-
-export const VERSION = "v.1.7.a"
-
-const gameUrl = (name: string) => {
-    const isDev = envConfig().isDev
-    return `${envConfig().externals.cifarm.packages.baseUrl}${!isDev ? `${VERSION}/` : "" }${name}`    
-} 
 
 export const _useUnity = (): UseUnityReturn => {
 
@@ -28,12 +21,14 @@ export const _useUnity = (): UseUnityReturn => {
         return "no-store"
     }
 
-    const context = {
-        loaderUrl: gameUrl(envConfig().externals.cifarm.packages.loaderName),
-        dataUrl: gameUrl(envConfig().externals.cifarm.packages.dataName),
-        frameworkUrl: gameUrl(envConfig().externals.cifarm.packages.frameworkName),
-        codeUrl: gameUrl(envConfig().externals.cifarm.packages.wasmName),
-        cacheControl: handleCacheControl
+    const { dataSwr, frameworkSwr, loaderSwr, wasmSwr } = useCifarmDb()
+
+    const context: UnityConfig = {
+        loaderUrl: loaderSwr.data || "",
+        dataUrl: dataSwr.data || "",
+        frameworkUrl: frameworkSwr.data || "",
+        codeUrl: wasmSwr.data || "",
+        cacheControl: handleCacheControl,
     }
 
     const unity = useUnityContext(context)
