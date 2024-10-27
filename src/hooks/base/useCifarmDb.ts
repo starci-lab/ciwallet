@@ -79,6 +79,7 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
     const [finishOpen, setFinishOpen] = useState(false)
     const finishLoadVersion = useAppSelector((state) => state.gameReducer.cifarm.finishLoadVersion)
     const gameVersion = useAppSelector((state) => state.gameReducer.cifarm.version)
+    
     useEffect(() => {
         if (!finishLoadVersion) return
         const handleEffect = async () => {
@@ -267,8 +268,8 @@ export class CifarmDb extends Dexie {
     packages!: EntityTable<PackageEntity, "key">
 
     constructor() {
-        super("cifarm")
-        this.version(2).stores({
+        super("cifarmv1")
+        this.version(1).stores({
             packages: "key, data",
         })
     }
