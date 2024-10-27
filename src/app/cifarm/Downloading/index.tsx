@@ -58,7 +58,7 @@ export const Downloading = () => {
                         <Progress
                             label={`Downloading (${toMB(total)} MB)`}
                             showValueLabel
-                            value={(downloaded / total) * 100}
+                            value={(total <= 1 ? 0 : downloaded / total) * 100}
                         />
                     </div>
                     <Spacer y={1.5} />
