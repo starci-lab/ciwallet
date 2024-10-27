@@ -268,7 +268,7 @@ export class CifarmDb extends Dexie {
 
     constructor() {
         super("cifarm")
-        this.version(1).stores({
+        this.version(2).stores({
             packages: "key, data",
         })
     }
