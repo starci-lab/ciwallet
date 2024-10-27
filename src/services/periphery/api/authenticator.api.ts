@@ -1,6 +1,6 @@
 import { envConfig } from "@/config"
 
-export class AuthenticatorApiService {
+export class AuthenticatorPeripheryApiService {
     private readonly url: string
     constructor() 
     {

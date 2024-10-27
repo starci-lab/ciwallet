@@ -8,6 +8,7 @@ const ENCRYPTED_MNEMONIC = "ciwallet-encrypted-mnemonic"
 const PREFERENCE_CHAIN = "ciwallet-preference-chain"
 const VAAS = "ciwallet-vaas"
 const CHAINS = "ciwallet-chains"
+const GAME_VERSION = "game-version"
 
 export interface StoredAccount {
     imageUrl: string;
@@ -119,4 +120,12 @@ export const saveChains = (chains: Record<string, ChainInfo>) => {
 export const loadChains = (): Record<string, ChainInfo> | null => {
     const found = localStorage.getItem(CHAINS)
     return found !== null ? deserialize(found) : null
+}
+
+export const saveGameVersion = (version: string) => {
+    localStorage.setItem(GAME_VERSION, version)
+}
+
+export const loadGameVersion = (): string | null => {
+    return localStorage.getItem(GAME_VERSION)
 }

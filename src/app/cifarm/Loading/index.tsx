@@ -8,7 +8,8 @@ export const Loading = () => {
     const preferenceChainKey = useAppSelector(
         (state) => state.blockchainReducer.preferenceChainKey
     )
-    const { downloaded } = useCifarmDb()
+    const { loader, framework, data, wasm } = useCifarmDb()
+    console.log({ loader, framework, data, wasm })
     return (
         <div className="absolute w-full h-full place-items-center grid">
             <div className="grid place-items-center gap-4 w-full relative">
@@ -29,10 +30,10 @@ export const Loading = () => {
                 </div>
                 <div>
                     <Progress
-                        label="Game loading..."
+                        label="Downloading Data"
                         className="w-[300px]"
                         showValueLabel
-                        value={downloaded * 100}
+                        value={1*100}
                     />
                     <Spacer y={1.5}/>
                     <div className="text-xs text-warning">Please be patient, the first load may take a little longer. </div>
