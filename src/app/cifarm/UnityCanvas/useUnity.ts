@@ -22,7 +22,7 @@ export const _useUnity = (): UseUnityReturn => {
     }
 
     const { dataSwr, frameworkSwr, loaderSwr, wasmSwr } = useCifarmDb()
-
+    console.log(dataSwr.data, frameworkSwr.data, loaderSwr.data, wasmSwr.data)
     const context: UnityConfig = {
         loaderUrl: loaderSwr.data || "",
         dataUrl: dataSwr.data || "",

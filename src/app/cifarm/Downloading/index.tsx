@@ -17,20 +17,21 @@ export const Downloading = () => {
     const { data, framework, loader, wasm } = useAppSelector(
         (state) => state.gameReducer.cifarm.packages
     )
+
     const total =
     data.totalSize + framework.totalSize + loader.totalSize + wasm.totalSize
     const dataDownloaded = data.finishDownloaded
         ? data.totalSize
-        : data.progress?.progress || 0
+        : data.progress?.loaded || 0
     const frameworkDownloaded = framework.finishDownloaded
         ? framework.totalSize
-        : framework.progress?.progress || 0
+        : framework.progress?.loaded || 0
     const loaderDownloaded = loader.finishDownloaded
         ? loader.totalSize
-        : loader.progress?.progress || 0
+        : loader.progress?.loaded || 0
     const wasmDownloaded = wasm.finishDownloaded
         ? wasm.totalSize
-        : wasm.progress?.progress || 0
+        : wasm.progress?.loaded || 0
     const downloaded =
     dataDownloaded + frameworkDownloaded + loaderDownloaded + wasmDownloaded
 
@@ -58,7 +59,7 @@ export const Downloading = () => {
                         <Progress
                             label={`Downloading (${toMB(total)} MB)`}
                             showValueLabel
-                            value={(total <= 1 ? 0 : downloaded / total) * 100}
+                            value={(total <= 1 ? 0 : downloaded / data.totalSize) * 100}
                         />
                     </div>
                     <Spacer y={1.5} />

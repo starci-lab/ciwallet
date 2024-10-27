@@ -68,8 +68,7 @@ export interface SetFinishDownloadedParams {
 const gameUrl = (name: string) => {
     const isDev = envConfig().isDev
     //s3
-    //return `${envConfig().externals.cifarm.packages.baseUrl}${!isDev ? `${RESOURCE_VERSION}/` : ""}${name}`
-    return `${envConfig().externals.cifarm.periphery.api}/packages/${name}`
+    return `${envConfig().externals.cifarm.packages.baseUrl}${!isDev ? `${RESOURCE_VERSION}/` : ""}${name}`
 }
 
 export const _useCifarmDb = (): UseCifarmDbReturn => {
@@ -78,9 +77,10 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
 
     const [needUpdate, setNeedUpdate] = useState(false)
     const [finishOpen, setFinishOpen] = useState(false)
-
+    const finishLoadVersion = useAppSelector((state) => state.gameReducer.cifarm.finishLoadVersion)
     const gameVersion = useAppSelector((state) => state.gameReducer.cifarm.version)
     useEffect(() => {
+        if (!finishLoadVersion) return
         const handleEffect = async () => {
             //check version
             const api = new GamePeripheryApiService()
@@ -97,7 +97,7 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
             setFinishOpen(true)
         }
         handleEffect()
-    }, [])
+    }, [finishLoadVersion])
 
     const dispatch = useAppDispatch()
 
@@ -205,7 +205,7 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
         }
     )
     const frameworkSwr = useSWR(
-        finishOpen ? ["CIFARM_FRAMEWORK", pathname] : null,
+        finishOpen ? ["CIFARM_FRAMEWORK", pathname, ] : null,
         () => createPackageBlobUrl(CifarmPackageKey.Framework),
         {
             revalidateOnFocus: false,
@@ -235,8 +235,7 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
         }
     )
 
-    const finishDownloaded =
-    !!dataSwr.data && !!frameworkSwr.data && !!loaderSwr.data && !!wasmSwr.data
+    const finishDownloaded = !!dataSwr.data && !!frameworkSwr.data && !!loaderSwr.data && !!wasmSwr.data
 
     useEffect(() => {
         if (!finishDownloaded) return
