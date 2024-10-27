@@ -67,7 +67,9 @@ export interface SetFinishDownloadedParams {
 
 const gameUrl = (name: string) => {
     const isDev = envConfig().isDev
-    return `${envConfig().externals.cifarm.packages.baseUrl}${!isDev ? `${RESOURCE_VERSION}/` : ""}${name}`
+    //s3
+    //return `${envConfig().externals.cifarm.packages.baseUrl}${!isDev ? `${RESOURCE_VERSION}/` : ""}${name}`
+    return `${envConfig().externals.cifarm.periphery.api}${name}`
 }
 
 export const _useCifarmDb = (): UseCifarmDbReturn => {
