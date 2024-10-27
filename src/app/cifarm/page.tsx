@@ -3,13 +3,13 @@ import { Container } from "@/components"
 import React from "react"
 import { UnityCanvas } from "./UnityCanvas"
 import { useCifarmDb } from "@/hooks"
-import { Loading } from "./Loading"
+import { Downloading } from "./Downloading"
 
 const Page = () => {
-    const { loaded } = useCifarmDb()
+    const { finishDownloaded } = useCifarmDb()
     return (
         <Container centerContent>
-            { loaded ? <UnityCanvas /> : <Loading /> }
+            { finishDownloaded ? <UnityCanvas /> : <Downloading /> }
         </Container>
     )
 }

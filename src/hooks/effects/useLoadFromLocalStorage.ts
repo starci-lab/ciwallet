@@ -10,6 +10,7 @@ import {
     setChain,
     setInitialized,
     setBotTypeInit,
+    setCifarmGameVersion,
 } from "@/redux"
 import {
     BotType,
@@ -17,6 +18,7 @@ import {
     foundEncryptedMnemonic,
     loadBaseAccounts,
     loadChains,
+    loadGameVersion,
     loadMnemonic,
     loadPreferenceChainKey,
     loadVaas,
@@ -34,6 +36,8 @@ export const useLoadFromLocalStorage = () => {
 
     const router = useRouterWithSearchParams()
     const botTypeInit = useAppSelector((state) => state.authReducer.botTypeInit)
+    const loadCifarmGameVersionKey = useAppSelector((state) => state.gameReducer.cifarm.loadCifarmGameVersionKey)
+
     useEffect(() => {
         const foundMnemonic = foundEncryptedMnemonic()
         const foundBaseAccounts = foundEncryptedBaseAccounts()
@@ -104,4 +108,9 @@ export const useLoadFromLocalStorage = () => {
         savePreferenceChainKey(preferenceChainKey)
     }, [preferenceChainKey])
     
+    useEffect(() => {
+        const foundVersion = loadGameVersion()
+        if (!foundVersion) return
+        dispatch(setCifarmGameVersion(foundVersion))
+    }, [loadCifarmGameVersionKey])
 }

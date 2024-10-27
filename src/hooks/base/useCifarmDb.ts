@@ -7,9 +7,15 @@ import useSWR, { SWRResponse } from "swr"
 import { useEffect, useState } from "react"
 import {
     GamePeripheryApiService,
-    loadGameVersion,
     saveGameVersion,
 } from "@/services"
+import {
+    CifarmPackageKey,
+    setCifarmPackagePartial,
+    triggerLoadCifarmGameVersion,
+    useAppDispatch,
+    useAppSelector,
+} from "@/redux"
 
 type UseCifarmDbSwr = SWRResponse<
   string,
@@ -21,13 +27,6 @@ type UseCifarmDbSwr = SWRResponse<
     revalidateOnMount: false;
   }
 >;
-
-export interface Package {
-  //swr indice the fetch process
-  swr: UseCifarmDbSwr;
-  //state
-  state: PackageState;
-}
 
 export interface PackageState {
   progress: AxiosProgressEvent | null;
@@ -44,25 +43,26 @@ export interface UseCifarmDbReturn {
   //db
   cifarmDb: CifarmDb;
   //data
-  data: Package;
-  framework: Package;
-  loader: Package;
-  wasm: Package;
+  dataSwr: UseCifarmDbSwr;
+  frameworkSwr: UseCifarmDbSwr;
+  loaderSwr: UseCifarmDbSwr;
+  wasmSwr: UseCifarmDbSwr;
   //finish download
   finishDownloaded: boolean;
+  needUpdate: boolean;
 }
 
 const VERSION = 1
 const RESOURCE_VERSION = `v.${VERSION}.7.a`
-const CHUNK_SIZE = 1024 * 1024 * 3 // 3MB
 
-export interface DownloadChunkParams {
-  key: string;
+export interface DownloadPackageParams {
+  key: CifarmPackageKey;
   resourceUrl: string;
-  index: number;
-  //content length to ensure last chunk
-  start: number;
-  end: number;
+}
+
+export interface SetFinishDownloadedParams {
+    key: CifarmPackageKey;
+    totalSize: number;
 }
 
 const gameUrl = (name: string) => {
@@ -77,18 +77,19 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
     const [needUpdate, setNeedUpdate] = useState(false)
     const [finishOpen, setFinishOpen] = useState(false)
 
+    const gameVersion = useAppSelector((state) => state.gameReducer.cifarm.version)
     useEffect(() => {
         const handleEffect = async () => {
             //check version
             const api = new GamePeripheryApiService()
             const { version } = await api.getGameVersion()
-
             //retrive in local storage
-            const storedGameVersion = loadGameVersion()
-            if (!storedGameVersion || storedGameVersion !== version) {
+            if (!gameVersion || (gameVersion !== version)) {
                 //save in local storage
                 setNeedUpdate(true)
                 saveGameVersion(version)
+                //trigger load cifarm game version
+                dispatch(triggerLoadCifarmGameVersion())
             }
             await cifarmDb.open()
             setFinishOpen(true)
@@ -96,112 +97,38 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
         handleEffect()
     }, [])
 
-    const defaultState: PackageState = {
-        progress: null,
-        totalChunks: 0,
-        downloadedChunks: 0,
-        totalSize: 0,
-        finishDownloaded: false,
-    }
+    const dispatch = useAppDispatch()
 
-    const [dataState, setDataState] = useState<PackageState>(defaultState)
-    const [frameworkState, setFrameworkState] =
-    useState<PackageState>(defaultState)
-    const [loaderState, setLoaderState] = useState<PackageState>(defaultState)
-    const [wasmState, setWasmState] = useState<PackageState>(defaultState)
-
-    const setFinishDownloaded = (key: CifarmPackageKey) => {
-        switch (key) {
-        case CifarmPackageKey.Data: {
-            setDataState({
-                ...dataState,
-                finishDownloaded: true,
-            })
-            break
-        }
-        case CifarmPackageKey.Framework: {
-            setFrameworkState({
-                ...frameworkState,
-                finishDownloaded: true,
-            })
-            break
-        }
-        case CifarmPackageKey.Loader: {
-            setLoaderState({
-                ...loaderState,
-                finishDownloaded: true,
-            })
-            break
-        }
-        case CifarmPackageKey.Wasm: {
-            setWasmState({
-                ...wasmState,
-                finishDownloaded: true,
-            })
-            break
-        }
-        }
-    }
-
-    const downloadChunk = async ({
+    const downloadPackage = async ({
         key,
         resourceUrl,
-        index,
-        start,
-        end,
-    }: DownloadChunkParams) => {
+    }: DownloadPackageParams): Promise<Blob|null> => {
         try {
             const { data } = await axios.get(resourceUrl, {
-                responseType: "arraybuffer",
+                responseType: "blob",
                 headers: {
                     "Cache-Control": "no-cache",
-                    Range: `bytes=${start}-${end}`,
                 },
                 onDownloadProgress: (progressEvent) => {
-                    switch (key) {
-                    case CifarmPackageKey.Data: {
-                        setDataState({
-                            ...dataState,
-                            downloadedChunks: index + 1,
-                            progress: progressEvent,
+                    dispatch(
+                        setCifarmPackagePartial({
+                            key,
+                            partial: {
+                                progress: progressEvent,
+                            },
                         })
-                        break
-                    }
-                    case CifarmPackageKey.Framework: {
-                        setFrameworkState({
-                            ...frameworkState,
-                            downloadedChunks: index + 1,
-                            progress: progressEvent,
-                        })
-                        break
-                    }
-                    case CifarmPackageKey.Loader: {
-                        setLoaderState({
-                            ...loaderState,
-                            downloadedChunks: index + 1,
-                            progress: progressEvent,
-                        })
-                        break
-                    }
-                    case CifarmPackageKey.Wasm: {
-                        setWasmState({
-                            ...wasmState,
-                            downloadedChunks: index + 1,
-                            progress: progressEvent,
-                        })
-                        break
-                    }
-                    }
+                    )
                 },
             })
-            await cifarmDb.chunks.add({
-                chunk_index: index,
-                package_key: key,
-                chunk_data: data,
+            await cifarmDb.packages.add({
+                key,
+                data,
             })
+            return data
         } catch (ex) {
             console.error(ex)
             //do nothing, just skip
+            return null
         }
     }
 
@@ -217,109 +144,51 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
             if (needUpdate) {
                 //if need update, we need to re-download
                 await cifarmDb.packages.where({ key }).delete()
-                await cifarmDb.chunks.where({ package_key: key }).delete()
             } else {
-                const chunks = await cifarmDb.chunks
-                    .where({
-                        package_key: key,
+                dispatch(
+                    setCifarmPackagePartial({
+                        key,
+                        partial: {
+                            totalSize: _package.data.size,
+                            finishDownloaded: true,
+                        },
                     })
-                    .toArray()
-                if (!chunks) throw new Error("Chunks not found")
-                if (chunks.length === _package.total_chunks) {
-                    //all chunks are downloaded
-                    const blob = new Blob(chunks.map((chunk) => chunk.chunk_data))
-
-                    //finish
-                    setFinishDownloaded(key)
-                    return URL.createObjectURL(blob)
-                }
-                const startChunk = chunks.length //start from the last chunk
-                for (let index = startChunk; index < _package.total_chunks; index++) {
-                    const start = index * CHUNK_SIZE
-                    const end = Math.min(
-                        (index + 1) * CHUNK_SIZE,
-                        _package.total_size - 1
-                    )
-                    await downloadChunk({ key, resourceUrl, start, end, index })
-                }
-                const newChunks = await cifarmDb.chunks
-                    .where({ package_key: key })
-                    .toArray()
-                const blob = new Blob(newChunks.map((chunk) => chunk.chunk_data))
-
-                setFinishDownloaded(key)
-                return URL.createObjectURL(blob)
+                )
+                return URL.createObjectURL(_package.data)
             }
         }
 
         //re-download everything
+        //call header to get the data size
         const { headers } = await axios.head(resourceUrl, {
             headers: {
                 "Cache-Control": "no-cache",
             },
         })
-        const contentLength = headers["content-length"]
-        if (!contentLength) throw new Error("Content-Length not found")
-        const totalChunks = Math.ceil(contentLength / CHUNK_SIZE)
-        //save
-        switch (key) {
-        case CifarmPackageKey.Data: {
-            setDataState({
-                ...dataState,
-                totalChunks,
-                totalSize: contentLength,
+        const totalSize = parseInt(headers["content-length"] || "0", 10)
+        dispatch(
+            setCifarmPackagePartial({
+                key,
+                partial: {
+                    totalSize,
+                },
             })
-            break
+        )
+
+        //download 
+        const blob = await downloadPackage({ key, resourceUrl })
+        if (blob ==  null) {
+            dispatch(setCifarmPackagePartial({ key, partial: { errorInDownload: true } }))
+            return ""
         }
-        case CifarmPackageKey.Framework: {
-            setFrameworkState({
-                ...frameworkState,
-                totalChunks,
-                totalSize: contentLength,
+        dispatch(
+            setCifarmPackagePartial({
+                key,
+                partial: {
+                    finishDownloaded: true,
+                },
             })
-            break
-        }
-        case CifarmPackageKey.Loader: {
-            setLoaderState({
-                ...loaderState,
-                totalChunks,
-                totalSize: contentLength,
-            })
-            break
-        }
-        case CifarmPackageKey.Wasm: {
-            setWasmState({
-                ...wasmState,
-                totalChunks,
-                totalSize: contentLength,
-            })
-            break
-        }
-        }
-
-        await cifarmDb.packages.add({
-            key,
-            total_chunks: totalChunks,
-            total_size: contentLength,
-        })
-
-        //download all chunks
-        for (let index = 0; index < totalChunks; index++) {
-            const start = index * CHUNK_SIZE
-            const end = Math.min((index + 1) * CHUNK_SIZE, contentLength - 1)
-            await downloadChunk({ key, resourceUrl, start, end, index })
-        }
-
-        //get all chunks
-        const chunks = await cifarmDb.chunks
-            .where({
-                package_key: key,
-            })
-            .toArray()
-
-        const blob = new Blob(chunks.map((chunk) => chunk.chunk_data))
-
-        setFinishDownloaded(key)
+        )
         return URL.createObjectURL(blob)
     }
 
@@ -374,23 +243,12 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
 
     return {
         cifarmDb,
-        data: {
-            swr: dataSwr,
-            state: dataState,
-        },
-        framework: {
-            swr: frameworkSwr,
-            state: frameworkState,
-        },
-        loader: {
-            swr: loaderSwr,
-            state: loaderState,
-        },
-        wasm: {
-            swr: wasmSwr,
-            state: wasmState,
-        },
+        dataSwr,
+        frameworkSwr,
+        loaderSwr,
+        wasmSwr,
         finishDownloaded,
+        needUpdate
     }
 }
 
@@ -401,26 +259,16 @@ export const useCifarmDb = () => {
 
 export interface PackageEntity {
   key: string;
-  total_chunks: number;
-  total_size: number;
-}
-
-export interface ChunkEntity {
-  id?: number;
-  chunk_index: number;
-  package_key: string;
-  chunk_data: ArrayBuffer;
+  data: Blob;
 }
 
 export class CifarmDb extends Dexie {
     packages!: EntityTable<PackageEntity, "key">
-    chunks!: EntityTable<ChunkEntity, "chunk_index">
 
     constructor() {
         super("cifarm")
-        this.version(VERSION).stores({
-            packages: "key, total_chunks, total_size",
-            chunks: "++id, chunk_index, package_key, chunk_data",
+        this.version(1).stores({
+            packages: "key, data",
         })
     }
 }
@@ -432,28 +280,26 @@ export enum CifarmPackageName {
   Wasm = "wasmName",
 }
 
-export enum CifarmPackageKey {
-  Data = "data",
-  Framework = "framework",
-  Loader = "loader",
-  Wasm = "wasm",
-}
-
 export interface CifarmPackageData {
   name: CifarmPackageName;
+  type: string;
 }
 
-const packageMap: Record<CifarmPackageKey, CifarmPackageData> = {
+export const packageMap: Record<CifarmPackageKey, CifarmPackageData> = {
     [CifarmPackageKey.Data]: {
         name: CifarmPackageName.Data,
+        type: "text/javascript",
     },
     [CifarmPackageKey.Framework]: {
         name: CifarmPackageName.Framework,
+        type: "application/vnd.unity",
     },
     [CifarmPackageKey.Loader]: {
         name: CifarmPackageName.Loader,
+        type: "application/vnd.unity",
     },
     [CifarmPackageKey.Wasm]: {
         name: CifarmPackageName.Wasm,
+        type: "application/vnd.unity",
     },
 }

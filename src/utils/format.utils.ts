@@ -52,3 +52,7 @@ export const valuesWithKey = <T extends object>(
 ): Array<WithKey<T>> => {
     return Object.entries(object).map(([key, value]) => ({ ...value, key }))
 }
+
+export const toMB = (bytes: number) => {
+    return (bytes / 1024 / 1024).toFixed(2)
+}
