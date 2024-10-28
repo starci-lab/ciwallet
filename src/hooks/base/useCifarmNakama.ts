@@ -10,7 +10,7 @@ import {
     signMessage,
 } from "@/services"
 import useSWRMutation, { SWRMutationResponse } from "swr/mutation"
-import { useCifarm } from "."
+import { useBase } from "."
 
 export interface UseCifarmNakamaReturn {
   authSwr: SWRMutationResponse<void, unknown>;
@@ -110,6 +110,6 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
 }
 
 export const useCifarmNakama = () => {
-    const { cifarmNakama } = useCifarm() 
+    const { cifarmNakama } = useBase() 
     return cifarmNakama
 }

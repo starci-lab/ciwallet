@@ -1,5 +1,5 @@
 import { Dexie, EntityTable } from "dexie"
-import { useCifarm } from "."
+import { useBase } from "."
 import { usePathname } from "next/navigation"
 import axios, { AxiosProgressEvent } from "axios"
 import { constantConfig, envConfig } from "@/config"
@@ -255,7 +255,7 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
 }
 
 export const useCifarmDb = () => {
-    const { cifarmDb } = useCifarm()
+    const { cifarmDb } = useBase()
     return cifarmDb
 }
 
