@@ -54,6 +54,7 @@ export const usePolkadotRelayChainBalance = ({
     const refreshBalanceKey = useAppSelector(
         (state) => state.refreshReducer.refreshBalanceKey
     )
+    const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
 
     return useSWR(
         address
@@ -66,12 +67,20 @@ export const usePolkadotRelayChainBalance = ({
             ]
             : null,
         async () => {
-            if (tokenKey === PolkadotChainKey.Relay) {
-                const relayChainClient = await polkadotRelayChainClient()
-                const account = await relayChainClient.query.system.account(address)
-                return computeDenomination(account.data.free.toBigInt(), decimals)
-            }
-            return 0
+            if (preferenceChainKey !== SupportedChainKey.Polkadot) return 0
+            try {
+                if (tokenKey === PolkadotChainKey.Relay) {
+                    const relayChainClient = await polkadotRelayChainClient()
+                    const account = await relayChainClient.query.system.account(address)
+                    return computeDenomination(account.data.free.toBigInt(), decimals)   
+                }
+                return 0
+            } catch (ex) {
+            //error occur mean the address is not valid, or the node is not connected
+            // in this case we just return 0
+                console.log((ex as Error).message)
+                return 0
+            }    
         }
     )
 }
@@ -86,7 +95,8 @@ export const usePolkadotUniqueNetworkBalance = ({
         (state) => state.refreshReducer.refreshBalanceKey
     )
     const { isOpen } = usePolkadotTokenDetailsModalDiscloresure()
-
+    const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
+    
     return useSWR(
         address
             ? [
@@ -98,16 +108,23 @@ export const usePolkadotUniqueNetworkBalance = ({
             ]
             : null,
         async () => {
-            console.log(tokenKey)
-            if (tokenKey === PolkadotChainKey.UniqueNetwork) {
-                const uniqueNetworkSdkClient = polkadotUniqueNetworkSdkClient(network)
-                const { total, decimals } = await uniqueNetworkSdkClient.balance.get({
-                    address,
-                })
-                console.log(total, address, decimals)
-                return computeDenomination(BigInt(total), decimals)
+            if (preferenceChainKey !== SupportedChainKey.Polkadot) return 0
+            try {
+                if (tokenKey === PolkadotChainKey.UniqueNetwork) {
+                    const uniqueNetworkSdkClient = polkadotUniqueNetworkSdkClient(network)
+                    const { total, decimals } = await uniqueNetworkSdkClient.balance.get({
+                        address,
+                    })
+                    console.log(total, address, decimals)
+                    return computeDenomination(BigInt(total), decimals)
+                }
+                return 0
+            } catch (ex) {
+            //error occur mean the address is not valid, or the node is not connected
+            // in this case we just return 0
+                console.log((ex as Error).message)
+                return 0
             }
-            return 0
         }
     )
 }
@@ -123,7 +140,7 @@ export const usePolkadotMoonbeamBalance = ({
         (state) => state.refreshReducer.refreshBalanceKey
     )
     const { isOpen } = usePolkadotTokenDetailsModalDiscloresure()
-
+    const preferenceChainKey = useAppSelector(state => state.blockchainReducer.preferenceChainKey)
     return useSWR(
         address
             ? [
@@ -135,23 +152,30 @@ export const usePolkadotMoonbeamBalance = ({
             ]
             : null,
         async () => {
-            const moonbeamProvider = polkadotMoonbeamProvider(network)
-            const _address = u8aToHex(addressToEvm(address))
-            const decimals =
+            if (preferenceChainKey !== SupportedChainKey.Polkadot) return 0
+            try {
+                const moonbeamProvider = polkadotMoonbeamProvider(network)
+                const _address = u8aToHex(addressToEvm(address))
+                const decimals =
         chains[SupportedChainKey.Polkadot].tokens[tokenKey][network].decimals
-
-            if (tokenKey === PolkadotChainKey.Moonbeam) {
-                const balance = await moonbeamProvider.getBalance(_address)
-                return computeDenomination(balance, decimals)
-            } else {
-                const tokenAddress =
+                if (tokenKey === PolkadotChainKey.Moonbeam) {
+                    const balance = await moonbeamProvider.getBalance(_address)
+                    return computeDenomination(balance, decimals)
+                } else {
+                    const tokenAddress =
           chains[SupportedChainKey.Polkadot].tokens[tokenKey][network].address
-                const contract = new Contract(tokenAddress, erc20Abi, moonbeamProvider)
-                const [balance, decimals] = await Promise.all([
-                    await contract.balanceOf(_address),
-                    await contract.decimals(),
-                ])
-                return computeDenomination(balance, Number(decimals))
+                    const contract = new Contract(tokenAddress, erc20Abi, moonbeamProvider)
+                    const [balance, decimals] = await Promise.all([
+                        await contract.balanceOf(_address),
+                        await contract.decimals(),
+                    ])
+                    return computeDenomination(balance, Number(decimals))
+                }                  
+            } catch (ex) {
+            //error occur mean the address is not valid, or the node is not connected
+            // in this case we just return 0
+                console.log((ex as Error).message)
+                return 0
             }
         }
     )
