@@ -84,15 +84,22 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
         if (!finishLoadVersion) return
         const handleEffect = async () => {
             //check version
-            const api = new GamePeripheryApiService()
-            const { version } = await api.getGameVersion()
-            //retrive in local storage
-            if (!gameVersion || (gameVersion !== version)) {
+            try {
+                const api = new GamePeripheryApiService()
+                const { version } = await api.getGameVersion()
+                //retrive in local storage
+                if (!gameVersion || (gameVersion !== version)) {
                 //save in local storage
-                setNeedUpdate(true)
-                saveGameVersion(version)
-                //trigger load cifarm game version
-                dispatch(triggerLoadCifarmGameVersion())
+                    setNeedUpdate(true)
+                    saveGameVersion(version)
+                    //trigger load cifarm game version
+                    dispatch(triggerLoadCifarmGameVersion())
+                }
+            } catch (ex) {
+                //catch mean that the version is not available (or server is down)
+                //so that skip
+                console.log((ex as Error).message)
+            //do nothing, just skip
             }
             await cifarmDb.open()
             setFinishOpen(true)
