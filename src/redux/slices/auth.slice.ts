@@ -1,3 +1,4 @@
+import { envConfig } from "@/config"
 import { BaseAccounts, BotType, ChainAccount, StoredAccount } from "@/services"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
@@ -49,7 +50,7 @@ const initialState: AuthState = {
         id: 0,
         username: "",
         referrerUserId: "",
-        initDataRaw: "",
+        initDataRaw: envConfig().defaultTelegramInitDataRaw,
     },
     saveBaseAccountsKey: 0,
     baseAccounts: {},

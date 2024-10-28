@@ -1,5 +1,6 @@
 export const envConfig = () => ({
     isDev: process.env.NODE_ENV !== "production",
+    defaultTelegramInitDataRaw: process.env.NEXT_PUBLIC_DEFAULT_TELEGRAM_INIT_DATA_RAW || "",
     externals: {
         cifarm: {
             core: {

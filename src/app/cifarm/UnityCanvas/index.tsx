@@ -8,7 +8,7 @@ import { useAppSelector } from "@/redux"
 import { constantConfig } from "@/config"
 import { useRouterWithSearchParams } from "@/hooks"
 
-const TIME_OUT = 1000
+const TIME_OUT = 2000
 const QUIT_EVENT_NAME = "Quit"
 
 export const WrappedUnityCanvas = () => {

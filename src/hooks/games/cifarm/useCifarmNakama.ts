@@ -11,6 +11,8 @@ import {
 } from "@/services"
 import useSWRMutation, { SWRMutationResponse } from "swr/mutation"
 import { useCifarm } from "."
+import { triggerErrorToast, triggerSuccessToast } from "@/toasts"
+import { consoleLogError } from "@/utils"
 
 export interface UseCifarmNakamaReturn {
   authSwr: SWRMutationResponse<void, unknown>;
@@ -52,54 +54,58 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
     const botType = useAppSelector((state) => state.authReducer.botType)
     
     const authSwr = useSWRMutation("CIFARM_AUTH_SWR", async () => {
-        const {
-            data: { message },
-        } = await requestMessage()
-        if (!activePrivateKey) return
-        if (!publicKey) return
-        if (!accountAddress) return
+        try {
+            const {
+                data: { message },
+            } = await requestMessage()
+            if (!activePrivateKey) return
+            if (!publicKey) return
+            if (!accountAddress) return
  
-        const signature = await signMessage({
-            chainKey: preferenceChainKey,
-            message,
-            privateKey: activePrivateKey,
-            publicKey,
-        })
-        if (!client) return
-        let _publicKey = publicKey
-        const platform = chainKeyToPlatform(preferenceChainKey)
-        if (platform === Platform.Evm) {
-            _publicKey = accountAddress
-        }
-        
-        const session = await client.authenticateCustom(
-            "starci",
-            false,
-            undefined,
-            {
-                message,
-                publicKey: _publicKey,
-                signature,
-                chainKey: preferenceChainKey,
-                network,
-                referrerUserId,
-                telegramInitDataRaw,
-                botType
-            }
-        )
-
-        setSession(session)
-        dispatch(
-            setCifarmCredentials({
+            const signature = await signMessage({
                 chainKey: preferenceChainKey,
                 message,
-                network,
-                publicKey: _publicKey,
-                signature,
-                telegramInitDataRaw,
-                botType
+                privateKey: activePrivateKey,
+                publicKey,
             })
-        )
+            if (!client) return
+            let _publicKey = publicKey
+            const platform = chainKeyToPlatform(preferenceChainKey)
+            if (platform === Platform.Evm) {
+                _publicKey = accountAddress
+            }
+        
+            const session = await client.authenticateCustom(
+                "starci",
+                false,
+                undefined,
+                {
+                    message,
+                    publicKey: _publicKey,
+                    signature,
+                    chainKey: preferenceChainKey,
+                    network,
+                    referrerUserId,
+                    telegramInitDataRaw,
+                    botType
+                }
+            )
+            triggerSuccessToast("Game authenticated successfully")
+            setSession(session)
+            dispatch(
+                setCifarmCredentials({
+                    chainKey: preferenceChainKey,
+                    message,
+                    network,
+                    publicKey: _publicKey,
+                    signature,
+                    telegramInitDataRaw,
+                    botType
+                })
+            )} catch (ex) {
+            consoleLogError(ex)
+            triggerErrorToast("Game authentication failed. Try again later")
+        }
     })
 
     return {
