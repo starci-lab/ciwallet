@@ -13,6 +13,7 @@ import useSWRMutation, { SWRMutationResponse } from "swr/mutation"
 import { useCifarm } from "."
 import { triggerErrorToast, triggerSuccessToast } from "@/toasts"
 import { consoleLogError } from "@/utils"
+import { useRouterWithSearchParams } from "@/hooks/miscellaneous"
 
 export interface UseCifarmNakamaReturn {
   authSwr: SWRMutationResponse<void, unknown>;
@@ -53,6 +54,8 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
     const dispatch = useAppDispatch()
     const botType = useAppSelector((state) => state.authReducer.botType)
     
+    const router = useRouterWithSearchParams()
+
     const authSwr = useSWRMutation("CIFARM_AUTH_SWR", async () => {
         try {
             const {
@@ -105,6 +108,7 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
             )} catch (ex) {
             consoleLogError(ex)
             triggerErrorToast("Game authentication failed. Try again later")
+            router.push(constantConfig().path.home)
         }
     })
 
