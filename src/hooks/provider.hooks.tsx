@@ -4,26 +4,26 @@ import React, { createContext, PropsWithChildren } from "react"
 import { _useModals, UseModalReturn } from "./modals"
 import { useEffects } from "./effects"
 import { _useFormiks, UseFormiksReturn } from "./formiks"
-import { _useBase, UseBaseReturn } from "./base"
+import { _useGames, UseGamesReturn } from "./games"
 
 interface HookContextsValue {
     modals: UseModalReturn
     formiks: UseFormiksReturn
-    base: UseBaseReturn
+    games: UseGamesReturn
 }
 export const HooksContext = createContext<HookContextsValue | null>(null)
 
 export const HooksProvider = ({ children } : PropsWithChildren) => {
     const modals = _useModals()
     const formiks = _useFormiks()
-    const base = _useBase()
+    const games = _useGames()
     useEffects()
 
     return (
         <HooksContext.Provider value={{
             modals,
             formiks,
-            base
+            games
         }}>
             {children}
         </HooksContext.Provider>
