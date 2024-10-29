@@ -99,8 +99,8 @@ export const gameSlice = createSlice({
                 ...payload.partial,
             }
         },
-        setCifarmGameVersion: (state, { payload }: PayloadAction<string>) => {
-            state.cifarm.version = payload
+        setCifarmGameVersion: (state, { payload }: PayloadAction<string | null>) => {
+            state.cifarm.version = payload || ""
             state.cifarm.finishLoadVersion = true
         },
         triggerLoadCifarmGameVersion: (state) => {

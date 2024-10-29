@@ -110,7 +110,6 @@ export const useLoadFromLocalStorage = () => {
     
     useEffect(() => {
         const foundVersion = loadGameVersion()
-        if (!foundVersion) return
         dispatch(setCifarmGameVersion(foundVersion))
     }, [loadCifarmGameVersionKey])
 }
