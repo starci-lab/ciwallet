@@ -55,9 +55,11 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
     const botType = useAppSelector((state) => state.authReducer.botType)
     
     const router = useRouterWithSearchParams()
+    const finishDownloaded = useAppSelector((state) => state.gameReducer.cifarm.finishDownloaded)
 
-    const authSwr = useSWRMutation("CIFARM_AUTH_SWR", async () => {
+    const authSwr = useSWRMutation(["CIFARM_AUTH_SWR", finishDownloaded], async () => {
         try {
+            if (!finishDownloaded) return
             const {
                 data: { message },
             } = await requestMessage()

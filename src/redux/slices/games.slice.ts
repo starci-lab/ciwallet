@@ -34,6 +34,7 @@ export interface CifarmState {
   version: string;
   loadCifarmGameVersionKey: number;
   finishLoadVersion: boolean;
+  finishDownloaded: boolean;
 }
 
 export interface GameState {
@@ -80,6 +81,7 @@ const initialState: GameState = {
         version: "",
         loadCifarmGameVersionKey: 0,
         finishLoadVersion: false,
+        finishDownloaded: false,
     },
 }
 
@@ -106,6 +108,9 @@ export const gameSlice = createSlice({
         triggerLoadCifarmGameVersion: (state) => {
             state.cifarm.loadCifarmGameVersionKey++
         },
+        setCifarmFinishDownloaded: (state, { payload }: PayloadAction<boolean>) => {
+            state.cifarm.finishDownloaded = payload
+        },
     },
 })
 
@@ -114,6 +119,7 @@ export const {
     setCifarmPackagePartial,
     setCifarmGameVersion,
     triggerLoadCifarmGameVersion,
+    setCifarmFinishDownloaded,
 } = gameSlice.actions
 export const gameReducer = gameSlice.reducer
 

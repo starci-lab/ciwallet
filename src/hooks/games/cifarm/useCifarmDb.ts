@@ -11,6 +11,7 @@ import {
 } from "@/services"
 import {
     CifarmPackageKey,
+    setCifarmFinishDownloaded,
     setCifarmPackagePartial,
     triggerLoadCifarmGameVersion,
     useAppDispatch,
@@ -248,6 +249,7 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
 
     useEffect(() => {
         if (!finishDownloaded) return
+        dispatch(setCifarmFinishDownloaded(true))
         cifarmDb.close()
     }, [finishDownloaded])
 
