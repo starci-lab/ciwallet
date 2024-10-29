@@ -100,9 +100,10 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
                 //so that skip
                 console.log((ex as Error).message)
             //do nothing, just skip
+            } finally {
+                await cifarmDb.open()
+                setFinishOpen(true)
             }
-            await cifarmDb.open()
-            setFinishOpen(true)
         }
         handleEffect()
     }, [finishLoadVersion])
@@ -275,8 +276,8 @@ export class CifarmDb extends Dexie {
     packages!: EntityTable<PackageEntity, "key">
 
     constructor() {
-        super("cifarmv1")
-        this.version(1).stores({
+        super("cifarmv12")
+        this.version(2).stores({
             packages: "key, data",
         })
     }
