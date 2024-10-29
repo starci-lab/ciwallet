@@ -9,7 +9,7 @@ const Layout = ({ children }: PropsWithChildren) => {
     const finishDownloaded = useAppSelector((state) => state.gameReducer.cifarm.finishDownloaded)
     useEffect(() => {
         if (!client) return
-        if (finishDownloaded) return
+        if (!finishDownloaded) return
         const handleEffect = async () => {
             await authSwr.trigger()
         }
