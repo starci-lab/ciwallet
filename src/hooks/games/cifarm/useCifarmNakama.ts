@@ -92,7 +92,8 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
                     network,
                     referrerUserId,
                     telegramInitDataRaw,
-                    botType
+                    botType,
+                    accountAddress
                 }
             )
             triggerSuccessToast("Game authenticated successfully")
