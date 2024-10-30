@@ -190,6 +190,31 @@ export const _getPolkadotTokenMetadata = async ({
     }
 }
 
+export const _getNearTokenMetadata = async ({
+    chainKey,
+    network,
+    tokenAddress
+}: GetTokenMetadataParams): Promise<TokenMetadata> => {
+    if (!tokenAddress) throw new Error("Token address not found")
+    network = network || Network.Testnet
+
+    if (tokenAddress === nativeTokenKey) {
+        const { decimals, symbol, name } =
+        blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+        return {
+            decimals,
+            name,
+            symbol,
+        }
+    }
+
+    return {
+        decimals: 0,
+        name: "",
+        symbol: "",
+    }
+}
+
 export const _getTokenMetadata = async (params: GetTokenMetadataParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
@@ -205,5 +230,7 @@ export const _getTokenMetadata = async (params: GetTokenMetadataParams) => {
         return _getSuiTokenMetadata(params)
     case Platform.Polkadot:
         return _getPolkadotTokenMetadata(params)
+    case Platform.Near:
+        return _getNearTokenMetadata(params)
     }
 }

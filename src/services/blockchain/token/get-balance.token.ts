@@ -1,6 +1,6 @@
 import { Network, blockchainConfig, nativeTokenKey } from "@/config"
 import { Contract, JsonRpcProvider } from "ethers"
-import { algorandAlgodClient, aptosClient, evmHttpRpcUrl, solanaClient, SUI_COIN_TYPE, suiClient } from "../rpcs"
+import { algorandAlgodClient, aptosClient, evmHttpRpcUrl, nearClient, solanaClient, SUI_COIN_TYPE, suiClient } from "../rpcs"
 import { erc20Abi } from "../abis"
 import { computeDenomination } from "@/utils"
 import { PublicKey } from "@solana/web3.js"
@@ -150,6 +150,37 @@ export const _getSuiBalance = async ({
     }
 }
 
+export const _getNearBalance = async ({
+    chainKey,
+    tokenAddress,
+    network,
+    accountAddress,
+}: GetBalanceParams): Promise<number> => {
+    if (!tokenAddress) throw new Error("Cannot find balance without token address")
+    network = network || Network.Testnet
+
+    const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+    if (!decimals) throw new Error("decimals must not undefined")
+
+    const client = await nearClient(network)
+    const account = await client.account(accountAddress)
+    
+    if (tokenAddress === nativeTokenKey) { 
+        const balance = await account.getAccountBalance()
+        return computeDenomination(BigInt(balance.total), decimals)
+    } else {
+        // const metadata = await suiClient(network).getCoinMetadata({
+        //     coinType: tokenAddress,
+        // })
+        // if (!metadata) throw new Error("Sui coin metadata not found")
+        // const balance = await suiClient(network).getBalance({
+        //     coinType: tokenAddress,
+        //     owner: accountAddress
+        // })
+        // return computeDenomination(BigInt(balance.totalBalance), metadata.decimals)
+        return 0
+    }
+}
 
 export const _getBalance = (params: GetBalanceParams) => {
     const platform = chainKeyToPlatform(params.chainKey)
@@ -159,6 +190,7 @@ export const _getBalance = (params: GetBalanceParams) => {
     case Platform.Solana: return _getSolanaBalance(params)
     case Platform.Algorand: return _getAlgorandBalance(params)
     case Platform.Sui: return _getSuiBalance(params)
+    case Platform.Near: return _getNearBalance(params)
     case Platform.Polkadot: throw new Error("Polkadot balance not supported")
     }
 }

@@ -2,6 +2,7 @@ import { ChainAccount, Platform, chainKeyToPlatform } from "../common"
 import { createAlgorandAccount, importAlgorandAccount } from "./algorand.creation"
 import { createAptosAccount, importAptosAccount } from "./aptos.creation"
 import { createEvmAccount, importEvmAccount } from "./evm.creation"
+import { createNearAccount, importNearAccount } from "./near.creation"
 import { createPolkadotAccount, importPolkadotAccount } from "./polkadot.creation"
 import { createSolanaAccount, importSolanaAccount } from "./solana.creation"
 import { createSuiAccount, importSuiAccount } from "./sui.creation"
@@ -51,7 +52,13 @@ export const createAccount = async ({
             accountNumber,
             mnemonic,
         })
+    case Platform.Near:
+        return createNearAccount({
+            accountNumber,
+            mnemonic,
+        })
     }
+
 }
 
 export const importAccount = ({
@@ -91,6 +98,10 @@ export const importAccount = ({
         })
     case Platform.Polkadot:
         return importPolkadotAccount({
+            privateKey
+        })
+    case Platform.Near:
+        return importNearAccount({
             privateKey
         })
     }

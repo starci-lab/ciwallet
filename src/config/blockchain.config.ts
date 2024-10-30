@@ -573,6 +573,84 @@ export const blockchainConfig = (): ChainConfig => {
                     }
                 }                 
             },
+            [SupportedChainKey.Near]: {
+                imageUrl: "/icons/near.svg",
+                wormhole: {
+                    chainId: 9,
+                    chain: "Near",
+                },
+                name: "NEAR",
+                tokens: {
+                    native: {
+                        [Network.Mainnet]: {
+                            address: "native",
+                            imageUrl: "/icons/near.svg",
+                            name: "Near",
+                            symbol: "NEAR",
+                            decimals: 24,
+                        },
+                        [Network.Testnet]: {
+                            address: "native",
+                            imageUrl: "/icons/near.svg",
+                            name: "Near",
+                            symbol: "NEAR",
+                            decimals: 24,
+                        },       
+                    },
+                    $CARROT: {
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
+                        },
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CARROT Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CARROT.png",
+                            symbol: "$CARROT",
+                        },       
+                    },
+                    $CAULI: {
+                        [Network.Mainnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },
+                        [Network.Testnet]: {
+                            address: "",
+                            name: "$CAULI Token",
+                            decimals: 18,
+                            imageUrl: "/icons/$CAULI.png",
+                            symbol: "$CAULI",
+                        },        
+                    },
+                },
+                nftGroups: {
+                    [NftGroupKey.CiFarm]: {
+                        name: "CiFarm",
+                        imageUrl: "/icons/cifarm.png",
+                        collections: {
+                            [NftCollectionKey.FertileTile]: {
+                                [Network.Mainnet]: {
+                                    imageUrl: "/icons/fertile-tile.png",
+                                    name: "Fertile Tiles",
+                                    collectionId: ""
+                                },
+                                [Network.Testnet]: {
+                                    imageUrl: "/icons/fertile-tile.png",
+                                    name: "Fertile Tiles",
+                                    collectionId: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34"
+                                }
+                            },
+                        }
+                    }
+                }
+            }
         },
     }
 }
@@ -647,4 +725,5 @@ export enum SupportedChainKey {
   Bsc = "bsc",
   Algorand = "algorand",
   Polkadot = "polkadot",
+  Near = "near",
 }

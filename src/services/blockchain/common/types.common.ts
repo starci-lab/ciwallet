@@ -7,7 +7,8 @@ export enum Platform {
   Solana = "solana",
   Algorand = "algorand",
   Sui = "sui",
-  Polkadot = "polkadot"
+  Polkadot = "polkadot",
+  Near = "near"
 }
 
 export const chainKeyToPlatform = (chainKey: string): Platform => {
@@ -26,6 +27,8 @@ export const chainKeyToPlatform = (chainKey: string): Platform => {
         return Platform.Sui
     case SupportedChainKey.Polkadot:
         return Platform.Polkadot
+    case SupportedChainKey.Near:
+        return Platform.Near
     default:
         throw new Error(`Chain not supported: ${chainKey}`)
     }

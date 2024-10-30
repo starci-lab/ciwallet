@@ -6,7 +6,9 @@ import React, { PropsWithChildren, useEffect } from "react"
 
 const Layout = ({ children }: PropsWithChildren) => {
     const { authSwr, client } = useCifarmNakama()
-    const finishDownloaded = useAppSelector((state) => state.gameReducer.cifarm.finishDownloaded)
+    const finishDownloaded = useAppSelector(
+        (state) => state.gameReducer.cifarm.finishDownloaded
+    )
     useEffect(() => {
         if (!client) return
         if (!finishDownloaded) return

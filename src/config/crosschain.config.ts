@@ -44,6 +44,9 @@ export const crosschainConfig = () : CrosschainConfig => ({
         [SupportedChainKey.Sui]: {
             [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
         },
+        [SupportedChainKey.Near]: {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        }
     },
     [SupportedChainKey.Aptos]: {
         [SupportedChainKey.Algorand]: {
@@ -61,6 +64,9 @@ export const crosschainConfig = () : CrosschainConfig => ({
         [SupportedChainKey.Sui]: {
             [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
         },
+        [SupportedChainKey.Near]: {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        }
     },
     [SupportedChainKey.Avalanche]: {
         [SupportedChainKey.Algorand]: {
@@ -78,6 +84,9 @@ export const crosschainConfig = () : CrosschainConfig => ({
         [SupportedChainKey.Sui]:  {
             [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
         },
+        [SupportedChainKey.Near]: {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        }
     },
     [SupportedChainKey.Bsc]: {
         [SupportedChainKey.Algorand]:  {
@@ -95,6 +104,9 @@ export const crosschainConfig = () : CrosschainConfig => ({
         [SupportedChainKey.Sui]:  {
             [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
         },
+        [SupportedChainKey.Near]: {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        }
     },
     [SupportedChainKey.Solana]: {
         [SupportedChainKey.Algorand]:  {
@@ -112,6 +124,9 @@ export const crosschainConfig = () : CrosschainConfig => ({
         [SupportedChainKey.Sui]:  {
             [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
         },
+        [SupportedChainKey.Near]: {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        }
     },
     [SupportedChainKey.Sui]: {
         [SupportedChainKey.Algorand]:  {
@@ -129,5 +144,28 @@ export const crosschainConfig = () : CrosschainConfig => ({
         [SupportedChainKey.Solana]:  {
             [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
         },
+        [SupportedChainKey.Near]: {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        }
+    },
+    [SupportedChainKey.Near]: {
+        [SupportedChainKey.Algorand]:  {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        },
+        [SupportedChainKey.Aptos]:  {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        },
+        [SupportedChainKey.Avalanche]:  {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        },
+        [SupportedChainKey.Bsc]:  {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        },
+        [SupportedChainKey.Solana]:  {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        },
+        [SupportedChainKey.Sui]:  {
+            [SupportedBridgeProtocolKey.Wormhole]: wormholeBridgeProtocol,
+        }
     },
 })
