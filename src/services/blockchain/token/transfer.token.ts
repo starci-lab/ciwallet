@@ -1,8 +1,16 @@
-import { blockchainConfig, nativeTokenKey, Network } from "@/config"
+import {
+    blockchainConfig,
+    defaultNetwork,
+    nativeTokenKey,
+    Network,
+} from "@/config"
 import {
     algorandAlgodClient,
     aptosClient,
     evmHttpRpcUrl,
+    nearClient,
+    nearKeyPair,
+    nearKeyStore,
     solanaHttpRpcUrl,
     SUI_COIN_TYPE,
     suiClient,
@@ -45,6 +53,8 @@ export interface TransferParams {
   recipientAddress: string;
   amount: number;
   fromAddress?: string;
+  //near
+  senderAddress?: string;
 }
 
 export interface TransferResult {
@@ -61,14 +71,15 @@ export const _transferEvm = async ({
 }: TransferParams): Promise<TransferResult> => {
     if (!tokenAddress)
         throw new Error("Cannot find balance without token address")
-    network = network || Network.Testnet
+    network = network || defaultNetwork
 
     const rpcUrl = evmHttpRpcUrl(chainKey, network)
     const provider = new JsonRpcProvider(rpcUrl)
     const wallet = new Wallet(privateKey, provider)
 
     if (tokenAddress === nativeTokenKey) {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+        const { decimals } =
+      blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
         const { hash } = await wallet.sendTransaction({
             to: recipientAddress,
@@ -98,7 +109,7 @@ export const _transferSolana = async ({
 }: TransferParams): Promise<TransferResult> => {
     if (!tokenAddress)
         throw new Error("Cannot find balance without token address")
-    network = network || Network.Testnet
+    network = network || defaultNetwork
 
     const recipientPublicKey = publicKey(recipientAddress)
 
@@ -162,7 +173,7 @@ export const _transferAptos = async ({
 }: TransferParams): Promise<TransferResult> => {
     if (!tokenAddress)
         throw new Error("Cannot find balance without token address")
-    network = network || Network.Testnet
+    network = network || defaultNetwork
 
     const client = aptosClient(network)
     const account = Account.fromPrivateKey({
@@ -171,7 +182,8 @@ export const _transferAptos = async ({
     })
 
     if (tokenAddress === nativeTokenKey) {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+        const { decimals } =
+      blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
         const transaction = await client.transferCoinTransaction({
             sender: account.accountAddress.toString(),
@@ -212,13 +224,14 @@ export const _transferAlgorand = async ({
 }: TransferParams): Promise<TransferResult> => {
     if (!tokenAddress)
         throw new Error("Cannot find balance without token address")
-    network = network || Network.Testnet
+    network = network || defaultNetwork
 
     const client = algorandAlgodClient(network)
     const account = mnemonicToSecretKey(privateKey)
 
     if (tokenAddress === nativeTokenKey) {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+        const { decimals } =
+      blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
 
         const suggestedParams = await client.getTransactionParams().do()
@@ -233,8 +246,9 @@ export const _transferAlgorand = async ({
         await waitForConfirmation(client, txid, 3)
         return { txHash: txid }
     } else {
-        //subtitue with actual decimals
-        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+    //subtitue with actual decimals
+        const { decimals } =
+      blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
 
         const suggestedParams = await client.getTransactionParams().do()
@@ -263,16 +277,17 @@ export const _transferSui = async ({
 }: TransferParams): Promise<TransferResult> => {
     if (!tokenAddress)
         throw new Error("Cannot find balance without token address")
-    network = network || Network.Testnet
+    network = network || defaultNetwork
 
     const client = suiClient(network)
     const executor = new SerialTransactionExecutor({
         client,
-        signer: Ed25519Keypair.fromSecretKey(privateKey)
+        signer: Ed25519Keypair.fromSecretKey(privateKey),
     })
 
     if (tokenAddress === nativeTokenKey) {
-        const { decimals } = blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+        const { decimals } =
+      blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
         const tx = new Transaction()
         const [coin] = tx.splitCoins(SUI_COIN_TYPE, [computeRaw(amount, decimals)])
@@ -285,10 +300,59 @@ export const _transferSui = async ({
         })
         if (!metadata) throw new Error("Sui coin metadata not found")
         const tx = new Transaction()
-        const [coin] = tx.splitCoins(tokenAddress, [computeRaw(amount, metadata.decimals)])
+        const [coin] = tx.splitCoins(tokenAddress, [
+            computeRaw(amount, metadata.decimals),
+        ])
         tx.transferObjects([coin], recipientAddress)
         const { digest } = await executor.executeTransaction(tx)
         return { txHash: digest }
+    }
+}
+
+export const _transferNear = async ({
+    chainKey,
+    tokenAddress,
+    network,
+    privateKey,
+    recipientAddress,
+    senderAddress,
+    amount,
+}: TransferParams): Promise<TransferResult> => {
+    if (!tokenAddress)
+        throw new Error("Cannot find balance without token address")
+    if (!senderAddress) throw new Error("Sender address is required")
+
+    network = network || defaultNetwork
+
+    const keyPair = nearKeyPair(privateKey)
+    const keyStore = nearKeyStore({
+        network,
+        keyPair,
+        accountId: chainKey,
+    })
+
+    const client = await nearClient(network, keyStore)
+    const account = await client.account(senderAddress)
+
+    if (tokenAddress === nativeTokenKey) {
+        const { decimals } =
+      blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
+        if (!decimals) throw new Error("decimals must not undefined")
+        const {
+            transaction_outcome: { id },
+        } = await account.sendMoney(recipientAddress, computeRaw(amount, decimals))
+        return { txHash: id }
+    } else {
+    // const metadata = await suiClient(network).getCoinMetadata({
+    //     coinType: tokenAddress,
+    // })
+    // if (!metadata) throw new Error("Sui coin metadata not found")
+    // const tx = new Transaction()
+    // const [coin] = tx.splitCoins(tokenAddress, [computeRaw(amount, metadata.decimals)])
+    // tx.transferObjects([coin], recipientAddress)
+    // const { digest } = await executor.executeTransaction(tx)
+    // return { txHash: digest }
+        return { txHash: "" }
     }
 }
 
@@ -309,5 +373,7 @@ export const transferToken = async (
         return _transferSui(params)
     case Platform.Polkadot:
         return _transferAlgorand(params)
+    case Platform.Near:
+        return _transferNear(params)
     }
 }

@@ -5,21 +5,25 @@ import { solanaExplorerUrl } from "./solana.explorer"
 import { ExplorerUrlParams } from "./types.explorer"
 import { suiExplorerUrl } from "./sui.explorer"
 import { algorandExplorerUrl } from "./algorand.explorer"
+import { SupportedChainKey } from "@/config"
+import { nearExplorerUrl } from "./near.explorer"
 
 export const explorerUrl = (params: ExplorerUrlParams) => {
     switch (params.chainKey) {
-    case "avalanche":
+    case SupportedChainKey.Avalanche:
         return avalancheExplorerUrl(params)[params.type]
-    case "aptos":
+    case SupportedChainKey.Aptos:
         return aptosExplorerUrl(params)[params.type]
-    case "bsc":
+    case SupportedChainKey.Bsc:
         return bscExplorerUrl(params)[params.type]
-    case "solana":
+    case SupportedChainKey.Solana:
         return solanaExplorerUrl(params)[params.type]
-    case "sui":
+    case SupportedChainKey.Sui:
         return suiExplorerUrl(params)[params.type]
-    case "algorand":
+    case SupportedChainKey.Algorand:
         return algorandExplorerUrl(params)[params.type]
+    case SupportedChainKey.Near:
+        return nearExplorerUrl(params)[params.type]
     default:
         throw new Error(`Chain not supported: ${params.chainKey}`)
     }

@@ -3,14 +3,15 @@ import {
     algorandAlgodClient,
     aptosClient,
     evmHttpRpcUrl,
+    nearClient,
     polkadotUniqueNetworkIndexerClient,
     solanaHttpRpcUrl,
 } from "../rpcs"
 import { erc721Abi } from "../abis"
-import { Network } from "@/config"
+import { defaultNetwork, Network } from "@/config"
 import { Platform, chainKeyToPlatform } from "../common"
 import { MulticallProvider } from "@ethers-ext/provider-multicall"
-import { AlgorandMetadata, NftData } from "./common"
+import { AlgorandMetadata, NearNft, NftData } from "./common"
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { fetchAllDigitalAssetByOwner } from "@metaplex-foundation/mpl-token-metadata"
 import { isSome, publicKey } from "@metaplex-foundation/umi"
@@ -49,7 +50,8 @@ export const _getEvmNftsByOwnerAddress = async (
     // make sure ipfsService is available
     if (!ipfsService) throw new Error("IPFS Service not found")
 
-    network = network || Network.Testnet
+    network = network || defaultNetwork
+
     const rpc = evmHttpRpcUrl(chainKey, network)
     const provider = new JsonRpcProvider(rpc)
     const contract = new Contract(nftCollectionId, erc721Abi, provider)
@@ -121,7 +123,7 @@ export const _getSolanaNftsByOwnerAddress = async (
 ): Promise<GetNftsByOwnerAddressResult> => {
     // make sure ipfsService is available
     if (!ipfsService) throw new Error("IPFS Service not found")
-    network = network || Network.Testnet
+    network = network || defaultNetwork
 
     const rpc = solanaHttpRpcUrl(chainKey, network)
     const umi = createUmi(rpc)
@@ -163,18 +165,21 @@ export const _getSolanaNftsByOwnerAddress = async (
     }
 }
 
-export const _getAptosNftsByOwnerAddress = async ({
-    nftCollectionId,
-    network,
-    accountAddress,
-    skip,
-    take,
-}: GetNftsByOwnerAddressParams,
-{ ipfsService }: GetNftsByOwnerAddressServices): Promise<GetNftsByOwnerAddressResult> => {
+export const _getAptosNftsByOwnerAddress = async (
+    {
+        nftCollectionId,
+        network,
+        accountAddress,
+        skip,
+        take,
+    }: GetNftsByOwnerAddressParams,
+    { ipfsService }: GetNftsByOwnerAddressServices
+): Promise<GetNftsByOwnerAddressResult> => {
     // make sure ipfsService is available
     if (!ipfsService) throw new Error("IPFS Service not found")
 
-    network = network || Network.Testnet
+    network = network || defaultNetwork
+
     const client = aptosClient(network)
 
     let nfts = await client.getAccountOwnedTokensFromCollectionAddress({
@@ -223,7 +228,8 @@ export const _getAlgorandNftsByOwnerAddress = async (
     // make sure ipfsService is available
     if (!ipfsService) throw new Error("IPFS Service not found")
 
-    network = network || Network.Testnet
+    network = network || defaultNetwork
+
     const client = algorandAlgodClient(network)
 
     const accountInfo = await client.accountInformation(accountAddress).do()
@@ -242,7 +248,7 @@ export const _getAlgorandNftsByOwnerAddress = async (
             }
             const cid = ipfsService.algorandReserveAddressToCid(params.reserve)
             const data = (await ipfsService.getCidContent(
-                cid,
+                cid
             )) as unknown as AlgorandMetadata & { properties: string }
 
             if (data !== null && data.collection.id === nftCollectionId) {
@@ -274,7 +280,8 @@ export const _getPolkadotUniqueNetworkNftsByOwnerAddress = async ({
     skip,
     take,
 }: GetNftsByOwnerAddressParams): Promise<GetNftsByOwnerAddressResult> => {
-    network = network || Network.Testnet
+    network = network || defaultNetwork
+
     const indexerClient = polkadotUniqueNetworkIndexerClient(network)
 
     const searchNfts = await indexerClient.nfts({
@@ -310,6 +317,42 @@ export const _getPolkadotUniqueNetworkNftsByOwnerAddress = async ({
     }
 }
 
+export const _getNearNftsByOwnerAddress = async ({
+    nftCollectionId,
+    network,
+    accountAddress,
+    skip,
+    take,
+}: GetNftsByOwnerAddressParams): Promise<GetNftsByOwnerAddressResult> => {
+    network = network || defaultNetwork
+
+    const client = await nearClient(network)
+    const account = await client.account("")
+
+    const nfts: Array<NearNft> = await account.viewFunction({
+        contractId: nftCollectionId,
+        methodName: "nft_tokens_for_owner",
+        args: { account_id: accountAddress },
+    })
+
+    const records = nfts
+        .slice(skip ? skip : undefined, take ? take : undefined)
+        .map((nft) => {
+            return {
+                ownerAddress: accountAddress,
+                tokenId: nft.token_id,
+                metadata: {
+                    image: nft.metadata.media || "",
+                    properties: nft.metadata.extra || "",
+                },
+            }
+        })
+    return {
+        records,
+        count: nfts.length,
+    }
+}
+
 export const _getNftsByOwnerAddress = (
     params: GetNftsByOwnerAddressParams,
     services: GetNftsByOwnerAddressServices
@@ -330,6 +373,9 @@ export const _getNftsByOwnerAddress = (
     }
     case Platform.Polkadot: {
         return _getPolkadotUniqueNetworkNftsByOwnerAddress(params)
+    }
+    case Platform.Near: {
+        return _getNearNftsByOwnerAddress(params)
     }
     default:
         throw new Error("Platform not found")

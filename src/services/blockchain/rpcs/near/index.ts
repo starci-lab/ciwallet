@@ -1,8 +1,10 @@
+
 import { Network } from "@/config"
 import { connect, KeyPair, keyStores } from "near-api-js"
 import { KeyStore } from "near-api-js/lib/key_stores"
-import { KeyPairString } from "near-api-js/lib/utils"
+import {} from "bs58"
 
+import { KeyPairString } from "near-api-js/lib/utils"
 export const NEAR_MAINNET_NODE_URL = "https://rpc.mainnet.near.org"
 export const NEAR_TESTNET_NODE_URL = "https://rpc.testnet.near.org"
 export const NEAR_MAINNET_WALLET_URL = "https://wallet.mainnet.near.org"
@@ -34,17 +36,33 @@ const nearRpcsMap: Record<Network, NearRpc> = {
     },
 }
 
-export const keyStoreFromPrivateKey = (
-    network: Network,
-    privateKey: string
-) => {
-    const keyStore = new keyStores.InMemoryKeyStore()
-    const keyPair = KeyPair.fromString(privateKey as KeyPairString)
-    keyStore.setKey(network, "ciwallet-account.testnet", keyPair)
+export const nearKeyPair = (privateKey: string) => {
+    return KeyPair.fromString(privateKey as KeyPairString)
 }
+
+export const nearPublicKeyToAddress = (publicKey: Uint8Array) => {
+    return Buffer.from(publicKey).toString("hex")
+}
+export const nearKeyStore = ({ accountId, keyPair, network }: NearKeyStore) => {
+    const keyStore = new keyStores.InMemoryKeyStore()
+    keyStore.setKey(
+        network,
+        accountId,
+        keyPair,
+    )
+    return keyStore
+}
+
 export const nearClient = async (network: Network, keyStore?: KeyStore) =>
     await connect({
         networkId: network,
         keyStore,
         ...nearRpcsMap[network],
     })
+
+
+export interface NearKeyStore {
+    network: Network;
+    accountId: string;
+    keyPair: KeyPair;
+}
