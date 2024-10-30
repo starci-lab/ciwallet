@@ -6,6 +6,7 @@ import algosdk, { mnemonicToSecretKey } from "algosdk"
 import bs58 from "bs58"
 import { sr25519Sign } from "@polkadot/util-crypto"
 import { hexToU8a } from "@polkadot/util"
+import { nearKeyPair } from "../rpcs"
 
 export interface SignMessageParams {
   message: string;
@@ -50,12 +51,23 @@ export const algorandSignMessage = ({
     ).toString("base64")
 }
 
-export const polkadotSignMessage = ({ message, privateKey, publicKey }: SignMessageParams) => {
+export const polkadotSignMessage = ({
+    message,
+    privateKey,
+    publicKey,
+}: SignMessageParams) => {
     return Buffer.from(
         sr25519Sign(Buffer.from(message, "base64"), {
             secretKey: hexToU8a(privateKey),
             publicKey: hexToU8a(publicKey),
-        }),
+        })
+    ).toString("base64")
+}
+
+export const nearSignMessage = ({ message, privateKey }: SignMessageParams) => {
+    const keyPair = nearKeyPair(privateKey)
+    return Buffer.from(
+        keyPair.sign(Buffer.from(message, "base64")).signature
     ).toString("base64")
 }
 
@@ -78,8 +90,10 @@ export const signMessage = (params: SignMessageParams) => {
     case Platform.Polkadot: {
         return polkadotSignMessage(params)
     }
+    case Platform.Near: {
+        return nearSignMessage(params)
+    }
     default:
         throw new Error(`Platform not supported: ${platform}`)
     }
 }
-
