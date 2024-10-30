@@ -53,8 +53,6 @@ export interface TransferParams {
   recipientAddress: string;
   amount: number;
   fromAddress?: string;
-  //near
-  senderAddress?: string;
 }
 
 export interface TransferResult {
@@ -315,12 +313,12 @@ export const _transferNear = async ({
     network,
     privateKey,
     recipientAddress,
-    senderAddress,
+    fromAddress,
     amount,
 }: TransferParams): Promise<TransferResult> => {
     if (!tokenAddress)
         throw new Error("Cannot find balance without token address")
-    if (!senderAddress) throw new Error("Sender address is required")
+    if (!fromAddress) throw new Error("From address is required")
 
     network = network || defaultNetwork
 
@@ -328,20 +326,25 @@ export const _transferNear = async ({
     const keyStore = nearKeyStore({
         network,
         keyPair,
-        accountId: chainKey,
+        accountId: fromAddress
     })
 
     const client = await nearClient(network, keyStore)
-    const account = await client.account(senderAddress)
-
+    const account = await client.account(fromAddress)
+    console.log(tokenAddress)
     if (tokenAddress === nativeTokenKey) {
         const { decimals } =
       blockchainConfig().chains[chainKey].tokens[nativeTokenKey][network]
         if (!decimals) throw new Error("decimals must not undefined")
-        const {
-            transaction_outcome: { id },
-        } = await account.sendMoney(recipientAddress, computeRaw(amount, decimals))
-        return { txHash: id }
+        try {
+            const {
+                transaction_outcome: { id },
+            } = await account.sendMoney(recipientAddress, computeRaw(amount, decimals))
+            return { txHash: id }
+        } catch (ex) {
+            console.log(ex)
+            throw ex
+        }
     } else {
     // const metadata = await suiClient(network).getCoinMetadata({
     //     coinType: tokenAddress,
