@@ -13,3 +13,5 @@ export class BaseError extends Error {
 export enum BaseErrorName {
     AtaNotFound = "AtaNotFound",
 }
+
+export const TIME_OUT = 1000

@@ -6,7 +6,7 @@ import { constantConfig, envConfig } from "@/config"
 import useSWR, { SWRResponse } from "swr"
 import { useEffect, useState } from "react"
 import {
-    GamePeripheryApiService,
+    CifarmPeripheryGameApiService,
     saveGameVersion,
 } from "@/services"
 import {
@@ -86,7 +86,7 @@ export const _useCifarmDb = (): UseCifarmDbReturn => {
         const handleEffect = async () => {
             //check version
             try {
-                const api = new GamePeripheryApiService()
+                const api = new CifarmPeripheryGameApiService()
                 const { version } = await api.getGameVersion()
                 //retrive in local storage
                 if (!gameVersion || (gameVersion !== version)) {

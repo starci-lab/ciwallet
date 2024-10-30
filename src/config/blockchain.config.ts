@@ -7,10 +7,10 @@ export enum Network {
 }
 
 export enum PolkadotChainKey {
-    Relay = "native",
-    Bifrost = "bifrost-native",
-    UniqueNetwork = "unique-network-native",
-    Moonbeam = "moonbeam-native"
+  Relay = "native",
+  Bifrost = "bifrost-native",
+  UniqueNetwork = "unique-network-native",
+  Moonbeam = "moonbeam-native",
 }
 
 export const blockchainConfig = (): ChainConfig => {
@@ -107,8 +107,8 @@ export const blockchainConfig = (): ChainConfig => {
                                 },
                             },
                         },
-                    }
-                }             
+                    },
+                },
             },
             [SupportedChainKey.Avalanche]: {
                 imageUrl: "/icons/avalanche.svg",
@@ -185,7 +185,7 @@ export const blockchainConfig = (): ChainConfig => {
                                 },
                             },
                         },
-                    }
+                    },
                 },
             },
             [SupportedChainKey.Aptos]: {
@@ -237,7 +237,8 @@ export const blockchainConfig = (): ChainConfig => {
                             symbol: "$CAULI",
                         },
                         [Network.Testnet]: {
-                            address: "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
+                            address:
+                "0x7ba903f5442c6eee5ecdfe49c12a88dcd9843eba117cef40ecc8acf83185b751::coin::T",
                             name: "$CAULI Token",
                             decimals: 18,
                             imageUrl: "/icons/$CAULI.png",
@@ -254,17 +255,18 @@ export const blockchainConfig = (): ChainConfig => {
                                 [Network.Mainnet]: {
                                     imageUrl: "/icons/fertile-tile.png",
                                     name: "Fertile Tiles",
-                                    collectionId: ""
+                                    collectionId: "",
                                 },
                                 [Network.Testnet]: {
                                     imageUrl: "/icons/fertile-tile.png",
                                     name: "Fertile Tiles",
-                                    collectionId: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34"
-                                }
+                                    collectionId:
+                    "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
+                                },
                             },
                         },
-                    }
-                }
+                    },
+                },
             },
             [SupportedChainKey.Bsc]: {
                 imageUrl: "/icons/bsc.svg",
@@ -288,7 +290,7 @@ export const blockchainConfig = (): ChainConfig => {
                             name: "Binance Coin",
                             symbol: "BNB",
                             decimals: 18,
-                        },  
+                        },
                     },
                     usdt: {
                         [Network.Mainnet]: {
@@ -304,10 +306,10 @@ export const blockchainConfig = (): ChainConfig => {
                             name: "USD Tether",
                             symbol: "USDT",
                             decimals: 18,
-                        },                    
+                        },
                     },
                 },
-                nftGroups: {}
+                nftGroups: {},
             },
             [SupportedChainKey.Algorand]: {
                 imageUrl: "/icons/algorand.svg",
@@ -331,7 +333,7 @@ export const blockchainConfig = (): ChainConfig => {
                             name: "Algorand",
                             symbol: "ALGO",
                             decimals: 6,
-                        },          
+                        },
                     },
                     $CARROT: {
                         [Network.Mainnet]: {
@@ -347,7 +349,7 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 18,
                             imageUrl: "/icons/$CARROT.png",
                             symbol: "$CARROT",
-                        },    
+                        },
                     },
                     $CAULI: {
                         [Network.Mainnet]: {
@@ -363,7 +365,7 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 18,
                             imageUrl: "/icons/$CAULI.png",
                             symbol: "$CAULI",
-                        },                       
+                        },
                     },
                 },
                 nftGroups: {
@@ -375,16 +377,16 @@ export const blockchainConfig = (): ChainConfig => {
                                 [Network.Mainnet]: {
                                     imageUrl: "/icons/fertile-tile.png",
                                     name: "Fertile Tiles",
-                                    collectionId: ""
+                                    collectionId: "",
                                 },
                                 [Network.Testnet]: {
                                     imageUrl: "/icons/fertile-tile.png",
                                     name: "Fertile Tiles",
-                                    collectionId: "premiumTile1"
-                                }
+                                    collectionId: "premiumTile1",
+                                },
                             },
                         },
-                    }      
+                    },
                 },
             },
             [SupportedChainKey.Sui]: {
@@ -409,7 +411,7 @@ export const blockchainConfig = (): ChainConfig => {
                             name: "Sui",
                             symbol: "SUI",
                             decimals: 6,
-                        },       
+                        },
                     },
                     $CARROT: {
                         [Network.Mainnet]: {
@@ -425,7 +427,7 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 18,
                             imageUrl: "/icons/$CARROT.png",
                             symbol: "$CARROT",
-                        },       
+                        },
                     },
                     $CAULI: {
                         [Network.Mainnet]: {
@@ -441,11 +443,10 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 18,
                             imageUrl: "/icons/$CAULI.png",
                             symbol: "$CAULI",
-                        },        
+                        },
                     },
                 },
-                nftGroups: {
-                },
+                nftGroups: {},
             },
             [SupportedChainKey.Polkadot]: {
                 //polkadot is special, we use nfts in unique network
@@ -533,7 +534,7 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 18,
                             imageUrl: "/icons/$CARROT.png",
                             symbol: "$CARROT",
-                        },       
+                        },
                     },
                     $CAULI: {
                         [Network.Mainnet]: {
@@ -549,7 +550,7 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 18,
                             imageUrl: "/icons/$CAULI.png",
                             symbol: "$CAULI",
-                        },        
+                        },
                     },
                 },
                 nftGroups: {
@@ -561,17 +562,17 @@ export const blockchainConfig = (): ChainConfig => {
                                 [Network.Mainnet]: {
                                     name: "Fertile Tiles",
                                     imageUrl: "/icons/fertile-tile.png",
-                                    collectionId: ""
+                                    collectionId: "",
                                 },
                                 [Network.Testnet]: {
                                     name: "Fertile Tiles",
                                     imageUrl: "/icons/fertile-tile.png",
-                                    collectionId: "4191"
-                                }
+                                    collectionId: "4191",
+                                },
                             },
                         },
-                    }
-                }                 
+                    },
+                },
             },
             [SupportedChainKey.Near]: {
                 imageUrl: "/icons/near.svg",
@@ -595,7 +596,7 @@ export const blockchainConfig = (): ChainConfig => {
                             name: "Near",
                             symbol: "NEAR",
                             decimals: 24,
-                        },       
+                        },
                     },
                     $CARROT: {
                         [Network.Mainnet]: {
@@ -611,7 +612,7 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 18,
                             imageUrl: "/icons/$CARROT.png",
                             symbol: "$CARROT",
-                        },       
+                        },
                     },
                     $CAULI: {
                         [Network.Mainnet]: {
@@ -627,7 +628,7 @@ export const blockchainConfig = (): ChainConfig => {
                             decimals: 18,
                             imageUrl: "/icons/$CAULI.png",
                             symbol: "$CAULI",
-                        },        
+                        },
                     },
                 },
                 nftGroups: {
@@ -639,18 +640,19 @@ export const blockchainConfig = (): ChainConfig => {
                                 [Network.Mainnet]: {
                                     imageUrl: "/icons/fertile-tile.png",
                                     name: "Fertile Tiles",
-                                    collectionId: ""
+                                    collectionId: "",
                                 },
                                 [Network.Testnet]: {
                                     imageUrl: "/icons/fertile-tile.png",
                                     name: "Fertile Tiles",
-                                    collectionId: "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34"
-                                }
+                                    collectionId:
+                    "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
+                                },
                             },
-                        }
-                    }
-                }
-            }
+                        },
+                    },
+                },
+            },
         },
     }
 }
@@ -677,7 +679,7 @@ export interface ChainInfo {
   imageUrl: string;
   name: string;
   tokens: Record<string, Record<Network, TokenInfo>>;
-  nftGroups: NftGroups
+  nftGroups: NftGroups;
 }
 
 export interface TokenInfo {
@@ -689,28 +691,28 @@ export interface TokenInfo {
 }
 
 export interface NftCollectionInfo {
-    collectionId: string
-    name: string
-    imageUrl: string
+  collectionId: string;
+  name: string;
+  imageUrl: string;
 }
 
 export interface NftGroupInfo {
-    name: string 
-    imageUrl: string
-    collections: Record<string, Record<Network, NftCollectionInfo>>
+  name: string;
+  imageUrl: string;
+  collections: Record<string, Record<Network, NftCollectionInfo>>;
 }
 
-export type NftGroups = Record<string, NftGroupInfo> 
+export type NftGroups = Record<string, NftGroupInfo>;
 
 export enum NftGroupKey {
-    CiFarm = "cifarm",
+  CiFarm = "cifarm",
 }
 
 export enum NftCollectionKey {
-    //đất phù sa
-    FertileTile = "fertileTile",
-    //bò
-    Cow = "cow",
+  //đất phù sa
+  FertileTile = "fertileTile",
+  //bò
+  Cow = "cow",
 }
 
 export interface ChainConfig {
@@ -727,3 +729,5 @@ export enum SupportedChainKey {
   Polkadot = "polkadot",
   Near = "near",
 }
+
+export const defaultNetwork = Network.Testnet

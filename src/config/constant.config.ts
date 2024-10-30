@@ -13,5 +13,6 @@ export const constantConfig = () => ({
         cifarm: "/cifarm",
         transfer: "/transfer",
         bridgeWormhole: "/bridge/wormhole",
+        nearUsername: "/near-username",
     },
 })

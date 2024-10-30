@@ -34,7 +34,7 @@ const Page = () => {
                         }</Link>}
                 />
                 <Spacer y={6} />
-                <Button fullWidth color="primary" type="submit">
+                <Button fullWidth color="primary" isLoading={formik.isSubmitting} type="submit">
           Continue
                 </Button>
             </form>

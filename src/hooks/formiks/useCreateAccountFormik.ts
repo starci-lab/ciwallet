@@ -76,6 +76,7 @@ export const _useCreateAccountFormik =
                   mnemonic,
                   accountNumber: _accountNumber,
                   chainKey: preferenceChainKey,
+                  nearUsername: "",
               })
 
               dispatch(

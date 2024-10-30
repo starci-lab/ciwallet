@@ -8,57 +8,31 @@ import { createSolanaAccount, importSolanaAccount } from "./solana.creation"
 import { createSuiAccount, importSuiAccount } from "./sui.creation"
 import { CreateAccountParams, ImportAccountParams } from "./types.creation"
 
-export const createAccount = async ({
-    accountNumber,
-    chainKey,
-    mnemonic,
-}: CreateAccountParams): Promise<ChainAccount> => {
-    if (mnemonic === "")
+export const createAccount = async (params: CreateAccountParams): Promise<ChainAccount> => {
+    if (params.mnemonic === "")
         return {
             address: "",
             privateKey: "",
             publicKey: "",
         }
 
-    const platform = chainKeyToPlatform(chainKey)
+    const platform = chainKeyToPlatform(params.chainKey)
     switch (platform) {
     case Platform.Evm:
-        return createEvmAccount({
-            accountNumber,
-            mnemonic,
-        })
+        return createEvmAccount(params)
     case Platform.Aptos:
-        return createAptosAccount({
-            accountNumber,
-            mnemonic,
-        })
+        return createAptosAccount(params)
     case Platform.Solana:
-        return createSolanaAccount({
-            accountNumber,
-            mnemonic,
-        })
+        return createSolanaAccount(params)
     case Platform.Algorand:
-        return createAlgorandAccount({
-            accountNumber,
-            mnemonic,
-        })
+        return createAlgorandAccount(params)
     case Platform.Sui:
-        return createSuiAccount({
-            accountNumber,
-            mnemonic,
-        })
+        return createSuiAccount(params)
     case Platform.Polkadot:
-        return await createPolkadotAccount({
-            accountNumber,
-            mnemonic,
-        })
+        return await createPolkadotAccount(params)
     case Platform.Near:
-        return createNearAccount({
-            accountNumber,
-            mnemonic,
-        })
+        return await createNearAccount(params)
     }
-
 }
 
 export const importAccount = ({

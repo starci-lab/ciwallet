@@ -70,6 +70,7 @@ export const chainKeyToChain = (chainKey: string) : Chain => {
     case SupportedChainKey.Bsc: return "Bsc"
     case SupportedChainKey.Algorand: return "Algorand"
     case SupportedChainKey.Sui: return "Sui"
+    case SupportedChainKey.Near: return "Near"
     default: throw new Error(`Chain not found : ${chainKey}`)
     }
 }
@@ -82,6 +83,7 @@ export const chainToChainKey = (chainKey: Chain) : string => {
     case "Algorand": return SupportedChainKey.Algorand
     case "Bsc": return SupportedChainKey.Bsc
     case "Sui": return SupportedChainKey.Sui
+    case "Near": return SupportedChainKey.Near
     default: throw new Error(`Chain not found : ${chainKey}`)
     }
 }

@@ -8,6 +8,8 @@ import { useRouterWithSearchParams } from "../miscellaneous"
 
 export interface CreatePasswordFormikValues {
     password: string;
+    //2 step to create near
+    nearUsername: string;
 }
 
 export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValues> => {
@@ -19,21 +21,24 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
 
     const initialValues: CreatePasswordFormikValues = {
         password: "",
+        nearUsername: "",
     }
 
     const validationSchema = Yup.object({
         password: Yup.string()
             .min(8, "Password must be at least 8 characters")
             .required("Password is required"),
+        nearUsername: Yup.string().required("Subdomain is required"),
     })
 
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const chainKeys = Object.keys(chains)
+    const network = useAppSelector((state) => state.blockchainReducer.network)
 
     const formik = useFormik({
         initialValues,
         validationSchema,
-        onSubmit: async ({ password }) => {
+        onSubmit: async ({ password, nearUsername }) => {
             saveEncryptedMnemonic({
                 mnemonic,
                 password
@@ -45,7 +50,9 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
                 const { address, privateKey, publicKey} = await createAccount({
                     mnemonic,
                     accountNumber: 0,
-                    chainKey
+                    chainKey,
+                    nearUsername,
+                    network
                 })
 
                 baseAccounts[chainKey] = {

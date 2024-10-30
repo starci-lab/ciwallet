@@ -1,7 +1,17 @@
+import { Network } from "./blockchain.config"
+
 export const envConfig = () => ({
     isDev: process.env.NODE_ENV !== "production",
     defaultTelegramInitDataRaw: process.env.NEXT_PUBLIC_DEFAULT_TELEGRAM_INIT_DATA_RAW || "",
+    nearAccountIds: {
+        [Network.Testnet]: process.env.NEXT_PUBLIC_TESTNET_NEAR_MAIN_ACCOUNT_ID || "",
+        [Network.Mainnet]: process.env.NEXT_PUBLIC_MAINNET_NEAR_MAIN_ACCOUNT_ID || "",
+    },
     externals: {
+        periphery: {
+            api: process.env.NEXT_PUBLIC_BASE_PERIPHERY_API_URL,
+            graphql: process.env.NEXT_PUBLIC_BASE_PERIPHERY_GRAPHQL_URL,
+        },
         cifarm: {
             core: {
                 key: process.env.NEXT_PUBLIC_CIFARM_CORE_KEY,

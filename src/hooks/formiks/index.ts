@@ -2,7 +2,7 @@ import { FormikProps } from "formik"
 import { PasswordFormikValues, _usePasswordFormik } from "./usePasswordFormik"
 import { use } from "react"
 import { HooksContext } from "../provider.hooks"
-import { _useCreatePasswordFormik } from "./useCreatePasswordFormik"
+import { _useCreatePasswordFormik, CreatePasswordFormikValues } from "./useCreatePasswordFormik"
 import {
     BridgeTransferFormikValues,
     _useBridgeTransferFormik,
@@ -31,7 +31,7 @@ import {
 
 export interface UseFormiksReturn {
   passwordFormik: FormikProps<PasswordFormikValues>;
-  createPasswordFormik: FormikProps<PasswordFormikValues>;
+  createPasswordFormik: FormikProps<CreatePasswordFormikValues>;
   bridgeTransferFormik: FormikProps<BridgeTransferFormikValues>;
   bridgeRedeemFormik: FormikProps<BridgeRedeemFormikValues>;
   createAccountFormik: FormikProps<CreateAccountFormikValues>;
