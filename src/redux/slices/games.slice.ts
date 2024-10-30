@@ -12,6 +12,11 @@ export interface Credentials {
   botType: BotType;
 }
 
+export interface GameCredentials extends Credentials {
+    //put accountAddress directly to credentials
+    accountAddress: string;
+}
+
 export interface PackageState {
   progress: AxiosProgressEvent | null;
   errorInDownload: boolean;
@@ -29,7 +34,7 @@ export enum CifarmPackageKey {
 export type CifarmPackages = Record<CifarmPackageKey, PackageState>;
 
 export interface CifarmState {
-  credentials: Credentials;
+  credentials: GameCredentials;
   packages: CifarmPackages;
   version: string;
   loadCifarmGameVersionKey: number;
@@ -51,6 +56,7 @@ const initialState: GameState = {
             signature: "",
             telegramInitDataRaw: "",
             botType: defaultBotType,
+            accountAddress: "",
         },
         packages: {
             [CifarmPackageKey.Data]: {
@@ -89,7 +95,7 @@ export const gameSlice = createSlice({
     name: "gameReducer",
     initialState,
     reducers: {
-        setCifarmCredentials: (state, { payload }: PayloadAction<Credentials>) => {
+        setCifarmCredentials: (state, { payload }: PayloadAction<GameCredentials>) => {
             state.cifarm.credentials = payload
         },
         setCifarmPackagePartial: (

@@ -105,7 +105,8 @@ export const _useCifarmNakama = (): UseCifarmNakamaReturn => {
                     publicKey: _publicKey,
                     signature,
                     telegramInitDataRaw,
-                    botType
+                    botType,
+                    accountAddress,
                 })
             )} catch (ex) {
             consoleLogError(ex)
