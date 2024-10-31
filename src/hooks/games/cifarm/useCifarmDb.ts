@@ -278,7 +278,7 @@ export class CifarmDb extends Dexie {
     packages!: EntityTable<PackageEntity, "key">
 
     constructor() {
-        super("cifarmv12")
+        super("cifarmv122")
         this.version(2).stores({
             packages: "key, data",
         })
