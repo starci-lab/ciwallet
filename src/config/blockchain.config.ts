@@ -645,8 +645,7 @@ export const blockchainConfig = (): ChainConfig => {
                                 [Network.Testnet]: {
                                     imageUrl: "/icons/fertile-tile.png",
                                     name: "Fertile Tiles",
-                                    collectionId:
-                    "0x2a86d07b6f49e8794051580e107d96f6feed0d27b52359e8d8c62af32c07cc34",
+                                    collectionId: "starci123.testnet",
                                 },
                             },
                         },
