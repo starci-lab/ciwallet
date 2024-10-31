@@ -1,4 +1,4 @@
-# CiWallet = Cross-Chain Telegram Wallet
+# CiWallet - Cross-Chain Telegram Wallet
 
 ## Overview
 
