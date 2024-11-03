@@ -7,6 +7,7 @@ export const useTelegramMiniApp = () => {
     if (typeof window === "undefined") return
     if (envConfig().isDev) return
     const { initData, initDataRaw } = retrieveLaunchParams()
+    console.log("initDataRaw", initDataRaw)
 
     const dispatch = useAppDispatch()
     useEffect(() => {

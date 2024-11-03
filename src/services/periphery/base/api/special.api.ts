@@ -19,7 +19,7 @@ export class BasePeripherySpecialApiService {
 }
 
 export interface CreateNearAccountParams {
-  username: string;
+  subdomain: string;
   publicKey: string;
   network?: Network;
 }

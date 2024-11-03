@@ -3,13 +3,11 @@ import * as Yup from "yup"
 import { useFormiks } from "."
 import { constantConfig } from "@/config"
 import { setPassword, useAppDispatch, useAppSelector } from "@/redux"
-import { BaseAccounts, createAccount, saveEncryptedBaseAccounts, saveEncryptedMnemonic } from "@/services"
+import { BaseAccounts, createAccount, makeNearAccountId, nearClient, saveEncryptedBaseAccounts, saveEncryptedMnemonic } from "@/services"
 import { useRouterWithSearchParams } from "../miscellaneous"
 
 export interface CreatePasswordFormikValues {
     password: string;
-    //2 step to create near
-    nearUsername: string;
 }
 
 export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValues> => {
@@ -21,29 +19,48 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
 
     const initialValues: CreatePasswordFormikValues = {
         password: "",
-        nearUsername: "",
     }
 
     const validationSchema = Yup.object({
         password: Yup.string()
             .min(8, "Password must be at least 8 characters")
             .required("Password is required"),
-        nearUsername: Yup.string().required("Subdomain is required"),
     })
 
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const chainKeys = Object.keys(chains)
     const network = useAppSelector((state) => state.blockchainReducer.network)
 
+    const username = useAppSelector((state) => state.authReducer.telegramInfo.username)
+
     const formik = useFormik({
         initialValues,
         validationSchema,
-        onSubmit: async ({ password, nearUsername }) => {
+        onSubmit: async ({ password }) => {
             saveEncryptedMnemonic({
                 mnemonic,
                 password
             })
             const baseAccounts : BaseAccounts = {}
+
+            //queries conitnue until got valid username
+            let subdomain = ""
+            let index = 0
+            for(;;) {
+                try {
+                    const client = await nearClient(network)
+                    subdomain = index > 0 ? `${username}${index}` : username
+                    const account = await client.account(makeNearAccountId(subdomain))
+                    await account.state()
+                    //if no error, mean that accountId is existed, continue to next index
+                    index++
+                } catch {
+                    //error mean that accountId is not existed, break the loop
+                    break
+                }      
+            }
+
+            console.log("subdomain", subdomain)
             //create session here
             for (const chainKey of chainKeys) {
                 //create account
@@ -51,7 +68,7 @@ export const _useCreatePasswordFormik = (): FormikProps<CreatePasswordFormikValu
                     mnemonic,
                     accountNumber: 0,
                     chainKey,
-                    nearUsername,
+                    subdomain,
                     network
                 })
 

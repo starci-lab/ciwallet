@@ -5,7 +5,7 @@ export interface CreateAccountParams {
     accountNumber: number;
     chainKey: string;
     //near only
-    nearUsername: string;
+    subdomain?: string;
     //temporatory our solution is testenet, so that we'll use it as default
     network?: Network;
 }

@@ -49,7 +49,7 @@ const Page = () => {
                 <Spacer y={6} />
                 <Button
                     onPress={() => {
-                        router.push(constantConfig().path.nearUsername)
+                        router.push(constantConfig().path.createPassword)
                     }}
                     color="primary"
                     fullWidth

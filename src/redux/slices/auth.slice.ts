@@ -48,7 +48,7 @@ const initialState: AuthState = {
     mnemonic: "",
     telegramInfo: {
         id: 0,
-        username: "",
+        username: "test",
         referrerUserId: "",
         initDataRaw: envConfig().defaultTelegramInitDataRaw,
     },

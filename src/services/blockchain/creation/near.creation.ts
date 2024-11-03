@@ -9,9 +9,10 @@ import { defaultNetwork, envConfig } from "@/config"
 export const createNearAccount = async ({
     accountNumber,
     mnemonic,
-    nearUsername,
+    subdomain,
     network,
 }: Omit<CreateAccountParams, "chainKey">): Promise<ChainAccount> => {
+    if (!subdomain) throw new Error("Subdomain is required for creating a Near account")
     network = network || defaultNetwork
 
     const { secretKey, publicKey } = parseSeedPhrase(
@@ -21,7 +22,7 @@ export const createNearAccount = async ({
     //call to near api to create account
     const api = new BasePeripherySpecialApiService()
     const { transactionHash } = await api.createNearAccount({
-        username: nearUsername,
+        subdomain,
         publicKey,
         //our default network is testnet
         network,
@@ -29,7 +30,7 @@ export const createNearAccount = async ({
     console.log("transactionHash", transactionHash)
     
     return {
-        address: `${nearUsername}.${envConfig().nearAccountIds[network]}`,
+        address: makeNearAccountId(subdomain),
         privateKey: secretKey,
         publicKey,
     }
@@ -44,4 +45,8 @@ export const importNearAccount = ({
         privateKey: privateKey,
         publicKey: keyPair.getPublicKey().toString(),
     }
+}
+
+export const makeNearAccountId = (subdomain: string) => {
+    return `${subdomain}.${envConfig().nearAccountIds[defaultNetwork]}`
 }

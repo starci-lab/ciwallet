@@ -2,7 +2,6 @@
 import { Network } from "@/config"
 import { connect, KeyPair, keyStores } from "near-api-js"
 import { KeyStore } from "near-api-js/lib/key_stores"
-import {} from "bs58"
 
 import { KeyPairString } from "near-api-js/lib/utils"
 export const NEAR_MAINNET_NODE_URL = "https://rpc.mainnet.near.org"
