@@ -12,20 +12,35 @@ import { VAAProfile } from "./VAAProfile"
 import { setConfirm, TransactionType, useAppDispatch, useAppSelector } from "@/redux"
 import { v4 } from "uuid"
 import { deserialize } from "@wormhole-foundation/sdk"
-import { bridgeProtocols, defaultChain, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, nativeTokenKey } from "@/config"
+import { defaultChain, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, nativeTokenKey } from "@/config"
 import { computeDenomination, replace, truncateString, valuesWithKey } from "@/utils"
 import { explorerUrl, toWormholeNativeFromUniversal } from "@/services"
+import { isEmpty } from "lodash"
 
 export const RedeemTab = () => {
+    const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
+
+    return (
+        <>
+            {
+                isEmpty(storedVaas) ? <EmptyVaaTab /> : <HasVaaTab />
+            }
+        </>
+    )
+}
+
+const EmptyVaaTab = () => <></>
+
+const HasVaaTab = () => {
     const selectedKey = useAppSelector((state) => state.vaaReducer.selectedKey)
     const storedVaas = useAppSelector((state) => state.vaaReducer.storedVaas)
 
     const {
         serializedVaa,
         network,
-        bridgeProtocolKey,
         decimals
     } = storedVaas[selectedKey]
+
     const { emitterChain, payload } = deserialize(
         "TokenBridge:Transfer",
         Uint8Array.from(Buffer.from(serializedVaa, "base64"))
@@ -45,7 +60,6 @@ export const RedeemTab = () => {
     const dispatch = useAppDispatch()
     
     const hasVaa = Object.values(storedVaas).length > 0
-    const protocol = bridgeProtocols[bridgeProtocolKey]
 
     const chains = useAppSelector((state) => state.blockchainReducer.chains)
     const valuesWithKeyChains = valuesWithKey(chains)
@@ -82,21 +96,9 @@ export const RedeemTab = () => {
                     onPress={async () => {
                         dispatch(
                             setConfirm({
-                                type: TransactionType.BridgeRedeem,
+                                type: TransactionType.WormholeBridgeRedeem,
                                 confirmMessage: (
                                     <div className="grid gap-2">
-                                        <div className="flex gap-1 items-center">
-                                            <div className="w-[80px] text-sm">Protocol</div>
-                                            <div className="flex gap-1 items-center">
-                                                <Image
-                                                    removeWrapper
-                                                    className="w-5 h-5"
-                                                    src={protocol?.imageUrl}
-                                                />
-                                                <div className="text-sm">{protocol?.name}</div>
-                                            </div>
-                                        </div>
-                                        <Spacer y={2} />
                                         <div className="flex gap-2 items-center">
                                             <div className="w-[80px]">Path</div>
                                             <div className="flex gap-1 items-center">

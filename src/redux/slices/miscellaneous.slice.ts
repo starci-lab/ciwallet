@@ -21,8 +21,8 @@ export interface ErrorState {
 export enum TransactionType {
   Transfer = "Transfer",
   Approve = "Approve",
-  BridgeTransfer = "Bridge Transfer",
-  BridgeRedeem = "Bridge Redeem",
+  WormholeBridgeTransfer = "Wormhole Bridge Transfer",
+  WormholeBridgeRedeem = "Wormhole Bridge Redeem",
 }
 
 export interface Confirm {

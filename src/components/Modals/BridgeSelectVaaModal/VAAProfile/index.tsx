@@ -1,9 +1,9 @@
 "use client"
-import { defaultChain, defaultChainKey, defaultSecondaryChain, defaultSecondaryChainKey, Network } from "@/config"
+import { defaultChain, defaultSecondaryChain, Network } from "@/config"
 import { selectVaa, StoredVaa, useAppDispatch, useAppSelector } from "@/redux"
 import { toWormholeNativeFromUniversal } from "@/services"
 import { computeDenomination, formatDay, truncateString, valuesWithKey, WithKey } from "@/utils"
-import { Card, CardBody, Chip, Image, Snippet, Spacer } from "@nextui-org/react"
+import { Card, CardBody, Chip, Image, Spacer } from "@nextui-org/react"
 import { deserialize } from "@wormhole-foundation/sdk"
 import React from "react"
 
@@ -15,7 +15,6 @@ export interface VAAProfileProps {
 export const VAAProfile = ({
     vaa: {
         key,
-        bridgeProtocolKey,
         network,
         serializedVaa,
         decimals
@@ -35,14 +34,7 @@ export const VAAProfile = ({
     const targetChain = valuesWithKeyChains.find(
         ({ wormhole }) => wormhole?.chain === payload.to.chain
     )
-
-    const crosschain = useAppSelector(state => state.blockchainReducer.crosschain)
-    const protocol = valuesWithKey(
-        crosschain[fromChain?.key ?? defaultChainKey][
-            targetChain?.key ?? defaultSecondaryChainKey
-        ]
-    ).find(({ key }) => key === bridgeProtocolKey)
-
+    
     const networkChip = {
         [Network.Mainnet]: (
             <Chip variant="flat" color="primary">
@@ -76,30 +68,6 @@ export const VAAProfile = ({
                     </div>
                     <Spacer y={4} />
                     <div>
-                        <div className="text-sm">Serialized VAA</div>
-                        <Spacer y={1.5} />
-                        <Snippet
-                            hideSymbol
-                            classNames={{
-                                pre: "text-justify !break-all !whitespace-pre-line !line-clamp-5",
-                            }}
-                            fullWidth
-                        >
-                            {serializedVaa}
-                        </Snippet>
-                        <Spacer y={4} />
-                        <div className="flex gap-1 items-center">
-                            <div className="w-[80px] text-sm">Protocol</div>
-                            <div className="flex gap-1 items-center">
-                                <Image
-                                    removeWrapper
-                                    className="w-5 h-5"
-                                    src={protocol?.imageUrl}
-                                />
-                                <div className="text-sm">{protocol?.name}</div>
-                            </div>
-                        </div>
-                        <Spacer y={2} />
                         <div className="flex gap-1 items-center">
                             <div className="w-[80px] text-sm">Network</div>
                             {networkChip[network]}

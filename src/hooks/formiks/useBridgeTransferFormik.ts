@@ -128,6 +128,8 @@ export const _useBridgeTransferFormik =
               tokenKey,
           }) => {
               const { decimals, address: _address } = tokens[tokenKey][network]
+              console.log(decimals)
+              console.log(amount)
               if (!_address) return
 
               let recipientAddress =

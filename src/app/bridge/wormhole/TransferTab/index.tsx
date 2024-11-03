@@ -107,7 +107,7 @@ export const TransferTab = () => {
             valuesWithKey(baseAccounts[formik.values.targetChainKey].accounts)[0]
                 .accountAddress
         )
-    }, [baseAccounts])
+    }, [baseAccounts, formik.values.targetChainKey])
 
     return (
         <div className="w-full min-h-full flex flex-col gap-6 justify-between">
@@ -196,7 +196,7 @@ export const TransferTab = () => {
                     onPress={async () => {
                         dispatch(
                             setConfirm({
-                                type: TransactionType.BridgeTransfer,
+                                type: TransactionType.WormholeBridgeTransfer,
                                 confirmMessage: (
                                     <div className="grid gap-2">
                                         <div className="flex gap-2 items-center">
@@ -232,21 +232,6 @@ export const TransferTab = () => {
                                                 />
                                                 <div className="text-sm">
                                                     {chains[formik.values.targetChainKey].name}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <div className="w-[80px]">Protocol</div>
-                                            <div className="flex gap-1 items-center">
-                                                <Image
-                                                    removeWrapper
-                                                    className="w-5 h-5"
-                                                    src={
-                                                        bridgeProtocols[SupportedBridgeProtocolKey.Wormhole].imageUrl
-                                                    }
-                                                />
-                                                <div className="text-sm">
-                                                    {bridgeProtocols[SupportedBridgeProtocolKey.Wormhole].name}
                                                 </div>
                                             </div>
                                         </div>
