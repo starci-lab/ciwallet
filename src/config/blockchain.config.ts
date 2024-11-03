@@ -159,7 +159,7 @@ export const blockchainConfig = (): ChainConfig => {
                             symbol: "$CAULI",
                         },
                         [Network.Testnet]: {
-                            address: "0x93ED1074fa946946309CdBe0cc873c58d6a725F1",
+                            address: "0x5c9176d425c3c1F32162aDF1f3D3E171B62cC7eC",
                             name: "$CAULI Token",
                             decimals: 18,
                             imageUrl: "/icons/$CAULI.png",

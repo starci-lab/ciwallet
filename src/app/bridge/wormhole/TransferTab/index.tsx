@@ -79,6 +79,7 @@ export const TransferTab = () => {
     }, [preferenceChainKey])
 
     const crosschain = useAppSelector(state => state.blockchainReducer.crosschain)
+    console.log(formik.values.targetChainKey)
     const bridgeProtocols = crosschain[preferenceChainKey][formik.values.targetChainKey] ?? {} 
 
     useEffect(() => {
@@ -90,7 +91,7 @@ export const TransferTab = () => {
         } else {
             formik.setFieldValue(
                 "nativeAmountPlusFee",
-                bridgeProtocols[0].minimalFee
+                bridgeProtocols[SupportedBridgeProtocolKey.Wormhole]?.minimalFee
             )
         }
     }, [formik.values.tokenKey, formik.values.amount])
