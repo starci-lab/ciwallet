@@ -26,3 +26,11 @@ Here are the related repositories for different components of the CiWallet ecosy
   Designed with privacy and security in mind:  
   - No sensitive user data is stored on the server.  
   - All transactions prioritize user protection and data integrity.
+
+## Current Supported Chains
+CiWallet currently supports the following blockchain networks:  
+- **Polkadot**
+- **Solana**
+- **Avalanche**
+- **Algorand**
+- **NEAR**
