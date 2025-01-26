@@ -1,12 +1,12 @@
-import { avalancheExplorerUrl } from "./avalanche.explorer"
-import { aptosExplorerUrl } from "./aptos.explorer"
-import { bscExplorerUrl } from "./bsc.explorer"
-import { solanaExplorerUrl } from "./solana.explorer"
-import { ExplorerUrlParams } from "./types.explorer"
-import { suiExplorerUrl } from "./sui.explorer"
-import { algorandExplorerUrl } from "./algorand.explorer"
+import { avalancheExplorerUrl } from "./avalanche"
+import { aptosExplorerUrl } from "./aptos"
+import { bscExplorerUrl } from "./bsc"
+import { solanaExplorerUrl } from "./solana"
+import { ExplorerUrlParams } from "./types"
+import { suiExplorerUrl } from "./sui"
+import { algorandExplorerUrl } from "./algorand"
 import { SupportedChainKey } from "@/config"
-import { nearExplorerUrl } from "./near.explorer"
+import { nearExplorerUrl } from "./near"
 
 export const explorerUrl = (params: ExplorerUrlParams) => {
     switch (params.chainKey) {
@@ -29,4 +29,4 @@ export const explorerUrl = (params: ExplorerUrlParams) => {
     }
 }
 
-export * from "./protocols.explorer"
+export * from "./protocols"

@@ -1,12 +1,12 @@
 import { ChainAccount, Platform, chainKeyToPlatform } from "../common"
-import { createAlgorandAccount, importAlgorandAccount } from "./algorand.creation"
-import { createAptosAccount, importAptosAccount } from "./aptos.creation"
-import { createEvmAccount, importEvmAccount } from "./evm.creation"
-import { createNearAccount, importNearAccount } from "./near.creation"
-import { createPolkadotAccount, importPolkadotAccount } from "./polkadot.creation"
-import { createSolanaAccount, importSolanaAccount } from "./solana.creation"
-import { createSuiAccount, importSuiAccount } from "./sui.creation"
-import { CreateAccountParams, ImportAccountParams } from "./types.creation"
+import { createAlgorandAccount, importAlgorandAccount } from "./algorand"
+import { createAptosAccount, importAptosAccount } from "./aptos"
+import { createEvmAccount, importEvmAccount } from "./evm"
+import { createNearAccount, importNearAccount } from "./near"
+import { createPolkadotAccount, importPolkadotAccount } from "./polkadot"
+import { createSolanaAccount, importSolanaAccount } from "./solana"
+import { createSuiAccount, importSuiAccount } from "./sui"
+import { CreateAccountParams, ImportAccountParams } from "./types"
 
 export const createAccount = async (params: CreateAccountParams): Promise<ChainAccount> => {
     if (params.mnemonic === "")
@@ -82,4 +82,4 @@ export const importAccount = ({
 }
 // Compare this snippet from src/services/blockchain/creation/sui.creation.ts:
 
-export * from "./near.creation"
+export * from "./near"

@@ -2,8 +2,8 @@ import { Network } from "@/config"
 import {
     GetNftsByOwnerAddressParams,
     _getNftsByOwnerAddress,
-} from "./get-nfts-by-owner-address.nft"
-import { IpfsService } from "./ipfs.nft"
+} from "./get-nfts-by-owner-address"
+import { IpfsService } from "./ipfs"
 
 export interface BlockchainNftServiceConstructorParams {
   nftCollectionId: string;
@@ -40,4 +40,4 @@ export class BlockchainNftService {
 }
 
 export * from "./common"
-export * from "./get-nfts-by-owner-address.nft"
+export * from "./get-nfts-by-owner-address"

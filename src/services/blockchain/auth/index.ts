@@ -1,1 +1,1 @@
-export * from "./sign.auth"
+export * from "./sign"
